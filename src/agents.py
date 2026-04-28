@@ -1,0 +1,28 @@
+from agents import Agent, Runner
+
+from .file_store import read_text
+from .settings import AGENT_INSTRUCTIONS_DIR, OPENAI_MODEL
+
+
+def load_instruction(name: str) -> str:
+    return read_text(AGENT_INSTRUCTIONS_DIR / f"{name}.md")
+
+
+def build_agent(name: str, instruction_file: str) -> Agent:
+    return Agent(
+        name=name,
+        instructions=load_instruction(instruction_file),
+        model=OPENAI_MODEL,
+    )
+
+
+async def run_agent(agent: Agent, prompt: str) -> str:
+    result = await Runner.run(agent, prompt)
+    return result.final_output
+
+
+content_strategist_agent = build_agent("Content Strategist", "content_strategist")
+content_creator_agent = build_agent("Content Creator", "content_creator")
+seo_agent = build_agent("SEO Agent", "seo")
+analytics_agent = build_agent("Analytics Agent", "analytics")
+orchestrator_agent = build_agent("Growth Orchestrator", "orchestrator")

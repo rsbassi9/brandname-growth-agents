@@ -1,0 +1,38 @@
+name: Daily Growth Agents
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 15 * * *"
+
+jobs:
+  daily-growth:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install -r requirements.txt
+
+      - name: Run daily growth workflow
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_MODEL: ${{ vars.OPENAI_MODEL || 'gpt-5.4-mini' }}
+          BRAND_WEBSITE_URL: https://www.brandnamedesign.co/
+          GOOGLE_DRIVE_ENABLED: ${{ vars.GOOGLE_DRIVE_ENABLED || 'false' }}
+          GOOGLE_DRIVE_ROOT_FOLDER_ID: ${{ secrets.GOOGLE_DRIVE_ROOT_FOLDER_ID }}
+        run: python -m src.orchestrator
+
+      - name: Commit generated outputs
+        run: |
+          git config user.name "brandname-growth-agents"
+          git config user.email "actions@github.com"
+          git add outputs
+          git diff --cached --quiet || git commit -m "chore: add daily growth outputs"
+          git push
