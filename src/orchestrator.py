@@ -32,6 +32,7 @@ def build_shared_context() -> str:
     brand_brief = read_text(BRAND_CONTEXT_DIR / "brand_brief.md")
     growth_strategy = read_text(BRAND_CONTEXT_DIR / "growth_strategy.md")
     visual_system = read_text(BRAND_CONTEXT_DIR / "visual_system.md")
+    fashion_marketing = read_text(BRAND_CONTEXT_DIR / "fashion_marketing_inspiration.md")
     asset_inventory = GoogleDriveService().get_asset_inventory().summary
     website_summary = fetch_website_summary(BRAND_WEBSITE_URL)
     learning_context = feedback_summary()
@@ -45,6 +46,8 @@ def build_shared_context() -> str:
             growth_strategy,
             "Visual system:",
             visual_system,
+            "Fashion marketing inspiration:",
+            fashion_marketing,
             "Learning loop feedback:",
             learning_context,
             "Raw asset inventory:",

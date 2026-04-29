@@ -15,6 +15,8 @@ Strategic priorities:
 3. Use daily feedback to tighten brand direction.
 4. Treat visual design feedback as high-priority learning input.
 5. Prioritize follows, saves, shares, and profile visits over direct selling.
+6. Make the product feel desirable as fashion first, then deepen the concept with the art-origin story.
+7. Position Brand Name as premium art-led streetwear, not generic apparel and not gallery merch.
 
 Content pillars:
 - Transformation: source painting to digital reconstruction to wearable fragment.
@@ -27,3 +29,8 @@ Visual direction:
 - Real source material should dominate when available.
 - Avoid generic templates, loud promotional layouts, and filler graphics.
 - Every visual should feel like part of an archive or system.
+- But do not make the archive so dominant that the product feels cold, academic, or unwearable.
+- Borrow the big-brand campaign logic: human motion, product hero, tactile material, styling, body, confidence, lifestyle context.
+- The ideal output feels like a fashion campaign with an art-system engine underneath.
+- Add streetwear codes: oversized fit, graphic garment presence, city/studio/gallery context, attitude, casual motion, concrete/metal/glass textures, and people who look like they would actually wear the product.
+- Keep it premium and restrained; streetwear should add cultural relevance, not visual noise.
