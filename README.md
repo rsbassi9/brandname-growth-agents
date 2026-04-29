@@ -27,6 +27,12 @@ pip install -r requirements.txt
 Copy-Item .env.example .env
 ```
 
+If Windows blocks a global install, use:
+
+```powershell
+python -m pip install --user -r requirements.txt
+```
+
 Add your API key to `.env`:
 
 ```text
@@ -39,6 +45,8 @@ Run the workflow:
 ```powershell
 python -m src.orchestrator
 ```
+
+If you see an `insufficient_quota` error, the code reached OpenAI successfully. Fix billing, credits, or usage limits in the OpenAI platform project tied to your API key, then rerun the same command.
 
 Outputs are written to:
 

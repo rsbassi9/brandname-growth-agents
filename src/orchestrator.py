@@ -1,6 +1,8 @@
 import asyncio
 from datetime import date
 
+from openai import AuthenticationError, OpenAIError, RateLimitError
+
 from .agents import (
     analytics_agent,
     content_creator_agent,
@@ -83,7 +85,19 @@ async def run_daily_workflow() -> dict[str, str]:
 
 
 def main() -> None:
-    paths = asyncio.run(run_daily_workflow())
+    try:
+        paths = asyncio.run(run_daily_workflow())
+    except AuthenticationError as exc:
+        raise SystemExit(
+            "OpenAI authentication failed. Check that OPENAI_API_KEY is set in .env and belongs to an active API project."
+        ) from exc
+    except RateLimitError as exc:
+        raise SystemExit(
+            "OpenAI quota/rate limit failed. Check platform billing, project credits, and usage limits, then rerun the workflow."
+        ) from exc
+    except OpenAIError as exc:
+        raise SystemExit(f"OpenAI request failed: {exc}") from exc
+
     print("Daily growth workflow complete.")
     for name, path in paths.items():
         print(f"{name}: {path}")
