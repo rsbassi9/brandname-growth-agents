@@ -22,6 +22,14 @@ Output only valid JSON with this shape:
     }
   ],
   "caption": "string",
+  "image_concepts": [
+    {
+      "name": "short concept name",
+      "brief": "what this image should accomplish",
+      "source_asset_hint": "which raw asset or type to reference",
+      "prompt": "detailed image generation prompt with no embedded text"
+    }
+  ],
   "approval_status": "Draft"
 }
 
@@ -31,3 +39,6 @@ Rules:
 - Prioritize the transformation: canvas to reconstruction to wearable fragment.
 - Avoid generic ecommerce language.
 - Use no more than seven slides.
+- Include exactly three `image_concepts`.
+- Image concept prompts must preserve the website aesthetic: technical archive label, optical scan, coordinate system, bone background, near-black, oxidized red, sparse, premium, no fake text inside the image.
+- Image concept prompts should ask for image-only source visuals. Do not ask the image model to render readable typography; typography will be added later by the renderer.

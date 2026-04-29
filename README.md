@@ -6,6 +6,7 @@ The MVP runs a daily review workflow:
 - generates content ideas
 - drafts captions, short video scripts, and carousel concepts
 - renders a draft Instagram carousel as PNG slides
+- generates three OpenAI image concept directions for visual exploration
 - audits the website for SEO opportunities
 - summarizes analytics constraints or learnings
 - saves review-ready markdown outputs
@@ -70,6 +71,7 @@ outputs/seo
 outputs/analytics
 outputs/daily_reports
 outputs/visual_content
+outputs/image_concepts
 ```
 
 ## Dashboard + Learning Loop
@@ -169,3 +171,25 @@ outputs/visual_content/
 ```
 
 If Google Drive is disabled or no images are available, the renderer creates text-first placeholder slides so the daily run still completes.
+
+## OpenAI Image Concepts
+
+When `IMAGE_CONCEPTS_ENABLED=true`, each run asks the Visual Designer agent for three image briefs and generates three OpenAI image concepts.
+
+These are exploratory source visuals, not final posts. The prompts intentionally ask for no embedded text so the dashboard or renderer can apply brand typography consistently.
+
+Outputs are saved under:
+
+```text
+outputs/image_concepts/
+```
+
+Useful settings:
+
+```text
+IMAGE_CONCEPTS_ENABLED=true
+IMAGE_CONCEPT_COUNT=3
+IMAGE_CONCEPT_MODEL=gpt-image-1
+IMAGE_CONCEPT_SIZE=1024x1536
+IMAGE_CONCEPT_QUALITY=medium
+```

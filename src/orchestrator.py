@@ -14,8 +14,16 @@ from .agents import (
 )
 from .drive_service import GoogleDriveService
 from .file_store import read_text, save_markdown
+from .image_concepts import generate_image_concepts
 from .learning import feedback_summary
-from .settings import BRAND_CONTEXT_DIR, BRAND_WEBSITE_URL, ROOT_DIR, VISUAL_ASSET_LIMIT, VISUAL_OUTPUT_ENABLED
+from .settings import (
+    BRAND_CONTEXT_DIR,
+    BRAND_WEBSITE_URL,
+    IMAGE_CONCEPTS_ENABLED,
+    ROOT_DIR,
+    VISUAL_ASSET_LIMIT,
+    VISUAL_OUTPUT_ENABLED,
+)
 from .visual_renderer import extract_json_plan, render_carousel
 from .web import fetch_website_summary
 
@@ -23,6 +31,7 @@ from .web import fetch_website_summary
 def build_shared_context() -> str:
     brand_brief = read_text(BRAND_CONTEXT_DIR / "brand_brief.md")
     growth_strategy = read_text(BRAND_CONTEXT_DIR / "growth_strategy.md")
+    visual_system = read_text(BRAND_CONTEXT_DIR / "visual_system.md")
     asset_inventory = GoogleDriveService().get_asset_inventory().summary
     website_summary = fetch_website_summary(BRAND_WEBSITE_URL)
     learning_context = feedback_summary()
@@ -34,6 +43,8 @@ def build_shared_context() -> str:
             brand_brief,
             "Growth strategy:",
             growth_strategy,
+            "Visual system:",
+            visual_system,
             "Learning loop feedback:",
             learning_context,
             "Raw asset inventory:",
@@ -71,6 +82,7 @@ async def generate_visual_content(shared_context: str, ideas: str, drafts: str) 
 
     plan = extract_json_plan(raw_plan)
     rendered_paths = render_carousel(plan, asset_paths)
+    image_concept_paths = generate_image_concepts(plan, asset_paths) if IMAGE_CONCEPTS_ENABLED else {}
     brief = "\n".join(
         [
             f"# {plan.get('title', 'Visual Carousel')}",
@@ -85,6 +97,9 @@ async def generate_visual_content(shared_context: str, ideas: str, drafts: str) 
             "## Rendered Slides",
             *[f"- {path}" for path in rendered_paths],
             "",
+            "## OpenAI Image Concepts",
+            *[f"- {key}: {value}" for key, value in image_concept_paths.items()],
+            "",
             "## Caption",
             plan.get("caption", ""),
         ]
@@ -94,6 +109,7 @@ async def generate_visual_content(shared_context: str, ideas: str, drafts: str) 
     return {
         "visual_brief": str(brief_path),
         "visual_slides": ", ".join(str(path) for path in rendered_paths),
+        **image_concept_paths,
     }
 
 

@@ -12,6 +12,7 @@ OUTPUT_FOLDERS = [
     "daily_reports",
     "ad_concepts",
     "visual_content",
+    "image_concepts",
 ]
 
 
