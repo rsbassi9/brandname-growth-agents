@@ -92,19 +92,29 @@ Every future agent run reads recent feedback and uses it as learning context.
 
 Google Drive is optional for the MVP.
 
-To enable it:
+To enable it with user OAuth, which works when service account keys are blocked:
 1. Create a Google Cloud project.
 2. Enable the Google Drive API.
-3. Create a service account.
-4. Download the service account JSON as `credentials.json`.
-5. Share the Brand Name Design Drive folder with the service account email.
-6. Set:
+3. Go to **APIs & Services -> OAuth consent screen** and configure the app for your Google account.
+4. Go to **APIs & Services -> Credentials**.
+5. Create an **OAuth client ID**.
+6. Choose **Desktop app**.
+7. Download the JSON file as `oauth_client.json`.
+8. Put it in the repo root.
+9. Copy your raw content folder ID from the Google Drive URL.
+10. Set:
 
 ```text
 GOOGLE_DRIVE_ENABLED=true
 GOOGLE_DRIVE_ROOT_FOLDER_ID=your_folder_id
-GOOGLE_APPLICATION_CREDENTIALS=credentials.json
+GOOGLE_AUTH_MODE=oauth
+GOOGLE_OAUTH_CLIENT_FILE=oauth_client.json
+GOOGLE_OAUTH_TOKEN_FILE=token.json
 ```
+
+The first run opens a Google sign-in browser window and creates `token.json`. Future runs reuse `token.json`.
+
+If you are using a Google project that still allows service account keys, set `GOOGLE_AUTH_MODE=service_account` and use `GOOGLE_APPLICATION_CREDENTIALS=credentials.json`.
 
 The Drive pass creates a recursive asset inventory summary from the configured folder. When `VISUAL_OUTPUT_ENABLED=true`, image files from the Drive folder are downloaded into `.cache/drive_assets` and used as source material for rendered PNG carousel slides.
 

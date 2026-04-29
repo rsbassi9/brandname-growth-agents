@@ -2,7 +2,17 @@ from dataclasses import dataclass
 from io import FileIO
 from pathlib import Path
 
-from .settings import GOOGLE_APPLICATION_CREDENTIALS, GOOGLE_DRIVE_ENABLED, GOOGLE_DRIVE_ROOT_FOLDER_ID
+from .settings import (
+    GOOGLE_APPLICATION_CREDENTIALS,
+    GOOGLE_AUTH_MODE,
+    GOOGLE_DRIVE_ENABLED,
+    GOOGLE_DRIVE_ROOT_FOLDER_ID,
+    GOOGLE_OAUTH_CLIENT_FILE,
+    GOOGLE_OAUTH_TOKEN_FILE,
+)
+
+
+DRIVE_READONLY_SCOPES = ["https://www.googleapis.com/auth/drive.readonly"]
 
 
 @dataclass
@@ -28,14 +38,13 @@ class GoogleDriveService:
             )
 
         try:
-            from google.oauth2 import service_account
-            from googleapiclient.discovery import build
+            self._assert_drive_dependencies()
         except ImportError:
             return AssetInventory(enabled=False, summary="Google Drive dependencies are not installed.", files=[])
 
-        credentials_path = Path(GOOGLE_APPLICATION_CREDENTIALS)
-        if not credentials_path.exists():
-            return AssetInventory(enabled=False, summary="credentials.json was not found.", files=[])
+        missing_auth = self._missing_auth_message()
+        if missing_auth:
+            return AssetInventory(enabled=False, summary=missing_auth, files=[])
 
         service = self._build_service()
         files = self._list_files(service, GOOGLE_DRIVE_ROOT_FOLDER_ID)
@@ -78,15 +87,60 @@ class GoogleDriveService:
         return downloaded
 
     def _build_service(self):
-        from google.oauth2 import service_account
         from googleapiclient.discovery import build
 
-        scopes = ["https://www.googleapis.com/auth/drive.readonly"]
-        credentials = service_account.Credentials.from_service_account_file(
-            Path(GOOGLE_APPLICATION_CREDENTIALS),
-            scopes=scopes,
-        )
+        if GOOGLE_AUTH_MODE == "service_account":
+            credentials = self._service_account_credentials()
+        else:
+            credentials = self._oauth_credentials()
+
         return build("drive", "v3", credentials=credentials)
+
+    def _assert_drive_dependencies(self) -> None:
+        import google.oauth2.credentials  # noqa: F401
+        import google_auth_oauthlib.flow  # noqa: F401
+        import googleapiclient.discovery  # noqa: F401
+
+    def _missing_auth_message(self) -> str:
+        if GOOGLE_AUTH_MODE == "service_account":
+            credentials_path = Path(GOOGLE_APPLICATION_CREDENTIALS)
+            if not credentials_path.exists():
+                return f"{GOOGLE_APPLICATION_CREDENTIALS} was not found."
+            return ""
+
+        client_path = Path(GOOGLE_OAUTH_CLIENT_FILE)
+        if not client_path.exists():
+            return f"{GOOGLE_OAUTH_CLIENT_FILE} was not found. Download an OAuth Desktop client JSON from Google Cloud."
+        return ""
+
+    def _service_account_credentials(self):
+        from google.oauth2 import service_account
+
+        return service_account.Credentials.from_service_account_file(
+            Path(GOOGLE_APPLICATION_CREDENTIALS),
+            scopes=DRIVE_READONLY_SCOPES,
+        )
+
+    def _oauth_credentials(self):
+        from google.auth.transport.requests import Request
+        from google.oauth2.credentials import Credentials
+        from google_auth_oauthlib.flow import InstalledAppFlow
+
+        token_path = Path(GOOGLE_OAUTH_TOKEN_FILE)
+        credentials = None
+
+        if token_path.exists():
+            credentials = Credentials.from_authorized_user_file(token_path, DRIVE_READONLY_SCOPES)
+
+        if credentials and credentials.expired and credentials.refresh_token:
+            credentials.refresh(Request())
+
+        if not credentials or not credentials.valid:
+            flow = InstalledAppFlow.from_client_secrets_file(GOOGLE_OAUTH_CLIENT_FILE, DRIVE_READONLY_SCOPES)
+            credentials = flow.run_local_server(port=0)
+            token_path.write_text(credentials.to_json(), encoding="utf-8")
+
+        return credentials
 
     def _list_files(self, service, folder_id: str) -> list[dict]:
         query = f"'{folder_id}' in parents and trashed = false"

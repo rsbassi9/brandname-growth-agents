@@ -5,4 +5,5 @@ __pycache__/
 .pytest_cache/
 .cache/
 credentials.json
+oauth_client.json
 token.json
