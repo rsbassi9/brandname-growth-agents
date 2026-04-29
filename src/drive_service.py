@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from io import FileIO
 from pathlib import Path
+from urllib.parse import parse_qs, urlparse
 
 from .settings import (
     GOOGLE_APPLICATION_CREDENTIALS,
@@ -47,7 +48,7 @@ class GoogleDriveService:
             return AssetInventory(enabled=False, summary=missing_auth, files=[])
 
         service = self._build_service()
-        files = self._list_files(service, GOOGLE_DRIVE_ROOT_FOLDER_ID)
+        files = self._list_files(service, self._folder_id())
 
         if not files:
             return AssetInventory(enabled=True, summary="Google Drive folder is connected, but no assets were found.", files=[])
@@ -62,10 +63,13 @@ class GoogleDriveService:
         if not self.enabled:
             return []
 
+        if self._missing_auth_message():
+            return []
+
         service = self._build_service()
         files = [
             item
-            for item in self._list_files(service, GOOGLE_DRIVE_ROOT_FOLDER_ID)
+            for item in self._list_files(service, self._folder_id())
             if item.get("mimeType", "").startswith("image/")
         ][:limit]
 
@@ -155,6 +159,20 @@ class GoogleDriveService:
                 expanded.append(item)
 
         return expanded
+
+    def _folder_id(self) -> str:
+        raw = GOOGLE_DRIVE_ROOT_FOLDER_ID.strip()
+        if raw.startswith("http"):
+            parsed = urlparse(raw)
+            parts = [part for part in parsed.path.split("/") if part]
+            if "folders" in parts:
+                index = parts.index("folders")
+                if len(parts) > index + 1:
+                    return parts[index + 1]
+            query = parse_qs(parsed.query)
+            if "id" in query and query["id"]:
+                return query["id"][0]
+        return raw
 
     def _media_downloader(self, handle, request):
         from googleapiclient.http import MediaIoBaseDownload
