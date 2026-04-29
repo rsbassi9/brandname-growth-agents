@@ -14,6 +14,7 @@ from .agents import (
 )
 from .drive_service import GoogleDriveService
 from .file_store import read_text, save_markdown
+from .learning import feedback_summary
 from .settings import BRAND_CONTEXT_DIR, BRAND_WEBSITE_URL, ROOT_DIR, VISUAL_ASSET_LIMIT, VISUAL_OUTPUT_ENABLED
 from .visual_renderer import extract_json_plan, render_carousel
 from .web import fetch_website_summary
@@ -21,14 +22,20 @@ from .web import fetch_website_summary
 
 def build_shared_context() -> str:
     brand_brief = read_text(BRAND_CONTEXT_DIR / "brand_brief.md")
+    growth_strategy = read_text(BRAND_CONTEXT_DIR / "growth_strategy.md")
     asset_inventory = GoogleDriveService().get_asset_inventory().summary
     website_summary = fetch_website_summary(BRAND_WEBSITE_URL)
+    learning_context = feedback_summary()
 
     return "\n\n".join(
         [
             f"Date: {date.today().isoformat()}",
             "Brand brief:",
             brand_brief,
+            "Growth strategy:",
+            growth_strategy,
+            "Learning loop feedback:",
+            learning_context,
             "Raw asset inventory:",
             asset_inventory,
             "Website summary:",

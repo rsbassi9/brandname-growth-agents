@@ -47,6 +47,18 @@ Run the workflow:
 python -m src.orchestrator
 ```
 
+Run the review dashboard:
+
+```powershell
+python -m uvicorn src.dashboard:app --reload --port 8765
+```
+
+Then open:
+
+```text
+http://127.0.0.1:8765
+```
+
 If you see an `insufficient_quota` error, the code reached OpenAI successfully. Fix billing, credits, or usage limits in the OpenAI platform project tied to your API key, then rerun the same command.
 
 Outputs are written to:
@@ -59,6 +71,22 @@ outputs/analytics
 outputs/daily_reports
 outputs/visual_content
 ```
+
+## Dashboard + Learning Loop
+
+The local dashboard lets you:
+- review daily generated reports, drafts, SEO notes, and visual slides
+- rate outputs from 1 to 5
+- leave comments and improvement requests
+- run the agents manually from the browser
+
+Feedback is stored in:
+
+```text
+memory/feedback.jsonl
+```
+
+Every future agent run reads recent feedback and uses it as learning context.
 
 ## Google Drive
 

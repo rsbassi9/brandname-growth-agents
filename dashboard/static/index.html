@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Brand Name Growth Agents</title>
+    <link rel="stylesheet" href="/static/styles.css" />
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div>
+        <p class="eyebrow">Growth OS</p>
+        <h1>Brand Name</h1>
+      </div>
+      <nav>
+        <button class="nav active" data-filter="all">All Outputs</button>
+        <button class="nav" data-filter="daily_reports">Daily Reports</button>
+        <button class="nav" data-filter="content_ideas">Ideas</button>
+        <button class="nav" data-filter="content_drafts">Drafts</button>
+        <button class="nav" data-filter="visual_content">Visuals</button>
+        <button class="nav" data-filter="seo">SEO</button>
+        <button class="nav" data-filter="analytics">Analytics</button>
+      </nav>
+      <button id="runAgents" class="primary">Run Agents</button>
+      <p id="runStatus" class="status"></p>
+    </aside>
+
+    <main>
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Objective</p>
+          <h2>Grow organic attention through better daily creative.</h2>
+        </div>
+        <div class="metrics">
+          <div><span id="outputCount">0</span><small>outputs</small></div>
+          <div><span id="feedbackCount">0</span><small>feedback notes</small></div>
+        </div>
+      </header>
+
+      <section class="layout">
+        <div class="output-list" id="outputList"></div>
+
+        <article class="viewer">
+          <div class="viewer-head">
+            <div>
+              <p class="eyebrow" id="selectedCategory">Select output</p>
+              <h3 id="selectedTitle">Daily generated content will appear here.</h3>
+            </div>
+          </div>
+          <div id="preview" class="preview empty">Choose an output to review.</div>
+
+          <form id="feedbackForm" class="feedback">
+            <input type="hidden" id="feedbackPath" />
+            <label>
+              Rating
+              <select id="rating">
+                <option value="5">5 - strong</option>
+                <option value="4">4 - usable</option>
+                <option value="3">3 - needs edits</option>
+                <option value="2">2 - off direction</option>
+                <option value="1">1 - reject</option>
+              </select>
+            </label>
+            <label>
+              Comment
+              <textarea id="comment" placeholder="What worked or missed?"></textarea>
+            </label>
+            <label>
+              Improvement request for next run
+              <textarea id="improvement" placeholder="Example: Visuals need to feel less generic and more archival. Use real source painting as dominant image."></textarea>
+            </label>
+            <button class="primary" type="submit">Save Feedback</button>
+            <p id="feedbackStatus" class="status"></p>
+          </form>
+        </article>
+      </section>
+    </main>
+
+    <script src="/static/app.js"></script>
+  </body>
+</html>
