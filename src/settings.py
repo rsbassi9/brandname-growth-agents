@@ -9,7 +9,7 @@ BRAND_CONTEXT_DIR = ROOT_DIR / "brand_context"
 AGENT_INSTRUCTIONS_DIR = ROOT_DIR / "agent_instructions"
 OUTPUTS_DIR = ROOT_DIR / "outputs"
 
-load_dotenv(ROOT_DIR / ".env")
+load_dotenv(ROOT_DIR / ".env", override=True)
 
 OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-5.4-mini")
 BRAND_WEBSITE_URL = os.getenv("BRAND_WEBSITE_URL", "https://www.brandnamedesign.co/")
