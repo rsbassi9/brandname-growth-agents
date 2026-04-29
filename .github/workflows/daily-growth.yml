@@ -27,6 +27,8 @@ jobs:
           BRAND_WEBSITE_URL: https://www.brandnamedesign.co/
           GOOGLE_DRIVE_ENABLED: ${{ vars.GOOGLE_DRIVE_ENABLED || 'false' }}
           GOOGLE_DRIVE_ROOT_FOLDER_ID: ${{ secrets.GOOGLE_DRIVE_ROOT_FOLDER_ID }}
+          VISUAL_OUTPUT_ENABLED: ${{ vars.VISUAL_OUTPUT_ENABLED || 'true' }}
+          VISUAL_ASSET_LIMIT: ${{ vars.VISUAL_ASSET_LIMIT || '12' }}
         run: python -m src.orchestrator
 
       - name: Commit generated outputs

@@ -25,4 +25,5 @@ content_strategist_agent = build_agent("Content Strategist", "content_strategist
 content_creator_agent = build_agent("Content Creator", "content_creator")
 seo_agent = build_agent("SEO Agent", "seo")
 analytics_agent = build_agent("Analytics Agent", "analytics")
+visual_designer_agent = build_agent("Visual Designer", "visual_designer")
 orchestrator_agent = build_agent("Growth Orchestrator", "orchestrator")

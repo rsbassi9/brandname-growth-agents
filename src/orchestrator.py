@@ -10,10 +10,12 @@ from .agents import (
     orchestrator_agent,
     run_agent,
     seo_agent,
+    visual_designer_agent,
 )
 from .drive_service import GoogleDriveService
 from .file_store import read_text, save_markdown
-from .settings import BRAND_CONTEXT_DIR, BRAND_WEBSITE_URL
+from .settings import BRAND_CONTEXT_DIR, BRAND_WEBSITE_URL, ROOT_DIR, VISUAL_ASSET_LIMIT, VISUAL_OUTPUT_ENABLED
+from .visual_renderer import extract_json_plan, render_carousel
 from .web import fetch_website_summary
 
 
@@ -35,6 +37,59 @@ def build_shared_context() -> str:
     )
 
 
+async def generate_visual_content(shared_context: str, ideas: str, drafts: str) -> dict[str, str]:
+    if not VISUAL_OUTPUT_ENABLED:
+        return {}
+
+    drive = GoogleDriveService()
+    asset_dir = ROOT_DIR / ".cache" / "drive_assets"
+    asset_paths = drive.download_image_assets(asset_dir, VISUAL_ASSET_LIMIT)
+    asset_list = "\n".join(f"- {path.name}" for path in asset_paths) or "No image assets downloaded. Render text-first placeholder slides."
+
+    raw_plan = await run_agent(
+        visual_designer_agent,
+        "\n\n".join(
+            [
+                shared_context,
+                "Content ideas:",
+                ideas,
+                "Drafts:",
+                drafts,
+                "Downloaded image assets available for design:",
+                asset_list,
+                "Create the JSON carousel plan now.",
+            ]
+        ),
+    )
+
+    plan = extract_json_plan(raw_plan)
+    rendered_paths = render_carousel(plan, asset_paths)
+    brief = "\n".join(
+        [
+            f"# {plan.get('title', 'Visual Carousel')}",
+            "",
+            f"Platform: {plan.get('platform', 'Instagram')}",
+            f"Format: {plan.get('format', 'carousel')}",
+            f"Approval status: {plan.get('approval_status', 'Draft')}",
+            "",
+            "## Asset Strategy",
+            plan.get("asset_strategy", "Use selected raw assets as source material."),
+            "",
+            "## Rendered Slides",
+            *[f"- {path}" for path in rendered_paths],
+            "",
+            "## Caption",
+            plan.get("caption", ""),
+        ]
+    )
+    brief_path = save_markdown("visual_content", "visual-carousel-brief", brief)
+
+    return {
+        "visual_brief": str(brief_path),
+        "visual_slides": ", ".join(str(path) for path in rendered_paths),
+    }
+
+
 async def run_daily_workflow() -> dict[str, str]:
     shared_context = build_shared_context()
 
@@ -54,6 +109,7 @@ async def run_daily_workflow() -> dict[str, str]:
         analytics_agent,
         f"{shared_context}\n\nAnalyze available performance data. If none is available, define the minimum tracking setup for tomorrow.",
     )
+    visual_paths = await generate_visual_content(shared_context, ideas, drafts)
 
     report = await run_agent(
         orchestrator_agent,
@@ -68,6 +124,8 @@ async def run_daily_workflow() -> dict[str, str]:
                 seo,
                 "Analytics notes:",
                 analytics,
+                "Visual content outputs:",
+                "\n".join(f"{key}: {value}" for key, value in visual_paths.items()) or "No visual content generated.",
                 "Compile the final daily growth report.",
             ]
         ),
@@ -80,6 +138,7 @@ async def run_daily_workflow() -> dict[str, str]:
         "analytics": str(save_markdown("analytics", "analytics-notes", analytics)),
         "report": str(save_markdown("daily_reports", "daily-growth-report", report)),
     }
+    paths.update(visual_paths)
 
     return paths
 

@@ -11,6 +11,7 @@ OUTPUT_FOLDERS = [
     "analytics",
     "daily_reports",
     "ad_concepts",
+    "visual_content",
 ]
 
 

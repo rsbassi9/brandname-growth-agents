@@ -5,6 +5,7 @@ OpenAI-first marketing agent system for Brand Name Design.
 The MVP runs a daily review workflow:
 - generates content ideas
 - drafts captions, short video scripts, and carousel concepts
+- renders a draft Instagram carousel as PNG slides
 - audits the website for SEO opportunities
 - summarizes analytics constraints or learnings
 - saves review-ready markdown outputs
@@ -56,6 +57,7 @@ outputs/content_drafts
 outputs/seo
 outputs/analytics
 outputs/daily_reports
+outputs/visual_content
 ```
 
 ## Google Drive
@@ -76,7 +78,7 @@ GOOGLE_DRIVE_ROOT_FOLDER_ID=your_folder_id
 GOOGLE_APPLICATION_CREDENTIALS=credentials.json
 ```
 
-The first Drive pass creates an asset inventory summary from the configured folder. It does not upload or move files yet.
+The Drive pass creates a recursive asset inventory summary from the configured folder. When `VISUAL_OUTPUT_ENABLED=true`, image files from the Drive folder are downloaded into `.cache/drive_assets` and used as source material for rendered PNG carousel slides.
 
 ## GitHub Actions
 
@@ -87,6 +89,8 @@ Add these repo settings:
 - Optional secret: `GOOGLE_DRIVE_ROOT_FOLDER_ID`
 - Optional variable: `OPENAI_MODEL`
 - Optional variable: `GOOGLE_DRIVE_ENABLED`
+- Optional variable: `VISUAL_OUTPUT_ENABLED`
+- Optional variable: `VISUAL_ASSET_LIMIT`
 
 ## Project Folders
 
@@ -99,6 +103,7 @@ outputs/seo/
 outputs/analytics/
 outputs/daily_reports/
 outputs/ad_concepts/
+outputs/visual_content/
 src/
 scripts/
 ```
@@ -111,3 +116,18 @@ Add Drive upload support so generated markdown files can be mirrored into:
 /Brand Name Design/02_Daily Agent Outputs
 /Brand Name Design/03_Drafts for Review
 ```
+
+## Visual Content Outputs
+
+The visual pipeline produces:
+- a JSON design brief
+- a markdown visual brief
+- PNG carousel slides sized for Instagram portrait posts
+
+Outputs are saved under:
+
+```text
+outputs/visual_content/
+```
+
+If Google Drive is disabled or no images are available, the renderer creates text-first placeholder slides so the daily run still completes.
