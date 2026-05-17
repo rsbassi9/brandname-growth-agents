@@ -1,0 +1,78 @@
+{
+  "title": "ARCHIVE FRAGMENT / 01",
+  "platform": "Instagram",
+  "format": "carousel",
+  "asset_strategy": "Lead with the raw painting and reconstruction assets, then move into studio/process evidence, and finish with a strong worn product hero from the JRR shoot set. Keep the sequence legible: canvas, capture, reconstruct, wear.",
+  "slides": [
+    {
+      "slide": 1,
+      "headline": "ONE PAINTING",
+      "subhead": "SOURCE STILL ACTIVE",
+      "asset_hint": "1MM_2PmUblB-kQKh9uxKi0mf_L-WBUAff-ADRIFT_colour_oilpaint_v5-png.png",
+      "layout": "cover",
+      "notes": "Use the painting as the dominant field. Bone background, minimal crop, high tension, archive-first."
+    },
+    {
+      "slide": 2,
+      "headline": "EXTRACTED ZONE",
+      "subhead": "CANVAS TO CAPTURE",
+      "asset_hint": "1N0xmjRS3hwzTCP4CFUJHtzuc6NcVl0Ve-ADRIFT_BW_pixelated-png.png",
+      "layout": "detail",
+      "notes": "Show the digital reconstruction as evidence, with coordinate logic and optical scan feel."
+    },
+    {
+      "slide": 3,
+      "headline": "RECONSTRUCTED",
+      "subhead": "SYSTEM ALIGNMENT",
+      "asset_hint": "1nAYpjSvK-eiObAjuIkWPNQc-agbSE-52-4DRFT_design2_blacktext_FINAL-copy-png.png",
+      "layout": "archive",
+      "notes": "Frame the design file like a technical archive plate. Sparse, sharp, controlled."
+    },
+    {
+      "slide": 4,
+      "headline": "PLACED ON BODY",
+      "subhead": "FRAGMENT BECOMES OBJECT",
+      "asset_hint": "IMG_2149.HEIC",
+      "layout": "split",
+      "notes": "Use process/studio evidence to show the fragment moving from screen to garment. Keep it tactile."
+    },
+    {
+      "slide": 5,
+      "headline": "WORN",
+      "subhead": "PRODUCT AS IDENTITY",
+      "asset_hint": "JRR_4001.jpg",
+      "layout": "product",
+      "notes": "Strong hero frame. Oversized silhouette, movement, premium streetwear confidence, concrete/shadow context."
+    },
+    {
+      "slide": 6,
+      "headline": "SYSTEM END",
+      "subhead": "ARCHIVE CONTINUES",
+      "asset_hint": "1i7hO5XwekYBQqiwaiYyT9Ox9nIuCtqn8-Background2-jpg.jpg",
+      "layout": "archive",
+      "notes": "Closing card with negative space and protocol energy. Feels like a quiet end-state, not a promo."
+    }
+  ],
+  "caption": "One painting.\nExtracted.\nReconstructed.\nWorn.\n\nThe source remains.",
+  "image_concepts": [
+    {
+      "name": "canvas to body hero",
+      "brief": "Show the full transformation in one premium campaign image: raw painting influence projected into a wearable oversized garment on a moving body.",
+      "source_asset_hint": "ADRIFT painting + JRR_4001.jpg",
+      "prompt": "Premium fashion campaign image, image-only source visual, a person in an oversized streetwear silhouette wearing a reconstructed art-fragment garment, moving through a concrete and glass studio-gallery space, confident candid motion, textile texture visible, garment feels like product-as-identity, source painting logic appears as subtle projection, reflection, or fragment overlay from a physical oil painting, bone background tones, near-black shadows, oxidized red accents, technical archive atmosphere, optical scan evidence, coordinate-system precision, sparse composition, premium restraint, editorial lighting, no readable text, no typography, no logos, no graffiti, no hype aesthetic"
+    },
+    {
+      "name": "reconstruction pass",
+      "brief": "Create a clean source image that makes the scan-to-rebuild process legible while still feeling like fashion imagery.",
+      "source_asset_hint": "ADRIFT_BW_pixelated + 4DRFT design files",
+      "prompt": "Image-only editorial source visual, close crop of an art reconstruction workflow becoming a wearable fragment, optical scan feel, technical archive label atmosphere, bone background, near-black interface-like shapes without readable text, oxidized red highlighted zones, coordinate marks implied through layout, a garment or textile panel suspended like evidence in a studio, oversized streetwear cues, tactile fabric surface, concrete and metal textures in the environment, premium minimal composition, emotional movement, product desirability first, source artwork translated into a wearable fragment through projection and alignment, no readable typography, no fake UI text, no logos"
+    },
+    {
+      "name": "worn fragment in city light",
+      "brief": "Deliver the strongest follow-worthy product hero: the fragment worn in a real setting with movement, confidence, and texture.",
+      "source_asset_hint": "JRR_4001.jpg or similar JRR shoot photo",
+      "prompt": "Premium streetwear campaign image, image-only source visual, oversized silhouette on a real body in motion, garment as a reconstructed fragment of an oil painting, city/studio/gallery context with concrete, glass, and brushed metal textures, candid confident posture, tactile textile detail, dark near-black palette with bone-toned highlights and oxidized red from source artwork, sparse technical archive mood, optical scan and coordinate-system energy suggested through framing and composition, desirable fashion-first product hero, emotional movement, clean premium lighting, no readable text, no typography, no logos, no graffiti, no cheap hype styling"
+    }
+  ],
+  "approval_status": "Draft"
+}

@@ -1,0 +1,156 @@
+{
+  "slides": [
+    {
+      "palette": "dark",
+      "footer": "CANVAS / CAPTURE / RECONSTRUCT / DROP",
+      "blocks": [
+        {
+          "id": "meta",
+          "text": "Drop reset",
+          "role": "mono",
+          "x": 72,
+          "y": 302,
+          "size": 34,
+          "color": "accent",
+          "uppercase": true,
+          "wrap": 28
+        },
+        {
+          "id": "headline",
+          "text": "WHAT IS [4DRFT]?",
+          "role": "display",
+          "x": 72,
+          "y": 390,
+          "size": 92,
+          "color": "ink",
+          "uppercase": true,
+          "wrap": 13
+        },
+        {
+          "id": "body",
+          "text": "A new line built from one physical painting.",
+          "role": "brand",
+          "x": 76,
+          "y": 700,
+          "size": 36,
+          "color": "muted",
+          "wrap": 34
+        }
+      ]
+    },
+    {
+      "palette": "light",
+      "footer": "CANVAS / CAPTURE / RECONSTRUCT / DROP",
+      "blocks": [
+        {
+          "id": "meta",
+          "text": "Source",
+          "role": "mono",
+          "x": 72,
+          "y": 302,
+          "size": 34,
+          "color": "accent",
+          "uppercase": true,
+          "wrap": 28
+        },
+        {
+          "id": "headline",
+          "text": "ONE PAINTING",
+          "role": "display",
+          "x": 72,
+          "y": 390,
+          "size": 92,
+          "color": "ink",
+          "uppercase": true,
+          "wrap": 13
+        },
+        {
+          "id": "body",
+          "text": "The painting stays in the studio. The fragments move into the world.",
+          "role": "brand",
+          "x": 76,
+          "y": 700,
+          "size": 36,
+          "color": "muted",
+          "wrap": 34
+        }
+      ]
+    },
+    {
+      "palette": "dark",
+      "footer": "CANVAS / CAPTURE / RECONSTRUCT / DROP",
+      "blocks": [
+        {
+          "id": "meta",
+          "text": "System",
+          "role": "mono",
+          "x": 72,
+          "y": 302,
+          "size": 34,
+          "color": "accent",
+          "uppercase": true,
+          "wrap": 28
+        },
+        {
+          "id": "headline",
+          "text": "SEVEN DESIGNS",
+          "role": "display",
+          "x": 72,
+          "y": 390,
+          "size": 92,
+          "color": "ink",
+          "uppercase": true,
+          "wrap": 13
+        },
+        {
+          "id": "body",
+          "text": "Each garment carries a reconstructed piece of the original source.",
+          "role": "brand",
+          "x": 76,
+          "y": 700,
+          "size": 36,
+          "color": "muted",
+          "wrap": 34
+        }
+      ]
+    },
+    {
+      "palette": "dark",
+      "footer": "CANVAS / CAPTURE / RECONSTRUCT / DROP",
+      "blocks": [
+        {
+          "id": "meta",
+          "text": "Object",
+          "role": "mono",
+          "x": 72,
+          "y": 302,
+          "size": 34,
+          "color": "accent",
+          "uppercase": true,
+          "wrap": 28
+        },
+        {
+          "id": "headline",
+          "text": "RECONSTRUCTED TO WEAR",
+          "role": "display",
+          "x": 72,
+          "y": 390,
+          "size": 92,
+          "color": "ink",
+          "uppercase": true,
+          "wrap": 13
+        },
+        {
+          "id": "body",
+          "text": "Not a graphic pasted on clothing. A source rebuilt as product.",
+          "role": "brand",
+          "x": 76,
+          "y": 700,
+          "size": 36,
+          "color": "muted",
+          "wrap": 34
+        }
+      ]
+    }
+  ]
+}

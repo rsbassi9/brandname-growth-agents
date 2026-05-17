@@ -1,0 +1,78 @@
+{
+  "title": "From canvas to fragment",
+  "platform": "Instagram",
+  "format": "carousel",
+  "asset_strategy": "Lead with the oil painting as source evidence, then shift into reconstruction detail, then finish on a styled wearable hero so the transformation reads as art-to-object-to-body. Use the raw painting asset as the dominant visual thread, and only bring in garment/product assets once the fragment logic is established.",
+  "slides": [
+    {
+      "slide": 1,
+      "headline": "SOURCE",
+      "subhead": "canvas evidence",
+      "asset_hint": "ADRIFT_colour_oilpaint_v5.png",
+      "layout": "cover",
+      "notes": "Full-bleed archive crop on bone ground; sparse technical framing; let paint texture carry the opening."
+    },
+    {
+      "slide": 2,
+      "headline": "CAPTURE",
+      "subhead": "optical scan",
+      "asset_hint": "ADRIFT_BW_pixelated.png",
+      "layout": "detail",
+      "notes": "Show scan logic and reconstruction texture; keep it clinical, minimal, and slightly mysterious."
+    },
+    {
+      "slide": 3,
+      "headline": "RECONSTRUCT",
+      "subhead": "system extraction",
+      "asset_hint": "4DRFT_design2_blacktext_FINAL copy.png",
+      "layout": "archive",
+      "notes": "Use a grid-like archive frame; emphasize coordinates, crop boundaries, and fragment selection."
+    },
+    {
+      "slide": 4,
+      "headline": "FRAGMENT",
+      "subhead": "wearable evidence",
+      "asset_hint": "branches_shorts.png",
+      "layout": "product",
+      "notes": "Introduce the garment as a desirable object; close on textile, placement, and silhouette."
+    },
+    {
+      "slide": 5,
+      "headline": "BODY",
+      "subhead": "in motion",
+      "asset_hint": "IMG_1794.HEIC",
+      "layout": "split",
+      "notes": "Styled streetwear body shot with movement; premium city/studio energy; art-origin detail stays visible."
+    },
+    {
+      "slide": 6,
+      "headline": "RETURN",
+      "subhead": "wear the archive",
+      "asset_hint": "Background2.jpg",
+      "layout": "cover",
+      "notes": "Quiet closing frame with negative space; make the fragment feel complete, confident, and follow-worthy."
+    }
+  ],
+  "caption": "Canvas // capture // reconstruct // wear.\nA fragment leaves the archive.",
+  "image_concepts": [
+    {
+      "name": "Canvas to body hero",
+      "brief": "Create a campaign image that starts with the painting as source evidence and ends with the garment as the desirable focal point.",
+      "source_asset_hint": "ADRIFT_colour_oilpaint_v5.png + branches_shorts.png",
+      "prompt": "Premium editorial fashion campaign image, image-only source visual, no embedded text. A physical oil painting reconstruction becomes a wearable streetwear fragment on a model, oversized silhouette, graphic garment emphasis, confident candid motion, city studio gallery context, concrete glass metal textures, near-black shadows, warm bone background, deep oxidized red accents, tactile textile detail, product-as-identity, art source visible as projection/reflection/material evidence, sparse technical archive mood, optical scan feeling, coordinate-system composition, premium and restrained, cinematic but clean, social follow-worthy, no readable typography, no logos, no fake text."
+    },
+    {
+      "name": "Scan extraction study",
+      "brief": "Make the reconstruction process legible through a system-like image that still feels like fashion marketing.",
+      "source_asset_hint": "ADRIFT_BW_pixelated.png + 4DRFT_design2_blacktext_FINAL copy.png",
+      "prompt": "Editorial source visual, no embedded text. A reconstructed fragment extracted from a painting appears as an optical scan and archival system study, with a model wearing an oversized streetwear garment in a studio-gallery space, close crop on textile texture and placement, motion blur from a candid step, concrete floor, glass reflections, metal surfaces, near-black and bone palette, oxidized red artifact tones, sparse technical labeling energy implied through composition only, coordinate grid atmosphere, premium streetwear campaign logic, human confidence, performance-lifestyle crossover, art-to-wearable evidence, no readable typography, no logos, no fake text."
+    },
+    {
+      "name": "Archive walkaway",
+      "brief": "End with a high-desire lifestyle frame that makes the wearable fragment feel natural in the world, not just conceptually described.",
+      "source_asset_hint": "Background2.jpg + IMG_1794.HEIC",
+      "prompt": "Image-only premium fashion campaign visual with art-led streetwear energy. A model in oversized silhouette walks through a minimal city/studio/gallery environment, product visible as a reconstructed fragment garment, tactile textile emphasis, subtle movement, confident posture, concrete and metal textures, warm bone and near-black palette with muted oxidized red notes, archive-system atmosphere, fragment overlay feeling as if the artwork is embedded in the garment surface, clean negative space, cinematic realism, desirable before conceptual, Nike/Adidas/Lululemon campaign logic translated into a restrained art-system brand language, no readable typography, no logos, no fake text."
+    }
+  ],
+  "approval_status": "Draft"
+}

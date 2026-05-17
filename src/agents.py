@@ -23,7 +23,11 @@ async def run_agent(agent: Agent, prompt: str) -> str:
 
 content_strategist_agent = build_agent("Content Strategist", "content_strategist")
 content_creator_agent = build_agent("Content Creator", "content_creator")
+content_candidate_agent = build_agent("Content Candidate Planner", "content_candidate")
+creative_composer_agent = build_agent("Creative Composition Art Director", "creative_composer")
 seo_agent = build_agent("SEO Agent", "seo")
 analytics_agent = build_agent("Analytics Agent", "analytics")
+ad_strategist_agent = build_agent("Future Ad Strategist", "ad_strategist")
 visual_designer_agent = build_agent("Visual Designer", "visual_designer")
+feed_curator_agent = build_agent("Feed Curator", "feed_curator")
 orchestrator_agent = build_agent("Growth Orchestrator", "orchestrator")

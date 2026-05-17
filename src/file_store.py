@@ -5,8 +5,11 @@ from .settings import OUTPUTS_DIR
 
 
 OUTPUT_FOLDERS = [
+    "asset_inventory",
     "content_ideas",
     "content_drafts",
+    "content_candidates",
+    "content_variations",
     "seo",
     "analytics",
     "daily_reports",

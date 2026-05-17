@@ -1,0 +1,297 @@
+[
+  {
+    "id": "new-drop",
+    "title": "New Drop",
+    "status": "Draft",
+    "purpose": "Commercial product clarity with a strong campaign cover.",
+    "cover_asset_name": "Distressed Grommet Eyelet Tank Top-mockups-1.png",
+    "frames": [
+      {
+        "asset_name": "Distressed Grommet Eyelet Tank Top-mockups-1.png",
+        "role": "cover",
+        "overlay_text": "NEW DROP",
+        "bucket": "Store Products"
+      },
+      {
+        "asset_name": "Distressed Grommet Eyelet Tank Top-mockups-10.png",
+        "role": "product detail",
+        "overlay_text": "DETAILS",
+        "bucket": "Store Products"
+      },
+      {
+        "asset_name": "Distressed Grommet Eyelet Tank Top-mockups-2.png",
+        "role": "product detail",
+        "overlay_text": "ON BODY",
+        "bucket": "Store Products"
+      },
+      {
+        "asset_name": "Distressed Grommet Eyelet Tank Top-mockups-3.png",
+        "role": "product detail",
+        "overlay_text": "AVAILABLE",
+        "bucket": "Store Products"
+      },
+      {
+        "asset_name": "Distressed Grommet Eyelet Tank Top-mockups-4.png",
+        "role": "product detail",
+        "overlay_text": "NEW DROP",
+        "bucket": "Store Products"
+      },
+      {
+        "asset_name": "Distressed Grommet Eyelet Tank Top-mockups-5.png",
+        "role": "product detail",
+        "overlay_text": "DETAILS",
+        "bucket": "Store Products"
+      },
+      {
+        "asset_name": "Distressed Grommet Eyelet Tank Top-mockups-6.png",
+        "role": "product detail",
+        "overlay_text": "ON BODY",
+        "bucket": "Store Products"
+      },
+      {
+        "asset_name": "Distressed Grommet Eyelet Tank Top-mockups-7.png",
+        "role": "product detail",
+        "overlay_text": "AVAILABLE",
+        "bucket": "Store Products"
+      }
+    ],
+    "curator_note": "New Drop uses 8 frames. Keep the first frame as the strongest cover, then alternate product, body, process, and source context.",
+    "updated_at": "2026-05-16T11:40:15"
+  },
+  {
+    "id": "process",
+    "title": "Process",
+    "status": "Draft",
+    "purpose": "Show evidence: studio, making, reconstruction, and detail.",
+    "cover_asset_name": "IMG_1793.HEIC",
+    "frames": [
+      {
+        "asset_name": "IMG_1793.HEIC",
+        "role": "cover",
+        "overlay_text": "PROCESS",
+        "bucket": "Process / Studio"
+      },
+      {
+        "asset_name": "IMG_1794.HEIC",
+        "role": "process proof",
+        "overlay_text": "SOURCE",
+        "bucket": "Process / Studio"
+      },
+      {
+        "asset_name": "IMG_1795.HEIC",
+        "role": "process proof",
+        "overlay_text": "RECONSTRUCT",
+        "bucket": "Process / Studio"
+      },
+      {
+        "asset_name": "IMG_1796.HEIC",
+        "role": "process proof",
+        "overlay_text": "PROOF",
+        "bucket": "Process / Studio"
+      },
+      {
+        "asset_name": "IMG_1797.HEIC",
+        "role": "process proof",
+        "overlay_text": "PROCESS",
+        "bucket": "Process / Studio"
+      },
+      {
+        "asset_name": "IMG_1991.HEIC",
+        "role": "process proof",
+        "overlay_text": "SOURCE",
+        "bucket": "Process / Studio"
+      },
+      {
+        "asset_name": "IMG_1992.HEIC",
+        "role": "process proof",
+        "overlay_text": "RECONSTRUCT",
+        "bucket": "Process / Studio"
+      },
+      {
+        "asset_name": "IMG_1993.HEIC",
+        "role": "process proof",
+        "overlay_text": "PROOF",
+        "bucket": "Process / Studio"
+      }
+    ],
+    "curator_note": "Process uses 8 frames. Keep the first frame as the strongest cover, then alternate product, body, process, and source context.",
+    "updated_at": "2026-05-16T11:40:15"
+  },
+  {
+    "id": "archive",
+    "title": "Archive",
+    "status": "Draft",
+    "purpose": "Explain the source world and Adrift language.",
+    "cover_asset_name": "4DRFT_design2_blacktext_FINAL copy.png",
+    "frames": [
+      {
+        "asset_name": "4DRFT_design2_blacktext_FINAL copy.png",
+        "role": "cover",
+        "overlay_text": "ARCHIVE",
+        "bucket": "Design Assets"
+      },
+      {
+        "asset_name": "ADRIFT_BW_pixelated.png",
+        "role": "context",
+        "overlay_text": "FRAGMENT",
+        "bucket": "Design Assets"
+      },
+      {
+        "asset_name": "ADRIFT_colour_oilpaint_v5.png",
+        "role": "context",
+        "overlay_text": "DRIFT",
+        "bucket": "Design Assets"
+      },
+      {
+        "asset_name": "Background2.jpg",
+        "role": "context",
+        "overlay_text": "OBJECT",
+        "bucket": "Design Assets"
+      },
+      {
+        "asset_name": "branches_shorts.png",
+        "role": "context",
+        "overlay_text": "ARCHIVE",
+        "bucket": "Design Assets"
+      },
+      {
+        "asset_name": "SimplyAdrift_v4.png",
+        "role": "context",
+        "overlay_text": "FRAGMENT",
+        "bucket": "Design Assets"
+      },
+      {
+        "asset_name": "IMG_1793.HEIC",
+        "role": "process proof",
+        "overlay_text": "DRIFT",
+        "bucket": "Process / Studio"
+      },
+      {
+        "asset_name": "IMG_1794.HEIC",
+        "role": "process proof",
+        "overlay_text": "OBJECT",
+        "bucket": "Process / Studio"
+      }
+    ],
+    "curator_note": "Archive uses 8 frames. Keep the first frame as the strongest cover, then alternate product, body, process, and source context.",
+    "updated_at": "2026-05-16T11:40:15"
+  },
+  {
+    "id": "styling",
+    "title": "Styling",
+    "status": "Draft",
+    "purpose": "Make the products wearable and easy to imagine in real life.",
+    "cover_asset_name": "JRR_3994.jpg",
+    "frames": [
+      {
+        "asset_name": "JRR_3994.jpg",
+        "role": "cover",
+        "overlay_text": "STYLE",
+        "bucket": "Shoot Photos"
+      },
+      {
+        "asset_name": "JRR_4000-2.jpg",
+        "role": "body proof",
+        "overlay_text": "FIT",
+        "bucket": "Shoot Photos"
+      },
+      {
+        "asset_name": "JRR_4000.jpg",
+        "role": "body proof",
+        "overlay_text": "DETAIL",
+        "bucket": "Shoot Photos"
+      },
+      {
+        "asset_name": "JRR_4001-2.jpg",
+        "role": "body proof",
+        "overlay_text": "WEAR",
+        "bucket": "Shoot Photos"
+      },
+      {
+        "asset_name": "JRR_4001.jpg",
+        "role": "body proof",
+        "overlay_text": "STYLE",
+        "bucket": "Shoot Photos"
+      },
+      {
+        "asset_name": "JRR_4002-2.jpg",
+        "role": "body proof",
+        "overlay_text": "FIT",
+        "bucket": "Shoot Photos"
+      },
+      {
+        "asset_name": "JRR_4002.jpg",
+        "role": "body proof",
+        "overlay_text": "DETAIL",
+        "bucket": "Shoot Photos"
+      },
+      {
+        "asset_name": "JRR_4004-2.jpg",
+        "role": "body proof",
+        "overlay_text": "WEAR",
+        "bucket": "Shoot Photos"
+      }
+    ],
+    "curator_note": "Styling uses 8 frames. Keep the first frame as the strongest cover, then alternate product, body, process, and source context.",
+    "updated_at": "2026-05-16T11:40:15"
+  },
+  {
+    "id": "q-and-a",
+    "title": "Q&A",
+    "status": "Draft",
+    "purpose": "Answer brand, drop, sizing, shipping, and process questions.",
+    "cover_asset_name": "4DRFT_design2_blacktext_FINAL copy.png",
+    "frames": [
+      {
+        "asset_name": "4DRFT_design2_blacktext_FINAL copy.png",
+        "role": "cover",
+        "overlay_text": "Q&A",
+        "bucket": "Design Assets"
+      },
+      {
+        "asset_name": "ADRIFT_BW_pixelated.png",
+        "role": "context",
+        "overlay_text": "WHAT IS 4DRFT?",
+        "bucket": "Design Assets"
+      },
+      {
+        "asset_name": "ADRIFT_colour_oilpaint_v5.png",
+        "role": "context",
+        "overlay_text": "SIZING",
+        "bucket": "Design Assets"
+      },
+      {
+        "asset_name": "Background2.jpg",
+        "role": "context",
+        "overlay_text": "SHIPPING",
+        "bucket": "Design Assets"
+      },
+      {
+        "asset_name": "branches_shorts.png",
+        "role": "context",
+        "overlay_text": "Q&A",
+        "bucket": "Design Assets"
+      },
+      {
+        "asset_name": "SimplyAdrift_v4.png",
+        "role": "context",
+        "overlay_text": "WHAT IS 4DRFT?",
+        "bucket": "Design Assets"
+      },
+      {
+        "asset_name": "Distressed Grommet Eyelet Tank Top-mockups-1.png",
+        "role": "product detail",
+        "overlay_text": "SIZING",
+        "bucket": "Store Products"
+      },
+      {
+        "asset_name": "Distressed Grommet Eyelet Tank Top-mockups-10.png",
+        "role": "product detail",
+        "overlay_text": "SHIPPING",
+        "bucket": "Store Products"
+      }
+    ],
+    "curator_note": "Q&A uses 8 frames. Keep the first frame as the strongest cover, then alternate product, body, process, and source context.",
+    "updated_at": "2026-05-16T11:40:15"
+  }
+]

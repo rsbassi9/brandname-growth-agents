@@ -3,80 +3,420 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Brand Name Growth Agents</title>
-    <link rel="stylesheet" href="/static/styles.css" />
+    <title>Brand Name Review Dashboard</title>
+    <link rel="stylesheet" href="/static/styles.css?v=quality-shoot-loop-1" />
   </head>
   <body>
     <aside class="sidebar">
-      <div>
-        <p class="eyebrow">Growth OS</p>
+      <div class="brand">
+        <p class="eyebrow">Review</p>
         <h1>Brand Name</h1>
       </div>
-      <nav>
-        <button class="nav active" data-filter="all">All Outputs</button>
-        <button class="nav" data-filter="daily_reports">Daily Reports</button>
-        <button class="nav" data-filter="content_ideas">Ideas</button>
-        <button class="nav" data-filter="content_drafts">Drafts</button>
-        <button class="nav" data-filter="visual_content">Visuals</button>
-        <button class="nav" data-filter="image_concepts">Image Concepts</button>
-        <button class="nav" data-filter="seo">SEO</button>
-        <button class="nav" data-filter="analytics">Analytics</button>
-      </nav>
-      <button id="runAgents" class="primary">Run Agents</button>
+
+      <button id="runAgents" class="primary" type="button">Run Today</button>
+      <button id="openReviewModal" class="secondary" type="button">Review Latest Outputs</button>
       <p id="runStatus" class="status"></p>
+      <div id="runNotice" class="run-notice hidden" role="status" aria-live="polite"></div>
+
+      <nav class="mode-nav">
+        <p>Create</p>
+        <button class="mode-button active" data-mode="review" type="button">Review</button>
+        <button class="mode-button" data-mode="builder" type="button">Builder</button>
+        <button class="mode-button" data-mode="visuals" type="button">Visuals</button>
+        <button class="mode-button" data-mode="highlights" type="button">Highlights</button>
+        <p>Plan</p>
+        <button class="mode-button" data-mode="calendar" type="button">Calendar</button>
+        <button class="mode-button" data-mode="feed" type="button">Feed Grid</button>
+        <button class="mode-button" data-mode="launch" type="button">Drop Launch</button>
+        <button class="mode-button" data-mode="direction" type="button">Direction</button>
+        <p>Learn</p>
+        <button class="mode-button" data-mode="performance" type="button">Performance</button>
+        <button class="mode-button" data-mode="shoot" type="button">Shoot Planner</button>
+        <button class="mode-button" data-mode="merchandising" type="button">Merchandising</button>
+        <p>Growth</p>
+        <button class="mode-button" data-mode="seo" type="button">SEO</button>
+        <button class="mode-button" data-mode="ads" type="button">Ads</button>
+        <button class="mode-button" data-mode="community" type="button">Community</button>
+        <button class="mode-button" data-mode="owned" type="button">Email / SMS</button>
+        <button class="mode-button" data-mode="automation" type="button">Automation</button>
+      </nav>
+
+      <form id="productUploadForm" class="upload-form">
+        <p class="eyebrow">Local Products</p>
+        <p class="helper-text">Optional backup. Drive Products are used automatically.</p>
+        <label>
+          Product Image
+          <input id="productImageFile" type="file" accept="image/*" />
+        </label>
+        <label>
+          Product Name
+          <input id="productName" type="text" placeholder="Adrift hoodie / tee / detail" />
+        </label>
+        <label>
+          Notes
+          <textarea id="productNotes" placeholder="Fit, color, product detail, use case"></textarea>
+        </label>
+        <button class="secondary" type="submit">Add Product</button>
+        <p id="productUploadStatus" class="status"></p>
+      </form>
+
+      <div>
+        <p class="eyebrow">Days</p>
+        <div id="dayList" class="day-list"></div>
+      </div>
     </aside>
 
     <main>
       <header class="topbar">
         <div>
-          <p class="eyebrow">Objective</p>
-          <h2>Grow organic attention through better daily creative.</h2>
+          <p class="eyebrow" id="selectedDateLabel">Latest Day</p>
+          <h2 id="modeTitle">Review generated posts, notes, and reports.</h2>
         </div>
         <div class="metrics">
-          <div><span id="outputCount">0</span><small>outputs</small></div>
-          <div><span id="feedbackCount">0</span><small>feedback notes</small></div>
+          <div><span id="postCount">0</span><small>post previews</small></div>
+          <div><span id="reportCount">0</span><small>reports</small></div>
+          <div><span id="feedbackCount">0</span><small>comments</small></div>
         </div>
       </header>
 
-      <section class="layout">
-        <div class="output-list" id="outputList"></div>
+      <section id="calendarView" class="calendar-view hidden">
+        <div class="calendar-header">
+          <div>
+            <p class="eyebrow">Content Calendar</p>
+            <h3>One post per day. Drag to reschedule.</h3>
+          </div>
+          <div class="header-actions">
+            <button id="launchRecovery" class="secondary" type="button" title="Prepends a 4DRFT launch recovery sequence before existing content.">Launch Recovery</button>
+            <button id="generateCalendar" class="secondary" type="button" title="Refreshes suggestions from latest agent outputs while preserving removals and saved edits.">Refresh Suggestions</button>
+          </div>
+        </div>
+        <div id="calendarStrategy" class="strategy-panel"></div>
+        <div id="calendarGrid" class="calendar-grid"></div>
+      </section>
 
-        <article class="viewer">
-          <div class="viewer-head">
+      <section id="feedView" class="feed-view hidden">
+        <div class="calendar-header">
+          <div>
+            <p class="eyebrow">Page Curation</p>
+            <h3>Preview every scheduled post as the Instagram grid.</h3>
+          </div>
+          <button id="curateFeed" class="secondary" type="button">Curate Feed</button>
+        </div>
+        <div id="feedCuration" class="strategy-panel"></div>
+        <div id="feedGrid" class="feed-grid"></div>
+      </section>
+
+      <section id="visualsView" class="visuals-view hidden">
+        <div class="calendar-header">
+          <div>
+            <p class="eyebrow">Generated Visuals</p>
+            <h3>Archive of rendered slides, AI concepts, and iterations.</h3>
+          </div>
+        </div>
+        <div id="aiVisualArchive" class="ai-visual-archive"></div>
+        <div id="visualArchive" class="visual-archive"></div>
+      </section>
+
+      <section id="highlightsView" class="highlights-view hidden">
+        <div class="calendar-header">
+          <div>
+            <p class="eyebrow">Highlight Curator</p>
+            <h3>Build profile highlights separate from the feed grid.</h3>
+          </div>
+          <button id="refreshHighlights" class="secondary" type="button">Refresh Highlights</button>
+        </div>
+        <div id="highlightGrid" class="highlight-grid"></div>
+      </section>
+
+      <section id="directionView" class="action-view hidden">
+        <div class="calendar-header">
+          <div>
+            <p class="eyebrow">Creative Direction</p>
+            <h3>One steering note that all agents read before generating.</h3>
+          </div>
+          <button id="refreshCampaignMemory" class="secondary" type="button">Refresh Campaign Memory</button>
+        </div>
+        <div id="campaignMemoryPanel" class="campaign-memory-panel"></div>
+        <div id="creativeBriefEditor" class="creative-brief-editor"></div>
+      </section>
+
+      <section id="seoView" class="action-view hidden">
+        <div class="calendar-header">
+          <div>
+            <p class="eyebrow">SEO Checklist</p>
+            <h3>Approve store improvements before automation.</h3>
+          </div>
+        </div>
+        <div id="seoChecklist" class="action-checklist"></div>
+      </section>
+
+      <section id="adsView" class="action-view hidden">
+        <div class="calendar-header">
+          <div>
+            <p class="eyebrow">Ads Checklist</p>
+            <h3>Review ad readiness before anything launches.</h3>
+          </div>
+        </div>
+        <div id="adsChecklist" class="action-checklist"></div>
+      </section>
+
+      <section id="performanceView" class="performance-view hidden">
+        <div class="calendar-header">
+          <div>
+            <p class="eyebrow">Performance Loop</p>
+            <h3>Log posted content and first metrics so agents learn what works.</h3>
+          </div>
+        </div>
+        <div id="performanceSummary" class="strategy-panel"></div>
+        <div id="performanceList" class="performance-list"></div>
+      </section>
+
+      <section id="shootView" class="action-view hidden">
+        <div class="calendar-header">
+          <div>
+            <p class="eyebrow">Shoot Planner</p>
+            <h3>Convert content gaps into practical photoshoot requests.</h3>
+          </div>
+          <button id="refreshShootPlan" class="secondary" type="button">Refresh Shot List</button>
+        </div>
+        <div id="shootPlan" class="shoot-plan"></div>
+      </section>
+
+      <section id="merchandisingView" class="action-view hidden">
+        <div class="calendar-header">
+          <div>
+            <p class="eyebrow">Product Merchandising</p>
+            <h3>Decide what products deserve attention next.</h3>
+          </div>
+          <button id="refreshMerchandising" class="secondary" type="button">Refresh Product Plan</button>
+        </div>
+        <div id="merchandisingPlan" class="merchandising-plan"></div>
+      </section>
+
+      <section id="launchView" class="action-view hidden">
+        <div class="calendar-header">
+          <div>
+            <p class="eyebrow">Drop Launch</p>
+            <h3>Coordinate content, highlights, SEO, ads, and shoot needs.</h3>
+          </div>
+          <button id="refreshLaunchPlan" class="secondary" type="button">Refresh Launch Plan</button>
+        </div>
+        <div id="launchPlan" class="launch-plan"></div>
+      </section>
+
+      <section id="communityView" class="action-view hidden">
+        <div class="calendar-header">
+          <div>
+            <p class="eyebrow">Community / FAQ</p>
+            <h3>Turn repeated questions into replies, stories, and highlights.</h3>
+          </div>
+          <button id="refreshCommunityFaq" class="secondary" type="button">Refresh FAQ</button>
+        </div>
+        <div id="communityFaq" class="community-faq"></div>
+      </section>
+
+      <section id="ownedView" class="action-view hidden">
+        <div class="calendar-header">
+          <div>
+            <p class="eyebrow">Email / SMS</p>
+            <h3>Reuse approved content for owned-channel marketing.</h3>
+          </div>
+          <button id="refreshOwnedPlan" class="secondary" type="button">Refresh Email / SMS</button>
+        </div>
+        <div id="ownedPlan" class="owned-plan"></div>
+      </section>
+
+      <section id="automationView" class="action-view hidden">
+        <div class="calendar-header">
+          <div>
+            <p class="eyebrow">Automation Schedule</p>
+            <h3>Set the rhythm while keeping review and approvals in control.</h3>
+          </div>
+        </div>
+        <div id="automationPanel" class="automation-panel"></div>
+      </section>
+
+      <section id="builderView" class="builder-view hidden">
+        <div class="builder-shell">
+          <section class="builder-preview-panel">
+            <div class="calendar-header">
+              <div>
+                <p class="eyebrow">Post Builder</p>
+                <h3 id="builderTitle">Select a post to build.</h3>
+              </div>
+              <select id="builderStatus">
+                <option value="Draft">Draft</option>
+                <option value="Needs Image">Needs Image</option>
+                <option value="Needs Copy">Needs Copy</option>
+                <option value="Approved">Approved</option>
+                <option value="Scheduled">Scheduled</option>
+                <option value="Posted">Posted</option>
+              </select>
+            </div>
+            <div id="builderPreview" class="phone-preview empty">Choose a calendar or feed item.</div>
+            <div id="builderAssetTray" class="builder-asset-tray"></div>
+            <div class="builder-library">
+              <div class="builder-library-head">
+                <p class="eyebrow">Swap From Drive</p>
+                <div id="builderAssetFilters" class="asset-filters"></div>
+              </div>
+              <div id="builderAssetLibrary" class="builder-asset-library"></div>
+            </div>
+          </section>
+          <aside class="builder-copy-panel">
+            <div id="builderWorkspace" class="workspace empty">No post selected.</div>
+          </aside>
+        </div>
+      </section>
+
+      <section id="reviewView" class="review-layout">
+        <section class="posts-panel">
+          <div class="panel-head">
             <div>
-              <p class="eyebrow" id="selectedCategory">Select output</p>
-              <h3 id="selectedTitle">Daily generated content will appear here.</h3>
+              <p class="eyebrow">Posts</p>
+              <h3>Previews</h3>
             </div>
           </div>
-          <div id="preview" class="preview empty">Choose an output to review.</div>
+          <div id="postGrid" class="post-grid"></div>
+        </section>
 
-          <form id="feedbackForm" class="feedback">
-            <input type="hidden" id="feedbackPath" />
+        <aside class="detail-panel">
+          <section class="workspace-panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">Post Workspace</p>
+                <h3 id="workspaceTitle">Select a candidate.</h3>
+              </div>
+            </div>
+            <div id="workspace" class="workspace empty">No candidate selected.</div>
+            <div class="regen-actions">
+              <button class="secondary" data-regen="hook" type="button">New Hook</button>
+              <button class="secondary" data-regen="caption" type="button">New Caption</button>
+              <button class="secondary" data-regen="structure" type="button">New Structure</button>
+            </div>
             <label>
-              Rating
-              <select id="rating">
-                <option value="5">5 - strong</option>
-                <option value="4">4 - usable</option>
-                <option value="3">3 - needs edits</option>
-                <option value="2">2 - off direction</option>
-                <option value="1">1 - reject</option>
-              </select>
+              Direction
+              <textarea id="regenDirection" placeholder="Less corny, more direct, more fashion, stronger first 2 seconds"></textarea>
             </label>
-            <label>
-              Comment
-              <textarea id="comment" placeholder="What worked or missed?"></textarea>
-            </label>
-            <label>
-              Improvement request for next run
-              <textarea id="improvement" placeholder="Example: Visuals need to feel less generic and more archival. Use real source painting as dominant image."></textarea>
-            </label>
-            <button class="primary" type="submit">Save Feedback</button>
-            <p id="feedbackStatus" class="status"></p>
-          </form>
-        </article>
+            <p id="regenStatus" class="status"></p>
+          </section>
+
+          <section class="selected-card">
+            <p class="eyebrow" id="selectedKind">Select</p>
+            <h3 id="selectedTitle">Choose a preview or report.</h3>
+            <div id="preview" class="preview empty">Nothing selected yet.</div>
+
+            <form id="replaceForm" class="replace-form hidden">
+              <label>
+                Replace Image
+                <input id="replacementFile" type="file" accept="image/*" />
+              </label>
+              <button class="secondary" type="submit">Use This Image</button>
+              <p id="replaceStatus" class="status"></p>
+            </form>
+
+            <section id="drivePicker" class="drive-picker hidden">
+              <div class="panel-head compact">
+                <div>
+                  <p class="eyebrow">Switch From Drive</p>
+                  <h3>Raw Images</h3>
+                </div>
+              </div>
+              <div id="driveAssetList" class="drive-asset-list"></div>
+              <p id="driveReplaceStatus" class="status"></p>
+            </section>
+
+            <form id="feedbackForm" class="feedback">
+              <input type="hidden" id="feedbackPath" />
+              <label>
+                Rating
+                <select id="rating">
+                  <option value="5">5 - strong</option>
+                  <option value="4">4 - usable</option>
+                  <option value="3">3 - needs edits</option>
+                  <option value="2">2 - off direction</option>
+                  <option value="1">1 - reject</option>
+                </select>
+              </label>
+              <label>
+                Inline Comment
+                <textarea id="comment" placeholder="Leave a note on this exact item."></textarea>
+              </label>
+              <label>
+                Request For Next Run
+                <textarea id="improvement" placeholder="What should the agents change next time?"></textarea>
+              </label>
+              <button class="primary" type="submit">Save Comment</button>
+              <p id="feedbackStatus" class="status"></p>
+            </form>
+
+            <div>
+              <p class="eyebrow">Comments On This Item</p>
+              <div id="inlineComments" class="comments"></div>
+            </div>
+          </section>
+
+          <section class="reports-panel">
+            <div class="panel-head">
+              <div>
+                <p class="eyebrow">Daily Archive</p>
+                <h3>Reports</h3>
+              </div>
+            </div>
+            <div id="reportList" class="report-list"></div>
+          </section>
+        </aside>
       </section>
     </main>
 
-    <script src="/static/app.js"></script>
+    <div id="reviewModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="reviewModalTitle">
+      <section class="modal-panel">
+        <div class="modal-head">
+          <div>
+            <p class="eyebrow">Run Review</p>
+            <h3 id="reviewModalTitle">Rank today's outputs</h3>
+          </div>
+          <button id="closeReviewModal" class="secondary" type="button">Close</button>
+        </div>
+        <p id="reviewModalStatus" class="status"></p>
+        <div id="reviewItems" class="review-items"></div>
+        <div class="modal-actions">
+          <button id="saveReviewRatings" class="secondary" type="button">Save Rankings</button>
+          <button id="saveReviewAndCurate" class="primary" type="button">Save + Curate Feed</button>
+        </div>
+      </section>
+    </div>
+
+    <div id="imageModal" class="modal hidden" role="dialog" aria-modal="true" aria-labelledby="imageModalTitle">
+      <section class="modal-panel image-modal-panel">
+        <div class="modal-head">
+          <div>
+            <p class="eyebrow">AI Visual</p>
+            <h3 id="imageModalTitle">Generated image</h3>
+          </div>
+          <button id="closeImageModal" class="secondary" type="button">Close</button>
+        </div>
+        <div class="image-modal-layout">
+          <div id="imageModalMedia" class="image-modal-media"></div>
+          <form id="iterationForm" class="iteration-form">
+            <input id="iterationItemId" type="hidden" />
+            <input id="iterationBasePath" type="hidden" />
+            <input id="iterationConceptType" type="hidden" />
+            <label>
+              Changes
+              <textarea id="iterationDirection" placeholder="Add the minimal front logo shown in the product references. Keep the same model pose, lighting, and garment color."></textarea>
+            </label>
+            <label>
+              Optional Reference Photos
+              <input id="iterationReferences" type="file" accept="image/*" multiple />
+            </label>
+            <button class="primary" type="submit">Generate Iteration</button>
+            <p id="iterationStatus" class="status"></p>
+          </form>
+        </div>
+      </section>
+    </div>
+
+    <script src="/static/app.js?v=quality-shoot-loop-1"></script>
   </body>
 </html>

@@ -1,0 +1,78 @@
+{
+  "title": "CANVAS / CAPTURE / RECONSTRUCT / WEAR",
+  "platform": "Instagram",
+  "format": "carousel",
+  "asset_strategy": "Lead with the source painting, move through reconstruction evidence, then land on a wearable hero using a JRR campaign shot and a product mockup. Keep the arc legible and sparse: archive first, product last.",
+  "slides": [
+    {
+      "slide": 1,
+      "headline": "CANVAS",
+      "subhead": "source fragment",
+      "asset_hint": "ADRIFT_colour_oilpaint_v5.png",
+      "layout": "cover",
+      "notes": "Full-bleed oil painting detail on bone field; crop tight, let texture dominate, add only a small protocol label."
+    },
+    {
+      "slide": 2,
+      "headline": "CAPTURE",
+      "subhead": "optical scan",
+      "asset_hint": "ADRIFT_BW_pixelated.png",
+      "layout": "detail",
+      "notes": "Use pixelated reconstruction as evidence; feel like scan output, not design decoration. High contrast, quiet coordinates."
+    },
+    {
+      "slide": 3,
+      "headline": "RECONSTRUCT",
+      "subhead": "system alignment",
+      "asset_hint": "4DRFT_design2_blacktext_FINAL copy.png",
+      "layout": "archive",
+      "notes": "Treat as technical archive plate: grid, coordinate marks, fragment map, oxidized red accent only where needed."
+    },
+    {
+      "slide": 4,
+      "headline": "FRAGMENT",
+      "subhead": "extracted form",
+      "asset_hint": "Essential Heavyweight Cotton T-Shirt-mockups-31.png",
+      "layout": "product",
+      "notes": "Bring the garment forward as an object, not a mockup; emphasize graphic placement and material weight."
+    },
+    {
+      "slide": 5,
+      "headline": "WEAR",
+      "subhead": "in motion",
+      "asset_hint": "JRR_4001.jpg",
+      "layout": "split",
+      "notes": "Campaign-body shot in city/studio light; oversized fit, candid movement, strong shadow, premium streetwear energy."
+    },
+    {
+      "slide": 6,
+      "headline": "ARCHIVE",
+      "subhead": "worn evidence",
+      "asset_hint": "JRR_4046.jpg",
+      "layout": "detail",
+      "notes": "Close crop on textile and body; make the fragment feel desirable and alive, with gallery/concrete restraint."
+    }
+  ],
+  "caption": "Extracted from the canvas.\nReconstructed into form.\nWorn as a fragment.",
+  "image_concepts": [
+    {
+      "name": "Source Fragment Hero",
+      "brief": "Create a premium cover image that makes the raw painting feel like the origin point of a desirable fashion object, with the art surface leading and the garment implied through system logic.",
+      "source_asset_hint": "ADRIFT_colour_oilpaint_v5.png",
+      "prompt": "Editorial fashion campaign source image, image-only, no readable text, premium minimal composition on warm bone background with near-black and oxidized red tones, a physical oil painting fragment treated as an archive specimen and optical source, technical scan evidence atmosphere, sparse coordinate system cues, negative space, stark crop, tactile paint texture, art-to-wearable translation implied through projection and reconstruction logic, premium streetwear sensibility, oversized silhouette presence suggested in framing, city-studio-gallery mood, concrete glass metal textures, confident contemporary attitude, cinematic but restrained, social media worthy, high-end art-led streetwear campaign, no typography, no logos, no fake text."
+    },
+    {
+      "name": "Wearable Fragment Hero",
+      "brief": "Show the garment as a desirable product first, with the painting fragment appearing as projected source material or overlay evidence in a real fashion campaign setting.",
+      "source_asset_hint": "JRR_4001.jpg + Essential Heavyweight Cotton T-Shirt-mockups-31.png",
+      "prompt": "Premium streetwear campaign image, image-only, no readable text, styled body in motion wearing an oversized garment with graphic emphasis derived from an art fragment, strong product hero framing, tactile textile detail, natural movement, confident posture, city or studio gallery context with concrete, glass, and metal textures, bone background and near-black tonal balance with oxidized red accents pulled from source artwork, subtle optical scan and coordinate system feeling through lighting and composition, fragment source appears as projection/reflection/material evidence rather than decoration, clean desirable fashion advertising logic inspired by performance/lifestyle campaigns, candid motion, premium restraint, no fake typography, no logos, no graffiti, no hype aesthetics."
+    },
+    {
+      "name": "Archive Reconstruction Study",
+      "brief": "Create a reconstruction-led image that feels like a system plate, bridging the canvas to the wearable object with a technical archive tone while still feeling fashion-forward.",
+      "source_asset_hint": "4DRFT_design2_blacktext_FINAL copy.png + ADRIFT_BW_pixelated.png",
+      "prompt": "Image-only editorial reconstruction study, no readable text, stark technical archive label aesthetic, near-black on bone background with oxidized red accents, optical scan artifacts, coordinate grid logic, magnified fragment mapping, reconstructed artwork data translated into garment evidence, premium minimal streetwear campaign framing, oversized silhouette implied through cropped product edges, concrete and glass studio environment cues, tactile textile texture, confident human presence suggested through motion blur and shadow, art-school archive meets fashion brand marketing, desirable product logic, no typography, no logos, no fake text inside the image."
+    }
+  ],
+  "approval_status": "Draft"
+}

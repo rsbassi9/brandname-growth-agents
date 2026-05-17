@@ -1,0 +1,372 @@
+{
+  "date": "2026-05-15",
+  "strategy": {
+    "mood": "Premium, archival, art-led streetwear with product desirability under the system language.",
+    "rhythm": "Balance transformation proof, wearable product clarity, process evidence, and quieter meaning posts.",
+    "format_mix": {
+      "Carousel": 7,
+      "Reel": 3,
+      "Feed Post": 2,
+      "Story": 4
+    },
+    "pillar_mix": {
+      "Product": 4,
+      "Process": 3,
+      "Meaning": 3,
+      "Transformation": 3,
+      "Visual Direction": 3
+    },
+    "guidance": [
+      "Avoid clustering too many abstract/process posts back-to-back.",
+      "Let product/wearability appear every 2-3 posts so the page stays commercially legible.",
+      "Use transformation/carousel posts as anchor pieces in the grid.",
+      "Use Reels for movement, proof, and first-two-second hooks."
+    ]
+  },
+  "posts": [
+    {
+      "id": "candidate-2026-05-15-2",
+      "platform": "Instagram",
+      "format": "Carousel",
+      "pillar": "Product",
+      "status": "Draft",
+      "scheduled_date": "2026-05-17",
+      "feed_position": 1,
+      "hook": "The fragment, worn.",
+      "caption": "EXTRACTED FROM THE ARCHIVE",
+      "source_files": [
+        "Distressed Grommet Eyelet Tank Top-mockups-5.png",
+        "Distressed Grommet Eyelet Tank Top-mockups-6.png",
+        "Distressed Grommet Eyelet Tank Top-mockups-7.png",
+        "JRR_4044.jpg"
+      ],
+      "curator_reason": "Adds immediate product clarity and wearability after the conceptual opener.",
+      "visual_role": "product",
+      "candidate_index": 2,
+      "candidate_source_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\content_candidates\\2026-05-15-content-candidates.md",
+      "performance_notes": {}
+    },
+    {
+      "id": "candidate-2026-05-15-3",
+      "platform": "Instagram",
+      "format": "Reel",
+      "pillar": "Process",
+      "status": "Draft",
+      "scheduled_date": "2026-05-19",
+      "feed_position": 2,
+      "hook": "Reconstruction, frame by frame.",
+      "caption": "PROCESS / ACTIVE",
+      "source_files": [
+        "IMG_1991.HEIC",
+        "IMG_1994.HEIC",
+        "IMG_2040.HEIC",
+        "IMG_3248.MOV"
+      ],
+      "curator_reason": "Process reel provides studio credibility and resets the pace after product.",
+      "visual_role": "process",
+      "candidate_index": 3,
+      "candidate_source_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\content_candidates\\2026-05-15-content-candidates.md",
+      "performance_notes": {}
+    },
+    {
+      "id": "candidate-2026-05-15-4",
+      "platform": "Instagram",
+      "format": "Feed Post",
+      "pillar": "Meaning",
+      "status": "Draft",
+      "scheduled_date": "2026-05-21",
+      "feed_position": 3,
+      "hook": "Archive drift.",
+      "caption": "A SYSTEM OF FRAGMENTS",
+      "source_files": [
+        "4DRFT_design2_blacktext_FINAL copy.png",
+        "ADRIFT_BW_pixelated.png"
+      ],
+      "curator_reason": "Quiet meaning post gives the grid a controlled pause and strengthens brand language.",
+      "visual_role": "meaning",
+      "candidate_index": 4,
+      "candidate_source_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\content_candidates\\2026-05-15-content-candidates.md",
+      "performance_notes": {}
+    },
+    {
+      "id": "candidate-2026-05-15-5",
+      "platform": "Instagram",
+      "format": "Carousel",
+      "pillar": "Transformation",
+      "status": "Draft",
+      "scheduled_date": "2026-05-23",
+      "feed_position": 4,
+      "hook": "One painting. Multiple fragments.",
+      "caption": "EXTRACT / REPEAT / WEAR",
+      "source_files": [
+        "SimplyAdrift_v4.png",
+        "JRR_4038.jpg",
+        "JRR_4046.jpg"
+      ],
+      "curator_reason": "Strong transformation carousel reinforces the core narrative with a different source artwork.",
+      "visual_role": "source",
+      "candidate_index": 5,
+      "candidate_source_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\content_candidates\\2026-05-15-content-candidates.md",
+      "performance_notes": {}
+    },
+    {
+      "id": "candidate-2026-05-15-6",
+      "platform": "Instagram",
+      "format": "Story",
+      "pillar": "Process",
+      "status": "Draft",
+      "scheduled_date": "2026-05-25",
+      "feed_position": 5,
+      "hook": "In the studio.",
+      "caption": "CURRENT STATE",
+      "source_files": [
+        "IMG_1793.HEIC",
+        "IMG_1794.HEIC",
+        "IMG_1795.HEIC"
+      ],
+      "curator_reason": "Product story keeps the feed commercially readable and softens the conceptual density.",
+      "visual_role": "product",
+      "candidate_index": 6,
+      "candidate_source_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\content_candidates\\2026-05-15-content-candidates.md",
+      "performance_notes": {}
+    },
+    {
+      "id": "candidate-2026-05-14-3",
+      "platform": "Instagram",
+      "format": "Reel",
+      "pillar": "Process",
+      "status": "Draft",
+      "scheduled_date": "2026-05-21",
+      "feed_position": 6,
+      "hook": "The system is built, not styled.",
+      "caption": "Process before product.\nEvidence before release.",
+      "source_files": [
+        "IMG_1991.HEIC",
+        "IMG_1994.HEIC",
+        "IMG_2060.HEIC",
+        "IMG_3393.MOV"
+      ],
+      "curator_reason": "Another process reel adds development evidence and breaks up the repeated transformation cadence.",
+      "visual_role": "process",
+      "candidate_index": 3,
+      "candidate_source_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\content_candidates\\2026-05-14-content-candidates.md",
+      "performance_notes": {}
+    },
+    {
+      "id": "candidate-2026-05-14-4",
+      "platform": "Instagram",
+      "format": "Feed Post",
+      "pillar": "Product",
+      "status": "Draft",
+      "scheduled_date": "2026-05-23",
+      "feed_position": 7,
+      "hook": "Fragment, worn.",
+      "caption": "A garment with a source.\nA fragment with intent.",
+      "source_files": [
+        "Distressed Grommet Eyelet Tank Top-mockups-8.png",
+        "JRR_4038.jpg"
+      ],
+      "curator_reason": "Product feed post brings body/proof back into view and avoids ending on abstraction.",
+      "visual_role": "product",
+      "candidate_index": 4,
+      "candidate_source_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\content_candidates\\2026-05-14-content-candidates.md",
+      "performance_notes": {}
+    },
+    {
+      "id": "candidate-2026-05-14-1",
+      "platform": "Instagram",
+      "format": "Reel",
+      "pillar": "Transformation",
+      "status": "Draft",
+      "scheduled_date": "2026-05-17",
+      "feed_position": 8,
+      "hook": "Canvas first. Garment second.",
+      "caption": "Extracted from the canvas.\nReconstructed into form.\nWorn as a fragment.",
+      "source_files": [
+        "ADRIFT_colour_oilpaint_v5.png",
+        "IMG_2166.MOV",
+        "IMG_3248.MOV"
+      ],
+      "curator_reason": "Alternative transformation reel reintroduces motion and maintains momentum deeper in the grid.",
+      "visual_role": "motion",
+      "candidate_index": 1,
+      "candidate_source_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\content_candidates\\2026-05-14-content-candidates.md",
+      "performance_notes": {}
+    },
+    {
+      "id": "candidate-2026-05-14-2",
+      "platform": "Instagram",
+      "format": "Carousel",
+      "pillar": "Transformation",
+      "status": "Draft",
+      "scheduled_date": "2026-05-19",
+      "feed_position": 9,
+      "hook": "From archive to object.",
+      "caption": "Fragment retained.\nSystem rebuilt.\nWorn in the world.",
+      "source_files": [
+        "ADRIFT_BW_pixelated.png",
+        "4DRFT_design2_blacktext_FINAL copy.png",
+        "JRR_4001.jpg"
+      ],
+      "curator_reason": "Meaning carousel adds archival depth while staying visually controlled.",
+      "visual_role": "meaning",
+      "candidate_index": 2,
+      "candidate_source_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\content_candidates\\2026-05-14-content-candidates.md",
+      "performance_notes": {}
+    },
+    {
+      "id": "candidate-2026-05-14-6",
+      "platform": "Instagram",
+      "format": "Carousel",
+      "pillar": "Meaning",
+      "status": "Draft",
+      "scheduled_date": "2026-05-27",
+      "feed_position": 10,
+      "hook": "Drift is the system.",
+      "caption": "Not a graphic.\nNot a print.\nA fragment in motion.",
+      "source_files": [
+        "SimplyAdrift_v4.png",
+        "JRR_4046.jpg",
+        "IMG_3096.HEIC"
+      ],
+      "curator_reason": "Meaning carousel sustains the brand world without repeating the exact transformation formula.",
+      "visual_role": "meaning",
+      "candidate_index": 6,
+      "candidate_source_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\content_candidates\\2026-05-14-content-candidates.md",
+      "performance_notes": {}
+    },
+    {
+      "id": "candidate-2026-05-14-7",
+      "platform": "Instagram",
+      "format": "Story",
+      "pillar": "Product",
+      "status": "Draft",
+      "scheduled_date": "2026-05-15",
+      "feed_position": 11,
+      "hook": "Daily object. Archive origin.",
+      "caption": "Built to be worn.\nMarked by the source.",
+      "source_files": [
+        "Essential Heavyweight Cotton T-Shirt-mockups-40.png",
+        "JRR_4010.jpg",
+        "IMG_3262.MOV"
+      ],
+      "curator_reason": "Daily object story closes with a restrained product reveal and preserves premium clarity.",
+      "visual_role": "product",
+      "candidate_index": 7,
+      "candidate_source_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\content_candidates\\2026-05-14-content-candidates.md",
+      "performance_notes": {}
+    },
+    {
+      "id": "candidate-2026-05-15-7",
+      "platform": "Instagram",
+      "format": "Story",
+      "pillar": "Product",
+      "status": "Draft",
+      "scheduled_date": "2026-05-27",
+      "feed_position": 12,
+      "hook": "Quiet product reveal.",
+      "caption": "DROP / STATUS: LIVE",
+      "source_files": [
+        "French Terry Boxy Tank Top-mockups-1.png",
+        "French Terry Boxy Tank Top-mockups-10.png"
+      ],
+      "curator_reason": "Kept in the remaining order after curator pass.",
+      "visual_role": "product",
+      "candidate_index": 7,
+      "candidate_source_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\content_candidates\\2026-05-15-content-candidates.md",
+      "performance_notes": {}
+    },
+    {
+      "id": "candidate-2026-05-14-5",
+      "platform": "Instagram",
+      "format": "Story",
+      "pillar": "Meaning",
+      "status": "Draft",
+      "scheduled_date": "2026-05-25",
+      "feed_position": 13,
+      "hook": "What remains after extraction.",
+      "caption": "Archive.\nDrift.\nResidue.",
+      "source_files": [
+        "IMG_2040.HEIC",
+        "IMG_2043.HEIC",
+        "IMG_2045.HEIC"
+      ],
+      "curator_reason": "Kept in the remaining order after curator pass.",
+      "visual_role": "process",
+      "candidate_index": 5,
+      "candidate_source_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\content_candidates\\2026-05-14-content-candidates.md",
+      "performance_notes": {}
+    },
+    {
+      "id": "visual-2026-05-15-canvas-capture-reconstruct-wear",
+      "platform": "Instagram",
+      "format": "Carousel",
+      "pillar": "Visual Direction",
+      "status": "Draft",
+      "scheduled_date": "2026-05-17",
+      "feed_position": 14,
+      "hook": "2026 05 15 Canvas Capture Reconstruct Wear",
+      "caption": "",
+      "source_files": [
+        "slide-05.png",
+        "slide-04.png",
+        "slide-03.png",
+        "slide-02.png",
+        "slide-01.png"
+      ],
+      "curator_reason": "Kept in the remaining order after curator pass.",
+      "visual_role": "meaning",
+      "candidate_index": null,
+      "candidate_source_path": "",
+      "performance_notes": {}
+    },
+    {
+      "id": "visual-2026-05-15-source-reconstruction-body",
+      "platform": "Instagram",
+      "format": "Carousel",
+      "pillar": "Visual Direction",
+      "status": "Draft",
+      "scheduled_date": "2026-05-19",
+      "feed_position": 15,
+      "hook": "2026 05 15 Source Reconstruction Body",
+      "caption": "",
+      "source_files": [
+        "slide-05.png",
+        "slide-04.png",
+        "slide-03.png",
+        "slide-02.png",
+        "slide-01.png"
+      ],
+      "curator_reason": "Kept in the remaining order after curator pass.",
+      "visual_role": "meaning",
+      "candidate_index": null,
+      "candidate_source_path": "",
+      "performance_notes": {}
+    },
+    {
+      "id": "visual-2026-05-15-canvas-reconstruct-wear",
+      "platform": "Instagram",
+      "format": "Carousel",
+      "pillar": "Visual Direction",
+      "status": "Draft",
+      "scheduled_date": "2026-05-17",
+      "feed_position": 16,
+      "hook": "2026 05 15 Canvas Reconstruct Wear",
+      "caption": "",
+      "source_files": [
+        "slide-06.png",
+        "slide-05.png",
+        "slide-04.png",
+        "slide-03.png",
+        "slide-02.png",
+        "slide-01.png"
+      ],
+      "curator_reason": "Kept in the remaining order after curator pass.",
+      "visual_role": "meaning",
+      "candidate_index": null,
+      "candidate_source_path": "",
+      "performance_notes": {}
+    }
+  ],
+  "updated_at": "2026-05-15T18:58:02"
+}

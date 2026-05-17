@@ -1,0 +1,118 @@
+{
+  "slides": [
+    {
+      "palette": "dark",
+      "footer": "CANVAS / CAPTURE / RECONSTRUCT / DROP",
+      "blocks": [
+        {
+          "id": "meta",
+          "text": "Process",
+          "role": "mono",
+          "x": 72,
+          "y": 302,
+          "size": 34,
+          "color": "accent",
+          "uppercase": true,
+          "wrap": 28
+        },
+        {
+          "id": "headline",
+          "text": "THE SYSTEM IS BUILT",
+          "role": "display",
+          "x": 72,
+          "y": 390,
+          "size": 92,
+          "color": "ink",
+          "uppercase": true,
+          "wrap": 13
+        },
+        {
+          "id": "body",
+          "text": "Before product, there is evidence: source, crop, reconstruction, placement.",
+          "role": "brand",
+          "x": 76,
+          "y": 700,
+          "size": 36,
+          "color": "muted",
+          "wrap": 34
+        }
+      ]
+    },
+    {
+      "palette": "light",
+      "footer": "CANVAS / CAPTURE / RECONSTRUCT / DROP",
+      "blocks": [
+        {
+          "id": "meta",
+          "text": "Proof",
+          "role": "mono",
+          "x": 72,
+          "y": 302,
+          "size": 34,
+          "color": "accent",
+          "uppercase": true,
+          "wrap": 28
+        },
+        {
+          "id": "headline",
+          "text": "NOT STYLED. BUILT.",
+          "role": "display",
+          "x": 72,
+          "y": 390,
+          "size": 92,
+          "color": "ink",
+          "uppercase": true,
+          "wrap": 13
+        },
+        {
+          "id": "body",
+          "text": "Process frames make the garment feel intentional instead of random.",
+          "role": "brand",
+          "x": 76,
+          "y": 700,
+          "size": 36,
+          "color": "muted",
+          "wrap": 34
+        }
+      ]
+    },
+    {
+      "palette": "dark",
+      "footer": "CANVAS / CAPTURE / RECONSTRUCT / DROP",
+      "blocks": [
+        {
+          "id": "meta",
+          "text": "Use",
+          "role": "mono",
+          "x": 72,
+          "y": 302,
+          "size": 34,
+          "color": "accent",
+          "uppercase": true,
+          "wrap": 28
+        },
+        {
+          "id": "headline",
+          "text": "SOURCE / OBJECT",
+          "role": "display",
+          "x": 72,
+          "y": 390,
+          "size": 92,
+          "color": "ink",
+          "uppercase": true,
+          "wrap": 13
+        },
+        {
+          "id": "body",
+          "text": "These slides exist to slow the feed down and explain why the product matters.",
+          "role": "brand",
+          "x": 76,
+          "y": 700,
+          "size": 36,
+          "color": "muted",
+          "wrap": 34
+        }
+      ]
+    }
+  ]
+}

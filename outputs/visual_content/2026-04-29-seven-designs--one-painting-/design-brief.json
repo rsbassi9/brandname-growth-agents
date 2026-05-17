@@ -1,0 +1,86 @@
+{
+  "title": "SEVEN DESIGNS. ONE PAINTING.",
+  "platform": "Instagram",
+  "format": "carousel",
+  "asset_strategy": "Build the carousel as a clean transformation sequence: source painting first, then reconstruction details, then worn fragment and final archive object. Use ADRIFT_colour_oilpaint_v5.png as the dominant source artwork, pair it with JRR_4006-2.jpg and JRR_4038.jpg for texture and body context, and finish with a restrained product/archive frame using 4DRFT_design2_blacktext_FINAL copy.png as a visual reference only, not embedded text. Keep every slide premium, sparse, and legible as a file in a system.",
+  "slides": [
+    {
+      "slide": 1,
+      "headline": "SEVEN DESIGNS.",
+      "subhead": "ONE PAINTING.",
+      "asset_hint": "ADRIFT_colour_oilpaint_v5.png",
+      "layout": "cover",
+      "notes": "Full-bleed source painting on bone background, minimal black overlay space, technical archive energy."
+    },
+    {
+      "slide": 2,
+      "headline": "CANVAS",
+      "subhead": "source material",
+      "asset_hint": "ADRIFT_colour_oilpaint_v5.png",
+      "layout": "detail",
+      "notes": "Tight crop on brush movement and texture; make the original surface feel tactile and precious."
+    },
+    {
+      "slide": 3,
+      "headline": "CAPTURE",
+      "subhead": "optical scan",
+      "asset_hint": "JRR_4046.jpg",
+      "layout": "archive",
+      "notes": "Treat the image like scan evidence: cropped, measured, quiet, with coordinates implied in the composition."
+    },
+    {
+      "slide": 4,
+      "headline": "RECONSTRUCT",
+      "subhead": "system output",
+      "asset_hint": "JRR_4006-2.jpg",
+      "layout": "split",
+      "notes": "Show a reconstruction detail paired with a clean negative-space field; technical but still desirable."
+    },
+    {
+      "slide": 5,
+      "headline": "WEAR",
+      "subhead": "fragment on body",
+      "asset_hint": "JRR_4038.jpg",
+      "layout": "product",
+      "notes": "Styled body in motion, oversized silhouette, street/studio confidence, product as identity."
+    },
+    {
+      "slide": 6,
+      "headline": "FRAGMENT",
+      "subhead": "archive piece",
+      "asset_hint": "JRR_4008-2.jpg",
+      "layout": "detail",
+      "notes": "Close crop of garment texture or print placement; let the fragment feel extracted, not decorated."
+    },
+    {
+      "slide": 7,
+      "headline": "FOLLOW THE SYSTEM",
+      "subhead": "next reconstruction",
+      "asset_hint": "4DRFT_design2_blacktext_FINAL copy.png",
+      "layout": "archive",
+      "notes": "Final quiet lockup feel: isolated object, bone field, near-black restraint, no loud promo cues."
+    }
+  ],
+  "caption": "Canvas.\nCaptured.\nReconstructed.\nWorn.\n\nOne painting.\nSeven fragments.\n\n`[4DRFT] // CANVAS \u2192 CAPTURE \u2192 RECONSTRUCT \u2192 WEAR`\n\nFollow for the next fragment.",
+  "image_concepts": [
+    {
+      "name": "Canvas to Body Hero",
+      "brief": "A premium fashion-campaign image that makes the garment desirable first while revealing the painting as the source system in the environment or overlay.",
+      "source_asset_hint": "ADRIFT_colour_oilpaint_v5.png + JRR_4038.jpg",
+      "prompt": "Premium editorial fashion image, image-only source visual, no embedded text, a person wearing an oversized streetwear garment reconstructed from a physical oil painting, confident body language, candid motion in a gallery-to-street context, bone background with near-black shadows and oxidized red accents, the original oil painting appearing as a subtle projected source field or reflection behind the wearer, textile texture clearly visible, garment as identity, concrete glass and metal textures in the environment, sparse technical archive aesthetic, optical scan feeling, coordinate system mood, premium minimal composition, fashion campaign lighting, emotional movement, modern streetwear desirability, no fake typography, no logos, no readable text."
+    },
+    {
+      "name": "Scan Evidence Fragment",
+      "brief": "A source-image concept that feels like archive documentation and optical reconstruction while still looking like a premium campaign detail.",
+      "source_asset_hint": "JRR_4046.jpg + ADRIFT_colour_oilpaint_v5.png",
+      "prompt": "Image-only source visual, no embedded text, close editorial crop of reconstructed artwork fragment and garment detail fused together like scan evidence, technical archive label mood, optical scan lines implied through composition, coordinate-like framing, bone background, near-black negative space, oxidized red from the source painting, premium textile grain, oversized silhouette hinted through scale, gallery studio environment with concrete and brushed metal textures, product-as-identity, restrained but aspirational, fashion brand marketing energy, crisp detail, no fake typography, no readable text, no neon, no hype graphics."
+    },
+    {
+      "name": "Motion in the Archive",
+      "brief": "A moving lifestyle image that gives the product human energy, with the artwork present as material evidence rather than decoration.",
+      "source_asset_hint": "JRR_4038.jpg + JRR_4006-2.jpg",
+      "prompt": "Premium streetwear campaign image, image-only source visual, no embedded text, candid motion of a wearer in an oversized silhouette moving through a concrete and glass gallery-studio urban setting, the garment carrying reconstructed art fragments with strong textile texture, subtle motion blur, body confidence, premium athletic-lifestyle crossover energy without copying any brand, bone background tones balanced with near-black shadows and oxidized red source color, the original painting translated into a faint projection, reflection, or layered material evidence, clean sparse composition, technical archive atmosphere, product hero first, social-follow-worthy, no fake text, no logos, no graffiti, no sneaker-resale styling."
+    }
+  ],
+  "approval_status": "Draft"
+}

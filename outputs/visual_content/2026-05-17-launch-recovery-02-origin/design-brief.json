@@ -1,0 +1,156 @@
+{
+  "slides": [
+    {
+      "palette": "light",
+      "footer": "CANVAS / CAPTURE / RECONSTRUCT / DROP",
+      "blocks": [
+        {
+          "id": "meta",
+          "text": "01",
+          "role": "mono",
+          "x": 72,
+          "y": 302,
+          "size": 34,
+          "color": "accent",
+          "uppercase": true,
+          "wrap": 28
+        },
+        {
+          "id": "headline",
+          "text": "CANVAS",
+          "role": "display",
+          "x": 72,
+          "y": 390,
+          "size": 92,
+          "color": "ink",
+          "uppercase": true,
+          "wrap": 13
+        },
+        {
+          "id": "body",
+          "text": "A physical painting begins the system.",
+          "role": "brand",
+          "x": 76,
+          "y": 700,
+          "size": 36,
+          "color": "muted",
+          "wrap": 34
+        }
+      ]
+    },
+    {
+      "palette": "dark",
+      "footer": "CANVAS / CAPTURE / RECONSTRUCT / DROP",
+      "blocks": [
+        {
+          "id": "meta",
+          "text": "02",
+          "role": "mono",
+          "x": 72,
+          "y": 302,
+          "size": 34,
+          "color": "accent",
+          "uppercase": true,
+          "wrap": 28
+        },
+        {
+          "id": "headline",
+          "text": "CAPTURE",
+          "role": "display",
+          "x": 72,
+          "y": 390,
+          "size": 92,
+          "color": "ink",
+          "uppercase": true,
+          "wrap": 13
+        },
+        {
+          "id": "body",
+          "text": "The source is documented, cropped, and studied.",
+          "role": "brand",
+          "x": 76,
+          "y": 700,
+          "size": 36,
+          "color": "muted",
+          "wrap": 34
+        }
+      ]
+    },
+    {
+      "palette": "dark",
+      "footer": "CANVAS / CAPTURE / RECONSTRUCT / DROP",
+      "blocks": [
+        {
+          "id": "meta",
+          "text": "03",
+          "role": "mono",
+          "x": 72,
+          "y": 302,
+          "size": 34,
+          "color": "accent",
+          "uppercase": true,
+          "wrap": 28
+        },
+        {
+          "id": "headline",
+          "text": "RECONSTRUCT",
+          "role": "display",
+          "x": 72,
+          "y": 390,
+          "size": 92,
+          "color": "ink",
+          "uppercase": true,
+          "wrap": 13
+        },
+        {
+          "id": "body",
+          "text": "Fragments are rebuilt into garment-facing compositions.",
+          "role": "brand",
+          "x": 76,
+          "y": 700,
+          "size": 36,
+          "color": "muted",
+          "wrap": 34
+        }
+      ]
+    },
+    {
+      "palette": "light",
+      "footer": "CANVAS / CAPTURE / RECONSTRUCT / DROP",
+      "blocks": [
+        {
+          "id": "meta",
+          "text": "04",
+          "role": "mono",
+          "x": 72,
+          "y": 302,
+          "size": 34,
+          "color": "accent",
+          "uppercase": true,
+          "wrap": 28
+        },
+        {
+          "id": "headline",
+          "text": "DROP",
+          "role": "display",
+          "x": 72,
+          "y": 390,
+          "size": 92,
+          "color": "ink",
+          "uppercase": true,
+          "wrap": 13
+        },
+        {
+          "id": "body",
+          "text": "The final object enters the world as [4DRFT].",
+          "role": "brand",
+          "x": 76,
+          "y": 700,
+          "size": 36,
+          "color": "muted",
+          "wrap": 34
+        }
+      ]
+    }
+  ]
+}

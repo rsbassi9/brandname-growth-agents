@@ -1,0 +1,58 @@
+{
+  "title": "From canvas to fragment",
+  "platform": "Instagram",
+  "format": "carousel",
+  "asset_strategy": "Text-first placeholder carousel using brand-brief language only. Since no image assets are downloaded, build minimal editorial slides that request the next asset categories: painting process, digital reconstruction, product photos, and short video clips. Use a sparse archive aesthetic and reserve space for future source material.",
+  "slides": [
+    {
+      "slide": 1,
+      "headline": "From canvas",
+      "subhead": "A painting begins the system.",
+      "asset_hint": "painting process",
+      "layout": "cover",
+      "notes": "Text-only cover with large negative space; quiet, premium, museum-like."
+    },
+    {
+      "slide": 2,
+      "headline": "Extracted",
+      "subhead": "Oil, cropped from the source.",
+      "asset_hint": "painting process",
+      "layout": "detail",
+      "notes": "Use a placeholder frame for a future macro of paint texture; minimal labels, no explanation."
+    },
+    {
+      "slide": 3,
+      "headline": "Reconstructed",
+      "subhead": "The canvas becomes a system.",
+      "asset_hint": "digital reconstruction",
+      "layout": "split",
+      "notes": "Left side for source, right side for digital process; keep typography small and precise."
+    },
+    {
+      "slide": 4,
+      "headline": "Fragment",
+      "subhead": "A usable piece of the archive.",
+      "asset_hint": "digital reconstruction",
+      "layout": "archive",
+      "notes": "Treat like a catalog entry; include a reserved area for interface-like reconstruction detail."
+    },
+    {
+      "slide": 5,
+      "headline": "Wearable",
+      "subhead": "The fragment leaves the frame.",
+      "asset_hint": "product photos",
+      "layout": "product",
+      "notes": "Placeholder for garment detail or flat lay; keep object-centered and restrained."
+    },
+    {
+      "slide": 6,
+      "headline": "Drift",
+      "subhead": "Canvas to body, unchanged in form.",
+      "asset_hint": "short video clips",
+      "layout": "detail",
+      "notes": "Design as a closing still for motion assets; suggest transition without over-animating."
+    }
+  ],
+  "caption": "A painting, reconstructed.\nFrom canvas. Through system. Into fragment.\n\nNext assets: painting process, digital reconstruction, product photos, short video clips.",
+  "approval_status": "Draft"
+}

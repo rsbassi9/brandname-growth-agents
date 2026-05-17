@@ -1,0 +1,7 @@
+filename,bucket,priority,notes,roles
+# Add optional manual overrides below. Match filename exactly as it appears in Drive.
+# bucket values: Shoot Photos, Process / Studio, Design Assets, Video, Other
+# priority values: 1-10
+# optional roles: hero_product;on_body;text_backdrop;texture_backdrop;canvas_surface;detail_crop;feed_breaker;transition_slide
+# Example:
+# JRR_4001.jpg,Shoot Photos,9,Strong campaign/product hero candidate,on_body;campaign_anchor

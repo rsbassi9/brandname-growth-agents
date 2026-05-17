@@ -1,0 +1,78 @@
+{
+  "title": "CANVAS \u2192 RECONSTRUCT \u2192 WEAR",
+  "platform": "Instagram",
+  "format": "carousel",
+  "asset_strategy": "Lead with the source painting, move into reconstruction evidence, end on a premium body-led wearable proof. Use full-bleed crops and dark-field framing to remove white space and keep the sequence feeling like one archive system. Prioritize ADRIFT_colour_oilpaint_v5.png as the origin, then pair with reconstruction/process assets and a strong JRR campaign frame for the final wearable fragment.",
+  "slides": [
+    {
+      "slide": 1,
+      "headline": "CANVAS",
+      "subhead": "source work",
+      "asset_hint": "ADRIFT_colour_oilpaint_v5.png",
+      "layout": "cover",
+      "notes": "Full-bleed painting crop. Bone or near-black frame edge. Let texture dominate immediately."
+    },
+    {
+      "slide": 2,
+      "headline": "CAPTURE",
+      "subhead": "optical scan",
+      "asset_hint": "ADRIFT_BW_pixelated.png",
+      "layout": "detail",
+      "notes": "Use pixelated reconstruction as evidence. Tight crop, coordinate feel, sparse label treatment."
+    },
+    {
+      "slide": 3,
+      "headline": "RECONSTRUCT",
+      "subhead": "system build",
+      "asset_hint": "4DRFT_design2_blacktext_FINAL copy.png",
+      "layout": "split",
+      "notes": "Show the protocol logic as a design surface. Keep it severe, technical, and minimal."
+    },
+    {
+      "slide": 4,
+      "headline": "EXTRACTED",
+      "subhead": "fragment",
+      "asset_hint": "one approved product mockup from the matched catalog (choose Distressed Grommet Eyelet Tank Top-mockups-5.jpg or Essential Heavyweight Cotton T-Shirt-mockups-31.png)",
+      "layout": "product",
+      "notes": "Let the garment read as a fragment first. Close crop on graphic placement and textile weight."
+    },
+    {
+      "slide": 5,
+      "headline": "WEAR",
+      "subhead": "body in motion",
+      "asset_hint": "JRR_4038.jpg",
+      "layout": "archive",
+      "notes": "Premium campaign proof. Oversized silhouette, candid motion, city/studio tension, no excess framing."
+    },
+    {
+      "slide": 6,
+      "headline": "ARCHIVE",
+      "subhead": "next fragment",
+      "asset_hint": "JRR_4046.jpg",
+      "layout": "detail",
+      "notes": "Secondary wearable context. Slightly quieter frame to leave the sequence with restraint and desire."
+    }
+  ],
+  "caption": "CANVAS / CAPTURE / RECONSTRUCT / WEAR.\n\nOne source. One system. One fragment.",
+  "image_concepts": [
+    {
+      "name": "canvas to body",
+      "brief": "Create the hero transformation image: painting source dissolving into reconstruction and ending as a wearable oversized garment on a confident body, with the product feeling desirable before the concept is explained.",
+      "source_asset_hint": "ADRIFT_colour_oilpaint_v5.png + JRR_4038.jpg + chosen product mockup",
+      "prompt": "Premium fashion campaign image, image-only source visual, no readable text, no typography. A physical oil painting fragment translated into a wearable oversized streetwear garment on a real model in motion, product as identity. Compose as transformation evidence: source painting texture appears as projection, reflection, or fragmented overlay on the garment, with the garment becoming the final reconstructed object. Use bone background, near-black shadows, oxidized red accents from the painting, sparse technical archive atmosphere, optical scan feeling, coordinate-system cues, subtle crop marks, premium streetwear styling, oversized silhouette, tactile textile texture, concrete glass metal context, candid motion, city-studio-gallery crossover, confident posture, clean cinematic movement, restrained and minimal, desirable before conceptual, no fake text anywhere in the image."
+    },
+    {
+      "name": "scan fragment study",
+      "brief": "Show the reconstruction logic as an archive artifact that still feels fashion-led and collectible, with the garment fragment emerging from scan evidence and technical mapping.",
+      "source_asset_hint": "ADRIFT_BW_pixelated.png + 4DRFT_design2_blacktext_FINAL copy.png",
+      "prompt": "Editorial archive-style fashion image, image-only source visual, no readable text, no typography. A technical reconstruction board feeling like an optical scan of a painting being extracted into wearable fragments, with a premium streetwear garment partially visible as the resolved outcome. Use near-black field, bone paper tone, oxidized red accents, sparse coordinates, magnification windows, scanline texture, crop marks, archive labels implied only through shape and composition, no actual words. The garment should feel oversized and desirable, with strong textile texture and graphic garment emphasis, situated in a studio-gallery environment with concrete, glass, and metal surfaces, subtle human presence or movement blur, product-as-identity, restrained and premium, fashion campaign logic with art-system evidence, no fake text inside the image."
+    },
+    {
+      "name": "wearable fragment motion",
+      "brief": "Produce a candid streetwear hero that proves the fragment is worn in real life, with motion and confidence, while the artwork origin remains visible as an environmental or reflective evidence layer.",
+      "source_asset_hint": "JRR_4046.jpg + approved product mockup + ADRIFT_colour_oilpaint_v5.png",
+      "prompt": "High-end streetwear campaign photograph, image-only source visual, no readable text, no typography. A real model wearing an oversized reconstructed garment in candid motion through a city-studio-gallery context, product hero emphasis, tactile fabric, graphic garment presence, confident attitude. The original oil painting should appear as subtle source evidence in the environment, reflection, projection, or fragment overlay, not as decoration. Minimal bone and near-black palette with oxidized red from the source artwork, concrete and glass textures, metal surfaces, shadow, movement blur, premium restraint, clean desirability, emotional momentum inspired by sportswear campaign logic without copying any brand identity, product-as-identity, no fake graffiti, no hype aesthetics, no fake text anywhere in the image."
+    }
+  ],
+  "approval_status": "Draft"
+}

@@ -1,0 +1,78 @@
+{
+  "title": "One painting. Three states.",
+  "platform": "Instagram",
+  "format": "carousel",
+  "asset_strategy": "Lead with the source painting, then move through reconstruction details, then finish on a worn product/body frame. Use real raw assets only: ADRIFT_colour_oilpaint_v5.png for origin, JRR_4001.jpg / JRR_4001-2.jpg for body proof, and Vintage Wash Drop Shoulder T-shirt-mockups-10.png or a close matching product mockup for the wearable fragment. Keep spacing severe, palette bone/near-black/oxidized red, and the sequence legible as CANVAS > RECONSTRUCT > WEAR.",
+  "slides": [
+    {
+      "slide": 1,
+      "headline": "CANVAS",
+      "subhead": "source fragment",
+      "asset_hint": "ADRIFT_colour_oilpaint_v5.png",
+      "layout": "cover",
+      "notes": "Use a tight crop of the oil paint surface. Let the painting feel like evidence, not decoration."
+    },
+    {
+      "slide": 2,
+      "headline": "CAPTURE",
+      "subhead": "optical scan",
+      "asset_hint": "ADRIFT_BW_pixelated.png",
+      "layout": "detail",
+      "notes": "Show the reconstruction layer as technical evidence. Sparse marks, coordinate logic, high contrast."
+    },
+    {
+      "slide": 3,
+      "headline": "RECONSTRUCT",
+      "subhead": "system lock",
+      "asset_hint": "4DRFT_design2_blacktext_FINAL copy.png",
+      "layout": "archive",
+      "notes": "Use the design file as an archive plate: labels, crop logic, and fragment placement with clean negative space."
+    },
+    {
+      "slide": 4,
+      "headline": "FRAGMENT",
+      "subhead": "extracted for wear",
+      "asset_hint": "Vintage Wash Drop Shoulder T-shirt-mockups-10.png",
+      "layout": "product",
+      "notes": "Make the garment feel premium first: oversized silhouette, fabric weight, quiet confidence."
+    },
+    {
+      "slide": 5,
+      "headline": "BODY",
+      "subhead": "object resolved",
+      "asset_hint": "JRR_4001.jpg",
+      "layout": "split",
+      "notes": "Pair body and garment clarity with a studio/city feel. Keep motion subtle and desirable."
+    },
+    {
+      "slide": 6,
+      "headline": "WORN",
+      "subhead": "drift in the world",
+      "asset_hint": "JRR_4001-2.jpg",
+      "layout": "product",
+      "notes": "End on a lived-in frame with attitude. The art origin should read as material evidence, not explanation."
+    }
+  ],
+  "caption": "CANVAS // CAPTURE // RECONSTRUCT // WEAR\n\nOne painting. Rebuilt into fragments.",
+  "image_concepts": [
+    {
+      "name": "source-to-fragment hero",
+      "brief": "Create a premium campaign image that starts with the painting as source evidence and ends with the garment as desirable object. The transformation should feel immediate and fashion-led, with the artwork visible as origin rather than decoration.",
+      "source_asset_hint": "ADRIFT_colour_oilpaint_v5.png + Vintage Wash Drop Shoulder T-shirt-mockups-10.png",
+      "prompt": "Premium fashion campaign image, image-only source visual, no embedded text, a single model in an oversized streetwear silhouette wearing a reconstructed graphic garment derived from a physical oil painting, bone background with near-black shadows and oxidized red accents, technical archive label aesthetic translated visually through crop boxes, coordinate system overlays, optical scan feel, the original painting surface appears as a projected source fragment or reflected material evidence, concrete glass and brushed metal studio/gallery context, candid motion, confident posture, tactile textile texture, product-as-identity, sparse composition, premium editorial lighting, high contrast, severe negative space, art-to-wearable transformation clearly legible, no fake typography, no readable text, no graffiti, no hype graphics"
+    },
+    {
+      "name": "scan reconstruction body frame",
+      "brief": "Show the reconstruction stage as a clean optical system while still keeping the garment desirable on-body. This should feel like a fashion brand campaign with a technical archive engine underneath.",
+      "source_asset_hint": "ADRIFT_BW_pixelated.png + JRR_4001.jpg",
+      "prompt": "Editorial fashion image, image-only source visual, no embedded text, close crop on a model wearing an oversized reconstructed streetwear garment, motion in the shoulders and sleeves, textile texture emphasized, technical scan overlays implied through composition only, optical reconstruction atmosphere, bone and near-black palette with oxidized red fragment accents, city studio gallery hybrid context with concrete floor, glass reflections, brushed metal surfaces, candid movement, premium premium streetwear energy, product hero first, source painting fragment appears as a projected reflection or layered material evidence, minimal and sparse, confident body language, clean luxury sportswear campaign logic without copying any brand, no readable text, no fake labels, no graffiti, no neon, no bokeh"
+    },
+    {
+      "name": "archive plate fragment study",
+      "brief": "Create a restrained archive-style image that documents the fragment extraction like a system plate. It should still hint at wearable desirability through scale, fabric, and body presence.",
+      "source_asset_hint": "4DRFT_design2_blacktext_FINAL copy.png + JRR_4001-2.jpg",
+      "prompt": "Premium archive-fashion composite, image-only source visual, no embedded text, stark bone background, near-black objects, oxidized red fragment marks, a reconstructed garment panel shown alongside a styled body crop, coordinate grid feeling, optical scan framing, severe spacing, technical documentation translated into editorial fashion marketing, oversized silhouette, fabric weight and drape visible, concrete and metal textures, studio/gallery environment, product remains desirable and worn rather than sterile, emotional movement with quiet confidence, art origin implied as source, reconstruction, and wearable fragment, no readable typography, no fake text, no generic streetwear poster styling, no graffiti, no cheap collage"
+    }
+  ],
+  "approval_status": "Draft"
+}

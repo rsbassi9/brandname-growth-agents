@@ -1,0 +1,5117 @@
+[
+  {
+    "id": "launch-recovery-01-intro",
+    "format": "Carousel",
+    "pillar": "Drop Context",
+    "hook": "What [4DRFT] actually is.",
+    "caption": "One painting. Seven designs. A physical source reconstructed into wearable fragments.",
+    "source_files": [
+      "4DRFT_design2_blacktext_FINAL copy.png",
+      "ADRIFT_BW_pixelated.png",
+      "ADRIFT_colour_oilpaint_v5.png"
+    ],
+    "visual_role": "meaning",
+    "launch_role": "Intro / reset",
+    "curator_reason": "This is the context reset that makes the drop legible before more product posts.",
+    "on_screen_text": [
+      "WHAT IS [4DRFT]?",
+      "ONE PAINTING",
+      "SEVEN DESIGNS",
+      "RECONSTRUCTED TO WEAR"
+    ],
+    "text_dominant": true,
+    "text_slides": [
+      {
+        "palette": "dark",
+        "footer": "CANVAS / CAPTURE / RECONSTRUCT / DROP",
+        "blocks": [
+          {
+            "id": "meta",
+            "text": "Drop reset",
+            "role": "mono",
+            "x": 72,
+            "y": 302,
+            "size": 34,
+            "color": "accent",
+            "uppercase": true,
+            "wrap": 28
+          },
+          {
+            "id": "headline",
+            "text": "WHAT IS [4DRFT]?",
+            "role": "display",
+            "x": 72,
+            "y": 390,
+            "size": 92,
+            "color": "ink",
+            "uppercase": true,
+            "wrap": 13
+          },
+          {
+            "id": "body",
+            "text": "A new line built from one physical painting.",
+            "role": "brand",
+            "x": 76,
+            "y": 700,
+            "size": 36,
+            "color": "muted",
+            "wrap": 34
+          }
+        ]
+      },
+      {
+        "palette": "light",
+        "footer": "CANVAS / CAPTURE / RECONSTRUCT / DROP",
+        "blocks": [
+          {
+            "id": "meta",
+            "text": "Source",
+            "role": "mono",
+            "x": 72,
+            "y": 302,
+            "size": 34,
+            "color": "accent",
+            "uppercase": true,
+            "wrap": 28
+          },
+          {
+            "id": "headline",
+            "text": "ONE PAINTING",
+            "role": "display",
+            "x": 72,
+            "y": 390,
+            "size": 92,
+            "color": "ink",
+            "uppercase": true,
+            "wrap": 13
+          },
+          {
+            "id": "body",
+            "text": "The painting stays in the studio. The fragments move into the world.",
+            "role": "brand",
+            "x": 76,
+            "y": 700,
+            "size": 36,
+            "color": "muted",
+            "wrap": 34
+          }
+        ]
+      },
+      {
+        "palette": "dark",
+        "footer": "CANVAS / CAPTURE / RECONSTRUCT / DROP",
+        "blocks": [
+          {
+            "id": "meta",
+            "text": "System",
+            "role": "mono",
+            "x": 72,
+            "y": 302,
+            "size": 34,
+            "color": "accent",
+            "uppercase": true,
+            "wrap": 28
+          },
+          {
+            "id": "headline",
+            "text": "SEVEN DESIGNS",
+            "role": "display",
+            "x": 72,
+            "y": 390,
+            "size": 92,
+            "color": "ink",
+            "uppercase": true,
+            "wrap": 13
+          },
+          {
+            "id": "body",
+            "text": "Each garment carries a reconstructed piece of the original source.",
+            "role": "brand",
+            "x": 76,
+            "y": 700,
+            "size": 36,
+            "color": "muted",
+            "wrap": 34
+          }
+        ]
+      },
+      {
+        "palette": "dark",
+        "footer": "CANVAS / CAPTURE / RECONSTRUCT / DROP",
+        "blocks": [
+          {
+            "id": "meta",
+            "text": "Object",
+            "role": "mono",
+            "x": 72,
+            "y": 302,
+            "size": 34,
+            "color": "accent",
+            "uppercase": true,
+            "wrap": 28
+          },
+          {
+            "id": "headline",
+            "text": "RECONSTRUCTED TO WEAR",
+            "role": "display",
+            "x": 72,
+            "y": 390,
+            "size": 92,
+            "color": "ink",
+            "uppercase": true,
+            "wrap": 13
+          },
+          {
+            "id": "body",
+            "text": "Not a graphic pasted on clothing. A source rebuilt as product.",
+            "role": "brand",
+            "x": 76,
+            "y": 700,
+            "size": 36,
+            "color": "muted",
+            "wrap": 34
+          }
+        ]
+      }
+    ],
+    "scheduled_date": "2026-05-17",
+    "status": "Draft",
+    "platform": "Instagram",
+    "selected_assets": [],
+    "product_keys": [],
+    "product_rotation_note": "",
+    "visual_fingerprint": {
+      "visual_family": "digital/source",
+      "palette": "black/dark",
+      "brightness": "dark",
+      "density": "dense",
+      "subject": "source",
+      "product_visibility_score": 0,
+      "content_weight": "graphic-heavy",
+      "warnings": [
+        "Post uses many assets with the same palette: black/dark.",
+        "Post leans heavily on one visual family: digital/source."
+      ]
+    },
+    "visual_group": {
+      "name": "launch-recovery-01-intro",
+      "images": [
+        {
+          "name": "slide-01.png",
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-17-launch-recovery-01-intro\\slide-01.png",
+          "kind": "image",
+          "category": "visual_content"
+        },
+        {
+          "name": "slide-02.png",
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-17-launch-recovery-01-intro\\slide-02.png",
+          "kind": "image",
+          "category": "visual_content"
+        },
+        {
+          "name": "slide-03.png",
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-17-launch-recovery-01-intro\\slide-03.png",
+          "kind": "image",
+          "category": "visual_content"
+        },
+        {
+          "name": "slide-04.png",
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-17-launch-recovery-01-intro\\slide-04.png",
+          "kind": "image",
+          "category": "visual_content"
+        }
+      ]
+    },
+    "feed_position": 0,
+    "candidate_index": null,
+    "candidate_source_path": "",
+    "recovery_sequence": true,
+    "created_at": "2026-05-17T01:09:19",
+    "calendar_note": "Launch recovery sequence scheduled before existing content.",
+    "asset_fingerprint": "4drft_design2_blacktext_final copy.png > adrift_bw_pixelated.png > adrift_colour_oilpaint_v5.png",
+    "asset_set_fingerprint": "4drft_design2_blacktext_final copy.png + adrift_bw_pixelated.png + adrift_colour_oilpaint_v5.png",
+    "duplicate_status": "unique",
+    "duplicate_note": "",
+    "visual_slots": [
+      {
+        "index": 0,
+        "name": "slide-01.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-17-launch-recovery-01-intro\\slide-01.png",
+        "source": "generated_visual",
+        "role": "text_backdrop",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 1,
+        "name": "slide-02.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-17-launch-recovery-01-intro\\slide-02.png",
+        "source": "generated_visual",
+        "role": "text_backdrop",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 2,
+        "name": "slide-03.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-17-launch-recovery-01-intro\\slide-03.png",
+        "source": "generated_visual",
+        "role": "text_backdrop",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 3,
+        "name": "slide-04.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-17-launch-recovery-01-intro\\slide-04.png",
+        "source": "generated_visual",
+        "role": "text_backdrop",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      }
+    ],
+    "quality_score": {
+      "overall": 74,
+      "product_clarity": 70,
+      "brand_fit": 85,
+      "visual_freshness": 69,
+      "feed_rhythm": 80,
+      "commercial_usefulness": 62,
+      "designed_vs_raw": 80,
+      "duplicate_risk": 0
+    },
+    "needs_work": []
+  },
+  {
+    "id": "launch-recovery-02-origin",
+    "format": "Carousel",
+    "pillar": "Origin",
+    "hook": "A physical painting. Reconstructed.",
+    "caption": "The source stays in the studio. The fragments move into the world.",
+    "source_files": [
+      "4DRFT_design2_blacktext_FINAL copy.png",
+      "ADRIFT_BW_pixelated.png"
+    ],
+    "visual_role": "source",
+    "launch_role": "Origin story",
+    "curator_reason": "Source-first post explains the art system and gives the feed a clear narrative anchor.",
+    "on_screen_text": [
+      "CANVAS",
+      "CAPTURE",
+      "RECONSTRUCT",
+      "DROP"
+    ],
+    "text_dominant": true,
+    "text_slides": [
+      {
+        "palette": "light",
+        "footer": "CANVAS / CAPTURE / RECONSTRUCT / DROP",
+        "blocks": [
+          {
+            "id": "meta",
+            "text": "01",
+            "role": "mono",
+            "x": 72,
+            "y": 302,
+            "size": 34,
+            "color": "accent",
+            "uppercase": true,
+            "wrap": 28
+          },
+          {
+            "id": "headline",
+            "text": "CANVAS",
+            "role": "display",
+            "x": 72,
+            "y": 390,
+            "size": 92,
+            "color": "ink",
+            "uppercase": true,
+            "wrap": 13
+          },
+          {
+            "id": "body",
+            "text": "A physical painting begins the system.",
+            "role": "brand",
+            "x": 76,
+            "y": 700,
+            "size": 36,
+            "color": "muted",
+            "wrap": 34
+          }
+        ]
+      },
+      {
+        "palette": "dark",
+        "footer": "CANVAS / CAPTURE / RECONSTRUCT / DROP",
+        "blocks": [
+          {
+            "id": "meta",
+            "text": "02",
+            "role": "mono",
+            "x": 72,
+            "y": 302,
+            "size": 34,
+            "color": "accent",
+            "uppercase": true,
+            "wrap": 28
+          },
+          {
+            "id": "headline",
+            "text": "CAPTURE",
+            "role": "display",
+            "x": 72,
+            "y": 390,
+            "size": 92,
+            "color": "ink",
+            "uppercase": true,
+            "wrap": 13
+          },
+          {
+            "id": "body",
+            "text": "The source is documented, cropped, and studied.",
+            "role": "brand",
+            "x": 76,
+            "y": 700,
+            "size": 36,
+            "color": "muted",
+            "wrap": 34
+          }
+        ]
+      },
+      {
+        "palette": "dark",
+        "footer": "CANVAS / CAPTURE / RECONSTRUCT / DROP",
+        "blocks": [
+          {
+            "id": "meta",
+            "text": "03",
+            "role": "mono",
+            "x": 72,
+            "y": 302,
+            "size": 34,
+            "color": "accent",
+            "uppercase": true,
+            "wrap": 28
+          },
+          {
+            "id": "headline",
+            "text": "RECONSTRUCT",
+            "role": "display",
+            "x": 72,
+            "y": 390,
+            "size": 92,
+            "color": "ink",
+            "uppercase": true,
+            "wrap": 13
+          },
+          {
+            "id": "body",
+            "text": "Fragments are rebuilt into garment-facing compositions.",
+            "role": "brand",
+            "x": 76,
+            "y": 700,
+            "size": 36,
+            "color": "muted",
+            "wrap": 34
+          }
+        ]
+      },
+      {
+        "palette": "light",
+        "footer": "CANVAS / CAPTURE / RECONSTRUCT / DROP",
+        "blocks": [
+          {
+            "id": "meta",
+            "text": "04",
+            "role": "mono",
+            "x": 72,
+            "y": 302,
+            "size": 34,
+            "color": "accent",
+            "uppercase": true,
+            "wrap": 28
+          },
+          {
+            "id": "headline",
+            "text": "DROP",
+            "role": "display",
+            "x": 72,
+            "y": 390,
+            "size": 92,
+            "color": "ink",
+            "uppercase": true,
+            "wrap": 13
+          },
+          {
+            "id": "body",
+            "text": "The final object enters the world as [4DRFT].",
+            "role": "brand",
+            "x": 76,
+            "y": 700,
+            "size": 36,
+            "color": "muted",
+            "wrap": 34
+          }
+        ]
+      }
+    ],
+    "scheduled_date": "2026-05-18",
+    "status": "Draft",
+    "platform": "Instagram",
+    "selected_assets": [],
+    "product_keys": [],
+    "product_rotation_note": "",
+    "visual_fingerprint": {
+      "visual_family": "digital/source",
+      "palette": "black/dark",
+      "brightness": "dark",
+      "density": "dense",
+      "subject": "source",
+      "product_visibility_score": 0,
+      "content_weight": "graphic-heavy",
+      "warnings": []
+    },
+    "visual_group": {
+      "name": "launch-recovery-02-origin",
+      "images": [
+        {
+          "name": "slide-01.png",
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-17-launch-recovery-02-origin\\slide-01.png",
+          "kind": "image",
+          "category": "visual_content"
+        },
+        {
+          "name": "slide-02.png",
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-17-launch-recovery-02-origin\\slide-02.png",
+          "kind": "image",
+          "category": "visual_content"
+        },
+        {
+          "name": "slide-03.png",
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-17-launch-recovery-02-origin\\slide-03.png",
+          "kind": "image",
+          "category": "visual_content"
+        },
+        {
+          "name": "slide-04.png",
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-17-launch-recovery-02-origin\\slide-04.png",
+          "kind": "image",
+          "category": "visual_content"
+        }
+      ]
+    },
+    "feed_position": 1,
+    "candidate_index": null,
+    "candidate_source_path": "",
+    "recovery_sequence": true,
+    "created_at": "2026-05-17T01:09:19",
+    "calendar_note": "Launch recovery sequence scheduled before existing content.",
+    "asset_fingerprint": "4drft_design2_blacktext_final copy.png > adrift_bw_pixelated.png",
+    "asset_set_fingerprint": "4drft_design2_blacktext_final copy.png + adrift_bw_pixelated.png",
+    "duplicate_status": "unique",
+    "duplicate_note": "",
+    "visual_slots": [
+      {
+        "index": 0,
+        "name": "slide-01.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-17-launch-recovery-02-origin\\slide-01.png",
+        "source": "generated_visual",
+        "role": "text_backdrop",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 1,
+        "name": "slide-02.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-17-launch-recovery-02-origin\\slide-02.png",
+        "source": "generated_visual",
+        "role": "text_backdrop",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 2,
+        "name": "slide-03.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-17-launch-recovery-02-origin\\slide-03.png",
+        "source": "generated_visual",
+        "role": "text_backdrop",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 3,
+        "name": "slide-04.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-17-launch-recovery-02-origin\\slide-04.png",
+        "source": "generated_visual",
+        "role": "text_backdrop",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      }
+    ],
+    "quality_score": {
+      "overall": 77,
+      "product_clarity": 70,
+      "brand_fit": 85,
+      "visual_freshness": 85,
+      "feed_rhythm": 80,
+      "commercial_usefulness": 62,
+      "designed_vs_raw": 80,
+      "duplicate_risk": 0
+    },
+    "needs_work": []
+  },
+  {
+    "id": "launch-recovery-03-product-clarity",
+    "format": "Solo Image Post",
+    "pillar": "Product",
+    "hook": "The garment is the object.",
+    "caption": "Product clarity after the origin story: the artwork becomes something wearable.",
+    "source_files": [
+      "Distressed Grommet Eyelet Tank Top-mockups-9.png",
+      "Distressed Grommet Eyelet Tank Top-mockups-7.png"
+    ],
+    "visual_role": "product",
+    "launch_role": "Product clarity",
+    "curator_reason": "Commercially clear product post prevents the launch from feeling only conceptual.",
+    "on_screen_text": [
+      "GARMENT OBJECT"
+    ],
+    "scheduled_date": "2026-05-19",
+    "status": "Draft",
+    "platform": "Instagram",
+    "selected_assets": [
+      "Distressed Grommet Eyelet Tank Top-mockups-9.png",
+      "Distressed Grommet Eyelet Tank Top-mockups-7.png"
+    ],
+    "product_keys": [
+      "distressed grommet eyelet tank top"
+    ],
+    "product_rotation_note": "Uses a recently featured product. Prefer this only if the story, styling, or format is meaningfully different.",
+    "visual_fingerprint": {
+      "visual_family": "product",
+      "palette": "unknown",
+      "brightness": "unknown",
+      "density": "minimal",
+      "subject": "garment",
+      "product_visibility_score": 4,
+      "content_weight": "photo/product-heavy",
+      "warnings": []
+    },
+    "visual_group": {},
+    "feed_position": 2,
+    "candidate_index": null,
+    "candidate_source_path": "",
+    "recovery_sequence": true,
+    "created_at": "2026-05-17T01:09:19",
+    "calendar_note": "Launch recovery sequence scheduled before existing content.",
+    "asset_fingerprint": "distressed grommet eyelet tank top-mockups-9.png > distressed grommet eyelet tank top-mockups-7.png",
+    "asset_set_fingerprint": "distressed grommet eyelet tank top-mockups-7.png + distressed grommet eyelet tank top-mockups-9.png",
+    "duplicate_status": "unique",
+    "duplicate_note": "",
+    "visual_slots": [
+      {
+        "index": 0,
+        "name": "Distressed Grommet Eyelet Tank Top-mockups-9.png",
+        "asset_name": "Distressed Grommet Eyelet Tank Top-mockups-9.png",
+        "image_path": "",
+        "source": "drive_asset",
+        "role": "product",
+        "notes": "Original source asset slot.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 1,
+        "name": "Distressed Grommet Eyelet Tank Top-mockups-7.png",
+        "asset_name": "Distressed Grommet Eyelet Tank Top-mockups-7.png",
+        "image_path": "",
+        "source": "drive_asset",
+        "role": "product",
+        "notes": "Original source asset slot.",
+        "overlay_text": "",
+        "updated_at": ""
+      }
+    ],
+    "quality_score": {
+      "overall": 78,
+      "product_clarity": 85,
+      "brand_fit": 85,
+      "visual_freshness": 70,
+      "feed_rhythm": 80,
+      "commercial_usefulness": 85,
+      "designed_vs_raw": 62,
+      "duplicate_risk": 0
+    },
+    "needs_work": [
+      {
+        "type": "needs_design_pass",
+        "note": "Post may feel raw. Run Improve Design or add backdrop/detail slots."
+      }
+    ]
+  },
+  {
+    "id": "launch-recovery-04-body-proof",
+    "format": "Reel",
+    "pillar": "Wearability",
+    "hook": "See it on body.",
+    "caption": "Fit, scale, and movement make the reconstruction real.",
+    "source_files": [
+      "JRR_3994.jpg",
+      "JRR_4000-2.jpg",
+      "JRR_4000.jpg",
+      "JRR_4001-2.jpg"
+    ],
+    "visual_role": "body",
+    "launch_role": "Model / body proof",
+    "curator_reason": "Body proof repairs the gap between concept and desire.",
+    "on_screen_text": [
+      "FIT",
+      "SCALE",
+      "MOVEMENT"
+    ],
+    "scheduled_date": "2026-05-20",
+    "status": "Draft",
+    "platform": "Instagram",
+    "selected_assets": [
+      "JRR_3994.jpg",
+      "JRR_4000-2.jpg",
+      "JRR_4000.jpg",
+      "JRR_4001-2.jpg"
+    ],
+    "product_keys": [],
+    "product_rotation_note": "",
+    "visual_fingerprint": {
+      "visual_family": "campaign photo",
+      "palette": "unknown",
+      "brightness": "unknown",
+      "density": "unknown",
+      "subject": "body",
+      "product_visibility_score": 8,
+      "content_weight": "photo/product-heavy",
+      "warnings": [
+        "Post leans heavily on one visual family: campaign photo."
+      ]
+    },
+    "visual_group": {},
+    "feed_position": 3,
+    "candidate_index": null,
+    "candidate_source_path": "",
+    "recovery_sequence": true,
+    "created_at": "2026-05-17T01:09:19",
+    "calendar_note": "Launch recovery sequence scheduled before existing content.",
+    "asset_fingerprint": "jrr_3994.jpg > jrr_4000-2.jpg > jrr_4000.jpg > jrr_4001-2.jpg",
+    "asset_set_fingerprint": "jrr_3994.jpg + jrr_4000-2.jpg + jrr_4000.jpg + jrr_4001-2.jpg",
+    "duplicate_status": "unique",
+    "duplicate_note": "",
+    "visual_slots": [
+      {
+        "index": 0,
+        "name": "JRR_3994.jpg",
+        "asset_name": "JRR_3994.jpg",
+        "image_path": "",
+        "source": "drive_asset",
+        "role": "body",
+        "notes": "Original source asset slot.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 1,
+        "name": "JRR_4000-2.jpg",
+        "asset_name": "JRR_4000-2.jpg",
+        "image_path": "",
+        "source": "drive_asset",
+        "role": "body",
+        "notes": "Original source asset slot.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 2,
+        "name": "JRR_4000.jpg",
+        "asset_name": "JRR_4000.jpg",
+        "image_path": "",
+        "source": "drive_asset",
+        "role": "body",
+        "notes": "Original source asset slot.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 3,
+        "name": "JRR_4001-2.jpg",
+        "asset_name": "JRR_4001-2.jpg",
+        "image_path": "",
+        "source": "drive_asset",
+        "role": "body",
+        "notes": "Original source asset slot.",
+        "overlay_text": "",
+        "updated_at": ""
+      }
+    ],
+    "quality_score": {
+      "overall": 70,
+      "product_clarity": 70,
+      "brand_fit": 85,
+      "visual_freshness": 62,
+      "feed_rhythm": 80,
+      "commercial_usefulness": 62,
+      "designed_vs_raw": 62,
+      "duplicate_risk": 0
+    },
+    "needs_work": [
+      {
+        "type": "quality",
+        "note": "Overall quality score is 70. Run Improve Design or replace weak assets."
+      },
+      {
+        "type": "needs_design_pass",
+        "note": "Post may feel raw. Run Improve Design or add backdrop/detail slots."
+      }
+    ]
+  },
+  {
+    "id": "launch-recovery-05-process-proof",
+    "format": "Carousel",
+    "pillar": "Process",
+    "hook": "The system is built, not styled.",
+    "caption": "Process evidence: source, reconstruction, product detail.",
+    "source_files": [
+      "IMG_1793.HEIC",
+      "IMG_1794.HEIC",
+      "IMG_1795.HEIC",
+      "IMG_1796.HEIC"
+    ],
+    "visual_role": "process",
+    "launch_role": "Process proof",
+    "curator_reason": "Process post gives credibility and breaks up product/body posts with evidence.",
+    "on_screen_text": [
+      "PROCESS",
+      "PROOF",
+      "SYSTEM"
+    ],
+    "text_dominant": true,
+    "text_slides": [
+      {
+        "palette": "dark",
+        "footer": "CANVAS / CAPTURE / RECONSTRUCT / DROP",
+        "blocks": [
+          {
+            "id": "meta",
+            "text": "Process",
+            "role": "mono",
+            "x": 72,
+            "y": 302,
+            "size": 34,
+            "color": "accent",
+            "uppercase": true,
+            "wrap": 28
+          },
+          {
+            "id": "headline",
+            "text": "THE SYSTEM IS BUILT",
+            "role": "display",
+            "x": 72,
+            "y": 390,
+            "size": 92,
+            "color": "ink",
+            "uppercase": true,
+            "wrap": 13
+          },
+          {
+            "id": "body",
+            "text": "Before product, there is evidence: source, crop, reconstruction, placement.",
+            "role": "brand",
+            "x": 76,
+            "y": 700,
+            "size": 36,
+            "color": "muted",
+            "wrap": 34
+          }
+        ]
+      },
+      {
+        "palette": "light",
+        "footer": "CANVAS / CAPTURE / RECONSTRUCT / DROP",
+        "blocks": [
+          {
+            "id": "meta",
+            "text": "Proof",
+            "role": "mono",
+            "x": 72,
+            "y": 302,
+            "size": 34,
+            "color": "accent",
+            "uppercase": true,
+            "wrap": 28
+          },
+          {
+            "id": "headline",
+            "text": "NOT STYLED. BUILT.",
+            "role": "display",
+            "x": 72,
+            "y": 390,
+            "size": 92,
+            "color": "ink",
+            "uppercase": true,
+            "wrap": 13
+          },
+          {
+            "id": "body",
+            "text": "Process frames make the garment feel intentional instead of random.",
+            "role": "brand",
+            "x": 76,
+            "y": 700,
+            "size": 36,
+            "color": "muted",
+            "wrap": 34
+          }
+        ]
+      },
+      {
+        "palette": "dark",
+        "footer": "CANVAS / CAPTURE / RECONSTRUCT / DROP",
+        "blocks": [
+          {
+            "id": "meta",
+            "text": "Use",
+            "role": "mono",
+            "x": 72,
+            "y": 302,
+            "size": 34,
+            "color": "accent",
+            "uppercase": true,
+            "wrap": 28
+          },
+          {
+            "id": "headline",
+            "text": "SOURCE / OBJECT",
+            "role": "display",
+            "x": 72,
+            "y": 390,
+            "size": 92,
+            "color": "ink",
+            "uppercase": true,
+            "wrap": 13
+          },
+          {
+            "id": "body",
+            "text": "These slides exist to slow the feed down and explain why the product matters.",
+            "role": "brand",
+            "x": 76,
+            "y": 700,
+            "size": 36,
+            "color": "muted",
+            "wrap": 34
+          }
+        ]
+      }
+    ],
+    "scheduled_date": "2026-05-21",
+    "status": "Draft",
+    "platform": "Instagram",
+    "selected_assets": [],
+    "product_keys": [],
+    "product_rotation_note": "",
+    "visual_fingerprint": {
+      "visual_family": "process",
+      "palette": "unknown",
+      "brightness": "unknown",
+      "density": "medium",
+      "subject": "detail",
+      "product_visibility_score": 0,
+      "content_weight": "process-heavy",
+      "warnings": [
+        "Post leans heavily on one visual family: process."
+      ]
+    },
+    "visual_group": {
+      "name": "launch-recovery-05-process-proof",
+      "images": [
+        {
+          "name": "slide-01.png",
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-17-launch-recovery-05-process-proof\\slide-01.png",
+          "kind": "image",
+          "category": "visual_content"
+        },
+        {
+          "name": "slide-02.png",
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-17-launch-recovery-05-process-proof\\slide-02.png",
+          "kind": "image",
+          "category": "visual_content"
+        },
+        {
+          "name": "slide-03.png",
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-17-launch-recovery-05-process-proof\\slide-03.png",
+          "kind": "image",
+          "category": "visual_content"
+        }
+      ]
+    },
+    "feed_position": 4,
+    "candidate_index": null,
+    "candidate_source_path": "",
+    "recovery_sequence": true,
+    "created_at": "2026-05-17T01:09:19",
+    "calendar_note": "Launch recovery sequence scheduled before existing content.",
+    "asset_fingerprint": "img_1793.heic > img_1794.heic > img_1795.heic > img_1796.heic",
+    "asset_set_fingerprint": "img_1793.heic + img_1794.heic + img_1795.heic + img_1796.heic",
+    "duplicate_status": "unique",
+    "duplicate_note": "",
+    "visual_slots": [
+      {
+        "index": 0,
+        "name": "slide-01.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-17-launch-recovery-05-process-proof\\slide-01.png",
+        "source": "generated_visual",
+        "role": "text_backdrop",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 1,
+        "name": "slide-02.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-17-launch-recovery-05-process-proof\\slide-02.png",
+        "source": "generated_visual",
+        "role": "text_backdrop",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 2,
+        "name": "slide-03.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-17-launch-recovery-05-process-proof\\slide-03.png",
+        "source": "generated_visual",
+        "role": "text_backdrop",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      }
+    ],
+    "quality_score": {
+      "overall": 75,
+      "product_clarity": 70,
+      "brand_fit": 85,
+      "visual_freshness": 74,
+      "feed_rhythm": 80,
+      "commercial_usefulness": 62,
+      "designed_vs_raw": 77,
+      "duplicate_risk": 0
+    },
+    "needs_work": []
+  },
+  {
+    "id": "launch-recovery-06-product-focus",
+    "format": "Carousel",
+    "pillar": "Product",
+    "hook": "Start with one piece.",
+    "caption": "A focused product carousel: front, back, detail, context.",
+    "source_files": [
+      "Essential Bodycon Crewneck T-Shirt-mockups-9.png",
+      "Essential Bodycon Crewneck T-Shirt-mockups-7.png",
+      "Essential Bodycon Crewneck T-Shirt-mockups-8.png",
+      "Essential Bodycon Crewneck T-Shirt-mockups-6.png"
+    ],
+    "visual_role": "product",
+    "launch_role": "Individual product focus",
+    "curator_reason": "Begins the product-by-product ramp after the audience understands the line.",
+    "on_screen_text": [
+      "FRONT",
+      "BACK",
+      "DETAIL",
+      "SOURCE"
+    ],
+    "scheduled_date": "2026-05-22",
+    "status": "Draft",
+    "platform": "Instagram",
+    "selected_assets": [
+      "Essential Bodycon Crewneck T-Shirt-mockups-9.png",
+      "Essential Bodycon Crewneck T-Shirt-mockups-7.png",
+      "Essential Bodycon Crewneck T-Shirt-mockups-8.png",
+      "Essential Bodycon Crewneck T-Shirt-mockups-6.png"
+    ],
+    "product_keys": [
+      "essential bodycon crewneck t shirt"
+    ],
+    "product_rotation_note": "Uses a recently featured product. Prefer this only if the story, styling, or format is meaningfully different.",
+    "visual_fingerprint": {
+      "visual_family": "product",
+      "palette": "unknown",
+      "brightness": "unknown",
+      "density": "minimal",
+      "subject": "garment",
+      "product_visibility_score": 8,
+      "content_weight": "photo/product-heavy",
+      "warnings": [
+        "Post leans heavily on one visual family: product."
+      ]
+    },
+    "visual_group": {},
+    "feed_position": 5,
+    "candidate_index": null,
+    "candidate_source_path": "",
+    "recovery_sequence": true,
+    "created_at": "2026-05-17T01:09:19",
+    "calendar_note": "Launch recovery sequence scheduled before existing content.",
+    "asset_fingerprint": "essential bodycon crewneck t-shirt-mockups-9.png > essential bodycon crewneck t-shirt-mockups-7.png > essential bodycon crewneck t-shirt-mockups-8.png > essential bodycon crewneck t-shirt-mockups-6.png",
+    "asset_set_fingerprint": "essential bodycon crewneck t-shirt-mockups-6.png + essential bodycon crewneck t-shirt-mockups-7.png + essential bodycon crewneck t-shirt-mockups-8.png + essential bodycon crewneck t-shirt-mockups-9.png",
+    "duplicate_status": "unique",
+    "duplicate_note": "",
+    "visual_slots": [
+      {
+        "index": 0,
+        "name": "Essential Bodycon Crewneck T-Shirt-mockups-9.png",
+        "asset_name": "Essential Bodycon Crewneck T-Shirt-mockups-9.png",
+        "image_path": "",
+        "source": "drive_asset",
+        "role": "hero",
+        "notes": "4:5, centered torso/garment, leave slight breathing room on one side for title placement | High-contrast but soft-edged; preserve fabric tone; subtle grain; slightly lifted shadows; avoid heavy sharpening | Best opener for a focused product statement and immediate clarity.",
+        "overlay_text": "START WITH ONE PIECE.",
+        "updated_at": "2026-05-17T01:10:38"
+      },
+      {
+        "index": 1,
+        "name": "Essential Bodycon Crewneck T-Shirt-mockups-7.png",
+        "asset_name": "Essential Bodycon Crewneck T-Shirt-mockups-7.png",
+        "image_path": "",
+        "source": "drive_asset",
+        "role": "product_clarity",
+        "notes": "4:5, straight product read, keep silhouette fully visible | Neutral tonal treatment, clean whites/blacks, minimal grain, crisp but not sterile | Gives the first factual read after the hero.",
+        "overlay_text": "FRONT",
+        "updated_at": "2026-05-17T01:10:38"
+      },
+      {
+        "index": 2,
+        "name": "Essential Bodycon Crewneck T-Shirt-mockups-8.png",
+        "asset_name": "Essential Bodycon Crewneck T-Shirt-mockups-8.png",
+        "image_path": "",
+        "source": "drive_asset",
+        "role": "texture_backdrop",
+        "notes": "4:5, tighter crop on fabric/body edge or garment fold if available, prioritize open area | Soften contrast slightly, preserve texture, use the quietest area as text surface, subtle warm-gray grading | Use as the premium breathing-room slide; should feel like a textile surface, not a raw mockup.",
+        "overlay_text": "DETAIL",
+        "updated_at": "2026-05-17T01:10:38"
+      },
+      {
+        "index": 3,
+        "name": "Essential Bodycon Crewneck T-Shirt-mockups-6.png",
+        "asset_name": "Essential Bodycon Crewneck T-Shirt-mockups-6.png",
+        "image_path": "",
+        "source": "drive_asset",
+        "role": "product_clarity",
+        "notes": "4:5, back view or strongest alternate angle, keep garment edges clean | Match hero tonality; mild grain; keep background quiet; slightly lower saturation for cohesion | Completes the product proof set and closes the carousel with structure.",
+        "overlay_text": "BACK",
+        "updated_at": "2026-05-17T01:10:38"
+      }
+    ],
+    "composition_plan": {
+      "summary": "Product-led carousel, but art-directed: use the first mockup as hero, then build a clean front/back/detail sequence with one folded textile or quiet garment crop as the breathing-room slide.",
+      "quality_bar": [
+        "Hero feels intentional, not like an e-comm grid crop.",
+        "One slide acts as a calm text/backdrop surface with negative space.",
+        "Detail slide has texture and material clarity without inventing graphics.",
+        "Sequence moves front -> back -> detail -> source/CTA with clear pacing.",
+        "Keeps the product legible while still fitting the launch-recovery narrative."
+      ],
+      "slide_plan": [
+        {
+          "slot": 0,
+          "role": "hero",
+          "asset_name": "Essential Bodycon Crewneck T-Shirt-mockups-9.png",
+          "image_path": "",
+          "crop": "4:5, centered torso/garment, leave slight breathing room on one side for title placement",
+          "treatment": "High-contrast but soft-edged; preserve fabric tone; subtle grain; slightly lifted shadows; avoid heavy sharpening",
+          "text_overlay": "START WITH ONE PIECE.",
+          "reason": "Best opener for a focused product statement and immediate clarity."
+        },
+        {
+          "slot": 1,
+          "role": "product_clarity",
+          "asset_name": "Essential Bodycon Crewneck T-Shirt-mockups-7.png",
+          "image_path": "",
+          "crop": "4:5, straight product read, keep silhouette fully visible",
+          "treatment": "Neutral tonal treatment, clean whites/blacks, minimal grain, crisp but not sterile",
+          "text_overlay": "FRONT",
+          "reason": "Gives the first factual read after the hero."
+        },
+        {
+          "slot": 2,
+          "role": "texture_backdrop",
+          "asset_name": "Essential Bodycon Crewneck T-Shirt-mockups-8.png",
+          "image_path": "",
+          "crop": "4:5, tighter crop on fabric/body edge or garment fold if available, prioritize open area",
+          "treatment": "Soften contrast slightly, preserve texture, use the quietest area as text surface, subtle warm-gray grading",
+          "text_overlay": "DETAIL",
+          "reason": "Use as the premium breathing-room slide; should feel like a textile surface, not a raw mockup."
+        },
+        {
+          "slot": 3,
+          "role": "product_clarity",
+          "asset_name": "Essential Bodycon Crewneck T-Shirt-mockups-6.png",
+          "image_path": "",
+          "crop": "4:5, back view or strongest alternate angle, keep garment edges clean",
+          "treatment": "Match hero tonality; mild grain; keep background quiet; slightly lower saturation for cohesion",
+          "text_overlay": "BACK",
+          "reason": "Completes the product proof set and closes the carousel with structure."
+        }
+      ],
+      "ai_reference_suggestions": [
+        {
+          "type": "feed_breaker",
+          "prompt_direction": "editorial folded textile surface, neutral studio light, premium archival fashion backdrop, lots of negative space",
+          "use_case": "Only if Builder needs a dedicated calm surface slide beyond the provided mockups."
+        }
+      ],
+      "edit_notes": [
+        "Use slide 2 as the text/backdrop moment: place one short line only.",
+        "Keep all overlays small, uppercase, and aligned consistently.",
+        "If a folded textile crop is available in Builder, swap it into slot 2 for the premium surface slide.",
+        "Avoid adding fake product specs or readable invented labels.",
+        "If the mockups feel too similar, slightly diversify crop scale between slides 1 and 3."
+      ]
+    },
+    "composition_direction": "Use folded textile or clean garment detail as a premium text/backdrop surface. Make this feel designed, not like raw product mockups.",
+    "updated_at": "2026-05-17T01:10:38",
+    "edit_history": [
+      {
+        "created_at": "2026-05-17T01:10:38",
+        "source": "creative_composition",
+        "changes": {
+          "composition_plan": true,
+          "direction": "Use folded textile or clean garment detail as a premium text/backdrop surface. Make this feel designed, not like raw product mockups."
+        }
+      }
+    ],
+    "quality_score": {
+      "overall": 83,
+      "product_clarity": 85,
+      "brand_fit": 85,
+      "visual_freshness": 77,
+      "feed_rhythm": 80,
+      "commercial_usefulness": 85,
+      "designed_vs_raw": 88,
+      "duplicate_risk": 0
+    },
+    "needs_work": []
+  },
+  {
+    "id": "launch-recovery-07-drop-cta",
+    "format": "Solo Image Post",
+    "pillar": "Drop CTA",
+    "hook": "[4DRFT] is live.",
+    "caption": "Fine art reconstructed. Shop the current drop.",
+    "source_files": [
+      "JRR_3994.jpg",
+      "Essential Heavyweight Cotton T-Shirt-mockups-9.png",
+      "Essential Heavyweight Cotton T-Shirt-mockups-7.png"
+    ],
+    "visual_role": "meaning",
+    "launch_role": "CTA / availability",
+    "curator_reason": "Closes the recovery sequence by making the drop available and understandable.",
+    "on_screen_text": [
+      "[4DRFT]",
+      "AVAILABLE NOW"
+    ],
+    "scheduled_date": "2026-05-23",
+    "status": "Draft",
+    "platform": "Instagram",
+    "selected_assets": [
+      "JRR_3994.jpg",
+      "Essential Heavyweight Cotton T-Shirt-mockups-9.png",
+      "Essential Heavyweight Cotton T-Shirt-mockups-7.png"
+    ],
+    "product_keys": [
+      "essential heavyweight cotton t shirt"
+    ],
+    "product_rotation_note": "Uses a recently featured product. Prefer this only if the story, styling, or format is meaningfully different.",
+    "visual_fingerprint": {
+      "visual_family": "product",
+      "palette": "unknown",
+      "brightness": "unknown",
+      "density": "minimal",
+      "subject": "garment",
+      "product_visibility_score": 6,
+      "content_weight": "photo/product-heavy",
+      "warnings": []
+    },
+    "visual_group": {},
+    "feed_position": 6,
+    "candidate_index": null,
+    "candidate_source_path": "",
+    "recovery_sequence": true,
+    "created_at": "2026-05-17T01:09:19",
+    "calendar_note": "Launch recovery sequence scheduled before existing content.",
+    "asset_fingerprint": "jrr_3994.jpg > essential heavyweight cotton t-shirt-mockups-9.png > essential heavyweight cotton t-shirt-mockups-7.png",
+    "asset_set_fingerprint": "essential heavyweight cotton t-shirt-mockups-7.png + essential heavyweight cotton t-shirt-mockups-9.png + jrr_3994.jpg",
+    "duplicate_status": "unique",
+    "duplicate_note": "",
+    "visual_slots": [
+      {
+        "index": 0,
+        "name": "JRR_3994.jpg",
+        "asset_name": "JRR_3994.jpg",
+        "image_path": "",
+        "source": "drive_asset",
+        "role": "meaning",
+        "notes": "Original source asset slot.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 1,
+        "name": "Essential Heavyweight Cotton T-Shirt-mockups-9.png",
+        "asset_name": "Essential Heavyweight Cotton T-Shirt-mockups-9.png",
+        "image_path": "",
+        "source": "drive_asset",
+        "role": "meaning",
+        "notes": "Original source asset slot.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 2,
+        "name": "Essential Heavyweight Cotton T-Shirt-mockups-7.png",
+        "asset_name": "Essential Heavyweight Cotton T-Shirt-mockups-7.png",
+        "image_path": "",
+        "source": "drive_asset",
+        "role": "meaning",
+        "notes": "Original source asset slot.",
+        "overlay_text": "",
+        "updated_at": ""
+      }
+    ],
+    "quality_score": {
+      "overall": 78,
+      "product_clarity": 85,
+      "brand_fit": 85,
+      "visual_freshness": 70,
+      "feed_rhythm": 80,
+      "commercial_usefulness": 85,
+      "designed_vs_raw": 62,
+      "duplicate_risk": 0
+    },
+    "needs_work": [
+      {
+        "type": "needs_design_pass",
+        "note": "Post may feel raw. Run Improve Design or add backdrop/detail slots."
+      }
+    ]
+  },
+  {
+    "id": "candidate-2026-05-14-1",
+    "scheduled_date": "2026-05-24",
+    "status": "Draft",
+    "platform": "Instagram",
+    "format": "Reel",
+    "pillar": "Transformation",
+    "hook": "Canvas first. Garment second.",
+    "caption": "Extracted from the canvas.\nReconstructed into form.\nWorn as a fragment.",
+    "source_files": [
+      "ADRIFT_colour_oilpaint_v5.png",
+      "IMG_2166.MOV",
+      "IMG_3248.MOV"
+    ],
+    "candidate_index": 1,
+    "candidate_source_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\content_candidates\\2026-05-14-content-candidates.md",
+    "visual_group": null,
+    "feed_position": 7,
+    "selected_assets": [
+      "ADRIFT_colour_oilpaint_v5.png",
+      "IMG_2166.MOV",
+      "IMG_3248.MOV"
+    ],
+    "created_at": "2026-05-16T09:41:38",
+    "curator_reason": "Transformation reel keeps the canvas-to-garment thesis moving with motion and reconstruction energy.",
+    "visual_role": "motion",
+    "asset_fingerprint": "adrift_colour_oilpaint_v5.png > img_2166.mov > img_3248.mov",
+    "asset_set_fingerprint": "adrift_colour_oilpaint_v5.png + img_2166.mov + img_3248.mov",
+    "duplicate_status": "unique",
+    "duplicate_note": "",
+    "edit_history": [
+      {
+        "created_at": "2026-05-16T10:37:56",
+        "source": "feed_curator",
+        "item_id": "candidate-2026-05-14-1",
+        "hook": "Canvas first. Garment second.",
+        "changes": {
+          "scheduled_date": {
+            "before": "2026-05-17",
+            "after": "2026-05-15"
+          },
+          "curator_reason": {
+            "before": "Best opening statement: clear transformation, motion, and body proof in one strong reel.",
+            "after": "Strongest opener: clear transformation, motion, and body proof in one reel."
+          }
+        }
+      },
+      {
+        "created_at": "2026-05-16T22:00:25",
+        "source": "feed_curator",
+        "item_id": "candidate-2026-05-14-1",
+        "hook": "Canvas first. Garment second.",
+        "changes": {
+          "scheduled_date": {
+            "before": "2026-05-24",
+            "after": "2026-05-22"
+          },
+          "feed_position": {
+            "before": 7,
+            "after": 6
+          },
+          "curator_reason": {
+            "before": "Strongest opener: clear transformation, motion, and body proof in one reel.",
+            "after": "Transformation reel keeps the canvas-to-garment thesis moving with motion and reconstruction energy."
+          }
+        }
+      }
+    ],
+    "product_keys": [],
+    "product_rotation_note": "",
+    "visual_fingerprint": {
+      "visual_family": "motion",
+      "palette": "unknown",
+      "brightness": "unknown",
+      "density": "unknown",
+      "subject": "unknown",
+      "product_visibility_score": 0,
+      "content_weight": "mixed",
+      "warnings": []
+    },
+    "calendar_note": "Auto-spaced so each post has its own day.",
+    "visual_slots": [
+      {
+        "index": 0,
+        "name": "ADRIFT_colour_oilpaint_v5.png",
+        "asset_name": "ADRIFT_colour_oilpaint_v5.png",
+        "image_path": "",
+        "source": "drive_asset",
+        "role": "motion",
+        "notes": "Original source asset slot.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 1,
+        "name": "IMG_2166.MOV",
+        "asset_name": "IMG_2166.MOV",
+        "image_path": "",
+        "source": "drive_asset",
+        "role": "motion",
+        "notes": "Original source asset slot.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 2,
+        "name": "IMG_3248.MOV",
+        "asset_name": "IMG_3248.MOV",
+        "image_path": "",
+        "source": "drive_asset",
+        "role": "motion",
+        "notes": "Original source asset slot.",
+        "overlay_text": "",
+        "updated_at": ""
+      }
+    ],
+    "quality_score": {
+      "overall": 72,
+      "product_clarity": 70,
+      "brand_fit": 85,
+      "visual_freshness": 70,
+      "feed_rhythm": 80,
+      "commercial_usefulness": 62,
+      "designed_vs_raw": 62,
+      "duplicate_risk": 0
+    },
+    "needs_work": [
+      {
+        "type": "needs_design_pass",
+        "note": "Post may feel raw. Run Improve Design or add backdrop/detail slots."
+      }
+    ]
+  },
+  {
+    "id": "candidate-2026-05-16-2",
+    "scheduled_date": "2026-05-25",
+    "status": "Draft",
+    "platform": "Instagram",
+    "format": "Carousel",
+    "pillar": "Process",
+    "hook": "The system before the garment.",
+    "caption": "archive / scan / rebuild",
+    "source_files": [
+      "IMG_1793.HEIC",
+      "IMG_1994.HEIC",
+      "IMG_2045.HEIC",
+      "ADRIFT_BW_pixelated.png"
+    ],
+    "candidate_index": 2,
+    "candidate_source_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\content_candidates\\2026-05-16-content-candidates.md",
+    "visual_group": {
+      "name": "2026-05-16-from-canvas-to-wearable-fragment",
+      "images": [
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-06.png",
+          "relative_path": "outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-06.png",
+          "name": "slide-06.png",
+          "category": "visual_content",
+          "modified_at": 1778948732.306232,
+          "kind": "image"
+        },
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-05.png",
+          "relative_path": "outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-05.png",
+          "name": "slide-05.png",
+          "category": "visual_content",
+          "modified_at": 1778948731.4464245,
+          "kind": "image"
+        },
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-04.png",
+          "relative_path": "outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-04.png",
+          "name": "slide-04.png",
+          "category": "visual_content",
+          "modified_at": 1778948730.7318466,
+          "kind": "image"
+        },
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-03.png",
+          "relative_path": "outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-03.png",
+          "name": "slide-03.png",
+          "category": "visual_content",
+          "modified_at": 1778948730.053506,
+          "kind": "image"
+        },
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-02.png",
+          "relative_path": "outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-02.png",
+          "name": "slide-02.png",
+          "category": "visual_content",
+          "modified_at": 1778948729.6481855,
+          "kind": "image"
+        },
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-01.png",
+          "relative_path": "outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-01.png",
+          "name": "slide-01.png",
+          "category": "visual_content",
+          "modified_at": 1778948728.9738104,
+          "kind": "image"
+        }
+      ],
+      "briefs": [
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\design-brief.json",
+          "relative_path": "outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\design-brief.json",
+          "name": "design-brief.json",
+          "category": "visual_content",
+          "modified_at": 1778948732.3076358,
+          "kind": "text"
+        }
+      ]
+    },
+    "feed_position": 8,
+    "selected_assets": [
+      "IMG_1793.HEIC",
+      "IMG_1994.HEIC",
+      "IMG_2045.HEIC",
+      "ADRIFT_BW_pixelated.png"
+    ],
+    "asset_fingerprint": "img_1793.heic > img_1994.heic > img_2045.heic > adrift_bw_pixelated.png",
+    "asset_set_fingerprint": "adrift_bw_pixelated.png + img_1793.heic + img_1994.heic + img_2045.heic",
+    "duplicate_status": "unique",
+    "duplicate_note": "",
+    "created_at": "2026-05-16T09:58:45",
+    "curator_reason": "Process carousel grounds the line in studio evidence and helps space the heavier visual families apart.",
+    "visual_role": "process",
+    "calendar_note": "Auto-spaced so each post has its own day.",
+    "edit_history": [
+      {
+        "created_at": "2026-05-16T10:37:56",
+        "source": "feed_curator",
+        "item_id": "candidate-2026-05-16-2",
+        "hook": "The system before the garment.",
+        "changes": {
+          "scheduled_date": {
+            "before": "2026-05-19",
+            "after": "2026-05-16"
+          },
+          "curator_reason": {
+            "before": "Adds procedural credibility immediately after the opener and keeps the system language grounded.",
+            "after": "Adds procedural credibility right after the opener and keeps the system language grounded."
+          }
+        }
+      },
+      {
+        "created_at": "2026-05-16T22:00:25",
+        "source": "feed_curator",
+        "item_id": "candidate-2026-05-16-2",
+        "hook": "The system before the garment.",
+        "changes": {
+          "scheduled_date": {
+            "before": "2026-05-25",
+            "after": "2026-05-23"
+          },
+          "feed_position": {
+            "before": 8,
+            "after": 7
+          },
+          "curator_reason": {
+            "before": "Adds procedural credibility right after the opener and keeps the system language grounded.",
+            "after": "Process carousel grounds the line in studio evidence and helps space the heavier visual families apart."
+          }
+        }
+      }
+    ],
+    "product_keys": [],
+    "product_rotation_note": "",
+    "visual_fingerprint": {
+      "visual_family": "process",
+      "palette": "unknown",
+      "brightness": "unknown",
+      "density": "medium",
+      "subject": "detail",
+      "product_visibility_score": 0,
+      "content_weight": "process-heavy",
+      "warnings": [
+        "Post leans heavily on one visual family: process."
+      ]
+    },
+    "visual_slots": [
+      {
+        "index": 0,
+        "name": "slide-06.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-06.png",
+        "source": "generated_visual",
+        "role": "process",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 1,
+        "name": "slide-05.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-05.png",
+        "source": "generated_visual",
+        "role": "process",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 2,
+        "name": "slide-04.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-04.png",
+        "source": "generated_visual",
+        "role": "process",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 3,
+        "name": "slide-03.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-03.png",
+        "source": "generated_visual",
+        "role": "process",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 4,
+        "name": "slide-02.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-02.png",
+        "source": "generated_visual",
+        "role": "process",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 5,
+        "name": "slide-01.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-01.png",
+        "source": "generated_visual",
+        "role": "process",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      }
+    ],
+    "quality_score": {
+      "overall": 70,
+      "product_clarity": 70,
+      "brand_fit": 85,
+      "visual_freshness": 62,
+      "feed_rhythm": 80,
+      "commercial_usefulness": 62,
+      "designed_vs_raw": 62,
+      "duplicate_risk": 0
+    },
+    "needs_work": [
+      {
+        "type": "quality",
+        "note": "Overall quality score is 70. Run Improve Design or replace weak assets."
+      },
+      {
+        "type": "needs_design_pass",
+        "note": "Post may feel raw. Run Improve Design or add backdrop/detail slots."
+      }
+    ]
+  },
+  {
+    "id": "candidate-2026-05-15-2",
+    "scheduled_date": "2026-05-26",
+    "status": "Draft",
+    "platform": "Instagram",
+    "format": "Carousel",
+    "pillar": "Product",
+    "hook": "The fragment, worn.",
+    "caption": "EXTRACTED FROM THE ARCHIVE",
+    "source_files": [
+      "Distressed Grommet Eyelet Tank Top-mockups-5.png",
+      "Distressed Grommet Eyelet Tank Top-mockups-6.png",
+      "Distressed Grommet Eyelet Tank Top-mockups-7.png",
+      "JRR_4044.jpg"
+    ],
+    "candidate_index": 2,
+    "candidate_source_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\content_candidates\\2026-05-15-content-candidates.md",
+    "visual_group": {
+      "name": "2026-05-16-from-canvas-to-wearable-fragment",
+      "images": [
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-06.png",
+          "relative_path": "outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-06.png",
+          "name": "slide-06.png",
+          "category": "visual_content",
+          "modified_at": 1778948732.306232,
+          "kind": "image"
+        },
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-05.png",
+          "relative_path": "outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-05.png",
+          "name": "slide-05.png",
+          "category": "visual_content",
+          "modified_at": 1778948731.4464245,
+          "kind": "image"
+        },
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-04.png",
+          "relative_path": "outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-04.png",
+          "name": "slide-04.png",
+          "category": "visual_content",
+          "modified_at": 1778948730.7318466,
+          "kind": "image"
+        },
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-03.png",
+          "relative_path": "outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-03.png",
+          "name": "slide-03.png",
+          "category": "visual_content",
+          "modified_at": 1778948730.053506,
+          "kind": "image"
+        },
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-02.png",
+          "relative_path": "outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-02.png",
+          "name": "slide-02.png",
+          "category": "visual_content",
+          "modified_at": 1778948729.6481855,
+          "kind": "image"
+        },
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-01.png",
+          "relative_path": "outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-01.png",
+          "name": "slide-01.png",
+          "category": "visual_content",
+          "modified_at": 1778948728.9738104,
+          "kind": "image"
+        }
+      ],
+      "briefs": [
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\design-brief.json",
+          "relative_path": "outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\design-brief.json",
+          "name": "design-brief.json",
+          "category": "visual_content",
+          "modified_at": 1778948732.3076358,
+          "kind": "text"
+        }
+      ]
+    },
+    "feed_position": 9,
+    "selected_assets": [
+      "Distressed Grommet Eyelet Tank Top-mockups-5.png",
+      "Distressed Grommet Eyelet Tank Top-mockups-6.png",
+      "Distressed Grommet Eyelet Tank Top-mockups-7.png",
+      "JRR_4044.jpg"
+    ],
+    "created_at": "2026-05-16T09:41:38",
+    "curator_reason": "Product forward, but with a wearable fragment angle that keeps the grid desirable.",
+    "visual_role": "product",
+    "updated_at": "2026-05-16T09:19:43",
+    "asset_fingerprint": "distressed grommet eyelet tank top-mockups-5.png > distressed grommet eyelet tank top-mockups-6.png > distressed grommet eyelet tank top-mockups-7.png > jrr_4044.jpg",
+    "asset_set_fingerprint": "distressed grommet eyelet tank top-mockups-5.png + distressed grommet eyelet tank top-mockups-6.png + distressed grommet eyelet tank top-mockups-7.png + jrr_4044.jpg",
+    "duplicate_status": "unique",
+    "duplicate_note": "",
+    "calendar_note": "Auto-spaced so each post has its own day.",
+    "edit_history": [
+      {
+        "created_at": "2026-05-16T10:37:56",
+        "source": "feed_curator",
+        "item_id": "candidate-2026-05-15-2",
+        "hook": "The fragment, worn.",
+        "changes": {
+          "scheduled_date": {
+            "before": "2026-05-18",
+            "after": "2026-05-17"
+          }
+        }
+      },
+      {
+        "created_at": "2026-05-16T22:00:25",
+        "source": "feed_curator",
+        "item_id": "candidate-2026-05-15-2",
+        "hook": "The fragment, worn.",
+        "changes": {
+          "scheduled_date": {
+            "before": "2026-05-26",
+            "after": "2026-05-24"
+          },
+          "feed_position": {
+            "before": 9,
+            "after": 8
+          },
+          "curator_reason": {
+            "before": "Brings wearable product clarity back into view so the feed does not stay conceptual too long.",
+            "after": "Product forward, but with a wearable fragment angle that keeps the grid desirable."
+          }
+        }
+      }
+    ],
+    "product_keys": [
+      "distressed grommet eyelet tank top"
+    ],
+    "product_rotation_note": "Uses a recently featured product. Prefer this only if the story, styling, or format is meaningfully different.",
+    "visual_fingerprint": {
+      "visual_family": "product",
+      "palette": "unknown",
+      "brightness": "unknown",
+      "density": "minimal",
+      "subject": "garment",
+      "product_visibility_score": 8,
+      "content_weight": "photo/product-heavy",
+      "warnings": [
+        "Post leans heavily on one visual family: product."
+      ]
+    },
+    "visual_slots": [
+      {
+        "index": 0,
+        "name": "slide-06.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-06.png",
+        "source": "generated_visual",
+        "role": "product",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 1,
+        "name": "slide-05.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-05.png",
+        "source": "generated_visual",
+        "role": "product",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 2,
+        "name": "slide-04.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-04.png",
+        "source": "generated_visual",
+        "role": "product",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 3,
+        "name": "slide-03.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-03.png",
+        "source": "generated_visual",
+        "role": "product",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 4,
+        "name": "slide-02.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-02.png",
+        "source": "generated_visual",
+        "role": "product",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 5,
+        "name": "slide-01.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-01.png",
+        "source": "generated_visual",
+        "role": "product",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      }
+    ],
+    "quality_score": {
+      "overall": 76,
+      "product_clarity": 85,
+      "brand_fit": 85,
+      "visual_freshness": 62,
+      "feed_rhythm": 80,
+      "commercial_usefulness": 85,
+      "designed_vs_raw": 62,
+      "duplicate_risk": 0
+    },
+    "needs_work": [
+      {
+        "type": "needs_design_pass",
+        "note": "Post may feel raw. Run Improve Design or add backdrop/detail slots."
+      }
+    ]
+  },
+  {
+    "id": "candidate-2026-05-15-3",
+    "scheduled_date": "2026-05-27",
+    "status": "Draft",
+    "platform": "Instagram",
+    "format": "Reel",
+    "pillar": "Process",
+    "hook": "Reconstruction, frame by frame.",
+    "caption": "PROCESS / ACTIVE",
+    "source_files": [
+      "IMG_1991.HEIC",
+      "IMG_1994.HEIC",
+      "IMG_2040.HEIC",
+      "IMG_3248.MOV"
+    ],
+    "candidate_index": 3,
+    "candidate_source_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\content_candidates\\2026-05-15-content-candidates.md",
+    "visual_group": null,
+    "feed_position": 10,
+    "selected_assets": [
+      "IMG_1991.HEIC",
+      "IMG_1994.HEIC",
+      "IMG_2040.HEIC",
+      "IMG_3248.MOV"
+    ],
+    "created_at": "2026-05-16T09:41:38",
+    "curator_reason": "Another process reel adds studio credibility and resolves the prior meaning beat into evidence.",
+    "visual_role": "process",
+    "asset_fingerprint": "img_1991.heic > img_1994.heic > img_2040.heic > img_3248.mov",
+    "asset_set_fingerprint": "img_1991.heic + img_1994.heic + img_2040.heic + img_3248.mov",
+    "duplicate_status": "unique",
+    "duplicate_note": "",
+    "calendar_note": "Auto-spaced so each post has its own day.",
+    "edit_history": [
+      {
+        "created_at": "2026-05-16T10:37:56",
+        "source": "feed_curator",
+        "item_id": "candidate-2026-05-15-3",
+        "hook": "Reconstruction, frame by frame.",
+        "changes": {
+          "scheduled_date": {
+            "before": "2026-05-20",
+            "after": "2026-05-19"
+          }
+        }
+      },
+      {
+        "created_at": "2026-05-16T22:00:25",
+        "source": "feed_curator",
+        "item_id": "candidate-2026-05-15-3",
+        "hook": "Reconstruction, frame by frame.",
+        "changes": {
+          "scheduled_date": {
+            "before": "2026-05-28",
+            "after": "2026-05-26"
+          },
+          "feed_position": {
+            "before": 11,
+            "after": 10
+          },
+          "curator_reason": {
+            "before": "Process reel restores studio evidence and prevents the meaning post from feeling too isolated.",
+            "after": "Another process reel adds studio credibility and resolves the prior meaning beat into evidence."
+          }
+        }
+      }
+    ],
+    "product_keys": [],
+    "product_rotation_note": "",
+    "visual_fingerprint": {
+      "visual_family": "process",
+      "palette": "unknown",
+      "brightness": "unknown",
+      "density": "medium",
+      "subject": "detail",
+      "product_visibility_score": 0,
+      "content_weight": "process-heavy",
+      "warnings": [
+        "Post leans heavily on one visual family: process."
+      ]
+    },
+    "visual_slots": [
+      {
+        "index": 0,
+        "name": "IMG_1991.HEIC",
+        "asset_name": "IMG_1991.HEIC",
+        "image_path": "",
+        "source": "drive_asset",
+        "role": "process",
+        "notes": "Original source asset slot.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 1,
+        "name": "IMG_1994.HEIC",
+        "asset_name": "IMG_1994.HEIC",
+        "image_path": "",
+        "source": "drive_asset",
+        "role": "process",
+        "notes": "Original source asset slot.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 2,
+        "name": "IMG_2040.HEIC",
+        "asset_name": "IMG_2040.HEIC",
+        "image_path": "",
+        "source": "drive_asset",
+        "role": "process",
+        "notes": "Original source asset slot.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 3,
+        "name": "IMG_3248.MOV",
+        "asset_name": "IMG_3248.MOV",
+        "image_path": "",
+        "source": "drive_asset",
+        "role": "process",
+        "notes": "Original source asset slot.",
+        "overlay_text": "",
+        "updated_at": ""
+      }
+    ],
+    "quality_score": {
+      "overall": 70,
+      "product_clarity": 70,
+      "brand_fit": 85,
+      "visual_freshness": 62,
+      "feed_rhythm": 80,
+      "commercial_usefulness": 62,
+      "designed_vs_raw": 62,
+      "duplicate_risk": 0
+    },
+    "needs_work": [
+      {
+        "type": "quality",
+        "note": "Overall quality score is 70. Run Improve Design or replace weak assets."
+      },
+      {
+        "type": "needs_design_pass",
+        "note": "Post may feel raw. Run Improve Design or add backdrop/detail slots."
+      }
+    ]
+  },
+  {
+    "id": "candidate-2026-05-16-3",
+    "scheduled_date": "2026-05-28",
+    "status": "Draft",
+    "platform": "Instagram",
+    "format": "Feed Post",
+    "pillar": "Product",
+    "hook": "Wearable fragment.",
+    "caption": "fragment, held in shape.",
+    "source_files": [
+      "Distressed Grommet Eyelet Tank Top-mockups-5.png",
+      "JRR_4008.jpg"
+    ],
+    "candidate_index": 3,
+    "candidate_source_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\content_candidates\\2026-05-16-content-candidates.md",
+    "visual_group": {
+      "name": "2026-05-16-candidate-2026-05-15-2-model-shoot",
+      "images": [
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\image_concepts\\2026-05-16-candidate-2026-05-15-2-model-shoot\\model-shoot-render.png",
+          "relative_path": "outputs\\image_concepts\\2026-05-16-candidate-2026-05-15-2-model-shoot\\model-shoot-render.png",
+          "name": "model-shoot-render.png",
+          "category": "image_concepts",
+          "modified_at": 1778949727.150413,
+          "kind": "image"
+        }
+      ],
+      "briefs": [
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\image_concepts\\2026-05-16-candidate-2026-05-15-2-model-shoot\\render-metadata.json",
+          "relative_path": "outputs\\image_concepts\\2026-05-16-candidate-2026-05-15-2-model-shoot\\render-metadata.json",
+          "name": "render-metadata.json",
+          "category": "image_concepts",
+          "modified_at": 1778948383.2112577,
+          "kind": "text"
+        }
+      ]
+    },
+    "feed_position": 11,
+    "selected_assets": [
+      "Distressed Grommet Eyelet Tank Top-mockups-5.png",
+      "JRR_4008.jpg"
+    ],
+    "asset_fingerprint": "distressed grommet eyelet tank top-mockups-5.png > jrr_4008.jpg",
+    "asset_set_fingerprint": "distressed grommet eyelet tank top-mockups-5.png + jrr_4008.jpg",
+    "duplicate_status": "unique",
+    "duplicate_note": "",
+    "created_at": "2026-05-16T09:58:45",
+    "curator_reason": "Short product post with on-body reference restores garment clarity and lightens the sequence.",
+    "visual_role": "product",
+    "calendar_note": "Auto-spaced so each post has its own day.",
+    "edit_history": [
+      {
+        "created_at": "2026-05-16T10:37:56",
+        "source": "feed_curator",
+        "item_id": "candidate-2026-05-16-3",
+        "hook": "Wearable fragment.",
+        "changes": {
+          "scheduled_date": {
+            "before": "2026-05-22",
+            "after": "2026-05-20"
+          }
+        }
+      },
+      {
+        "created_at": "2026-05-16T22:00:25",
+        "source": "feed_curator",
+        "item_id": "candidate-2026-05-16-3",
+        "hook": "Wearable fragment.",
+        "changes": {
+          "scheduled_date": {
+            "before": "2026-05-29",
+            "after": "2026-05-27"
+          },
+          "feed_position": {
+            "before": 12,
+            "after": 11
+          },
+          "curator_reason": {
+            "before": "Product shot with on-body reference keeps the page desirable and readable.",
+            "after": "Short product post with on-body reference restores garment clarity and lightens the sequence."
+          }
+        }
+      }
+    ],
+    "product_keys": [
+      "distressed grommet eyelet tank top"
+    ],
+    "product_rotation_note": "Uses a recently featured product. Prefer this only if the story, styling, or format is meaningfully different.",
+    "visual_fingerprint": {
+      "visual_family": "product",
+      "palette": "unknown",
+      "brightness": "unknown",
+      "density": "minimal",
+      "subject": "garment",
+      "product_visibility_score": 4,
+      "content_weight": "photo/product-heavy",
+      "warnings": []
+    },
+    "visual_slots": [
+      {
+        "index": 0,
+        "name": "model-shoot-render.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\image_concepts\\2026-05-16-candidate-2026-05-15-2-model-shoot\\model-shoot-render.png",
+        "source": "generated_visual",
+        "role": "product",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      }
+    ],
+    "quality_score": {
+      "overall": 78,
+      "product_clarity": 85,
+      "brand_fit": 85,
+      "visual_freshness": 70,
+      "feed_rhythm": 80,
+      "commercial_usefulness": 85,
+      "designed_vs_raw": 62,
+      "duplicate_risk": 0
+    },
+    "needs_work": [
+      {
+        "type": "needs_design_pass",
+        "note": "Post may feel raw. Run Improve Design or add backdrop/detail slots."
+      }
+    ]
+  },
+  {
+    "id": "candidate-2026-05-16-6",
+    "scheduled_date": "2026-05-29",
+    "status": "Draft",
+    "platform": "Instagram",
+    "format": "Carousel",
+    "pillar": "Transformation",
+    "hook": "The fragment returns to the body.",
+    "caption": "from source to worn object.",
+    "source_files": [
+      "JRR_4004.jpg",
+      "JRR_4004-2.jpg",
+      "ADRIFT_colour_oilpaint_v5.png"
+    ],
+    "candidate_index": 6,
+    "candidate_source_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\content_candidates\\2026-05-16-content-candidates.md",
+    "visual_group": {
+      "name": "2026-05-16-from-canvas-to-wearable-fragment",
+      "images": [
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-06.png",
+          "relative_path": "outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-06.png",
+          "name": "slide-06.png",
+          "category": "visual_content",
+          "modified_at": 1778948732.306232,
+          "kind": "image"
+        },
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-05.png",
+          "relative_path": "outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-05.png",
+          "name": "slide-05.png",
+          "category": "visual_content",
+          "modified_at": 1778948731.4464245,
+          "kind": "image"
+        },
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-04.png",
+          "relative_path": "outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-04.png",
+          "name": "slide-04.png",
+          "category": "visual_content",
+          "modified_at": 1778948730.7318466,
+          "kind": "image"
+        },
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-03.png",
+          "relative_path": "outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-03.png",
+          "name": "slide-03.png",
+          "category": "visual_content",
+          "modified_at": 1778948730.053506,
+          "kind": "image"
+        },
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-02.png",
+          "relative_path": "outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-02.png",
+          "name": "slide-02.png",
+          "category": "visual_content",
+          "modified_at": 1778948729.6481855,
+          "kind": "image"
+        },
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-01.png",
+          "relative_path": "outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-01.png",
+          "name": "slide-01.png",
+          "category": "visual_content",
+          "modified_at": 1778948728.9738104,
+          "kind": "image"
+        }
+      ],
+      "briefs": [
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\design-brief.json",
+          "relative_path": "outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\design-brief.json",
+          "name": "design-brief.json",
+          "category": "visual_content",
+          "modified_at": 1778948732.3076358,
+          "kind": "text"
+        }
+      ]
+    },
+    "feed_position": 12,
+    "selected_assets": [
+      "JRR_4004.jpg",
+      "JRR_4004-2.jpg",
+      "ADRIFT_colour_oilpaint_v5.png"
+    ],
+    "asset_fingerprint": "jrr_4004.jpg > jrr_4004-2.jpg > adrift_colour_oilpaint_v5.png",
+    "asset_set_fingerprint": "adrift_colour_oilpaint_v5.png + jrr_4004-2.jpg + jrr_4004.jpg",
+    "duplicate_status": "unique",
+    "duplicate_note": "",
+    "created_at": "2026-05-16T09:58:45",
+    "curator_reason": "Body-led transformation post brings fashion proof back into the grid and pairs well after the lighter product beat.",
+    "visual_role": "body",
+    "calendar_note": "Auto-spaced so each post has its own day.",
+    "edit_history": [
+      {
+        "created_at": "2026-05-16T10:37:56",
+        "source": "feed_curator",
+        "item_id": "candidate-2026-05-16-6",
+        "hook": "The fragment returns to the body.",
+        "changes": {
+          "scheduled_date": {
+            "before": "2026-06-01",
+            "after": "2026-05-27"
+          },
+          "feed_position": {
+            "before": 14,
+            "after": 12
+          },
+          "curator_reason": {
+            "before": "Kept in the remaining order after curator pass.",
+            "after": "Strong body-led transformation post restores fashion proof and keeps the archive story wearable."
+          }
+        }
+      },
+      {
+        "created_at": "2026-05-16T22:00:25",
+        "source": "feed_curator",
+        "item_id": "candidate-2026-05-16-6",
+        "hook": "The fragment returns to the body.",
+        "changes": {
+          "scheduled_date": {
+            "before": "2026-06-05",
+            "after": "2026-05-28"
+          },
+          "feed_position": {
+            "before": 19,
+            "after": 12
+          },
+          "curator_reason": {
+            "before": "Strong body-led transformation post restores fashion proof and keeps the archive story wearable.",
+            "after": "Body-led transformation post brings fashion proof back into the grid and pairs well after the lighter product beat."
+          }
+        }
+      }
+    ],
+    "product_keys": [],
+    "product_rotation_note": "",
+    "visual_fingerprint": {
+      "visual_family": "campaign photo",
+      "palette": "unknown",
+      "brightness": "unknown",
+      "density": "unknown",
+      "subject": "body",
+      "product_visibility_score": 4,
+      "content_weight": "photo/product-heavy",
+      "warnings": []
+    },
+    "visual_slots": [
+      {
+        "index": 0,
+        "name": "slide-06.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-06.png",
+        "source": "generated_visual",
+        "role": "body",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 1,
+        "name": "slide-05.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-05.png",
+        "source": "generated_visual",
+        "role": "body",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 2,
+        "name": "slide-04.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-04.png",
+        "source": "generated_visual",
+        "role": "body",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 3,
+        "name": "slide-03.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-03.png",
+        "source": "generated_visual",
+        "role": "body",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 4,
+        "name": "slide-02.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-02.png",
+        "source": "generated_visual",
+        "role": "body",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 5,
+        "name": "slide-01.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-01.png",
+        "source": "generated_visual",
+        "role": "body",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      }
+    ],
+    "quality_score": {
+      "overall": 72,
+      "product_clarity": 70,
+      "brand_fit": 85,
+      "visual_freshness": 70,
+      "feed_rhythm": 80,
+      "commercial_usefulness": 62,
+      "designed_vs_raw": 62,
+      "duplicate_risk": 0
+    },
+    "needs_work": [
+      {
+        "type": "needs_design_pass",
+        "note": "Post may feel raw. Run Improve Design or add backdrop/detail slots."
+      }
+    ]
+  },
+  {
+    "id": "candidate-2026-05-15-5",
+    "scheduled_date": "2026-05-30",
+    "status": "Draft",
+    "platform": "Instagram",
+    "format": "Carousel",
+    "pillar": "Transformation",
+    "hook": "One painting. Multiple fragments.",
+    "caption": "EXTRACT / REPEAT / WEAR",
+    "source_files": [
+      "SimplyAdrift_v4.png",
+      "JRR_4038.jpg",
+      "JRR_4046.jpg"
+    ],
+    "candidate_index": 5,
+    "candidate_source_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\content_candidates\\2026-05-15-content-candidates.md",
+    "visual_group": {
+      "name": "2026-05-16-from-canvas-to-wearable-fragment",
+      "images": [
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-06.png",
+          "relative_path": "outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-06.png",
+          "name": "slide-06.png",
+          "category": "visual_content",
+          "modified_at": 1778948732.306232,
+          "kind": "image"
+        },
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-05.png",
+          "relative_path": "outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-05.png",
+          "name": "slide-05.png",
+          "category": "visual_content",
+          "modified_at": 1778948731.4464245,
+          "kind": "image"
+        },
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-04.png",
+          "relative_path": "outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-04.png",
+          "name": "slide-04.png",
+          "category": "visual_content",
+          "modified_at": 1778948730.7318466,
+          "kind": "image"
+        },
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-03.png",
+          "relative_path": "outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-03.png",
+          "name": "slide-03.png",
+          "category": "visual_content",
+          "modified_at": 1778948730.053506,
+          "kind": "image"
+        },
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-02.png",
+          "relative_path": "outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-02.png",
+          "name": "slide-02.png",
+          "category": "visual_content",
+          "modified_at": 1778948729.6481855,
+          "kind": "image"
+        },
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-01.png",
+          "relative_path": "outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-01.png",
+          "name": "slide-01.png",
+          "category": "visual_content",
+          "modified_at": 1778948728.9738104,
+          "kind": "image"
+        }
+      ],
+      "briefs": [
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\design-brief.json",
+          "relative_path": "outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\design-brief.json",
+          "name": "design-brief.json",
+          "category": "visual_content",
+          "modified_at": 1778948732.3076358,
+          "kind": "text"
+        }
+      ]
+    },
+    "feed_position": 13,
+    "selected_assets": [
+      "SimplyAdrift_v4.png",
+      "JRR_4038.jpg",
+      "JRR_4046.jpg"
+    ],
+    "created_at": "2026-05-16T09:41:38",
+    "curator_reason": "Source-led transformation reinforces the painting origin while staying wearable through campaign imagery.",
+    "visual_role": "source",
+    "asset_fingerprint": "simplyadrift_v4.png > jrr_4038.jpg > jrr_4046.jpg",
+    "asset_set_fingerprint": "jrr_4038.jpg + jrr_4046.jpg + simplyadrift_v4.png",
+    "duplicate_status": "unique",
+    "duplicate_note": "",
+    "calendar_note": "Auto-spaced so each post has its own day.",
+    "edit_history": [
+      {
+        "created_at": "2026-05-16T10:37:56",
+        "source": "feed_curator",
+        "item_id": "candidate-2026-05-15-5",
+        "hook": "One painting. Multiple fragments.",
+        "changes": {
+          "scheduled_date": {
+            "before": "2026-05-26",
+            "after": "2026-05-21"
+          }
+        }
+      },
+      {
+        "created_at": "2026-05-16T22:00:25",
+        "source": "feed_curator",
+        "item_id": "candidate-2026-05-15-5",
+        "hook": "One painting. Multiple fragments.",
+        "changes": {
+          "scheduled_date": {
+            "before": "2026-05-30",
+            "after": "2026-05-29"
+          },
+          "curator_reason": {
+            "before": "Strong transformation carousel re-centers the archive-to-object narrative with source material visible.",
+            "after": "Source-led transformation reinforces the painting origin while staying wearable through campaign imagery."
+          }
+        }
+      }
+    ],
+    "product_keys": [],
+    "product_rotation_note": "",
+    "visual_fingerprint": {
+      "visual_family": "campaign photo",
+      "palette": "unknown",
+      "brightness": "unknown",
+      "density": "unknown",
+      "subject": "body",
+      "product_visibility_score": 4,
+      "content_weight": "photo/product-heavy",
+      "warnings": []
+    },
+    "visual_slots": [
+      {
+        "index": 0,
+        "name": "slide-06.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-06.png",
+        "source": "generated_visual",
+        "role": "source",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 1,
+        "name": "slide-05.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-05.png",
+        "source": "generated_visual",
+        "role": "source",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 2,
+        "name": "slide-04.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-04.png",
+        "source": "generated_visual",
+        "role": "source",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 3,
+        "name": "slide-03.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-03.png",
+        "source": "generated_visual",
+        "role": "source",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 4,
+        "name": "slide-02.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-02.png",
+        "source": "generated_visual",
+        "role": "source",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 5,
+        "name": "slide-01.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-01.png",
+        "source": "generated_visual",
+        "role": "source",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      }
+    ],
+    "quality_score": {
+      "overall": 72,
+      "product_clarity": 70,
+      "brand_fit": 85,
+      "visual_freshness": 70,
+      "feed_rhythm": 80,
+      "commercial_usefulness": 62,
+      "designed_vs_raw": 62,
+      "duplicate_risk": 0
+    },
+    "needs_work": [
+      {
+        "type": "needs_design_pass",
+        "note": "Post may feel raw. Run Improve Design or add backdrop/detail slots."
+      }
+    ]
+  },
+  {
+    "id": "candidate-2026-05-14-3",
+    "scheduled_date": "2026-05-31",
+    "status": "Draft",
+    "platform": "Instagram",
+    "format": "Reel",
+    "pillar": "Process",
+    "hook": "The system is built, not styled.",
+    "caption": "Process before product.\nEvidence before release.",
+    "source_files": [
+      "IMG_1991.HEIC",
+      "IMG_1994.HEIC",
+      "IMG_2060.HEIC",
+      "IMG_3393.MOV"
+    ],
+    "candidate_index": 3,
+    "candidate_source_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\content_candidates\\2026-05-14-content-candidates.md",
+    "visual_group": null,
+    "feed_position": 14,
+    "selected_assets": [
+      "IMG_1991.HEIC",
+      "IMG_1994.HEIC",
+      "IMG_2060.HEIC",
+      "IMG_3393.MOV"
+    ],
+    "created_at": "2026-05-16T09:41:38",
+    "curator_reason": "Process reel adds a final studio-side proof point and keeps the grid from overusing source-only language.",
+    "visual_role": "process",
+    "asset_fingerprint": "img_1991.heic > img_1994.heic > img_2060.heic > img_3393.mov",
+    "asset_set_fingerprint": "img_1991.heic + img_1994.heic + img_2060.heic + img_3393.mov",
+    "duplicate_status": "unique",
+    "duplicate_note": "",
+    "calendar_note": "Auto-spaced so each post has its own day.",
+    "edit_history": [
+      {
+        "created_at": "2026-05-16T10:37:56",
+        "source": "feed_curator",
+        "item_id": "candidate-2026-05-14-3",
+        "hook": "The system is built, not styled.",
+        "changes": {
+          "scheduled_date": {
+            "before": "2026-05-24",
+            "after": "2026-05-22"
+          }
+        }
+      },
+      {
+        "created_at": "2026-05-16T22:00:25",
+        "source": "feed_curator",
+        "item_id": "candidate-2026-05-14-3",
+        "hook": "The system is built, not styled.",
+        "changes": {
+          "scheduled_date": {
+            "before": "2026-05-31",
+            "after": "2026-05-30"
+          },
+          "curator_reason": {
+            "before": "Another process reel adds credibility and breaks the repeated transformation cadence.",
+            "after": "Process reel adds a final studio-side proof point and keeps the grid from overusing source-only language."
+          }
+        }
+      }
+    ],
+    "product_keys": [],
+    "product_rotation_note": "",
+    "visual_fingerprint": {
+      "visual_family": "process",
+      "palette": "unknown",
+      "brightness": "unknown",
+      "density": "medium",
+      "subject": "detail",
+      "product_visibility_score": 0,
+      "content_weight": "process-heavy",
+      "warnings": [
+        "Post leans heavily on one visual family: process."
+      ]
+    },
+    "visual_slots": [
+      {
+        "index": 0,
+        "name": "IMG_1991.HEIC",
+        "asset_name": "IMG_1991.HEIC",
+        "image_path": "",
+        "source": "drive_asset",
+        "role": "process",
+        "notes": "Original source asset slot.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 1,
+        "name": "IMG_1994.HEIC",
+        "asset_name": "IMG_1994.HEIC",
+        "image_path": "",
+        "source": "drive_asset",
+        "role": "process",
+        "notes": "Original source asset slot.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 2,
+        "name": "IMG_2060.HEIC",
+        "asset_name": "IMG_2060.HEIC",
+        "image_path": "",
+        "source": "drive_asset",
+        "role": "process",
+        "notes": "Original source asset slot.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 3,
+        "name": "IMG_3393.MOV",
+        "asset_name": "IMG_3393.MOV",
+        "image_path": "",
+        "source": "drive_asset",
+        "role": "process",
+        "notes": "Original source asset slot.",
+        "overlay_text": "",
+        "updated_at": ""
+      }
+    ],
+    "quality_score": {
+      "overall": 70,
+      "product_clarity": 70,
+      "brand_fit": 85,
+      "visual_freshness": 62,
+      "feed_rhythm": 80,
+      "commercial_usefulness": 62,
+      "designed_vs_raw": 62,
+      "duplicate_risk": 0
+    },
+    "needs_work": [
+      {
+        "type": "quality",
+        "note": "Overall quality score is 70. Run Improve Design or replace weak assets."
+      },
+      {
+        "type": "needs_design_pass",
+        "note": "Post may feel raw. Run Improve Design or add backdrop/detail slots."
+      }
+    ]
+  },
+  {
+    "id": "candidate-2026-05-16-7",
+    "scheduled_date": "2026-06-01",
+    "status": "Draft",
+    "platform": "Instagram",
+    "format": "Story",
+    "pillar": "Product",
+    "hook": "Quiet shape.",
+    "caption": "boxy / cropped / held",
+    "source_files": [
+      "French Terry Boxy Tank Top-mockups-1.png",
+      "French Terry Boxy Tank Top-mockups-10.png"
+    ],
+    "candidate_index": 7,
+    "candidate_source_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\content_candidates\\2026-05-16-content-candidates.md",
+    "visual_group": {
+      "name": "2026-05-16-candidate-2026-05-15-2-model-shoot",
+      "images": [
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\image_concepts\\2026-05-16-candidate-2026-05-15-2-model-shoot\\model-shoot-render.png",
+          "relative_path": "outputs\\image_concepts\\2026-05-16-candidate-2026-05-15-2-model-shoot\\model-shoot-render.png",
+          "name": "model-shoot-render.png",
+          "category": "image_concepts",
+          "modified_at": 1778948383.183812,
+          "kind": "image"
+        }
+      ],
+      "briefs": [
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\image_concepts\\2026-05-16-candidate-2026-05-15-2-model-shoot\\render-metadata.json",
+          "relative_path": "outputs\\image_concepts\\2026-05-16-candidate-2026-05-15-2-model-shoot\\render-metadata.json",
+          "name": "render-metadata.json",
+          "category": "image_concepts",
+          "modified_at": 1778948383.2112577,
+          "kind": "text"
+        }
+      ]
+    },
+    "feed_position": 15,
+    "selected_assets": [
+      "French Terry Boxy Tank Top-mockups-1.png",
+      "French Terry Boxy Tank Top-mockups-10.png"
+    ],
+    "created_at": "2026-05-16T09:41:38",
+    "curator_reason": "Quiet product story closes with a softer, technical read and introduces the underused french terry boxy tank top family.",
+    "visual_role": "product",
+    "asset_fingerprint": "french terry boxy tank top-mockups-1.png > french terry boxy tank top-mockups-10.png",
+    "asset_set_fingerprint": "french terry boxy tank top-mockups-1.png + french terry boxy tank top-mockups-10.png",
+    "duplicate_status": "unique",
+    "duplicate_note": "",
+    "calendar_note": "Auto-spaced so each post has its own day.",
+    "updated_at": "2026-05-16T10:17:05",
+    "edit_history": [
+      {
+        "created_at": "2026-05-16T10:17:05",
+        "source": "manual_update",
+        "item_id": "candidate-2026-05-16-7",
+        "hook": "Quiet shape.",
+        "changes": {
+          "scheduled_date": {
+            "before": "2026-06-04",
+            "after": "2026-06-02"
+          }
+        }
+      },
+      {
+        "created_at": "2026-05-16T10:37:56",
+        "source": "feed_curator",
+        "item_id": "candidate-2026-05-16-7",
+        "hook": "Quiet shape.",
+        "changes": {
+          "scheduled_date": {
+            "before": "2026-06-02",
+            "after": "2026-05-30"
+          },
+          "feed_position": {
+            "before": 16,
+            "after": 15
+          },
+          "curator_reason": {
+            "before": "Kept in the remaining order after curator pass.",
+            "after": "Clean product story closes the sequence with quiet shape and technical clarity."
+          }
+        }
+      },
+      {
+        "created_at": "2026-05-16T22:00:25",
+        "source": "feed_curator",
+        "item_id": "candidate-2026-05-16-7",
+        "hook": "Quiet shape.",
+        "changes": {
+          "scheduled_date": {
+            "before": "2026-06-08",
+            "after": "2026-05-31"
+          },
+          "feed_position": {
+            "before": 22,
+            "after": 15
+          },
+          "curator_reason": {
+            "before": "Clean product story closes the sequence with quiet shape and technical clarity.",
+            "after": "Quiet product story closes with a softer, technical read and introduces the underused french terry boxy tank top family."
+          }
+        }
+      }
+    ],
+    "product_keys": [
+      "french terry boxy tank top2"
+    ],
+    "product_rotation_note": "Uses a recently featured product. Prefer this only if the story, styling, or format is meaningfully different.",
+    "visual_fingerprint": {
+      "visual_family": "product",
+      "palette": "unknown",
+      "brightness": "unknown",
+      "density": "minimal",
+      "subject": "garment",
+      "product_visibility_score": 4,
+      "content_weight": "photo/product-heavy",
+      "warnings": []
+    },
+    "visual_slots": [
+      {
+        "index": 0,
+        "name": "model-shoot-render.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\image_concepts\\2026-05-16-candidate-2026-05-15-2-model-shoot\\model-shoot-render.png",
+        "source": "generated_visual",
+        "role": "product",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      }
+    ],
+    "quality_score": {
+      "overall": 78,
+      "product_clarity": 85,
+      "brand_fit": 85,
+      "visual_freshness": 70,
+      "feed_rhythm": 80,
+      "commercial_usefulness": 85,
+      "designed_vs_raw": 62,
+      "duplicate_risk": 0
+    },
+    "needs_work": [
+      {
+        "type": "needs_design_pass",
+        "note": "Post may feel raw. Run Improve Design or add backdrop/detail slots."
+      }
+    ]
+  },
+  {
+    "id": "candidate-2026-05-14-7",
+    "scheduled_date": "2026-06-02",
+    "status": "Draft",
+    "platform": "Instagram",
+    "format": "Story",
+    "pillar": "Product",
+    "hook": "Daily object. Archive origin.",
+    "caption": "Built to be worn.\nMarked by the source.",
+    "source_files": [
+      "Essential Heavyweight Cotton T-Shirt-mockups-40.png",
+      "JRR_4010.jpg",
+      "IMG_3262.MOV"
+    ],
+    "candidate_index": 7,
+    "candidate_source_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\content_candidates\\2026-05-14-content-candidates.md",
+    "visual_group": {
+      "name": "2026-05-15-canvas---capture---reconstruct---wear",
+      "images": [
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-15-canvas---capture---reconstruct---wear\\slide-05.png",
+          "relative_path": "outputs\\visual_content\\2026-05-15-canvas---capture---reconstruct---wear\\slide-05.png",
+          "name": "slide-05.png",
+          "category": "visual_content",
+          "modified_at": 1778890533.5729067,
+          "kind": "image"
+        },
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-15-canvas---capture---reconstruct---wear\\slide-04.png",
+          "relative_path": "outputs\\visual_content\\2026-05-15-canvas---capture---reconstruct---wear\\slide-04.png",
+          "name": "slide-04.png",
+          "category": "visual_content",
+          "modified_at": 1778890532.5236032,
+          "kind": "image"
+        },
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-15-canvas---capture---reconstruct---wear\\slide-03.png",
+          "relative_path": "outputs\\visual_content\\2026-05-15-canvas---capture---reconstruct---wear\\slide-03.png",
+          "name": "slide-03.png",
+          "category": "visual_content",
+          "modified_at": 1778890531.1984756,
+          "kind": "image"
+        },
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-15-canvas---capture---reconstruct---wear\\slide-02.png",
+          "relative_path": "outputs\\visual_content\\2026-05-15-canvas---capture---reconstruct---wear\\slide-02.png",
+          "name": "slide-02.png",
+          "category": "visual_content",
+          "modified_at": 1778890530.5403283,
+          "kind": "image"
+        },
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-15-canvas---capture---reconstruct---wear\\slide-01.png",
+          "relative_path": "outputs\\visual_content\\2026-05-15-canvas---capture---reconstruct---wear\\slide-01.png",
+          "name": "slide-01.png",
+          "category": "visual_content",
+          "modified_at": 1778890529.365253,
+          "kind": "image"
+        }
+      ],
+      "briefs": [
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-15-canvas---capture---reconstruct---wear\\design-brief.json",
+          "relative_path": "outputs\\visual_content\\2026-05-15-canvas---capture---reconstruct---wear\\design-brief.json",
+          "name": "design-brief.json",
+          "category": "visual_content",
+          "modified_at": 1778890533.582135,
+          "kind": "text"
+        }
+      ]
+    },
+    "feed_position": 16,
+    "selected_assets": [
+      "Essential Heavyweight Cotton T-Shirt-mockups-40.png",
+      "JRR_4010.jpg",
+      "IMG_3262.MOV"
+    ],
+    "created_at": "2026-05-15T18:44:12",
+    "curator_reason": "Essential heavyweight cotton t-shirt gets its turn as a wearable, daily-object product beat, which helps fill the shoot gap.",
+    "visual_role": "product",
+    "asset_fingerprint": "essential heavyweight cotton t-shirt-mockups-40.png > jrr_4010.jpg > img_3262.mov",
+    "asset_set_fingerprint": "essential heavyweight cotton t-shirt-mockups-40.png + img_3262.mov + jrr_4010.jpg",
+    "duplicate_status": "unique",
+    "duplicate_note": "",
+    "edit_history": [
+      {
+        "created_at": "2026-05-16T10:37:56",
+        "source": "feed_curator",
+        "item_id": "candidate-2026-05-14-7",
+        "hook": "Daily object. Archive origin.",
+        "changes": {
+          "scheduled_date": {
+            "before": "2026-05-15",
+            "after": "2026-05-31"
+          },
+          "feed_position": {
+            "before": 11,
+            "after": 16
+          },
+          "curator_reason": {
+            "before": "A final product story-post concept functions as a clean wearable close and preserves premium clarity.",
+            "after": "Kept in the remaining order after curator pass."
+          },
+          "visual_role": {
+            "before": "product",
+            "after": "motion"
+          }
+        }
+      },
+      {
+        "created_at": "2026-05-16T22:00:25",
+        "source": "feed_curator",
+        "item_id": "candidate-2026-05-14-7",
+        "hook": "Daily object. Archive origin.",
+        "changes": {
+          "scheduled_date": {
+            "before": "2026-06-09",
+            "after": "2026-06-01"
+          },
+          "feed_position": {
+            "before": 23,
+            "after": 16
+          },
+          "curator_reason": {
+            "before": "Kept in the remaining order after curator pass.",
+            "after": "Essential heavyweight cotton t-shirt gets its turn as a wearable, daily-object product beat, which helps fill the shoot gap."
+          },
+          "visual_role": {
+            "before": "motion",
+            "after": "product"
+          }
+        }
+      }
+    ],
+    "product_keys": [
+      "essential heavyweight cotton t shirt"
+    ],
+    "product_rotation_note": "Uses a recently featured product. Prefer this only if the story, styling, or format is meaningfully different.",
+    "visual_fingerprint": {
+      "visual_family": "product",
+      "palette": "unknown",
+      "brightness": "unknown",
+      "density": "unknown",
+      "subject": "garment",
+      "product_visibility_score": 4,
+      "content_weight": "photo/product-heavy",
+      "warnings": []
+    },
+    "calendar_note": "Auto-spaced so each post has its own day.",
+    "visual_slots": [
+      {
+        "index": 0,
+        "name": "slide-05.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-15-canvas---capture---reconstruct---wear\\slide-05.png",
+        "source": "generated_visual",
+        "role": "product",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 1,
+        "name": "slide-04.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-15-canvas---capture---reconstruct---wear\\slide-04.png",
+        "source": "generated_visual",
+        "role": "product",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 2,
+        "name": "slide-03.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-15-canvas---capture---reconstruct---wear\\slide-03.png",
+        "source": "generated_visual",
+        "role": "product",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 3,
+        "name": "slide-02.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-15-canvas---capture---reconstruct---wear\\slide-02.png",
+        "source": "generated_visual",
+        "role": "product",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 4,
+        "name": "slide-01.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-15-canvas---capture---reconstruct---wear\\slide-01.png",
+        "source": "generated_visual",
+        "role": "product",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      }
+    ],
+    "quality_score": {
+      "overall": 78,
+      "product_clarity": 85,
+      "brand_fit": 85,
+      "visual_freshness": 70,
+      "feed_rhythm": 80,
+      "commercial_usefulness": 85,
+      "designed_vs_raw": 62,
+      "duplicate_risk": 0
+    },
+    "needs_work": [
+      {
+        "type": "needs_design_pass",
+        "note": "Post may feel raw. Run Improve Design or add backdrop/detail slots."
+      }
+    ]
+  },
+  {
+    "id": "candidate-2026-05-14-2",
+    "scheduled_date": "2026-06-03",
+    "status": "Draft",
+    "platform": "Instagram",
+    "format": "Carousel",
+    "pillar": "Transformation",
+    "hook": "From archive to object.",
+    "caption": "Fragment retained.\nSystem rebuilt.\nWorn in the world.",
+    "source_files": [
+      "ADRIFT_BW_pixelated.png",
+      "4DRFT_design2_blacktext_FINAL copy.png",
+      "JRR_4001.jpg"
+    ],
+    "candidate_index": 2,
+    "candidate_source_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\content_candidates\\2026-05-14-content-candidates.md",
+    "visual_group": {
+      "name": "2026-05-16-from-canvas-to-wearable-fragment",
+      "images": [
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-06.png",
+          "relative_path": "outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-06.png",
+          "name": "slide-06.png",
+          "category": "visual_content",
+          "modified_at": 1778948732.306232,
+          "kind": "image"
+        },
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-05.png",
+          "relative_path": "outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-05.png",
+          "name": "slide-05.png",
+          "category": "visual_content",
+          "modified_at": 1778948731.4464245,
+          "kind": "image"
+        },
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-04.png",
+          "relative_path": "outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-04.png",
+          "name": "slide-04.png",
+          "category": "visual_content",
+          "modified_at": 1778948730.7318466,
+          "kind": "image"
+        },
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-03.png",
+          "relative_path": "outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-03.png",
+          "name": "slide-03.png",
+          "category": "visual_content",
+          "modified_at": 1778948730.053506,
+          "kind": "image"
+        },
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-02.png",
+          "relative_path": "outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-02.png",
+          "name": "slide-02.png",
+          "category": "visual_content",
+          "modified_at": 1778948729.6481855,
+          "kind": "image"
+        },
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-01.png",
+          "relative_path": "outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-01.png",
+          "name": "slide-01.png",
+          "category": "visual_content",
+          "modified_at": 1778948728.9738104,
+          "kind": "image"
+        }
+      ],
+      "briefs": [
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\design-brief.json",
+          "relative_path": "outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\design-brief.json",
+          "name": "design-brief.json",
+          "category": "visual_content",
+          "modified_at": 1778948732.3076358,
+          "kind": "text"
+        }
+      ]
+    },
+    "feed_position": 17,
+    "selected_assets": [
+      "ADRIFT_BW_pixelated.png",
+      "4DRFT_design2_blacktext_FINAL copy.png",
+      "JRR_4001.jpg"
+    ],
+    "created_at": "2026-05-16T09:41:38",
+    "curator_reason": "Digital/source meaning post returns the archive thesis and resets the visual tone after product rows.",
+    "visual_role": "meaning",
+    "asset_fingerprint": "adrift_bw_pixelated.png > 4drft_design2_blacktext_final copy.png > jrr_4001.jpg",
+    "asset_set_fingerprint": "4drft_design2_blacktext_final copy.png + adrift_bw_pixelated.png + jrr_4001.jpg",
+    "duplicate_status": "unique",
+    "duplicate_note": "",
+    "calendar_note": "Auto-spaced so each post has its own day.",
+    "edit_history": [
+      {
+        "created_at": "2026-05-16T10:37:56",
+        "source": "feed_curator",
+        "item_id": "candidate-2026-05-14-2",
+        "hook": "From archive to object.",
+        "changes": {
+          "scheduled_date": {
+            "before": "2026-05-21",
+            "after": "2026-05-24"
+          }
+        }
+      },
+      {
+        "created_at": "2026-05-16T22:00:25",
+        "source": "feed_curator",
+        "item_id": "candidate-2026-05-14-2",
+        "hook": "From archive to object.",
+        "changes": {
+          "feed_position": {
+            "before": 16,
+            "after": 17
+          },
+          "curator_reason": {
+            "before": "Meaning carousel adds archival depth while staying visually controlled.",
+            "after": "Digital/source meaning post returns the archive thesis and resets the visual tone after product rows."
+          }
+        }
+      }
+    ],
+    "product_keys": [],
+    "product_rotation_note": "",
+    "visual_fingerprint": {
+      "visual_family": "digital/source",
+      "palette": "black/dark",
+      "brightness": "dark",
+      "density": "dense",
+      "subject": "source",
+      "product_visibility_score": 2,
+      "content_weight": "graphic-heavy",
+      "warnings": []
+    },
+    "visual_slots": [
+      {
+        "index": 0,
+        "name": "slide-06.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-06.png",
+        "source": "generated_visual",
+        "role": "meaning",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 1,
+        "name": "slide-05.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-05.png",
+        "source": "generated_visual",
+        "role": "meaning",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 2,
+        "name": "slide-04.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-04.png",
+        "source": "generated_visual",
+        "role": "meaning",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 3,
+        "name": "slide-03.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-03.png",
+        "source": "generated_visual",
+        "role": "meaning",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 4,
+        "name": "slide-02.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-02.png",
+        "source": "generated_visual",
+        "role": "meaning",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 5,
+        "name": "slide-01.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-from-canvas-to-wearable-fragment\\slide-01.png",
+        "source": "generated_visual",
+        "role": "meaning",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      }
+    ],
+    "quality_score": {
+      "overall": 72,
+      "product_clarity": 70,
+      "brand_fit": 85,
+      "visual_freshness": 70,
+      "feed_rhythm": 80,
+      "commercial_usefulness": 62,
+      "designed_vs_raw": 62,
+      "duplicate_risk": 0
+    },
+    "needs_work": [
+      {
+        "type": "needs_design_pass",
+        "note": "Post may feel raw. Run Improve Design or add backdrop/detail slots."
+      }
+    ]
+  },
+  {
+    "id": "candidate-2026-05-14-5",
+    "scheduled_date": "2026-06-04",
+    "status": "Draft",
+    "platform": "Instagram",
+    "format": "Story",
+    "pillar": "Meaning",
+    "hook": "What remains after extraction.",
+    "caption": "Archive.\nDrift.\nResidue.",
+    "source_files": [
+      "IMG_2040.HEIC",
+      "IMG_2043.HEIC",
+      "IMG_2045.HEIC"
+    ],
+    "candidate_index": 5,
+    "candidate_source_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\content_candidates\\2026-05-14-content-candidates.md",
+    "visual_group": {
+      "name": "2026-05-15-canvas---capture---reconstruct---wear",
+      "images": [
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-15-canvas---capture---reconstruct---wear\\slide-05.png",
+          "relative_path": "outputs\\visual_content\\2026-05-15-canvas---capture---reconstruct---wear\\slide-05.png",
+          "name": "slide-05.png",
+          "category": "visual_content",
+          "modified_at": 1778890533.5729067,
+          "kind": "image"
+        },
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-15-canvas---capture---reconstruct---wear\\slide-04.png",
+          "relative_path": "outputs\\visual_content\\2026-05-15-canvas---capture---reconstruct---wear\\slide-04.png",
+          "name": "slide-04.png",
+          "category": "visual_content",
+          "modified_at": 1778890532.5236032,
+          "kind": "image"
+        },
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-15-canvas---capture---reconstruct---wear\\slide-03.png",
+          "relative_path": "outputs\\visual_content\\2026-05-15-canvas---capture---reconstruct---wear\\slide-03.png",
+          "name": "slide-03.png",
+          "category": "visual_content",
+          "modified_at": 1778890531.1984756,
+          "kind": "image"
+        },
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-15-canvas---capture---reconstruct---wear\\slide-02.png",
+          "relative_path": "outputs\\visual_content\\2026-05-15-canvas---capture---reconstruct---wear\\slide-02.png",
+          "name": "slide-02.png",
+          "category": "visual_content",
+          "modified_at": 1778890530.5403283,
+          "kind": "image"
+        },
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-15-canvas---capture---reconstruct---wear\\slide-01.png",
+          "relative_path": "outputs\\visual_content\\2026-05-15-canvas---capture---reconstruct---wear\\slide-01.png",
+          "name": "slide-01.png",
+          "category": "visual_content",
+          "modified_at": 1778890529.365253,
+          "kind": "image"
+        }
+      ],
+      "briefs": [
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-15-canvas---capture---reconstruct---wear\\design-brief.json",
+          "relative_path": "outputs\\visual_content\\2026-05-15-canvas---capture---reconstruct---wear\\design-brief.json",
+          "name": "design-brief.json",
+          "category": "visual_content",
+          "modified_at": 1778890533.582135,
+          "kind": "text"
+        }
+      ]
+    },
+    "feed_position": 18,
+    "selected_assets": [
+      "IMG_2040.HEIC",
+      "IMG_2043.HEIC",
+      "IMG_2045.HEIC"
+    ],
+    "created_at": "2026-05-15T18:44:12",
+    "curator_reason": "Process/story beat adds texture and closes the grid with a reflective, studio-informed note.",
+    "visual_role": "process",
+    "asset_fingerprint": "img_2040.heic > img_2043.heic > img_2045.heic",
+    "asset_set_fingerprint": "img_2040.heic + img_2043.heic + img_2045.heic",
+    "duplicate_status": "unique",
+    "duplicate_note": "",
+    "calendar_note": "Auto-spaced so each post has its own day.",
+    "edit_history": [
+      {
+        "created_at": "2026-05-16T10:37:56",
+        "source": "feed_curator",
+        "item_id": "candidate-2026-05-14-5",
+        "hook": "What remains after extraction.",
+        "changes": {
+          "scheduled_date": {
+            "before": "2026-05-31",
+            "after": "2026-05-28"
+          },
+          "feed_position": {
+            "before": 19,
+            "after": 13
+          },
+          "curator_reason": {
+            "before": "Kept in the remaining order after curator pass.",
+            "after": "Meaning story offers a low-friction reflective beat without breaking the system language."
+          }
+        }
+      },
+      {
+        "created_at": "2026-05-16T22:00:25",
+        "source": "feed_curator",
+        "item_id": "candidate-2026-05-14-5",
+        "hook": "What remains after extraction.",
+        "changes": {
+          "scheduled_date": {
+            "before": "2026-06-06",
+            "after": "2026-06-03"
+          },
+          "feed_position": {
+            "before": 20,
+            "after": 18
+          },
+          "curator_reason": {
+            "before": "Meaning story offers a low-friction reflective beat without breaking the system language.",
+            "after": "Process/story beat adds texture and closes the grid with a reflective, studio-informed note."
+          }
+        }
+      }
+    ],
+    "product_keys": [],
+    "product_rotation_note": "",
+    "visual_fingerprint": {
+      "visual_family": "process",
+      "palette": "unknown",
+      "brightness": "unknown",
+      "density": "medium",
+      "subject": "detail",
+      "product_visibility_score": 0,
+      "content_weight": "process-heavy",
+      "warnings": [
+        "Post leans heavily on one visual family: process."
+      ]
+    },
+    "visual_slots": [
+      {
+        "index": 0,
+        "name": "slide-05.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-15-canvas---capture---reconstruct---wear\\slide-05.png",
+        "source": "generated_visual",
+        "role": "process",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 1,
+        "name": "slide-04.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-15-canvas---capture---reconstruct---wear\\slide-04.png",
+        "source": "generated_visual",
+        "role": "process",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 2,
+        "name": "slide-03.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-15-canvas---capture---reconstruct---wear\\slide-03.png",
+        "source": "generated_visual",
+        "role": "process",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 3,
+        "name": "slide-02.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-15-canvas---capture---reconstruct---wear\\slide-02.png",
+        "source": "generated_visual",
+        "role": "process",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 4,
+        "name": "slide-01.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-15-canvas---capture---reconstruct---wear\\slide-01.png",
+        "source": "generated_visual",
+        "role": "process",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      }
+    ],
+    "quality_score": {
+      "overall": 70,
+      "product_clarity": 70,
+      "brand_fit": 85,
+      "visual_freshness": 62,
+      "feed_rhythm": 80,
+      "commercial_usefulness": 62,
+      "designed_vs_raw": 62,
+      "duplicate_risk": 0
+    },
+    "needs_work": [
+      {
+        "type": "quality",
+        "note": "Overall quality score is 70. Run Improve Design or replace weak assets."
+      },
+      {
+        "type": "needs_design_pass",
+        "note": "Post may feel raw. Run Improve Design or add backdrop/detail slots."
+      }
+    ]
+  },
+  {
+    "id": "visual-2026-05-16-launch-recovery-01-intro",
+    "scheduled_date": "2026-06-05",
+    "status": "Draft",
+    "platform": "Instagram",
+    "format": "Carousel",
+    "pillar": "Visual Direction",
+    "hook": "2026 05 16 Launch Recovery 01 Intro",
+    "caption": "",
+    "source_files": [
+      "slide-04.png",
+      "slide-03.png",
+      "slide-02.png",
+      "slide-01.png"
+    ],
+    "product_keys": [],
+    "product_rotation_note": "",
+    "visual_fingerprint": {
+      "visual_family": "unknown",
+      "palette": "unknown",
+      "brightness": "unknown",
+      "density": "unknown",
+      "subject": "unknown",
+      "product_visibility_score": 0,
+      "content_weight": "mixed",
+      "warnings": []
+    },
+    "candidate_index": null,
+    "candidate_source_path": "",
+    "visual_group": {
+      "name": "2026-05-16-launch-recovery-01-intro",
+      "images": [
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-launch-recovery-01-intro\\slide-04.png",
+          "relative_path": "outputs\\visual_content\\2026-05-16-launch-recovery-01-intro\\slide-04.png",
+          "name": "slide-04.png",
+          "category": "visual_content",
+          "modified_at": 1778973745.5170374,
+          "kind": "image",
+          "visual_metadata": {
+            "dominant_rgb": [
+              14,
+              13,
+              14
+            ],
+            "palette": "black/dark",
+            "brightness": "dark",
+            "brightness_value": 13.67,
+            "contrast_value": 154.67,
+            "density": "medium",
+            "image_type": "dark-anchor",
+            "mtime": 1778973745.5170374
+          }
+        },
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-launch-recovery-01-intro\\slide-03.png",
+          "relative_path": "outputs\\visual_content\\2026-05-16-launch-recovery-01-intro\\slide-03.png",
+          "name": "slide-03.png",
+          "category": "visual_content",
+          "modified_at": 1778973745.4094067,
+          "kind": "image",
+          "visual_metadata": {
+            "dominant_rgb": [
+              13,
+              12,
+              13
+            ],
+            "palette": "black/dark",
+            "brightness": "dark",
+            "brightness_value": 12.67,
+            "contrast_value": 144.67,
+            "density": "medium",
+            "image_type": "dark-anchor",
+            "mtime": 1778973745.4094067
+          }
+        },
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-launch-recovery-01-intro\\slide-02.png",
+          "relative_path": "outputs\\visual_content\\2026-05-16-launch-recovery-01-intro\\slide-02.png",
+          "name": "slide-02.png",
+          "category": "visual_content",
+          "modified_at": 1778973745.301593,
+          "kind": "image",
+          "visual_metadata": {
+            "dominant_rgb": [
+              239,
+              236,
+              231
+            ],
+            "palette": "light/neutral",
+            "brightness": "bright",
+            "brightness_value": 235.33,
+            "contrast_value": 182,
+            "density": "dense",
+            "image_type": "photo/mixed",
+            "mtime": 1778973745.301593
+          }
+        },
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-launch-recovery-01-intro\\slide-01.png",
+          "relative_path": "outputs\\visual_content\\2026-05-16-launch-recovery-01-intro\\slide-01.png",
+          "name": "slide-01.png",
+          "category": "visual_content",
+          "modified_at": 1778973745.2057793,
+          "kind": "image",
+          "visual_metadata": {
+            "dominant_rgb": [
+              13,
+              12,
+              13
+            ],
+            "palette": "black/dark",
+            "brightness": "dark",
+            "brightness_value": 12.67,
+            "contrast_value": 156.67,
+            "density": "medium",
+            "image_type": "dark-anchor",
+            "mtime": 1778973745.2057793
+          }
+        }
+      ],
+      "briefs": [
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-launch-recovery-01-intro\\design-brief.json",
+          "relative_path": "outputs\\visual_content\\2026-05-16-launch-recovery-01-intro\\design-brief.json",
+          "name": "design-brief.json",
+          "category": "visual_content",
+          "modified_at": 1778973745.518052,
+          "kind": "text"
+        }
+      ]
+    },
+    "feed_position": 19,
+    "selected_assets": [],
+    "rating": 4,
+    "review_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-launch-recovery-01-intro",
+    "created_at": "2026-05-16T21:59:15",
+    "asset_fingerprint": "slide-04.png > slide-03.png > slide-02.png > slide-01.png",
+    "asset_set_fingerprint": "slide-01.png + slide-02.png + slide-03.png + slide-04.png",
+    "duplicate_status": "unique",
+    "duplicate_note": "",
+    "visual_slots": [
+      {
+        "index": 0,
+        "name": "slide-04.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-launch-recovery-01-intro\\slide-04.png",
+        "source": "generated_visual",
+        "role": "meaning",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 1,
+        "name": "slide-03.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-launch-recovery-01-intro\\slide-03.png",
+        "source": "generated_visual",
+        "role": "meaning",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 2,
+        "name": "slide-02.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-launch-recovery-01-intro\\slide-02.png",
+        "source": "generated_visual",
+        "role": "meaning",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 3,
+        "name": "slide-01.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-launch-recovery-01-intro\\slide-01.png",
+        "source": "generated_visual",
+        "role": "meaning",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      }
+    ],
+    "curator_reason": "Kept in the remaining order after curator pass.",
+    "visual_role": "meaning",
+    "edit_history": [
+      {
+        "created_at": "2026-05-16T22:00:25",
+        "source": "feed_curator",
+        "item_id": "visual-2026-05-16-launch-recovery-01-intro",
+        "hook": "2026 05 16 Launch Recovery 01 Intro",
+        "changes": {
+          "scheduled_date": {
+            "before": "2026-05-20",
+            "after": "2026-06-04"
+          },
+          "feed_position": {
+            "before": 4,
+            "after": 19
+          },
+          "curator_reason": {
+            "before": null,
+            "after": "Kept in the remaining order after curator pass."
+          },
+          "visual_role": {
+            "before": null,
+            "after": "meaning"
+          }
+        }
+      }
+    ],
+    "quality_score": {
+      "overall": 72,
+      "product_clarity": 70,
+      "brand_fit": 85,
+      "visual_freshness": 70,
+      "feed_rhythm": 80,
+      "commercial_usefulness": 62,
+      "designed_vs_raw": 62,
+      "duplicate_risk": 0
+    },
+    "needs_work": [
+      {
+        "type": "needs_design_pass",
+        "note": "Post may feel raw. Run Improve Design or add backdrop/detail slots."
+      }
+    ]
+  },
+  {
+    "id": "visual-2026-05-16-launch-recovery-05-process-proof",
+    "scheduled_date": "2026-06-06",
+    "status": "Draft",
+    "platform": "Instagram",
+    "format": "Carousel",
+    "pillar": "Visual Direction",
+    "hook": "2026 05 16 Launch Recovery 05 Process Proof",
+    "caption": "",
+    "source_files": [
+      "slide-03.png",
+      "slide-02.png",
+      "slide-01.png"
+    ],
+    "product_keys": [],
+    "product_rotation_note": "",
+    "visual_fingerprint": {
+      "visual_family": "unknown",
+      "palette": "unknown",
+      "brightness": "unknown",
+      "density": "unknown",
+      "subject": "unknown",
+      "product_visibility_score": 0,
+      "content_weight": "mixed",
+      "warnings": []
+    },
+    "candidate_index": null,
+    "candidate_source_path": "",
+    "visual_group": {
+      "name": "2026-05-16-launch-recovery-05-process-proof",
+      "images": [
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-launch-recovery-05-process-proof\\slide-03.png",
+          "relative_path": "outputs\\visual_content\\2026-05-16-launch-recovery-05-process-proof\\slide-03.png",
+          "name": "slide-03.png",
+          "category": "visual_content",
+          "modified_at": 1778973782.218467,
+          "kind": "image",
+          "visual_metadata": {
+            "dominant_rgb": [
+              13,
+              12,
+              13
+            ],
+            "palette": "black/dark",
+            "brightness": "dark",
+            "brightness_value": 12.67,
+            "contrast_value": 139,
+            "density": "medium",
+            "image_type": "dark-anchor",
+            "mtime": 1778973782.218467
+          }
+        },
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-launch-recovery-05-process-proof\\slide-02.png",
+          "relative_path": "outputs\\visual_content\\2026-05-16-launch-recovery-05-process-proof\\slide-02.png",
+          "name": "slide-02.png",
+          "category": "visual_content",
+          "modified_at": 1778973782.0711951,
+          "kind": "image",
+          "visual_metadata": {
+            "dominant_rgb": [
+              239,
+              236,
+              231
+            ],
+            "palette": "light/neutral",
+            "brightness": "bright",
+            "brightness_value": 235.33,
+            "contrast_value": 185,
+            "density": "dense",
+            "image_type": "photo/mixed",
+            "mtime": 1778973782.0711951
+          }
+        },
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-launch-recovery-05-process-proof\\slide-01.png",
+          "relative_path": "outputs\\visual_content\\2026-05-16-launch-recovery-05-process-proof\\slide-01.png",
+          "name": "slide-01.png",
+          "category": "visual_content",
+          "modified_at": 1778973781.9560277,
+          "kind": "image",
+          "visual_metadata": {
+            "dominant_rgb": [
+              14,
+              13,
+              14
+            ],
+            "palette": "black/dark",
+            "brightness": "dark",
+            "brightness_value": 13.67,
+            "contrast_value": 158.33,
+            "density": "medium",
+            "image_type": "dark-anchor",
+            "mtime": 1778973781.9560277
+          }
+        }
+      ],
+      "briefs": [
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-launch-recovery-05-process-proof\\design-brief.json",
+          "relative_path": "outputs\\visual_content\\2026-05-16-launch-recovery-05-process-proof\\design-brief.json",
+          "name": "design-brief.json",
+          "category": "visual_content",
+          "modified_at": 1778973782.2209888,
+          "kind": "text"
+        }
+      ]
+    },
+    "feed_position": 20,
+    "selected_assets": [],
+    "rating": 0,
+    "review_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-launch-recovery-05-process-proof",
+    "created_at": "2026-05-16T21:59:15",
+    "asset_fingerprint": "slide-03.png > slide-02.png > slide-01.png",
+    "asset_set_fingerprint": "slide-01.png + slide-02.png + slide-03.png",
+    "duplicate_status": "unique",
+    "duplicate_note": "",
+    "visual_slots": [
+      {
+        "index": 0,
+        "name": "slide-03.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-launch-recovery-05-process-proof\\slide-03.png",
+        "source": "generated_visual",
+        "role": "process",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 1,
+        "name": "slide-02.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-launch-recovery-05-process-proof\\slide-02.png",
+        "source": "generated_visual",
+        "role": "process",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 2,
+        "name": "slide-01.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-16-launch-recovery-05-process-proof\\slide-01.png",
+        "source": "generated_visual",
+        "role": "process",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      }
+    ],
+    "curator_reason": "Kept in the remaining order after curator pass.",
+    "visual_role": "process",
+    "edit_history": [
+      {
+        "created_at": "2026-05-16T22:00:25",
+        "source": "feed_curator",
+        "item_id": "visual-2026-05-16-launch-recovery-05-process-proof",
+        "hook": "2026 05 16 Launch Recovery 05 Process Proof",
+        "changes": {
+          "scheduled_date": {
+            "before": "2026-05-23",
+            "after": "2026-06-05"
+          },
+          "feed_position": {
+            "before": 6,
+            "after": 20
+          },
+          "curator_reason": {
+            "before": null,
+            "after": "Kept in the remaining order after curator pass."
+          },
+          "visual_role": {
+            "before": null,
+            "after": "process"
+          }
+        }
+      }
+    ],
+    "quality_score": {
+      "overall": 72,
+      "product_clarity": 70,
+      "brand_fit": 85,
+      "visual_freshness": 70,
+      "feed_rhythm": 80,
+      "commercial_usefulness": 62,
+      "designed_vs_raw": 62,
+      "duplicate_risk": 0
+    },
+    "needs_work": [
+      {
+        "type": "needs_design_pass",
+        "note": "Post may feel raw. Run Improve Design or add backdrop/detail slots."
+      }
+    ]
+  },
+  {
+    "id": "candidate-2026-05-14-4",
+    "scheduled_date": "2026-06-07",
+    "status": "Draft",
+    "platform": "Instagram",
+    "format": "Feed Post",
+    "pillar": "Product",
+    "hook": "Fragment, worn.",
+    "caption": "A garment with a source.\nA fragment with intent.",
+    "source_files": [
+      "Distressed Grommet Eyelet Tank Top-mockups-8.png",
+      "JRR_4038.jpg"
+    ],
+    "candidate_index": 4,
+    "candidate_source_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\content_candidates\\2026-05-14-content-candidates.md",
+    "visual_group": {
+      "name": "2026-05-16-candidate-2026-05-15-2-model-shoot",
+      "images": [
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\image_concepts\\2026-05-16-candidate-2026-05-15-2-model-shoot\\model-shoot-render.png",
+          "relative_path": "outputs\\image_concepts\\2026-05-16-candidate-2026-05-15-2-model-shoot\\model-shoot-render.png",
+          "name": "model-shoot-render.png",
+          "category": "image_concepts",
+          "modified_at": 1778948383.183812,
+          "kind": "image"
+        }
+      ],
+      "briefs": [
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\image_concepts\\2026-05-16-candidate-2026-05-15-2-model-shoot\\render-metadata.json",
+          "relative_path": "outputs\\image_concepts\\2026-05-16-candidate-2026-05-15-2-model-shoot\\render-metadata.json",
+          "name": "render-metadata.json",
+          "category": "image_concepts",
+          "modified_at": 1778948383.2112577,
+          "kind": "text"
+        }
+      ]
+    },
+    "feed_position": 21,
+    "selected_assets": [
+      "Distressed Grommet Eyelet Tank Top-mockups-8.png",
+      "JRR_4038.jpg"
+    ],
+    "created_at": "2026-05-16T09:41:38",
+    "curator_reason": "Kept in the remaining order after curator pass.",
+    "visual_role": "body",
+    "asset_fingerprint": "distressed grommet eyelet tank top-mockups-8.png > jrr_4038.jpg",
+    "asset_set_fingerprint": "distressed grommet eyelet tank top-mockups-8.png + jrr_4038.jpg",
+    "duplicate_status": "unique",
+    "duplicate_note": "",
+    "calendar_note": "Auto-spaced so each post has its own day.",
+    "edit_history": [
+      {
+        "created_at": "2026-05-16T10:37:56",
+        "source": "feed_curator",
+        "item_id": "candidate-2026-05-14-4",
+        "hook": "Fragment, worn.",
+        "changes": {
+          "scheduled_date": {
+            "before": "2026-05-27",
+            "after": "2026-05-23"
+          }
+        }
+      },
+      {
+        "created_at": "2026-05-16T22:00:25",
+        "source": "feed_curator",
+        "item_id": "candidate-2026-05-14-4",
+        "hook": "Fragment, worn.",
+        "changes": {
+          "scheduled_date": {
+            "before": "2026-06-01",
+            "after": "2026-06-06"
+          },
+          "feed_position": {
+            "before": 15,
+            "after": 21
+          },
+          "curator_reason": {
+            "before": "Product feed post returns body and garment clarity before the grid gets too abstract.",
+            "after": "Kept in the remaining order after curator pass."
+          },
+          "visual_role": {
+            "before": "product",
+            "after": "body"
+          }
+        }
+      }
+    ],
+    "product_keys": [
+      "distressed grommet eyelet tank top"
+    ],
+    "product_rotation_note": "Uses a recently featured product. Prefer this only if the story, styling, or format is meaningfully different.",
+    "visual_fingerprint": {
+      "visual_family": "product",
+      "palette": "unknown",
+      "brightness": "unknown",
+      "density": "minimal",
+      "subject": "garment",
+      "product_visibility_score": 4,
+      "content_weight": "photo/product-heavy",
+      "warnings": []
+    },
+    "visual_slots": [
+      {
+        "index": 0,
+        "name": "model-shoot-render.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\image_concepts\\2026-05-16-candidate-2026-05-15-2-model-shoot\\model-shoot-render.png",
+        "source": "generated_visual",
+        "role": "body",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      }
+    ],
+    "quality_score": {
+      "overall": 78,
+      "product_clarity": 85,
+      "brand_fit": 85,
+      "visual_freshness": 70,
+      "feed_rhythm": 80,
+      "commercial_usefulness": 85,
+      "designed_vs_raw": 62,
+      "duplicate_risk": 0
+    },
+    "needs_work": [
+      {
+        "type": "needs_design_pass",
+        "note": "Post may feel raw. Run Improve Design or add backdrop/detail slots."
+      }
+    ]
+  },
+  {
+    "id": "candidate-2026-05-14-6",
+    "scheduled_date": "2026-06-08",
+    "status": "Draft",
+    "platform": "Instagram",
+    "format": "Carousel",
+    "pillar": "Meaning",
+    "hook": "Drift is the system.",
+    "caption": "Not a graphic.\nNot a print.\nA fragment in motion.",
+    "source_files": [
+      "SimplyAdrift_v4.png",
+      "JRR_4046.jpg",
+      "IMG_3096.HEIC"
+    ],
+    "candidate_index": 6,
+    "candidate_source_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\content_candidates\\2026-05-14-content-candidates.md",
+    "visual_group": {
+      "name": "2026-05-15-canvas---reconstruct---wear",
+      "images": [
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-15-canvas---reconstruct---wear\\slide-06.png",
+          "relative_path": "outputs\\visual_content\\2026-05-15-canvas---reconstruct---wear\\slide-06.png",
+          "name": "slide-06.png",
+          "category": "visual_content",
+          "modified_at": 1778895372.4329493,
+          "kind": "image"
+        },
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-15-canvas---reconstruct---wear\\slide-05.png",
+          "relative_path": "outputs\\visual_content\\2026-05-15-canvas---reconstruct---wear\\slide-05.png",
+          "name": "slide-05.png",
+          "category": "visual_content",
+          "modified_at": 1778895369.803377,
+          "kind": "image"
+        },
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-15-canvas---reconstruct---wear\\slide-04.png",
+          "relative_path": "outputs\\visual_content\\2026-05-15-canvas---reconstruct---wear\\slide-04.png",
+          "name": "slide-04.png",
+          "category": "visual_content",
+          "modified_at": 1778895368.0568795,
+          "kind": "image"
+        },
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-15-canvas---reconstruct---wear\\slide-03.png",
+          "relative_path": "outputs\\visual_content\\2026-05-15-canvas---reconstruct---wear\\slide-03.png",
+          "name": "slide-03.png",
+          "category": "visual_content",
+          "modified_at": 1778895366.4203591,
+          "kind": "image"
+        },
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-15-canvas---reconstruct---wear\\slide-02.png",
+          "relative_path": "outputs\\visual_content\\2026-05-15-canvas---reconstruct---wear\\slide-02.png",
+          "name": "slide-02.png",
+          "category": "visual_content",
+          "modified_at": 1778895365.5386114,
+          "kind": "image"
+        },
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-15-canvas---reconstruct---wear\\slide-01.png",
+          "relative_path": "outputs\\visual_content\\2026-05-15-canvas---reconstruct---wear\\slide-01.png",
+          "name": "slide-01.png",
+          "category": "visual_content",
+          "modified_at": 1778895364.0421891,
+          "kind": "image"
+        }
+      ],
+      "briefs": [
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-15-canvas---reconstruct---wear\\design-brief.json",
+          "relative_path": "outputs\\visual_content\\2026-05-15-canvas---reconstruct---wear\\design-brief.json",
+          "name": "design-brief.json",
+          "category": "visual_content",
+          "modified_at": 1778895372.4354718,
+          "kind": "text"
+        }
+      ]
+    },
+    "feed_position": 22,
+    "selected_assets": [
+      "SimplyAdrift_v4.png",
+      "JRR_4046.jpg",
+      "IMG_3096.HEIC"
+    ],
+    "created_at": "2026-05-15T18:44:12",
+    "curator_reason": "Kept in the remaining order after curator pass.",
+    "visual_role": "body",
+    "asset_fingerprint": "simplyadrift_v4.png > jrr_4046.jpg > img_3096.heic",
+    "asset_set_fingerprint": "img_3096.heic + jrr_4046.jpg + simplyadrift_v4.png",
+    "duplicate_status": "unique",
+    "duplicate_note": "",
+    "calendar_note": "Auto-spaced so each post has its own day.",
+    "edit_history": [
+      {
+        "created_at": "2026-05-16T10:37:56",
+        "source": "feed_curator",
+        "item_id": "candidate-2026-05-14-6",
+        "hook": "Drift is the system.",
+        "changes": {
+          "scheduled_date": {
+            "before": "2026-06-03",
+            "after": "2026-05-25"
+          }
+        }
+      },
+      {
+        "created_at": "2026-05-16T22:00:25",
+        "source": "feed_curator",
+        "item_id": "candidate-2026-05-14-6",
+        "hook": "Drift is the system.",
+        "changes": {
+          "scheduled_date": {
+            "before": "2026-06-03",
+            "after": "2026-06-07"
+          },
+          "feed_position": {
+            "before": 17,
+            "after": 22
+          },
+          "curator_reason": {
+            "before": "Keeps the brand world coherent while reintroducing transformation language in a softer form.",
+            "after": "Kept in the remaining order after curator pass."
+          },
+          "visual_role": {
+            "before": "meaning",
+            "after": "body"
+          }
+        }
+      }
+    ],
+    "product_keys": [],
+    "product_rotation_note": "",
+    "visual_fingerprint": {
+      "visual_family": "digital/source",
+      "palette": "unknown",
+      "brightness": "unknown",
+      "density": "dense",
+      "subject": "source",
+      "product_visibility_score": 2,
+      "content_weight": "photo/product-heavy",
+      "warnings": []
+    },
+    "visual_slots": [
+      {
+        "index": 0,
+        "name": "slide-06.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-15-canvas---reconstruct---wear\\slide-06.png",
+        "source": "generated_visual",
+        "role": "body",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 1,
+        "name": "slide-05.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-15-canvas---reconstruct---wear\\slide-05.png",
+        "source": "generated_visual",
+        "role": "body",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 2,
+        "name": "slide-04.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-15-canvas---reconstruct---wear\\slide-04.png",
+        "source": "generated_visual",
+        "role": "body",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 3,
+        "name": "slide-03.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-15-canvas---reconstruct---wear\\slide-03.png",
+        "source": "generated_visual",
+        "role": "body",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 4,
+        "name": "slide-02.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-15-canvas---reconstruct---wear\\slide-02.png",
+        "source": "generated_visual",
+        "role": "body",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 5,
+        "name": "slide-01.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-15-canvas---reconstruct---wear\\slide-01.png",
+        "source": "generated_visual",
+        "role": "body",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      }
+    ],
+    "quality_score": {
+      "overall": 72,
+      "product_clarity": 70,
+      "brand_fit": 85,
+      "visual_freshness": 70,
+      "feed_rhythm": 80,
+      "commercial_usefulness": 62,
+      "designed_vs_raw": 62,
+      "duplicate_risk": 0
+    },
+    "needs_work": [
+      {
+        "type": "needs_design_pass",
+        "note": "Post may feel raw. Run Improve Design or add backdrop/detail slots."
+      }
+    ]
+  },
+  {
+    "id": "candidate-2026-05-16-5",
+    "scheduled_date": "2026-06-09",
+    "status": "Draft",
+    "platform": "Instagram",
+    "format": "Reel",
+    "pillar": "Process",
+    "hook": "Rebuild in motion.",
+    "caption": "scan. cut. resolve.",
+    "source_files": [
+      "IMG_3245.MOV",
+      "IMG_3246.MOV",
+      "IMG_3247.MOV"
+    ],
+    "candidate_index": 5,
+    "candidate_source_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\content_candidates\\2026-05-16-content-candidates.md",
+    "visual_group": null,
+    "feed_position": 23,
+    "selected_assets": [
+      "IMG_3245.MOV",
+      "IMG_3246.MOV",
+      "IMG_3247.MOV"
+    ],
+    "asset_fingerprint": "img_3245.mov > img_3246.mov > img_3247.mov",
+    "asset_set_fingerprint": "img_3245.mov + img_3246.mov + img_3247.mov",
+    "duplicate_status": "unique",
+    "duplicate_note": "",
+    "created_at": "2026-05-16T09:58:45",
+    "curator_reason": "Kept in the remaining order after curator pass.",
+    "visual_role": "motion",
+    "calendar_note": "Auto-spaced so each post has its own day.",
+    "edit_history": [
+      {
+        "created_at": "2026-05-16T10:37:56",
+        "source": "feed_curator",
+        "item_id": "candidate-2026-05-16-5",
+        "hook": "Rebuild in motion.",
+        "changes": {
+          "scheduled_date": {
+            "before": "2026-05-28",
+            "after": "2026-05-26"
+          },
+          "feed_position": {
+            "before": 13,
+            "after": 11
+          },
+          "curator_reason": {
+            "before": "Kept in the remaining order after curator pass.",
+            "after": "Keeps motion active with a clean process reel and prevents the grid from stalling."
+          }
+        }
+      },
+      {
+        "created_at": "2026-05-16T22:00:25",
+        "source": "feed_curator",
+        "item_id": "candidate-2026-05-16-5",
+        "hook": "Rebuild in motion.",
+        "changes": {
+          "scheduled_date": {
+            "before": "2026-06-04",
+            "after": "2026-06-08"
+          },
+          "feed_position": {
+            "before": 18,
+            "after": 23
+          },
+          "curator_reason": {
+            "before": "Keeps motion active with a clean process reel and prevents the grid from stalling.",
+            "after": "Kept in the remaining order after curator pass."
+          }
+        }
+      }
+    ],
+    "product_keys": [],
+    "product_rotation_note": "",
+    "visual_fingerprint": {
+      "visual_family": "motion",
+      "palette": "unknown",
+      "brightness": "unknown",
+      "density": "unknown",
+      "subject": "unknown",
+      "product_visibility_score": 0,
+      "content_weight": "mixed",
+      "warnings": [
+        "Post leans heavily on one visual family: motion."
+      ]
+    },
+    "visual_slots": [
+      {
+        "index": 0,
+        "name": "IMG_3245.MOV",
+        "asset_name": "IMG_3245.MOV",
+        "image_path": "",
+        "source": "drive_asset",
+        "role": "motion",
+        "notes": "Original source asset slot.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 1,
+        "name": "IMG_3246.MOV",
+        "asset_name": "IMG_3246.MOV",
+        "image_path": "",
+        "source": "drive_asset",
+        "role": "motion",
+        "notes": "Original source asset slot.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 2,
+        "name": "IMG_3247.MOV",
+        "asset_name": "IMG_3247.MOV",
+        "image_path": "",
+        "source": "drive_asset",
+        "role": "motion",
+        "notes": "Original source asset slot.",
+        "overlay_text": "",
+        "updated_at": ""
+      }
+    ],
+    "quality_score": {
+      "overall": 70,
+      "product_clarity": 70,
+      "brand_fit": 85,
+      "visual_freshness": 62,
+      "feed_rhythm": 80,
+      "commercial_usefulness": 62,
+      "designed_vs_raw": 62,
+      "duplicate_risk": 0
+    },
+    "needs_work": [
+      {
+        "type": "quality",
+        "note": "Overall quality score is 70. Run Improve Design or replace weak assets."
+      },
+      {
+        "type": "needs_design_pass",
+        "note": "Post may feel raw. Run Improve Design or add backdrop/detail slots."
+      }
+    ]
+  },
+  {
+    "id": "candidate-2026-05-15-6",
+    "scheduled_date": "2026-06-10",
+    "status": "Draft",
+    "platform": "Instagram",
+    "format": "Story",
+    "pillar": "Process",
+    "hook": "In the studio.",
+    "caption": "CURRENT STATE",
+    "source_files": [
+      "IMG_1793.HEIC",
+      "IMG_1794.HEIC",
+      "IMG_1795.HEIC"
+    ],
+    "candidate_index": 6,
+    "candidate_source_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\content_candidates\\2026-05-15-content-candidates.md",
+    "visual_group": {
+      "name": "2026-05-16-candidate-2026-05-15-2-model-shoot",
+      "images": [
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\image_concepts\\2026-05-16-candidate-2026-05-15-2-model-shoot\\model-shoot-render.png",
+          "relative_path": "outputs\\image_concepts\\2026-05-16-candidate-2026-05-15-2-model-shoot\\model-shoot-render.png",
+          "name": "model-shoot-render.png",
+          "category": "image_concepts",
+          "modified_at": 1778948383.183812,
+          "kind": "image"
+        }
+      ],
+      "briefs": [
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\image_concepts\\2026-05-16-candidate-2026-05-15-2-model-shoot\\render-metadata.json",
+          "relative_path": "outputs\\image_concepts\\2026-05-16-candidate-2026-05-15-2-model-shoot\\render-metadata.json",
+          "name": "render-metadata.json",
+          "category": "image_concepts",
+          "modified_at": 1778948383.2112577,
+          "kind": "text"
+        }
+      ]
+    },
+    "feed_position": 24,
+    "selected_assets": [
+      "IMG_1793.HEIC",
+      "IMG_1794.HEIC",
+      "IMG_1795.HEIC"
+    ],
+    "created_at": "2026-05-16T09:41:38",
+    "curator_reason": "Kept in the remaining order after curator pass.",
+    "visual_role": "process",
+    "updated_at": "2026-05-15T18:48:42",
+    "asset_fingerprint": "img_1793.heic > img_1794.heic > img_1795.heic",
+    "asset_set_fingerprint": "img_1793.heic + img_1794.heic + img_1795.heic",
+    "duplicate_status": "unique",
+    "duplicate_note": "",
+    "calendar_note": "Auto-spaced so each post has its own day.",
+    "edit_history": [
+      {
+        "created_at": "2026-05-16T10:37:56",
+        "source": "feed_curator",
+        "item_id": "candidate-2026-05-15-6",
+        "hook": "In the studio.",
+        "changes": {
+          "scheduled_date": {
+            "before": "2026-05-30",
+            "after": "2026-05-29"
+          },
+          "feed_position": {
+            "before": 15,
+            "after": 14
+          },
+          "curator_reason": {
+            "before": "Kept in the remaining order after curator pass.",
+            "after": "Studio story gives behind-the-scenes credibility and texture."
+          }
+        }
+      },
+      {
+        "created_at": "2026-05-16T22:00:25",
+        "source": "feed_curator",
+        "item_id": "candidate-2026-05-15-6",
+        "hook": "In the studio.",
+        "changes": {
+          "scheduled_date": {
+            "before": "2026-06-07",
+            "after": "2026-06-09"
+          },
+          "feed_position": {
+            "before": 21,
+            "after": 24
+          },
+          "curator_reason": {
+            "before": "Studio story gives behind-the-scenes credibility and texture.",
+            "after": "Kept in the remaining order after curator pass."
+          }
+        }
+      }
+    ],
+    "product_keys": [],
+    "product_rotation_note": "",
+    "visual_fingerprint": {
+      "visual_family": "process",
+      "palette": "unknown",
+      "brightness": "unknown",
+      "density": "medium",
+      "subject": "detail",
+      "product_visibility_score": 0,
+      "content_weight": "process-heavy",
+      "warnings": [
+        "Post leans heavily on one visual family: process."
+      ]
+    },
+    "visual_slots": [
+      {
+        "index": 0,
+        "name": "model-shoot-render.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\image_concepts\\2026-05-16-candidate-2026-05-15-2-model-shoot\\model-shoot-render.png",
+        "source": "generated_visual",
+        "role": "process",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      }
+    ],
+    "quality_score": {
+      "overall": 70,
+      "product_clarity": 70,
+      "brand_fit": 85,
+      "visual_freshness": 62,
+      "feed_rhythm": 80,
+      "commercial_usefulness": 62,
+      "designed_vs_raw": 62,
+      "duplicate_risk": 0
+    },
+    "needs_work": [
+      {
+        "type": "quality",
+        "note": "Overall quality score is 70. Run Improve Design or replace weak assets."
+      },
+      {
+        "type": "needs_design_pass",
+        "note": "Post may feel raw. Run Improve Design or add backdrop/detail slots."
+      }
+    ]
+  },
+  {
+    "id": "candidate-2026-05-16-4",
+    "scheduled_date": "2026-06-11",
+    "status": "Draft",
+    "platform": "Instagram",
+    "format": "Story",
+    "pillar": "Meaning",
+    "hook": "Archive note.",
+    "caption": "not a graphic. a fragment.",
+    "source_files": [
+      "SimplyAdrift_v4.png",
+      "IMG_2040.HEIC"
+    ],
+    "candidate_index": 4,
+    "candidate_source_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\content_candidates\\2026-05-16-content-candidates.md",
+    "visual_group": {
+      "name": "2026-05-16-candidate-2026-05-15-2-model-shoot",
+      "images": [
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\image_concepts\\2026-05-16-candidate-2026-05-15-2-model-shoot\\model-shoot-render.png",
+          "relative_path": "outputs\\image_concepts\\2026-05-16-candidate-2026-05-15-2-model-shoot\\model-shoot-render.png",
+          "name": "model-shoot-render.png",
+          "category": "image_concepts",
+          "modified_at": 1778949727.150413,
+          "kind": "image"
+        }
+      ],
+      "briefs": [
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\image_concepts\\2026-05-16-candidate-2026-05-15-2-model-shoot\\render-metadata.json",
+          "relative_path": "outputs\\image_concepts\\2026-05-16-candidate-2026-05-15-2-model-shoot\\render-metadata.json",
+          "name": "render-metadata.json",
+          "category": "image_concepts",
+          "modified_at": 1778948383.2112577,
+          "kind": "text"
+        }
+      ]
+    },
+    "feed_position": 25,
+    "selected_assets": [
+      "SimplyAdrift_v4.png",
+      "IMG_2040.HEIC"
+    ],
+    "asset_fingerprint": "simplyadrift_v4.png > img_2040.heic",
+    "asset_set_fingerprint": "img_2040.heic + simplyadrift_v4.png",
+    "duplicate_status": "unique",
+    "duplicate_note": "",
+    "created_at": "2026-05-16T09:58:45",
+    "curator_reason": "Kept in the remaining order after curator pass.",
+    "visual_role": "process",
+    "calendar_note": "Auto-spaced so each post has its own day.",
+    "edit_history": [
+      {
+        "created_at": "2026-05-16T10:37:56",
+        "source": "feed_curator",
+        "item_id": "candidate-2026-05-16-4",
+        "hook": "Archive note.",
+        "changes": {
+          "scheduled_date": {
+            "before": "2026-05-25",
+            "after": "2026-06-01"
+          },
+          "feed_position": {
+            "before": 12,
+            "after": 17
+          }
+        }
+      },
+      {
+        "created_at": "2026-05-16T22:00:25",
+        "source": "feed_curator",
+        "item_id": "candidate-2026-05-16-4",
+        "hook": "Archive note.",
+        "changes": {
+          "feed_position": {
+            "before": 24,
+            "after": 25
+          }
+        }
+      }
+    ],
+    "product_keys": [],
+    "product_rotation_note": "",
+    "visual_fingerprint": {
+      "visual_family": "digital/source",
+      "palette": "black/dark",
+      "brightness": "dark",
+      "density": "dense",
+      "subject": "source",
+      "product_visibility_score": 0,
+      "content_weight": "mixed",
+      "warnings": []
+    },
+    "visual_slots": [
+      {
+        "index": 0,
+        "name": "model-shoot-render.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\image_concepts\\2026-05-16-candidate-2026-05-15-2-model-shoot\\model-shoot-render.png",
+        "source": "generated_visual",
+        "role": "process",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      }
+    ],
+    "quality_score": {
+      "overall": 72,
+      "product_clarity": 70,
+      "brand_fit": 85,
+      "visual_freshness": 70,
+      "feed_rhythm": 80,
+      "commercial_usefulness": 62,
+      "designed_vs_raw": 62,
+      "duplicate_risk": 0
+    },
+    "needs_work": [
+      {
+        "type": "needs_design_pass",
+        "note": "Post may feel raw. Run Improve Design or add backdrop/detail slots."
+      }
+    ]
+  },
+  {
+    "id": "candidate-2026-05-15-1",
+    "scheduled_date": "2026-06-12",
+    "status": "Draft",
+    "platform": "Instagram",
+    "format": "Reel",
+    "pillar": "Transformation",
+    "hook": "From canvas. To fragment.",
+    "caption": "SOURCE // RECONSTRUCTED",
+    "source_files": [
+      "ADRIFT_colour_oilpaint_v5.png",
+      "JRR_4001.jpg",
+      "IMG_2166.MOV"
+    ],
+    "product_keys": [],
+    "product_rotation_note": "",
+    "visual_fingerprint": {
+      "visual_family": "digital/source",
+      "palette": "unknown",
+      "brightness": "unknown",
+      "density": "unknown",
+      "subject": "source",
+      "product_visibility_score": 2,
+      "content_weight": "photo/product-heavy",
+      "warnings": []
+    },
+    "candidate_index": 1,
+    "candidate_source_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\content_candidates\\2026-05-15-content-candidates.md",
+    "visual_group": null,
+    "feed_position": 26,
+    "selected_assets": [
+      "ADRIFT_colour_oilpaint_v5.png",
+      "JRR_4001.jpg",
+      "IMG_2166.MOV"
+    ],
+    "asset_fingerprint": "adrift_colour_oilpaint_v5.png > jrr_4001.jpg > img_2166.mov",
+    "asset_set_fingerprint": "adrift_colour_oilpaint_v5.png + img_2166.mov + jrr_4001.jpg",
+    "duplicate_status": "unique",
+    "duplicate_note": "",
+    "created_at": "2026-05-16T21:59:06",
+    "curator_reason": "Kept in the remaining order after curator pass.",
+    "visual_role": "motion",
+    "visual_slots": [
+      {
+        "index": 0,
+        "name": "ADRIFT_colour_oilpaint_v5.png",
+        "asset_name": "ADRIFT_colour_oilpaint_v5.png",
+        "image_path": "",
+        "source": "drive_asset",
+        "role": "motion",
+        "notes": "Original source asset slot.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 1,
+        "name": "JRR_4001.jpg",
+        "asset_name": "JRR_4001.jpg",
+        "image_path": "",
+        "source": "drive_asset",
+        "role": "motion",
+        "notes": "Original source asset slot.",
+        "overlay_text": "",
+        "updated_at": ""
+      },
+      {
+        "index": 2,
+        "name": "IMG_2166.MOV",
+        "asset_name": "IMG_2166.MOV",
+        "image_path": "",
+        "source": "drive_asset",
+        "role": "motion",
+        "notes": "Original source asset slot.",
+        "overlay_text": "",
+        "updated_at": ""
+      }
+    ],
+    "edit_history": [
+      {
+        "created_at": "2026-05-16T22:00:25",
+        "source": "feed_curator",
+        "item_id": "candidate-2026-05-15-1",
+        "hook": "From canvas. To fragment.",
+        "changes": {
+          "feed_position": {
+            "before": 25,
+            "after": 26
+          }
+        }
+      }
+    ],
+    "quality_score": {
+      "overall": 72,
+      "product_clarity": 70,
+      "brand_fit": 85,
+      "visual_freshness": 70,
+      "feed_rhythm": 80,
+      "commercial_usefulness": 62,
+      "designed_vs_raw": 62,
+      "duplicate_risk": 0
+    },
+    "needs_work": [
+      {
+        "type": "needs_design_pass",
+        "note": "Post may feel raw. Run Improve Design or add backdrop/detail slots."
+      }
+    ]
+  },
+  {
+    "id": "visual-2026-05-16-candidate-2026-05-15-2-model-shoot",
+    "scheduled_date": "2026-06-13",
+    "status": "Draft",
+    "platform": "Instagram",
+    "format": "Solo Image Post",
+    "pillar": "Visual Direction",
+    "hook": "2026 05 16 Candidate 2026 05 15 2 Model Shoot",
+    "caption": "",
+    "source_files": [
+      "model-shoot-render.png"
+    ],
+    "product_keys": [],
+    "product_rotation_note": "",
+    "visual_fingerprint": {
+      "visual_family": "unknown",
+      "palette": "unknown",
+      "brightness": "unknown",
+      "density": "unknown",
+      "subject": "unknown",
+      "product_visibility_score": 0,
+      "content_weight": "mixed",
+      "warnings": []
+    },
+    "candidate_index": null,
+    "candidate_source_path": "",
+    "visual_group": {
+      "name": "2026-05-16-candidate-2026-05-15-2-model-shoot",
+      "images": [
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\image_concepts\\2026-05-16-candidate-2026-05-15-2-model-shoot\\model-shoot-render.png",
+          "relative_path": "outputs\\image_concepts\\2026-05-16-candidate-2026-05-15-2-model-shoot\\model-shoot-render.png",
+          "name": "model-shoot-render.png",
+          "category": "image_concepts",
+          "modified_at": 1778949727.150413,
+          "kind": "image",
+          "visual_metadata": {
+            "dominant_rgb": [
+              172,
+              174,
+              169
+            ],
+            "palette": "grey/washed",
+            "brightness": "mid",
+            "brightness_value": 171.67,
+            "contrast_value": 183,
+            "density": "dense",
+            "image_type": "photo/mixed",
+            "mtime": 1778949727.150413
+          }
+        }
+      ],
+      "briefs": [
+        {
+          "path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\image_concepts\\2026-05-16-candidate-2026-05-15-2-model-shoot\\render-metadata.json",
+          "relative_path": "outputs\\image_concepts\\2026-05-16-candidate-2026-05-15-2-model-shoot\\render-metadata.json",
+          "name": "render-metadata.json",
+          "category": "image_concepts",
+          "modified_at": 1778948383.2112577,
+          "kind": "text"
+        }
+      ]
+    },
+    "feed_position": 27,
+    "selected_assets": [],
+    "rating": 3,
+    "review_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\image_concepts\\2026-05-16-candidate-2026-05-15-2-model-shoot",
+    "created_at": "2026-05-16T21:59:15",
+    "asset_fingerprint": "model-shoot-render.png",
+    "asset_set_fingerprint": "model-shoot-render.png",
+    "duplicate_status": "unique",
+    "duplicate_note": "",
+    "curator_reason": "Kept in the remaining order after curator pass.",
+    "visual_role": "meaning",
+    "visual_slots": [
+      {
+        "index": 0,
+        "name": "model-shoot-render.png",
+        "asset_name": "",
+        "image_path": "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\image_concepts\\2026-05-16-candidate-2026-05-15-2-model-shoot\\model-shoot-render.png",
+        "source": "generated_visual",
+        "role": "meaning",
+        "notes": "Generated visual slide. Replace this slot with a Drive asset to hot swap the slide.",
+        "overlay_text": "",
+        "updated_at": ""
+      }
+    ],
+    "edit_history": [
+      {
+        "created_at": "2026-05-16T22:00:25",
+        "source": "feed_curator",
+        "item_id": "visual-2026-05-16-candidate-2026-05-15-2-model-shoot",
+        "hook": "2026 05 16 Candidate 2026 05 15 2 Model Shoot",
+        "changes": {
+          "feed_position": {
+            "before": 26,
+            "after": 27
+          }
+        }
+      }
+    ],
+    "quality_score": {
+      "overall": 72,
+      "product_clarity": 70,
+      "brand_fit": 85,
+      "visual_freshness": 70,
+      "feed_rhythm": 80,
+      "commercial_usefulness": 62,
+      "designed_vs_raw": 62,
+      "duplicate_risk": 0
+    },
+    "needs_work": [
+      {
+        "type": "needs_design_pass",
+        "note": "Post may feel raw. Run Improve Design or add backdrop/detail slots."
+      }
+    ]
+  },
+  {
+    "id": "shoot-placeholder-essential-bodycon-crewneck-t-shirt",
+    "scheduled_date": "2026-06-14",
+    "status": "Needs Image",
+    "platform": "Instagram",
+    "format": "Shoot Placeholder",
+    "pillar": "Shoot Gap",
+    "hook": "Need shoot: Essential Bodycon Crewneck T Shirt",
+    "caption": "",
+    "source_files": [],
+    "selected_assets": [],
+    "visual_group": {},
+    "visual_slots": [
+      {
+        "index": 0,
+        "name": "Slot 1",
+        "asset_name": "",
+        "image_path": "",
+        "source": "empty",
+        "role": "campaign_anchor",
+        "notes": "Front, back, worn detail, and one movement frame | 4:5 product/body crop | Commercially clear while keeping the archival system language | Neutral studio or quiet exterior | Even enough to read garment details | Product rotation, feed breathing room, SEO/product-page support | Underused product family: essential bodycon crewneck t shirt.",
+        "overlay_text": ""
+      }
+    ],
+    "visual_role": "shoot_gap",
+    "curator_reason": "Placeholder created from Shoot Planner so the calendar and feed can plan around a missing real asset.",
+    "shoot_request": {
+      "priority": "Must Shoot",
+      "product": "Essential Bodycon Crewneck T Shirt",
+      "angle": "Front, back, worn detail, and one movement frame",
+      "crop": "4:5 product/body crop",
+      "mood": "Commercially clear while keeping the archival system language",
+      "background": "Neutral studio or quiet exterior",
+      "lighting": "Even enough to read garment details",
+      "use_case": "Product rotation, feed breathing room, SEO/product-page support",
+      "solves": "Underused product family: essential bodycon crewneck t shirt."
+    },
+    "shoot_brief": "Essential Bodycon Crewneck T Shirt - Underused product family: essential bodycon crewneck t shirt.",
+    "calendar_note": "Needs real photoshoot asset. AI references are planning-only.",
+    "feed_position": 28,
+    "created_at": "2026-05-17T08:33:14",
+    "product_keys": [],
+    "product_rotation_note": "",
+    "visual_fingerprint": {
+      "visual_family": "unknown",
+      "palette": "unknown",
+      "brightness": "unknown",
+      "density": "unknown",
+      "subject": "unknown",
+      "warnings": []
+    },
+    "quality_score": {
+      "overall": 60,
+      "product_clarity": 45,
+      "brand_fit": 85,
+      "visual_freshness": 50,
+      "feed_rhythm": 80,
+      "commercial_usefulness": 62,
+      "designed_vs_raw": 37,
+      "duplicate_risk": 0
+    },
+    "needs_work": [
+      {
+        "type": "needs_real_shoot_asset",
+        "note": "Needs real photoshoot asset. AI references are planning-only."
+      },
+      {
+        "type": "quality",
+        "note": "Overall quality score is 60. Run Improve Design or replace weak assets."
+      },
+      {
+        "type": "needs_design_pass",
+        "note": "Post may feel raw. Run Improve Design or add backdrop/detail slots."
+      },
+      {
+        "type": "needs_image",
+        "note": "No visual asset attached."
+      }
+    ],
+    "asset_fingerprint": "",
+    "asset_set_fingerprint": "",
+    "duplicate_status": "unique",
+    "duplicate_note": ""
+  }
+]

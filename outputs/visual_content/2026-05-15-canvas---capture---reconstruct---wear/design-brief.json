@@ -1,0 +1,70 @@
+{
+  "title": "CANVAS / CAPTURE / RECONSTRUCT / WEAR",
+  "platform": "Instagram",
+  "format": "carousel",
+  "asset_strategy": "Lead with the source painting, then move through reconstruction evidence, then finish on a body-led product hero. Use ADRIFT_colour_oilpaint_v5.png as the origin, 4DRFT_design2_blacktext_FINAL copy.png for system translation, and JRR_4004.jpg / JRR_4010.jpg for the wearable proof. Keep each slide sparse, premium, and legible as an archive sequence.",
+  "slides": [
+    {
+      "slide": 1,
+      "headline": "SEVEN DESIGNS.",
+      "subhead": "ONE PAINTING.",
+      "asset_hint": "ADRIFT_colour_oilpaint_v5.png",
+      "layout": "cover",
+      "notes": "Treat as evidence, not decoration. Bone field, severe crop, maximum source presence."
+    },
+    {
+      "slide": 2,
+      "headline": "CAPTURE",
+      "subhead": "optical scan",
+      "asset_hint": "IMG_1793.HEIC or IMG_1994.HEIC",
+      "layout": "detail",
+      "notes": "Show the extraction stage. Close, technical, quiet; let the raw process feel intentional."
+    },
+    {
+      "slide": 3,
+      "headline": "RECONSTRUCT",
+      "subhead": "system layer",
+      "asset_hint": "4DRFT_design2_blacktext_FINAL copy.png",
+      "layout": "split",
+      "notes": "Pair artwork logic with the graphic system. Use a stark split and preserve negative space."
+    },
+    {
+      "slide": 4,
+      "headline": "FRAGMENT",
+      "subhead": "material evidence",
+      "asset_hint": "JRR_4004.jpg",
+      "layout": "product",
+      "notes": "Introduce the garment as a desirable object first. Strong body presence, oversized silhouette, premium light."
+    },
+    {
+      "slide": 5,
+      "headline": "WORN",
+      "subhead": "in motion",
+      "asset_hint": "JRR_4010.jpg",
+      "layout": "archive",
+      "notes": "End on lifestyle proof. Candid movement, concrete/metal context, product-as-identity."
+    }
+  ],
+  "caption": "Source.\nCapture.\nReconstruct.\nWear.\n\nA physical painting becomes a fragment.\n\n[BRAND NAME.]",
+  "image_concepts": [
+    {
+      "name": "Canvas to Fragment Hero",
+      "brief": "A premium fashion-campaign image that makes the artwork origin immediately legible while keeping the garment desirable and body-led.",
+      "source_asset_hint": "ADRIFT_colour_oilpaint_v5.png + JRR_4004.jpg",
+      "prompt": "Image-only editorial fashion campaign visual, premium streetwear brand aesthetic, bone background with near-black negative space, one oversized garment on a confident model and the original oil painting fragment present as source evidence through projection or overlay, technical archive label feeling, optical scan tension, coordinate-system precision, oxidized red accents only, concrete and glass studio environment, candid motion, textile texture, product hero clarity, art-origin fragment becoming wearable object, sparse composition, severe cropping, cinematic but restrained, no readable text, no logos, no extra graphics, no neon, no bokeh, no fake typography"
+    },
+    {
+      "name": "Reconstruction Field",
+      "brief": "A reconstruction-focused source image that visually explains the translation from painting to system without becoming academic.",
+      "source_asset_hint": "4DRFT_design2_blacktext_FINAL copy.png + IMG_1793.HEIC",
+      "prompt": "Image-only editorial reconstruction scene, premium archive system atmosphere, optical scan marks, coordinate grid implied through composition, bone and near-black palette, oxidized red technical accent, studio table or wall with layered source artwork fragments and garment pattern evidence, oversized streetwear silhouette partially visible as identity object, concrete, metal, glass textures, hand-made reconstruction energy, fashion campaign lighting, clean premium desirability, candid human presence, motion blur subtle, no readable text, no fake UI, no neon, no abstract blobs, no graffiti, no hype styling"
+    },
+    {
+      "name": "Worn Archive Motion",
+      "brief": "A lifestyle product hero that proves the fragment lives on-body and belongs in the world, not only in the archive.",
+      "source_asset_hint": "JRR_4010.jpg",
+      "prompt": "Image-only premium streetwear campaign frame, styled body in oversized silhouette moving through a city studio or gallery-adjacent concrete space, product as identity, garment graphic emphasis derived from art fragment, tactile textile texture, confident posture, candid motion, near-black and bone palette with oxidized red trace, shadow-heavy composition, glass and metal textures, minimal archive-system feeling embedded in the environment, fashion desirability first, art-origin story visible as reflection or overlay evidence, no readable text, no logo marks, no fake typography, no neon, no glossy AI gradients, no hypebeast energy"
+    }
+  ],
+  "approval_status": "Draft"
+}

@@ -27,9 +27,20 @@ jobs:
           BRAND_WEBSITE_URL: https://www.brandnamedesign.co/
           GOOGLE_DRIVE_ENABLED: ${{ vars.GOOGLE_DRIVE_ENABLED || 'false' }}
           GOOGLE_DRIVE_ROOT_FOLDER_ID: ${{ secrets.GOOGLE_DRIVE_ROOT_FOLDER_ID }}
+          GOOGLE_AUTH_MODE: ${{ vars.GOOGLE_AUTH_MODE || 'oauth' }}
           VISUAL_OUTPUT_ENABLED: ${{ vars.VISUAL_OUTPUT_ENABLED || 'true' }}
           VISUAL_ASSET_LIMIT: ${{ vars.VISUAL_ASSET_LIMIT || '12' }}
-        run: python -m src.orchestrator
+        run: |
+          if [ -n "${{ secrets.GOOGLE_OAUTH_CLIENT_JSON }}" ]; then
+            printf '%s' '${{ secrets.GOOGLE_OAUTH_CLIENT_JSON }}' > oauth_client.json
+          fi
+          if [ -n "${{ secrets.GOOGLE_OAUTH_TOKEN_JSON }}" ]; then
+            printf '%s' '${{ secrets.GOOGLE_OAUTH_TOKEN_JSON }}' > token.json
+          fi
+          if [ -n "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_JSON }}" ]; then
+            printf '%s' '${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_JSON }}' > credentials.json
+          fi
+          python -m src.orchestrator
 
       - name: Commit generated outputs
         run: |

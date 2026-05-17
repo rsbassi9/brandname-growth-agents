@@ -1,0 +1,78 @@
+{
+  "title": "From canvas to wearable fragment",
+  "platform": "Instagram",
+  "format": "carousel",
+  "asset_strategy": "Lead with the raw painting as source evidence, move into reconstruction signals using design assets and process frames, then resolve into on-body product proof with one premium campaign shot. Keep the sequence sparse and procedural so the transformation reads instantly: canvas \u2192 capture \u2192 reconstruct \u2192 wear.",
+  "slides": [
+    {
+      "slide": 1,
+      "headline": "SOURCE",
+      "subhead": "canvas detail",
+      "asset_hint": "ADRIFT_colour_oilpaint_v5.png",
+      "layout": "cover",
+      "notes": "Full-bleed raw painting crop on bone background, minimal archive framing, high tension."
+    },
+    {
+      "slide": 2,
+      "headline": "SCAN",
+      "subhead": "optical read",
+      "asset_hint": "ADRIFT_BW_pixelated.png",
+      "layout": "detail",
+      "notes": "Use the pixelated reconstruction as a technical proof layer, sparse and severe."
+    },
+    {
+      "slide": 3,
+      "headline": "SYSTEM",
+      "subhead": "extracted fragment",
+      "asset_hint": "4DRFT_design2_blacktext_FINAL copy.png",
+      "layout": "archive",
+      "notes": "Treat the design asset like an archive label and reconstruction map, not a poster."
+    },
+    {
+      "slide": 4,
+      "headline": "REBUILD",
+      "subhead": "wearable form",
+      "asset_hint": "IMG_1994.HEIC",
+      "layout": "split",
+      "notes": "Pair process evidence with a clean fragment crop; make the translation legible."
+    },
+    {
+      "slide": 5,
+      "headline": "BODY",
+      "subhead": "fragment in motion",
+      "asset_hint": "JRR_4004.jpg",
+      "layout": "product",
+      "notes": "Premium campaign frame with styled body, oversized silhouette, concrete/glass/metal context."
+    },
+    {
+      "slide": 6,
+      "headline": "WORN",
+      "subhead": "reconstructed object",
+      "asset_hint": "JRR_4004-2.jpg",
+      "layout": "product",
+      "notes": "Alternate crop or angle to emphasize garment presence, confidence, and textile texture."
+    }
+  ],
+  "caption": "SOURCE // CAPTURE // RECONSTRUCT // WEAR\n\nA fragment, extracted from the archive.",
+  "image_concepts": [
+    {
+      "name": "Canvas to body hero",
+      "brief": "Create a premium fashion-campaign image that makes the garment desirable first, while the source painting appears as the origin signal inside the frame.",
+      "source_asset_hint": "ADRIFT_colour_oilpaint_v5.png + JRR_4004.jpg + Distressed Grommet Eyelet Tank Top-mockups-5.png",
+      "prompt": "Editorial fashion campaign image, image-only, no readable text, premium streetwear styling, oversized silhouette, art-led garment worn by a confident model in a city studio gallery space with concrete, glass, and metal textures, motion in the body, tactile textile detail, garment graphic clearly visible as a fragment extracted from a physical oil painting, source painting appears as an environmental projection/reflection/overlay rather than a poster, bone background feel, near-black shadows, oxidized red accents from the artwork, sparse composition, sharp product-as-identity, candid movement, high-end campaign lighting, quiet and mysterious, no fake typography, no logos, no graphic clutter"
+    },
+    {
+      "name": "Reconstruction proof frame",
+      "brief": "Show the transition from source to wearable system in a way that feels like technical evidence and fashion desirability at once.",
+      "source_asset_hint": "ADRIFT_BW_pixelated.png + 4DRFT_design2_blacktext_FINAL copy.png + IMG_1994.HEIC",
+      "prompt": "Minimal editorial reconstruction scene, image-only, no readable text, technical archive label aesthetic, optical scan feeling, coordinate system, bone background, near-black and oxidized red palette, close crop of a hand, screen, or process surface with pixelated reconstruction logic, premium streetwear garment fragment emerging from the system, oversized silhouette implied through partial body presence, studio context with concrete and metal textures, tactile textile evidence, candid motion blur, product still desirable and wearable, sparse negative space, museum-grade but not sterile, no neon, no glossy cyberpunk, no fake typography"
+    },
+    {
+      "name": "Streetwear fragment in motion",
+      "brief": "Generate a follow-worthy campaign image that sells the garment as daily wear with attitude, while keeping the archive/reconstruction origin visible as evidence.",
+      "source_asset_hint": "JRR_4004.jpg + JRR_4004-2.jpg + Distressed Grommet Eyelet Tank Top-mockups-5.png",
+      "prompt": "Premium streetwear marketing image, image-only, no readable text, realistic model in motion wearing an oversized reconstructed fragment garment, body language confident and casual, styled in a city or gallery-adjacent studio environment with concrete, glass, and brushed metal textures, garment texture and fit clearly visible, art-origin fragment subtly embedded as source evidence in the scene through shadow, reflection, or projected crop, near-black and bone tonal system with oxidized red accent, sparse composition, clean but emotional like a high-end sports/lifestyle campaign, candid movement, product hero, no fake graffiti, no hype aesthetics, no logos, no typography"
+    }
+  ],
+  "approval_status": "Draft"
+}

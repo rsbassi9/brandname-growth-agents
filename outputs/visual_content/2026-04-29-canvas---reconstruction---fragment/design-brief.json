@@ -1,0 +1,58 @@
+{
+  "title": "Canvas \u2192 Reconstruction \u2192 Fragment",
+  "platform": "Instagram",
+  "format": "carousel",
+  "asset_strategy": "Text-first placeholder carousel using the brand brief and website headings only. Since no image assets are available, design each slide as an archive-style reconstruction system: use minimal typography, negative space, and sequential labels to simulate the transformation from source canvas to digital reconstruction to wearable fragment. Request painting process, digital reconstruction, and product photos for the next version.",
+  "slides": [
+    {
+      "slide": 1,
+      "headline": "One painting.",
+      "subhead": "Seven designs.",
+      "asset_hint": "text-first placeholder; reference website heading 'SEVEN DESIGNS. ONE PAINTING.'",
+      "layout": "cover",
+      "notes": "Full-bleed minimal cover. Sparse type. High contrast. Feels like an archive title card."
+    },
+    {
+      "slide": 2,
+      "headline": "Source.",
+      "subhead": "Physical oil painting.",
+      "asset_hint": "painting process",
+      "layout": "archive",
+      "notes": "Treat as the origin frame. Leave room around the subject. No decorative elements."
+    },
+    {
+      "slide": 3,
+      "headline": "Reconstructed.",
+      "subhead": "Digital system.",
+      "asset_hint": "digital reconstruction",
+      "layout": "detail",
+      "notes": "Present as a technical translation stage. Functional labels only. Calm, precise, mysterious."
+    },
+    {
+      "slide": 4,
+      "headline": "Extracted.",
+      "subhead": "A fragment is kept.",
+      "asset_hint": "painting process + digital reconstruction",
+      "layout": "split",
+      "notes": "Pair source and rebuilt state in one frame. Emphasize the act of selection and removal."
+    },
+    {
+      "slide": 5,
+      "headline": "Wearable.",
+      "subhead": "Fragment on object.",
+      "asset_hint": "product photos",
+      "layout": "product",
+      "notes": "Quiet product reveal. Treat the garment as an object study, not an apparel shot."
+    },
+    {
+      "slide": 6,
+      "headline": "Archive.",
+      "subhead": "Not inspired. Extracted.",
+      "asset_hint": "text-first placeholder",
+      "layout": "archive",
+      "notes": "Closing statement slide. Minimal brand voice. Reinforce the concept without over-explaining."
+    }
+  ],
+  "caption": "Canvas.\nReconstructed.\nWearable fragment.\n\nNot inspired by the painting.\nExtracted from it.\n\nFollow for the archive.",
+  "approval_status": "Draft"
+}

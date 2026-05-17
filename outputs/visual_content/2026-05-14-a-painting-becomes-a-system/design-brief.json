@@ -1,0 +1,78 @@
+{
+  "title": "A painting becomes a system",
+  "platform": "Instagram",
+  "format": "carousel",
+  "asset_strategy": "Lead with the source painting, move into reconstruction evidence, end on the garment as a desirable worn fragment. Use Adrift painting and 4DRFT design files for origin and system language, then JRR_4001.jpg and JRR_4046.jpg for body-led product proof. Keep every frame sparse, archive-like, and premium.",
+  "slides": [
+    {
+      "slide": 1,
+      "headline": "SEVEN DESIGNS.",
+      "subhead": "ONE PAINTING.",
+      "asset_hint": "Adrift painting / 1MM_2PmUblB-kQKh9uxKi0mf_L-WBUAff-ADRIFT_colour_oilpaint_v5-png.png",
+      "layout": "cover",
+      "notes": "Full-frame source image. Bone field, quiet labels, immediate art authority."
+    },
+    {
+      "slide": 2,
+      "headline": "CAPTURE",
+      "subhead": "optical scan",
+      "asset_hint": "Adrift painting detail / 1N0xmjRS3hwzTCP4CFUJHtzuc6NcVl0Ve-ADRIFT_BW_pixelated-png.png",
+      "layout": "detail",
+      "notes": "Macro crop with technical tension. Treat texture like evidence."
+    },
+    {
+      "slide": 3,
+      "headline": "RECONSTRUCT",
+      "subhead": "system layer",
+      "asset_hint": "4DRFT design file / 1nAYpjSvK-eiObAjuIkWPNQc-agbSE-52-4DRFT_design2_blacktext_FINAL-copy-png.png",
+      "layout": "split",
+      "notes": "Pair source logic with reconstruction geometry. Stark, measured, minimal."
+    },
+    {
+      "slide": 4,
+      "headline": "EXTRACTED",
+      "subhead": "fragment study",
+      "asset_hint": "4DRFT design files / 1nAYpjSvK-eiObAjuIkWPNQc-agbSE-52-4DRFT_design2_blacktext_FINAL-copy-png.png",
+      "layout": "archive",
+      "notes": "Use a cropped plate feel. Negative space first, object second."
+    },
+    {
+      "slide": 5,
+      "headline": "WORN",
+      "subhead": "fragment returns to body",
+      "asset_hint": "JRR_4001.jpg",
+      "layout": "product",
+      "notes": "Styled body, oversized silhouette, confident motion. Make the garment feel wanted."
+    },
+    {
+      "slide": 6,
+      "headline": "OBJECT",
+      "subhead": "returned",
+      "asset_hint": "JRR_4046.jpg",
+      "layout": "product",
+      "notes": "Close product hero with street/studio energy. Quiet finish, strong desirability."
+    }
+  ],
+  "caption": "CANVAS // CAPTURE // RECONSTRUCT // WEAR\nfragment extracted\nobject returned to body",
+  "image_concepts": [
+    {
+      "name": "Canvas to Body",
+      "brief": "Show the full transformation arc in one fashion-led sequence: source painting, scan evidence, reconstructed garment, worn fragment in motion.",
+      "source_asset_hint": "Adrift painting + 4DRFT design files + JRR_4001.jpg",
+      "prompt": "Premium fashion campaign source image, image-only, no readable text, no typography, no logos. A restrained art-translation streetwear scene that makes a painted artwork feel extracted into clothing. Start with a bone-background technical archive feel, then transition through optical scan evidence and reconstruction logic into a worn oversized garment on a real body. The garment should feel desirable first: premium streetwear silhouette, graphic placement, textile texture, confident posture, candid motion. Include city/studio/gallery context with concrete, glass, metal, shadow, and sparse near-black and oxidized red accents. Use the painting as source material through crop, projection, reflection, or overlay evidence. Clean, minimal, mysterious, premium, fashion-editorial, social-follow-worthy."
+    },
+    {
+      "name": "Reconstruction Hero",
+      "brief": "Create a centered product hero that still reads like an archive artifact reconstructed from canvas data.",
+      "source_asset_hint": "4DRFT design files + JRR_4046.jpg",
+      "prompt": "High-end editorial product hero, image-only, no readable text, no fake typography. A premium oversized streetwear garment presented as a reconstructed fragment from an artwork archive. Styled on body in a gallery-studio-city hybrid environment with concrete floor, glass reflections, brushed metal edges, near-black shadows, bone-toned negative space, and oxidized red trace accents. The garment should dominate the frame with tactile textile detail, confident stance, subtle motion blur, and fashion-campaign energy. Visually suggest technical reconstruction through crop marks, scanline presence, coordinate-system composition, and layered source evidence without adding any embedded text. Minimal, sharp, premium, desirably wearable."
+    },
+    {
+      "name": "Fragment in Motion",
+      "brief": "Make the wearable piece feel alive in motion, like an object moving through the city with art-origin residue.",
+      "source_asset_hint": "JRR_4001.jpg or JRR_4006.jpg",
+      "prompt": "Cinematic streetwear fashion campaign image, image-only, no readable text, no logos, no graffiti. A model in an oversized silhouette wears a reconstructed fragment garment while moving through a muted city/studio/gallery context. Show candid motion, strong body language, textile weight, and product-as-identity. The art-origin story should appear as source evidence projected or reflected nearby, like a scan-derived archive residue. Palette must stay premium and restrained: bone background tones, near-black, oxidized red, muted technical neutrals, with source-art color only from the painting material. Include concrete, glass, and metal textures, sparse composition, clean negative space, and a confident, aspirational feel that sits between art archive and premium streetwear campaign."
+    }
+  ],
+  "approval_status": "Draft"
+}

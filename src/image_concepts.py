@@ -16,7 +16,11 @@ from .settings import (
     OUTPUTS_DIR,
     ROOT_DIR,
 )
+from .product_inventory import product_inventory_summary
 from .visual_renderer import _slug
+
+
+POST_VISUAL_REFERENCE_LIMIT = 10
 
 
 def generate_image_concepts(plan: dict, asset_paths: list[Path]) -> dict[str, str]:
@@ -69,6 +73,87 @@ def generate_image_concepts(plan: dict, asset_paths: list[Path]) -> dict[str, st
     }
 
 
+def generate_post_visual_image(
+    item: dict,
+    concept_type: str,
+    brief: str,
+    direction: str,
+    reference_paths: list[Path],
+) -> dict[str, str]:
+    stamp = datetime.now().strftime("%Y-%m-%d")
+    post_id = _slug(item.get("id", "post"))
+    output_dir = OUTPUTS_DIR / "image_concepts" / f"{stamp}-{post_id}-{_slug(concept_type)}"
+    output_dir.mkdir(parents=True, exist_ok=True)
+
+    prompt = _build_post_prompt(item, concept_type, brief, direction)
+    prepared_references = _prepare_references(reference_paths[:POST_VISUAL_REFERENCE_LIMIT])
+    image_data = _generate_image(prompt, prepared_references)
+    image_path = output_dir / f"{_slug(concept_type)}-render.png"
+    image_path.write_bytes(base64.b64decode(image_data))
+
+    metadata = {
+        "post_id": item.get("id"),
+        "concept_type": concept_type,
+        "direction": direction,
+        "output_path": str(image_path),
+        "final_prompt": prompt,
+        "reference_paths": [str(path) for path in prepared_references],
+        "created_at": datetime.now().isoformat(timespec="seconds"),
+    }
+    (output_dir / "render-metadata.json").write_text(json.dumps(metadata, indent=2), encoding="utf-8")
+    return {"image_path": str(image_path), "metadata_path": str(output_dir / "render-metadata.json"), "prompt": prompt, "concept_type": concept_type}
+
+
+def _build_post_prompt(item: dict, concept_type: str, brief: str, direction: str) -> str:
+    type_instruction = {
+        "model_shoot": (
+            "Create a realistic editorial photoshoot image with an AI-generated model wearing the exact referenced garment. "
+            "The garment graphic, silhouette, color, and product identity must follow the provided product/campaign references."
+        ),
+        "process_detail": (
+            "Create a premium process/detail image: artist brush, pencil, canvas texture, scanner bed, design file, studio table, "
+            "or digital reconstruction detail tied to the referenced source files."
+        ),
+        "feed_breaker": (
+            "Create a premium feed-breaker or text-backdrop image: folded textile, garment texture, canvas surface, quiet product detail, "
+            "negative space, restrained color field, or tactile material surface tied to the referenced brand world."
+        ),
+        "curator_process_reference": (
+            "Create a premium curator reference image. If the brief asks for product/body/campaign, make a realistic editorial product reference. "
+            "If it asks for process, make a brush, pencil, canvas, scanner, studio, or digital-file detail. If it asks for a feed breaker, make a tactile surface or color/texture composition."
+        ),
+    }.get(concept_type, "Create one premium visual concept image tied to the referenced post assets.")
+
+    return "\n".join(
+        [
+            "Create one premium editorial image for Brand Name Design.",
+            type_instruction,
+            "Use the provided reference images as the source of truth. Do not invent new garments, graphics, products, colorways, logos, or readable text.",
+            "When multiple reference images show the same product, synthesize the garment identity across all of them: front, back, close detail, fabric, color, fit, and graphic placement.",
+            "If the selected product has a minimal front logo, chest mark, hem mark, tag, grommet, or other small front-side branding/detail in the references, preserve it visibly on front-facing model shots.",
+            "Small garment branding may be approximate and non-readable, but it must be present in the correct location when the product reference shows it.",
+            "If a model appears, make the person realistic, fashion-editorial, and natural. Avoid uncanny faces, extra limbs, distorted hands, fake typography, or generic fashion-ad styling.",
+            "If this is a process/detail concept, make it tactile and art-directed: pencil marks, brush strokes, canvas grain, screenshots, scanner light, table shadows, paper edges, or studio evidence.",
+            "Aesthetic: minimal, premium, art-first streetwear; archival reconstruction; near-black, bone/off-white, muted grey-brown, deep oxidized red accents; concrete, metal, glass, studio, gallery, or city textures.",
+            "No readable text. No fake brand names. No neon cyberpunk. No glossy gradients. No sticker collage.",
+            "",
+            "Approved product constraint:",
+            product_inventory_summary(),
+            "",
+            f"Post id: {item.get('id', '')}",
+            f"Format: {item.get('format', '')}",
+            f"Pillar: {item.get('pillar', '')}",
+            f"Hook: {item.get('hook', '')}",
+            f"Caption: {item.get('caption', '')}",
+            f"Source files: {', '.join(item.get('selected_assets') or item.get('source_files') or [])}",
+            f"Reviewer direction: {direction or 'Make a visually appealing main image that helps tie this post into the curated feed.'}",
+            "",
+            "Brief to follow:",
+            brief[:6000],
+        ]
+    )
+
+
 def _build_prompt(concept: dict, plan: dict) -> str:
     return "\n".join(
         [
@@ -84,7 +169,12 @@ def _build_prompt(concept: dict, plan: dict) -> str:
             "- premium streetwear energy: oversized silhouette, graphic garment emphasis, city/studio/gallery setting, concrete/glass/metal textures, attitude, candid motion, product-as-identity",
             "- inspired by big-brand campaign logic without copying any brand: emotional momentum, sport/style crossover, clean premium product desirability",
             "- garment/object must feel desirable before the concept is explained",
+            "- models and garments must be based only on approved product inventory or named raw store/campaign assets",
+            "- do not invent new apparel, graphics, silhouettes, colorways, logos, or products",
             "- no generic fashion ad, no generic hypebeast poster, no fake graffiti, no museum-only documentation, no neon cyberpunk, no glossy gradients, no bokeh, no fake typography",
+            "",
+            "Approved product constraint:",
+            product_inventory_summary(),
             "",
             f"Carousel title: {plan.get('title', '')}",
             f"Concept name: {concept.get('name', '')}",
@@ -133,6 +223,13 @@ def _prepare_references(paths: list[Path]) -> list[Path]:
 
     for index, path in enumerate(paths, start=1):
         try:
+            if path.suffix.lower() in {".heic", ".heif"}:
+                try:
+                    import pillow_heif  # type: ignore
+
+                    pillow_heif.register_heif_opener()
+                except ImportError:
+                    continue
             with Image.open(path) as image:
                 converted = image.convert("RGB")
                 converted.thumbnail((1200, 1200), Image.Resampling.LANCZOS)

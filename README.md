@@ -3,12 +3,14 @@
 OpenAI-first marketing agent system for Brand Name Design.
 
 The MVP runs a daily review workflow:
+- inventories raw Google Drive assets when enabled
 - generates content ideas
 - drafts captions, short video scripts, and carousel concepts
 - renders a draft Instagram carousel as PNG slides
 - generates three OpenAI image concept directions for visual exploration
 - audits the website for SEO opportunities
 - summarizes analytics constraints or learnings
+- produces Phase 2 ad readiness notes without recommending spend unless evidence exists
 - saves review-ready markdown outputs
 
 It does not auto-publish content.
@@ -70,8 +72,10 @@ outputs/content_drafts
 outputs/seo
 outputs/analytics
 outputs/daily_reports
+outputs/ad_concepts
 outputs/visual_content
 outputs/image_concepts
+outputs/asset_inventory
 ```
 
 ## Dashboard + Learning Loop
@@ -94,7 +98,13 @@ Every future agent run reads recent feedback and uses it as learning context.
 
 Google Drive is optional for the MVP.
 
-To enable it with user OAuth, which works when service account keys are blocked:
+Use it when you want the agents to read a Drive folder of raw assets before creating content ideas. The workflow saves a review-ready asset inventory to:
+
+```text
+outputs/asset_inventory
+```
+
+To enable it with user OAuth, which works well for a local starter repo:
 1. Create a Google Cloud project.
 2. Enable the Google Drive API.
 3. Go to **APIs & Services -> OAuth consent screen** and configure the app for your Google account.
@@ -103,7 +113,7 @@ To enable it with user OAuth, which works when service account keys are blocked:
 6. Choose **Desktop app**.
 7. Download the JSON file as `oauth_client.json`.
 8. Put it in the repo root.
-9. Copy your raw content folder ID from the Google Drive URL.
+9. Copy your raw content folder ID from the Google Drive URL. In a URL like `https://drive.google.com/drive/folders/abc123`, use `abc123`.
 10. Set:
 
 ```text
@@ -118,7 +128,9 @@ The first run opens a Google sign-in browser window and creates `token.json`. Fu
 
 If you are using a Google project that still allows service account keys, set `GOOGLE_AUTH_MODE=service_account` and use `GOOGLE_APPLICATION_CREDENTIALS=credentials.json`.
 
-The Drive pass creates a recursive asset inventory summary from the configured folder. When `VISUAL_OUTPUT_ENABLED=true`, image files from the Drive folder are downloaded into `.cache/drive_assets` and used as source material for rendered PNG carousel slides.
+For GitHub Actions with OAuth, create `token.json` locally first, then store its contents as a GitHub secret and write it during the workflow, or use a service account if your Google Workspace policy allows it. The Drive folder must be shared with whichever Google identity is authenticating.
+
+The Drive pass creates a recursive asset inventory summary from the configured folder before content ideas are generated. The strategist is instructed to reference available assets and request missing assets instead of inventing them. When `VISUAL_OUTPUT_ENABLED=true`, image files from the Drive folder are downloaded into `.cache/drive_assets` and used as source material for rendered PNG carousel slides.
 
 ## GitHub Actions
 
@@ -127,8 +139,12 @@ The workflow in `.github/workflows/daily-growth.yml` runs every day at 8:00 AM V
 Add these repo settings:
 - Secret: `OPENAI_API_KEY`
 - Optional secret: `GOOGLE_DRIVE_ROOT_FOLDER_ID`
+- Optional secret: `GOOGLE_OAUTH_CLIENT_JSON` if you want CI to authenticate with OAuth
+- Optional secret: `GOOGLE_OAUTH_TOKEN_JSON` if you want CI to authenticate with OAuth
+- Optional secret: `GOOGLE_APPLICATION_CREDENTIALS_JSON` if you want CI to authenticate with a service account
 - Optional variable: `OPENAI_MODEL`
 - Optional variable: `GOOGLE_DRIVE_ENABLED`
+- Optional variable: `GOOGLE_AUTH_MODE`
 - Optional variable: `VISUAL_OUTPUT_ENABLED`
 - Optional variable: `VISUAL_ASSET_LIMIT`
 
@@ -143,6 +159,7 @@ outputs/seo/
 outputs/analytics/
 outputs/daily_reports/
 outputs/ad_concepts/
+outputs/asset_inventory/
 outputs/visual_content/
 src/
 scripts/
