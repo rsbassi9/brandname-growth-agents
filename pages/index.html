@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Brand Name Growth Dashboard</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <aside class="sidebar">
+      <div>
+        <p class="eyebrow">Public Review</p>
+        <h1>Brand Name</h1>
+        <p class="lede">Read-only archive of generated growth outputs, visual directions, and content drafts.</p>
+      </div>
+      <nav id="dayNav" class="day-nav" aria-label="Output days"></nav>
+    </aside>
+
+    <main>
+      <header class="topbar">
+        <div>
+          <p id="selectedDayLabel" class="eyebrow">Latest Day</p>
+          <h2>Review generated work from anywhere.</h2>
+        </div>
+        <div class="metrics">
+          <div><strong id="reportCount">0</strong><span>reports</span></div>
+          <div><strong id="imageCount">0</strong><span>images</span></div>
+          <div><strong id="categoryCount">0</strong><span>categories</span></div>
+        </div>
+      </header>
+
+      <section id="gallery" class="gallery" aria-label="Generated visuals"></section>
+      <section id="reports" class="reports" aria-label="Generated reports"></section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
