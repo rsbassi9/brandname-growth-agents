@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import asyncio
+import base64
+import hmac
 from dataclasses import asdict
 from datetime import date, datetime, timedelta
 import json
@@ -11,7 +13,7 @@ import shutil
 import tempfile
 from collections import Counter
 
-from fastapi import FastAPI, File, Form, HTTPException, UploadFile
+from fastapi import FastAPI, File, Form, HTTPException, Request, UploadFile
 from fastapi.responses import FileResponse
 from fastapi.staticfiles import StaticFiles
 from PIL import Image
@@ -22,12 +24,21 @@ from .learning import FeedbackEntry, append_feedback, load_feedback
 from .orchestrator import run_daily_workflow
 from .performance import load_performance_records, performance_summary, save_performance_record
 from .product_inventory import IMAGE_SUFFIXES, load_product_inventory, save_product_image
+from .product_truth import build_product_truth, load_product_truth, product_truth_for_keys, product_truth_requirements, save_product_truth
 from .product_rotation import (
     prioritize_candidates_for_rotation,
     product_keys_for_names,
     product_rotation_note,
 )
-from .settings import OUTPUTS_DIR, ROOT_DIR
+from .settings import (
+    DASHBOARD_AUTH_ENABLED,
+    DASHBOARD_PASSWORD,
+    DASHBOARD_USERNAME,
+    MEMORY_DIR,
+    OUTPUTS_DIR,
+    PRODUCT_INVENTORY_DIR,
+    ROOT_DIR,
+)
 from .agents import content_candidate_agent, creative_composer_agent, feed_curator_agent, run_agent
 from .asset_design_roles import asset_design_context
 from .content_state import LIFECYCLE_STATES, get_content_state, load_content_state, update_content_state
@@ -36,6 +47,7 @@ from .creative_brief import load_creative_brief, save_creative_brief
 from .file_store import save_markdown
 from .image_concepts import generate_post_visual_image
 from .shopify_service import ShopifyService
+from .visual_compositor import composite_product_reference
 from .visual_fingerprint import grid_visual_warnings, visual_fingerprint_for_names
 from .visual_metadata import metadata_for_output, warm_output_visual_metadata
 from .visual_renderer import font_status, log_text_slide_edit, normalize_text_slides, render_text_carousel
@@ -43,18 +55,49 @@ from .web import product_catalog_summary
 
 
 STATIC_DIR = ROOT_DIR / "dashboard" / "static"
-CALENDAR_PATH = ROOT_DIR / "memory" / "content_calendar.json"
-FEED_CURATION_PATH = ROOT_DIR / "memory" / "feed_curation.json"
-REMOVED_CALENDAR_PATH = ROOT_DIR / "memory" / "removed_calendar_items.json"
-CALENDAR_CHANGES_PATH = ROOT_DIR / "memory" / "calendar_changes.jsonl"
-HIGHLIGHTS_PATH = ROOT_DIR / "memory" / "highlights.json"
+CALENDAR_PATH = MEMORY_DIR / "content_calendar.json"
+FEED_CURATION_PATH = MEMORY_DIR / "feed_curation.json"
+REMOVED_CALENDAR_PATH = MEMORY_DIR / "removed_calendar_items.json"
+CALENDAR_CHANGES_PATH = MEMORY_DIR / "calendar_changes.jsonl"
+HIGHLIGHTS_PATH = MEMORY_DIR / "highlights.json"
 CONTENT_PLAN_DIR = OUTPUTS_DIR / "content_plan"
-SHOPIFY_SEO_LOG_PATH = ROOT_DIR / "memory" / "shopify_seo_changes.jsonl"
-AUTOMATION_PATH = ROOT_DIR / "memory" / "automation_schedule.json"
-AUTOMATION_LOG_PATH = ROOT_DIR / "memory" / "automation_log.jsonl"
+SHOPIFY_SEO_LOG_PATH = MEMORY_DIR / "shopify_seo_changes.jsonl"
+AUTOMATION_PATH = MEMORY_DIR / "automation_schedule.json"
+AUTOMATION_LOG_PATH = MEMORY_DIR / "automation_log.jsonl"
+VISUAL_QA_LOG_PATH = MEMORY_DIR / "visual_qa_log.jsonl"
 
 app = FastAPI(title="Brand Name Growth Agents")
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+
+
+@app.middleware("http")
+async def require_dashboard_auth(request: Request, call_next):
+    if _auth_exempt(request.url.path) or _valid_basic_auth(request.headers.get("authorization", "")):
+        return await call_next(request)
+    from fastapi.responses import Response
+
+    return Response(
+        "Authentication required",
+        status_code=401,
+        headers={"WWW-Authenticate": 'Basic realm="Brand Name Dashboard"'},
+    )
+
+
+def _auth_exempt(path: str) -> bool:
+    return path == "/healthz" or not DASHBOARD_AUTH_ENABLED
+
+
+def _valid_basic_auth(header: str) -> bool:
+    if not DASHBOARD_PASSWORD:
+        return not DASHBOARD_AUTH_ENABLED
+    if not header.lower().startswith("basic "):
+        return False
+    try:
+        decoded = base64.b64decode(header.split(" ", 1)[1]).decode("utf-8")
+    except (ValueError, UnicodeDecodeError):
+        return False
+    username, separator, password = decoded.partition(":")
+    return bool(separator) and hmac.compare_digest(username, DASHBOARD_USERNAME) and hmac.compare_digest(password, DASHBOARD_PASSWORD)
 
 
 class FeedbackRequest(BaseModel):
@@ -179,6 +222,17 @@ class VisualConceptRequest(BaseModel):
     concept_type: str = "model_shoot"
 
 
+class VisualQARequest(BaseModel):
+    image_path: str = ""
+    concept_type: str = "model_shoot"
+
+
+class IterateQAFixesRequest(BaseModel):
+    image_path: str = ""
+    concept_type: str = "model_shoot"
+    direction: str = ""
+
+
 class CreativeCompositionRequest(BaseModel):
     direction: str = ""
 
@@ -203,6 +257,11 @@ class VisualNeedReferenceRequest(BaseModel):
 @app.get("/")
 def index() -> FileResponse:
     return FileResponse(STATIC_DIR / "index.html")
+
+
+@app.get("/healthz")
+def healthz() -> dict:
+    return {"ok": True}
 
 
 @app.get("/api/outputs")
@@ -265,6 +324,19 @@ def product_context() -> dict:
     return {"summary": product_catalog_summary(BRAND_WEBSITE_URL, assets)}
 
 
+@app.get("/api/product-truth")
+def product_truth() -> dict:
+    truth = load_product_truth()
+    if not truth.get("profiles"):
+        truth = _refresh_product_truth()
+    return truth
+
+
+@app.post("/api/product-truth/refresh")
+def refresh_product_truth() -> dict:
+    return _refresh_product_truth()
+
+
 @app.get("/api/raw-assets")
 def raw_assets(kind: str = "image") -> dict:
     assets = GoogleDriveService().list_raw_assets()
@@ -272,6 +344,8 @@ def raw_assets(kind: str = "image") -> dict:
         assets = [item for item in assets if item.get("mimeType") in {"image/jpeg", "image/png", "image/webp"}]
     elif kind == "video":
         assets = [item for item in assets if item.get("mimeType", "").startswith("video/")]
+    elif kind == "all":
+        assets = [*assets, *_builder_generated_assets()]
     return {"assets": assets}
 
 
@@ -894,6 +968,7 @@ def update_calendar_slot(item_id: str, slot_index: int, payload: CalendarSlotUpd
             slot["name"] = payload.asset_name.strip()
         if payload.image_path is not None:
             slot["image_path"] = payload.image_path.strip()
+            slot["asset_name"] = ""
             slot["source"] = "generated_visual"
             slot["name"] = Path(payload.image_path).name
         if payload.role is not None:
@@ -952,29 +1027,40 @@ async def create_visual_concept(item_id: str, payload: VisualConceptRequest) -> 
             "Create one AI image concept brief tied to this social post.",
             "The goal is visual direction for an Instagram/TikTok feed and future real photoshoots.",
             "Do not invent new products. If a garment appears, it must be based on the listed product/source files.",
+            "For product/model concepts, preserve exact product placement: front logo/mark on front shots, back graphic on back shots, trims, grommets, hems, fabric wash, and silhouette from the product folder.",
             "Prefer realistic model/editorial concepts for product shots; prefer brush, pencil, canvas, digital-file, scanner, or studio-detail concepts for process posts.",
             "Return concise markdown with: Concept Title, Use Case, Image Prompt, Negative Prompt, Styling Notes, Feed Role, Source Assets To Respect.",
             f"Concept type: {payload.concept_type}",
             f"Reviewer direction: {payload.direction or 'Create a visually appealing concept that ties this post into the brand feed.'}",
             "Calendar post:",
             json.dumps(item, indent=2),
+            "Product placement requirements:",
+            _product_reference_requirements(item),
             "Candidate detail:",
             json.dumps(candidate or {}, indent=2),
             "Recent human feedback:",
             json.dumps([entry for entry in load_feedback(limit=40) if item_id in entry.get("output_path", "") or entry.get("category") in {"visual_content", "content_candidate"}], indent=2),
         ]
     )
-    result = await run_agent(content_candidate_agent, prompt)
+    brief_error = ""
+    try:
+        result = await run_agent(content_candidate_agent, prompt)
+    except Exception as exc:
+        brief_error = str(exc)
+        result = _fallback_visual_brief(item, payload.concept_type, payload.direction, brief_error)
     path = save_markdown("image_concepts", f"{item_id}-{payload.concept_type}-visual-brief", result)
     image_result: dict[str, str] = {}
     image_error = ""
+    reference_paths: list[Path] = []
     try:
+        item["product_reference_requirements"] = _product_reference_requirements(item)
+        reference_paths = _reference_paths_for_item(item)
         image_result = generate_post_visual_image(
             item=item,
             concept_type=payload.concept_type,
             brief=result,
             direction=payload.direction,
-            reference_paths=_reference_paths_for_item(item),
+            reference_paths=reference_paths,
         )
     except Exception as exc:
         image_error = str(exc)
@@ -985,9 +1071,19 @@ async def create_visual_concept(item_id: str, payload: VisualConceptRequest) -> 
         "metadata_path": image_result.get("metadata_path", ""),
         "concept_type": payload.concept_type,
         "direction": payload.direction,
+        "brief_error": brief_error,
         "image_error": image_error,
         "created_at": datetime.now().isoformat(timespec="seconds"),
     }
+    if concept["image_path"]:
+        composite = _maybe_composite_product_visual(item, concept["image_path"], payload.concept_type, reference_paths)
+        if composite:
+            concept["product_composite"] = composite
+        concept["visual_qa"] = _visual_qa_result(item, concept["image_path"], payload.concept_type)
+        if composite:
+            concept["visual_qa"]["product_composite"] = composite
+        item.setdefault("visual_qa", []).append(concept["visual_qa"])
+        _append_visual_qa_log(item_id, concept["image_path"], concept["visual_qa"])
     item.setdefault("ai_visual_concepts", []).append(concept)
     item["updated_at"] = datetime.now().isoformat(timespec="seconds")
     _save_calendar(items)
@@ -1101,19 +1197,28 @@ async def iterate_visual_concept(
             "Create a revised AI image concept brief for the selected post.",
             "Honor the prior image, but correct the requested issue. Keep product identity anchored to reference files.",
             "If the user references product branding, front logos, graphics, grommets, tags, hems, or other garment details, make those details visible in the revised image.",
+            "Preserve exact product placement from references: do not omit small front logos/marks, do not move back graphics to the front, and do not invent new readable branding.",
             f"Concept type: {concept_type}",
             f"Reviewer revision request: {direction or 'Create a stronger iteration while preserving the product identity.'}",
             "Calendar post:",
             json.dumps(item, indent=2),
+            "Product placement requirements:",
+            _product_reference_requirements(item),
             "Prior concept metadata:",
             json.dumps(prior_concepts[-3:], indent=2),
         ]
     )
-    result = await run_agent(content_candidate_agent, prompt)
+    brief_error = ""
+    try:
+        result = await run_agent(content_candidate_agent, prompt)
+    except Exception as exc:
+        brief_error = str(exc)
+        result = _fallback_visual_brief(item, f"{concept_type}_iteration", direction, brief_error, iteration=True)
     path = save_markdown("image_concepts", f"{item_id}-{concept_type}-iteration-brief", result)
     image_result: dict[str, str] = {}
     image_error = ""
     try:
+        item["product_reference_requirements"] = _product_reference_requirements(item)
         image_result = generate_post_visual_image(
             item=item,
             concept_type=f"{concept_type}_iteration",
@@ -1132,14 +1237,58 @@ async def iterate_visual_concept(
         "direction": direction,
         "base_image_path": base_image_path,
         "uploaded_reference_paths": [str(path) for path in upload_paths],
+        "brief_error": brief_error,
         "image_error": image_error,
         "created_at": datetime.now().isoformat(timespec="seconds"),
     }
+    if concept["image_path"]:
+        composite = _maybe_composite_product_visual(item, concept["image_path"], concept["concept_type"], reference_paths)
+        if composite:
+            concept["product_composite"] = composite
+        concept["visual_qa"] = _visual_qa_result(item, concept["image_path"], concept["concept_type"])
+        if composite:
+            concept["visual_qa"]["product_composite"] = composite
+        item.setdefault("visual_qa", []).append(concept["visual_qa"])
+        _append_visual_qa_log(item_id, concept["image_path"], concept["visual_qa"])
     item.setdefault("ai_visual_concepts", []).append(concept)
     item["updated_at"] = datetime.now().isoformat(timespec="seconds")
     _save_calendar(items)
     _save_content_plan(items)
     return {"item": item, "items": items, "concept": concept, "content": result, "image": image_result, "image_error": image_error}
+
+
+@app.post("/api/calendar/{item_id}/visual-concept/qa")
+async def qa_visual_concept(item_id: str, payload: VisualQARequest) -> dict:
+    items = _load_calendar()
+    item = next((entry for entry in items if entry.get("id") == item_id), None)
+    if not item:
+        raise HTTPException(status_code=404, detail="Calendar item not found")
+    image_path = payload.image_path.strip()
+    if image_path:
+        resolved = _safe_output_path(image_path)
+        if not resolved.exists():
+            raise HTTPException(status_code=404, detail="Generated image not found")
+    qa = _visual_qa_result(item, image_path, payload.concept_type)
+    _attach_visual_qa(item, image_path, qa)
+    item["updated_at"] = datetime.now().isoformat(timespec="seconds")
+    _append_visual_qa_log(item_id, image_path, qa)
+    items = _save_calendar(items, change_source="visual_qa")
+    _save_content_plan(items)
+    updated = next((entry for entry in items if entry.get("id") == item_id), item)
+    return {"item": updated, "items": items, "qa": qa, "strategy": _calendar_strategy(items)}
+
+
+@app.post("/api/calendar/{item_id}/visual-concept/iterate-qa")
+async def iterate_visual_concept_with_qa(item_id: str, payload: IterateQAFixesRequest) -> dict:
+    items = _load_calendar()
+    item = next((entry for entry in items if entry.get("id") == item_id), None)
+    if not item:
+        raise HTTPException(status_code=404, detail="Calendar item not found")
+    latest_qa = _latest_visual_qa(item, payload.image_path)
+    qa_direction = _qa_iteration_direction(latest_qa)
+    direction = "\n".join(part for part in [payload.direction.strip(), qa_direction] if part).strip()
+    concept = VisualConceptRequest(direction=direction, concept_type=f"{payload.concept_type or 'model_shoot'}_iteration")
+    return await create_visual_concept(item_id, concept)
 
 
 @app.post("/api/feed/reorder")
@@ -1175,6 +1324,8 @@ async def curate_feed(payload: FeedCurateRequest | None = None) -> dict:
             "Duplicate rule: never place exact duplicate asset sequences. If posts reuse the same images, only keep them if their order, role, and narrative purpose differ, and treat that as a last resort.",
             "Product rotation rule: avoid placing the same product family repeatedly across the grid. Give unused product families a turn before recently featured products unless the visual/story role changes clearly.",
             "Visual rhythm rule: use each post's visual_fingerprint to avoid clustering dark/black, text-heavy, dense digital/source, or visually similar posts together. If a row has multiple black/dark posts, split them unless the row concept deliberately needs that weight.",
+            "Feed role rhythm rule: never place the same feed_role directly back-to-back. Rotate between text_explainer, product, body_campaign, process_studio, creative_source, cta_drop, and community_proof. If repetition is unavoidable, warn clearly and name the missing replacement role.",
+            "Visual surface rhythm rule: never place the same visual_surface directly back-to-back. Rotate what the viewer sees: text_slide, product_mockup, model_shoot, campaign_photo, process_detail, source_art, cta_graphic, feed_breaker.",
             "Design-surface rule: folded cloth mockups, canvas/source textures, quiet product details, hems, tags, and negative-space product crops can be used as text backdrops, feed breakers, and carousel transition slides. Do not treat every product file as only a product hero.",
             "If focus is visual_warnings, prioritize fixing the listed visual rhythm warnings while preserving the strongest product/process/source story possible.",
             "Return strict JSON with the requested schema.",
@@ -1202,6 +1353,8 @@ async def curate_feed(payload: FeedCurateRequest | None = None) -> dict:
             item["feed_position"] = order_index[item["id"]]
             item["curator_reason"] = next((entry.get("reason", "") for entry in curation["grid"] if entry.get("post_id") == item["id"]), "")
             item["visual_role"] = next((entry.get("visual_role", "") for entry in curation["grid"] if entry.get("post_id") == item["id"]), "")
+            item["feed_role"] = next((entry.get("feed_role", "") for entry in curation["grid"] if entry.get("post_id") == item["id"]), "") or _infer_feed_role(item)
+            item["visual_surface"] = next((entry.get("visual_surface", "") for entry in curation["grid"] if entry.get("post_id") == item["id"]), "") or _infer_visual_surface(item)
     items = _save_calendar(items, sync_order="feed", change_source="feed_curator", before_by_id=before_by_id)
     _save_feed_curation(curation)
     plan_path = _save_content_plan(items)
@@ -1243,7 +1396,7 @@ def media(path: str) -> FileResponse:
 @app.get("/product-media")
 def product_media(path: str) -> FileResponse:
     resolved = Path(path).resolve()
-    root = (ROOT_DIR / "brand_context" / "product_inventory").resolve()
+    root = PRODUCT_INVENTORY_DIR.resolve()
     if resolved != root and root not in resolved.parents:
         raise HTTPException(status_code=400, detail="Path must be inside product inventory")
     if not resolved.exists() or not resolved.is_file():
@@ -1377,7 +1530,7 @@ def _collect_outputs() -> list[dict]:
 
     results = []
     for path in sorted(files, key=lambda item: item.stat().st_mtime, reverse=True):
-        rel = path.relative_to(ROOT_DIR)
+        rel = _display_relative_path(path)
         category = path.relative_to(OUTPUTS_DIR).parts[0]
         item = {
                 "path": str(path),
@@ -1392,6 +1545,17 @@ def _collect_outputs() -> list[dict]:
         _attach_state(item, "output", str(path))
         results.append(item)
     return results
+
+
+def _display_relative_path(path: Path) -> Path:
+    try:
+        return Path("outputs") / path.relative_to(OUTPUTS_DIR)
+    except ValueError:
+        pass
+    try:
+        return path.relative_to(ROOT_DIR)
+    except ValueError:
+        return path
 
 
 def _collect_days() -> list[dict]:
@@ -1476,6 +1640,65 @@ def _collect_review_items(day: str | None = None) -> list[dict]:
             )
 
     return review
+
+
+def _refresh_product_truth() -> dict:
+    raw_assets = _safe_raw_assets_for_rotation()
+    truth = build_product_truth(raw_assets)
+    truth["updated_at"] = datetime.now().isoformat(timespec="seconds")
+    save_product_truth(truth)
+    return truth
+
+
+def _builder_generated_assets() -> list[dict]:
+    ratings = _feedback_rating_map()
+    generated_roots = [OUTPUTS_DIR / "visual_content", OUTPUTS_DIR / "image_concepts", OUTPUTS_DIR / "_replaced_images"]
+    assets: list[dict] = []
+    seen: set[str] = set()
+    for root in generated_roots:
+        if not root.exists():
+            continue
+        for path in root.rglob("*"):
+            if not path.is_file() or path.suffix.lower() not in {".png", ".jpg", ".jpeg", ".webp"}:
+                continue
+            key = str(path)
+            if key in seen:
+                continue
+            seen.add(key)
+            parent_rating = ratings.get(str(path.parent), 0)
+            rating = ratings.get(key, parent_rating)
+            if rating == 1:
+                continue
+            metadata = metadata_for_output(path)
+            bucket = "AI Generated" if "image_concepts" in path.parts else "Generated Visuals"
+            assets.append(
+                {
+                    "id": f"generated:{key}",
+                    "name": path.name,
+                    "path": key,
+                    "mimeType": mimetypes.guess_type(path.name)[0] or "image/png",
+                    "creativeBucket": bucket,
+                    "folderPath": str(path.parent.relative_to(ROOT_DIR)) if path.is_relative_to(ROOT_DIR) else str(path.parent),
+                    "source": "generated_asset",
+                    "rating": rating,
+                    "sizeLabel": f"Rated {rating}/5" if rating else "Unranked",
+                    "designRoles": metadata.get("roles", []),
+                    "designSurfaceScore": metadata.get("design_surface_score", 0),
+                    "visualFamily": metadata.get("visual_family", ""),
+                    "palette": metadata.get("palette", ""),
+                    "brightness": metadata.get("brightness", ""),
+                    "updatedAt": path.stat().st_mtime,
+                }
+            )
+    return sorted(
+        assets,
+        key=lambda asset: (
+            -int(asset.get("rating") or 0),
+            -int(asset.get("designSurfaceScore") or 0),
+            -float(asset.get("updatedAt") or 0),
+            str(asset.get("name", "")).lower(),
+        ),
+    )
 
 
 def _report_checklist(category: str, shopify: ShopifyService | None = None) -> dict:
@@ -1922,6 +2145,11 @@ def _load_calendar() -> list[dict]:
         if item.get("text_slides"):
             item["text_slides"] = normalize_text_slides(item.get("text_slides", []))
         item["visual_slots"] = _visual_slots_for_item(item)
+        item["feed_role"] = _normalize_feed_role(item.get("feed_role", "") or _infer_feed_role(item))
+        profiles = product_truth_for_keys(item.get("product_keys") or [])
+        if profiles:
+            item["product_truth"] = profiles
+            item["product_reference_requirements"] = product_truth_requirements(item.get("product_keys") or [])
         item["quality_score"] = _score_calendar_item(item)
         item["needs_work"] = _needs_work_reasons(item)
         _attach_state(item, "post", item.get("id", ""), item.get("status", "Draft"))
@@ -1997,6 +2225,24 @@ def _asset_names_for_item(item: dict) -> list[str]:
         if text:
             cleaned.append(text)
     return cleaned
+
+
+def _product_rotation_asset_names_for_item(item: dict) -> list[str]:
+    product_led = str(item.get("pillar", "")).lower() in {"product", "drop cta", "wearability"} or str(item.get("visual_role", "")).lower() in {
+        "product",
+        "body",
+    }
+    if not product_led:
+        return [str(name).strip() for name in item.get("source_files") or [] if str(name).strip()]
+
+    primary_roles = {"hero", "product_clarity", "on_body", "cta"}
+    slot_names = [
+        slot.get("asset_name", "").strip()
+        for slot in item.get("visual_slots", [])
+        if slot.get("asset_name", "").strip() and str(slot.get("role", "")).lower() in primary_roles
+    ]
+    names = slot_names or item.get("selected_assets") or item.get("source_files") or []
+    return [str(name).strip() for name in names if str(name).strip()]
 
 
 def _composition_relevant_assets(item: dict, raw_assets: list[dict], limit: int = 28) -> list[dict]:
@@ -2186,11 +2432,32 @@ def _safe_raw_assets_for_rotation() -> list[dict]:
 def _ensure_product_keys(items: list[dict]) -> list[dict]:
     raw_assets = _safe_raw_assets_for_rotation()
     for item in items:
-        names = item.get("selected_assets") or item.get("source_files") or []
-        product_keys = sorted(product_keys_for_names(names, raw_assets))
+        names = _product_rotation_asset_names_for_item(item)
+        product_keys = sorted(item.get("product_keys_override") or product_keys_for_names(names, raw_assets))
         item["product_keys"] = product_keys
         item["product_rotation_note"] = product_rotation_note(product_keys, raw_assets)
-        item["visual_fingerprint"] = visual_fingerprint_for_names(names, raw_assets)
+        item["visual_fingerprint"] = visual_fingerprint_for_names(_asset_names_for_item(item), raw_assets)
+    return items
+
+
+def _ensure_feed_roles(items: list[dict]) -> list[dict]:
+    for item in items:
+        item["feed_role"] = _normalize_feed_role(item.get("feed_role", "") or _infer_feed_role(item))
+        item["visual_surface"] = _normalize_visual_surface(item.get("visual_surface", "") or _infer_visual_surface(item))
+    return items
+
+
+def _ensure_product_truth(items: list[dict]) -> list[dict]:
+    truth = load_product_truth()
+    if not truth.get("profiles"):
+        truth = _refresh_product_truth()
+    for item in items:
+        profiles = product_truth_for_keys(item.get("product_keys") or [], truth)
+        if profiles:
+            item["product_truth"] = profiles
+            item["product_reference_requirements"] = product_truth_requirements(item.get("product_keys") or [], truth)
+        elif item.get("product_truth"):
+            item.pop("product_truth", None)
     return items
 
 
@@ -2414,12 +2681,12 @@ def _reference_paths_for_item(item: dict) -> list[Path]:
 
     wanted_names = set(item.get("selected_assets") or item.get("source_files") or [])
     if not wanted_names:
-        return _visual_group_reference_paths(item, limit=4)
+        return _unique_paths(_cached_reference_paths(item) + _visual_group_reference_paths(item, limit=4))
 
     try:
         assets = GoogleDriveService().list_raw_assets()
     except Exception:
-        return _visual_group_reference_paths(item, limit=4)
+        return _unique_paths(_cached_reference_paths(item) + _visual_group_reference_paths(item, limit=4))[:12]
 
     selected_assets = [asset for asset in assets if asset.get("name") in wanted_names]
     product_folders = {
@@ -2455,7 +2722,87 @@ def _reference_paths_for_item(item: dict) -> list[Path]:
             paths.append(downloaded)
 
     paths.extend(_visual_group_reference_paths(item, limit=3))
+    paths.extend(_cached_reference_paths(item))
     return _unique_paths(paths)[:12]
+
+
+def _cached_reference_paths(item: dict) -> list[Path]:
+    cache_dir = ROOT_DIR / ".cache" / "post_visual_references" / _slugify(item.get("id", "post"))
+    if not cache_dir.exists():
+        return []
+    preferred_names = []
+    for profile in item.get("product_truth") or product_truth_for_keys(item.get("product_keys") or []):
+        refs = profile.get("preferred_generation_refs", {})
+        preferred_names.extend(refs.get("design_sources", []))
+        preferred_names.extend(refs.get("fit_sources", []))
+        preferred_names.extend(refs.get("material_sources", []))
+    files = [path for path in cache_dir.iterdir() if path.is_file() and path.suffix.lower() in {".png", ".jpg", ".jpeg", ".webp", ".heic", ".heif"}]
+    if not preferred_names:
+        return sorted(files, key=lambda path: path.name.lower())[:12]
+    product_tokens = [token for key in item.get("product_keys", []) for token in _normalize_product_key(key).split() if len(token) > 2]
+    if product_tokens:
+        matching_product_files = [path for path in files if all(token in _normalize_product_key(path.name) for token in product_tokens[:4])]
+        if matching_product_files:
+            files = matching_product_files
+
+    def rank(path: Path) -> tuple[int, str]:
+        match_index = next((index for index, name in enumerate(preferred_names) if _loose_filename_match(name, path.name)), 999)
+        return (match_index, path.name.lower())
+
+    return sorted(files, key=rank)[:12]
+
+
+def _loose_filename_match(expected: str, actual: str) -> bool:
+    def clean(value: str) -> str:
+        return "".join(ch for ch in value.lower() if ch.isalnum())
+
+    return clean(expected) in clean(actual)
+
+
+def _product_reference_requirements(item: dict) -> str:
+    names = set(item.get("selected_assets") or item.get("source_files") or [])
+    if not names:
+        return "No product file selected. Use available references conservatively and do not invent garment graphics."
+    try:
+        assets = GoogleDriveService().list_raw_assets()
+    except Exception:
+        return "Use the named source files as exact product references. Preserve visible graphics, logos, trims, and silhouette."
+
+    selected_assets = [asset for asset in assets if asset.get("name") in names]
+    product_folders = sorted(
+        {
+            asset.get("folderPath", "")
+            for asset in selected_assets
+            if asset.get("creativeBucket") == "Store Products" and asset.get("folderPath")
+        }
+    )
+    folder_assets = [
+        asset
+        for asset in assets
+        if asset.get("folderPath") in product_folders and asset.get("mimeType", "").startswith("image/")
+    ]
+    selected_names = ", ".join(asset.get("name", "") for asset in selected_assets if asset.get("name"))
+    folder_names = ", ".join(Path(folder).name for folder in product_folders) or ", ".join(item.get("product_keys") or [])
+    front_refs = [asset.get("name", "") for asset in folder_assets if any(term in asset.get("name", "").lower() for term in ("front", "mockups-9", "mockups-7", "mockups-1"))][:4]
+    back_refs = [asset.get("name", "") for asset in folder_assets if any(term in asset.get("name", "").lower() for term in ("back", "mockups-8", "mockups-6", "mockups-2"))][:4]
+    detail_refs = [
+        asset.get("name", "")
+        for asset in folder_assets
+        if any(term in asset.get("name", "").lower() for term in ("detail", "logo", "tag", "hem", "close", "mockups-3", "mockups-4", "mockups-5"))
+    ][:4]
+    lines = [
+        f"Product folders to respect: {folder_names or 'selected source files only'}.",
+        f"Selected post files: {selected_names or ', '.join(names)}.",
+        "For model_shoot images, preserve exact side-specific garment details: front logos/marks on front views, back graphics on back views, grommets, trims, hem/tags, fabric wash, silhouette, sleeve/neck shape, and color.",
+        "Do not move a back graphic to the front. Do not omit a visible front logo/mark when the reference shows one. Do not invent new readable typography.",
+    ]
+    if front_refs:
+        lines.append(f"Front/branding reference files: {', '.join(front_refs)}.")
+    if back_refs:
+        lines.append(f"Back/large graphic reference files: {', '.join(back_refs)}.")
+    if detail_refs:
+        lines.append(f"Detail/placement reference files: {', '.join(detail_refs)}.")
+    return "\n".join(lines)
 
 
 def _visual_group_reference_paths(item: dict, limit: int) -> list[Path]:
@@ -2516,6 +2863,168 @@ def _unique_paths(paths: list[Path]) -> list[Path]:
     return unique
 
 
+def _visual_qa_result(item: dict, image_path: str, concept_type: str) -> dict:
+    profiles = item.get("product_truth") or product_truth_for_keys(item.get("product_keys") or [])
+    product_led = bool(profiles) and ("model_shoot" in concept_type or item.get("feed_role") in {"product", "body_campaign", "cta_drop"})
+    checks = []
+    fixes = []
+    status = "pass"
+    if product_led:
+        checks.extend(
+            [
+                {
+                    "check": "product_truth_available",
+                    "status": "pass",
+                    "note": f"{len(profiles)} product truth profile(s) available.",
+                },
+                {
+                    "check": "front_branding_or_graphic",
+                    "status": "needs_review",
+                    "note": "Confirm visible front mark/logo/graphic placement against front references when the render is front-facing.",
+                },
+                {
+                    "check": "side_specific_graphics",
+                    "status": "needs_review",
+                    "note": "Confirm back graphics were not moved to the front and front marks were not omitted.",
+                },
+                {
+                    "check": "silhouette_and_wash",
+                    "status": "needs_review",
+                    "note": "Confirm silhouette, fabric wash, trims, hems, grommets/tags match product truth.",
+                },
+            ]
+        )
+        fixes.extend(
+            [
+                "Use the product truth profile as a strict constraint, not a mood board.",
+                "If front-facing, preserve the small front logo/mark/graphic exactly where the front references place it.",
+                "If back-facing, preserve the back artwork only on the back.",
+                "Preserve silhouette, fabric wash, trim, hems, grommets, tags, and neckline/arm opening.",
+            ]
+        )
+        status = "needs_review"
+    elif "process" in concept_type:
+        checks.append({"check": "process_relevance", "status": "needs_review", "note": "Confirm process detail supports the selected post and feed role."})
+        status = "needs_review"
+    else:
+        checks.append({"check": "brand_fit", "status": "needs_review", "note": "Confirm brand fit and no fake readable text."})
+        status = "needs_review"
+
+    requirements = item.get("product_reference_requirements") or product_truth_requirements(item.get("product_keys") or [])
+    return {
+        "status": status,
+        "concept_type": concept_type,
+        "image_path": image_path,
+        "checked_at": datetime.now().isoformat(timespec="seconds"),
+        "summary": _qa_summary(status, product_led),
+        "checks": checks,
+        "fixes": fixes,
+        "product_truth": profiles,
+        "product_reference_requirements": requirements,
+    }
+
+
+def _maybe_composite_product_visual(item: dict, image_path: str, concept_type: str, reference_paths: list[Path]) -> dict:
+    if not image_path or not item.get("product_keys"):
+        return {}
+    if "model_shoot" not in concept_type and item.get("feed_role") not in {"product", "body_campaign", "cta_drop"}:
+        return {}
+    profiles = item.get("product_truth") or product_truth_for_keys(item.get("product_keys") or [])
+    composite = composite_product_reference(image_path, reference_paths, concept_type, profiles)
+    if composite:
+        composite["status"] = "needs_review"
+        composite["reason"] = "Product-led generated visuals need a composited reference option when branding/graphics may be omitted by the image model."
+    return composite
+
+
+def _fallback_visual_brief(item: dict, concept_type: str, direction: str, error: str, iteration: bool = False) -> str:
+    requirements = item.get("product_reference_requirements") or product_truth_requirements(item.get("product_keys") or [])
+    profiles = item.get("product_truth") or product_truth_for_keys(item.get("product_keys") or [])
+    design_sources = []
+    fit_sources = []
+    material_sources = []
+    for profile in profiles:
+        refs = profile.get("preferred_generation_refs", {})
+        design_sources.extend(refs.get("design_sources", []))
+        fit_sources.extend(refs.get("fit_sources", []))
+        material_sources.extend(refs.get("material_sources", []))
+    return "\n".join(
+        [
+            "# Local Visual Brief Fallback",
+            "",
+            f"Concept type: {concept_type}",
+            f"Use case: {'Iteration from an existing generated image' if iteration else 'New model/product visual concept'}",
+            "",
+            "## Image Prompt",
+            (
+                direction
+                or "Create a premium realistic editorial product image that combines the actual designed product references with the fit/model references."
+            ),
+            "",
+            "Use design sources as final product truth. Use blank fit model sources only for pose, fit, silhouette, drape, crop, neckline, sleeve shape, and material behavior. Do not output the blank garment when a designed product source exists.",
+            "",
+            f"Design sources: {', '.join(dict.fromkeys(design_sources)) or 'selected product design references'}",
+            f"Fit/model sources: {', '.join(dict.fromkeys(fit_sources)) or 'blank model references only for fit'}",
+            f"Material/detail sources: {', '.join(dict.fromkeys(material_sources)) or 'detail references for texture/construction'}",
+            "",
+            "## Product Placement Requirements",
+            requirements,
+            "",
+            "## Negative Prompt",
+            "No invented products, no fake readable text, no blank garment as final output when design sources exist, no back graphic moved to front, no missing front/back graphic placement.",
+            "",
+            "## Brief Fallback Note",
+            f"The agent brief call failed, so this deterministic local brief was used instead. Error: {error[:500]}",
+        ]
+    )
+
+
+def _qa_summary(status: str, product_led: bool) -> str:
+    if status == "pass":
+        return "Visual QA passed."
+    if product_led:
+        return "Needs human/product accuracy review before approval. Product placement details cannot be trusted until checked against references."
+    return "Needs visual review before approval."
+
+
+def _attach_visual_qa(item: dict, image_path: str, qa: dict) -> None:
+    item.setdefault("visual_qa", []).append(qa)
+    for concept in item.get("ai_visual_concepts", []):
+        if image_path and concept.get("image_path") == image_path:
+            concept["visual_qa"] = qa
+            break
+
+
+def _latest_visual_qa(item: dict, image_path: str = "") -> dict:
+    qa_items = item.get("visual_qa") or []
+    if image_path:
+        matching = [entry for entry in qa_items if entry.get("image_path") == image_path]
+        if matching:
+            return matching[-1]
+    return qa_items[-1] if qa_items else {}
+
+
+def _qa_iteration_direction(qa: dict) -> str:
+    fixes = qa.get("fixes") or []
+    requirements = qa.get("product_reference_requirements") or ""
+    if not fixes and not requirements:
+        return "Improve product accuracy and preserve all product reference details."
+    return "\n".join(
+        [
+            "Iterate using Visual QA fixes:",
+            *[f"- {fix}" for fix in fixes],
+            "Product truth requirements:",
+            requirements,
+        ]
+    )
+
+
+def _append_visual_qa_log(item_id: str, image_path: str, qa: dict) -> None:
+    VISUAL_QA_LOG_PATH.parent.mkdir(parents=True, exist_ok=True)
+    with VISUAL_QA_LOG_PATH.open("a", encoding="utf-8") as handle:
+        handle.write(json.dumps({"item_id": item_id, "image_path": image_path, "qa": qa}) + "\n")
+
+
 def _save_calendar(
     items: list[dict],
     sync_order: str | None = None,
@@ -2523,7 +3032,9 @@ def _save_calendar(
     before_by_id: dict[str, dict] | None = None,
 ) -> list[dict]:
     CALENDAR_PATH.parent.mkdir(parents=True, exist_ok=True)
+    items = _ensure_feed_roles(items)
     items = _ensure_product_keys(items)
+    items = _ensure_product_truth(items)
     items = _ensure_quality_scores(items)
     for item in items:
         _attach_state(item, "post", item.get("id", ""), item.get("status", "Draft"))
@@ -2534,6 +3045,8 @@ def _save_calendar(
     if sync_order == "dates":
         items = _sync_feed_positions_from_dates(items)
     items = _apply_duplicate_notes(items)
+    items = _ensure_feed_roles(items)
+    items = _ensure_product_truth(items)
     items = _ensure_quality_scores(items)
     if change_source and before_by_id:
         for item in items:
@@ -2597,6 +3110,8 @@ def _post_plan_item(item: dict) -> dict:
         "selected_assets": item.get("selected_assets", []),
         "visual_slots": _visual_slots_for_item(item),
         "product_keys": item.get("product_keys", []),
+        "product_truth": item.get("product_truth", []),
+        "product_reference_requirements": item.get("product_reference_requirements", ""),
         "product_rotation_note": item.get("product_rotation_note", ""),
         "visual_fingerprint": item.get("visual_fingerprint", {}),
         "reviewer_notes": item.get("reviewer_notes", ""),
@@ -2604,6 +3119,8 @@ def _post_plan_item(item: dict) -> dict:
         "edit_history": item.get("edit_history", [])[-5:],
         "curator_reason": item.get("curator_reason", ""),
         "visual_role": item.get("visual_role", ""),
+        "feed_role": item.get("feed_role", "") or _infer_feed_role(item),
+        "visual_surface": item.get("visual_surface", "") or _infer_visual_surface(item),
         "asset_fingerprint": item.get("asset_fingerprint") or _ordered_asset_fingerprint(item),
         "asset_set_fingerprint": item.get("asset_set_fingerprint") or _asset_set_fingerprint(item),
         "duplicate_status": item.get("duplicate_status", "unique"),
@@ -2639,6 +3156,8 @@ def _normalize_curation(curation: dict, items: list[dict]) -> dict:
                 "position": len(grid),
                 "reason": entry.get("reason", ""),
                 "visual_role": entry.get("visual_role", ""),
+                "feed_role": _normalize_feed_role(entry.get("feed_role", "") or _infer_feed_role(next((item for item in items if item.get("id") == post_id), {}))),
+                "visual_surface": _normalize_visual_surface(entry.get("visual_surface", "") or _infer_visual_surface(next((item for item in items if item.get("id") == post_id), {}))),
                 "row_note": entry.get("row_note", ""),
             }
         )
@@ -2650,9 +3169,12 @@ def _normalize_curation(curation: dict, items: list[dict]) -> dict:
                     "position": len(grid),
                     "reason": "Kept in the remaining order after curator pass.",
                     "visual_role": _infer_visual_role(item),
+                    "feed_role": _infer_feed_role(item),
+                    "visual_surface": _infer_visual_surface(item),
                     "row_note": "Fills the grid rhythm.",
                 }
             )
+    grid = _repair_feed_sequence(grid)
     return {
         "feed_story": curation.get("feed_story") or "Balance source, product, process, and body proof across the grid.",
         "rules": curation.get("rules") or [],
@@ -2663,24 +3185,71 @@ def _normalize_curation(curation: dict, items: list[dict]) -> dict:
     }
 
 
+def _repair_feed_sequence(grid: list[dict]) -> list[dict]:
+    remaining = sorted(grid, key=lambda entry: entry.get("position", 999))
+    repaired = []
+    while remaining:
+        last_role = repaired[-1].get("feed_role") if repaired else ""
+        last_surface = repaired[-1].get("visual_surface") if repaired else ""
+        pick_index = next(
+            (
+                index
+                for index, entry in enumerate(remaining)
+                if entry.get("feed_role") != last_role and entry.get("visual_surface") != last_surface
+            ),
+            next((index for index, entry in enumerate(remaining) if entry.get("feed_role") != last_role), 0),
+        )
+        entry = remaining.pop(pick_index)
+        entry["position"] = len(repaired)
+        if entry.get("feed_role") == last_role:
+            entry["row_note"] = (entry.get("row_note", "") + " Feed role repeat could not be avoided with available posts.").strip()
+        if entry.get("visual_surface") == last_surface:
+            entry["row_note"] = (entry.get("row_note", "") + " Visual surface repeat could not be avoided with available posts.").strip()
+        repaired.append(entry)
+    return repaired
+
+
+def _repair_feed_role_sequence(grid: list[dict]) -> list[dict]:
+    return _repair_feed_sequence(grid)
+
+
 def _fallback_feed_curation(items: list[dict]) -> dict:
-    role_order = {"body": 0, "product": 1, "source": 2, "process": 3, "meaning": 4, "motion": 5}
+    role_order = {
+        "body_campaign": 0,
+        "product": 1,
+        "creative_source": 2,
+        "process_studio": 3,
+        "text_explainer": 4,
+        "cta_drop": 5,
+        "community_proof": 6,
+    }
     decorated = []
     for item in items:
-        role = _infer_visual_role(item)
+        role = _infer_feed_role(item)
         decorated.append((role_order.get(role, 9), item))
     grid = []
     last_role = ""
     for _, item in sorted(decorated, key=lambda value: (value[0], value[1].get("feed_position", 999))):
-        role = _infer_visual_role(item)
+        role = _infer_feed_role(item)
+        visual_role = _infer_visual_role(item)
         reason = "Adds visual contrast and keeps the story moving."
         if role == last_role:
-            reason = "Placed here as a secondary option; consider swapping to avoid repetition."
-        grid.append({"post_id": item["id"], "position": len(grid), "reason": reason, "visual_role": role, "row_note": "Fallback curator order."})
+            reason = "Placed here as a secondary option; consider swapping to avoid repeated feed roles."
+        grid.append(
+            {
+                "post_id": item["id"],
+                "position": len(grid),
+                "reason": reason,
+                "visual_role": visual_role,
+                "feed_role": role,
+                "visual_surface": _infer_visual_surface(item),
+                "row_note": "Fallback curator order.",
+            }
+        )
         last_role = role
     return {
-        "feed_story": "Fallback curation: alternate product/body clarity with source/process context.",
-        "rules": ["Avoid repeated visual roles side by side.", "Keep product or body proof visible every row."],
+        "feed_story": "Fallback curation: alternate product/body clarity with source/process/text context.",
+        "rules": ["Avoid repeated feed roles side by side.", "Keep product or body proof visible every row."],
         "warnings": [],
         "grid": grid,
         "rationale": _feed_curation_rationale(grid, items),
@@ -2691,10 +3260,11 @@ def _feed_curation_rationale(grid: list[dict], items: list[dict]) -> dict:
     item_by_id = {item.get("id"): item for item in items}
     ordered = sorted(grid, key=lambda entry: entry.get("position", 999))
     roles = [entry.get("visual_role") or _infer_visual_role(item_by_id.get(entry.get("post_id"), {})) for entry in ordered]
+    feed_roles = [entry.get("feed_role") or _infer_feed_role(item_by_id.get(entry.get("post_id"), {})) for entry in ordered]
     row_notes = []
     for row_index in range(0, len(ordered), 3):
         row = ordered[row_index : row_index + 3]
-        row_roles = [entry.get("visual_role") or _infer_visual_role(item_by_id.get(entry.get("post_id"), {})) for entry in row]
+        row_roles = [entry.get("feed_role") or _infer_feed_role(item_by_id.get(entry.get("post_id"), {})) for entry in row]
         row_notes.append(
             {
                 "row": row_index // 3 + 1,
@@ -2705,7 +3275,7 @@ def _feed_curation_rationale(grid: list[dict], items: list[dict]) -> dict:
     column_notes = []
     for column in range(3):
         column_entries = ordered[column::3]
-        column_roles = [entry.get("visual_role") or _infer_visual_role(item_by_id.get(entry.get("post_id"), {})) for entry in column_entries]
+        column_roles = [entry.get("feed_role") or _infer_feed_role(item_by_id.get(entry.get("post_id"), {})) for entry in column_entries]
         column_notes.append(
             {
                 "column": column + 1,
@@ -2714,7 +3284,7 @@ def _feed_curation_rationale(grid: list[dict], items: list[dict]) -> dict:
             }
         )
     return {
-        "summary": _curation_summary(roles),
+        "summary": _curation_summary(feed_roles),
         "row_notes": row_notes,
         "column_notes": column_notes,
     }
@@ -2756,6 +3326,112 @@ def _infer_visual_role(item: dict) -> str:
     if "adrift" in text or "painting" in text or "design" in text:
         return "source"
     return "meaning"
+
+
+def _normalize_visual_surface(value: str) -> str:
+    normalized = str(value or "").strip().lower().replace("-", "_").replace(" ", "_")
+    aliases = {
+        "text": "text_slide",
+        "typography": "text_slide",
+        "mockup": "product_mockup",
+        "product": "product_mockup",
+        "model": "model_shoot",
+        "body": "model_shoot",
+        "campaign": "campaign_photo",
+        "photo": "campaign_photo",
+        "process": "process_detail",
+        "studio": "process_detail",
+        "source": "source_art",
+        "art": "source_art",
+        "cta": "cta_graphic",
+    }
+    normalized = aliases.get(normalized, normalized)
+    allowed = {"text_slide", "product_mockup", "model_shoot", "campaign_photo", "process_detail", "source_art", "cta_graphic", "feed_breaker"}
+    return normalized if normalized in allowed else "source_art"
+
+
+def _infer_visual_surface(item: dict) -> str:
+    if item.get("visual_surface"):
+        return _normalize_visual_surface(item.get("visual_surface"))
+    text = " ".join(
+        [
+            item.get("format", ""),
+            item.get("pillar", ""),
+            item.get("visual_role", ""),
+            item.get("feed_role", ""),
+            item.get("hook", ""),
+            " ".join(item.get("selected_assets") or item.get("source_files") or []),
+        ]
+    ).lower()
+    if item.get("text_dominant") or item.get("text_slides"):
+        return "text_slide"
+    if ".mov" in text or "reel" in text:
+        return "model_shoot"
+    if "jrr" in text or "photoshoot" in text or "campaign" in text:
+        return "campaign_photo"
+    if "mockup" in text or item.get("product_keys"):
+        return "product_mockup"
+    if any(term in text for term in ("heic", "process", "studio", "brush", "pencil", "scanner")):
+        return "process_detail"
+    if any(term in text for term in ("cta", "available", "shop", "live")):
+        return "cta_graphic"
+    if any(term in text for term in ("adrift", "painting", "canvas", "source", "design")):
+        return "source_art"
+    return "source_art"
+
+
+def _normalize_feed_role(value: str) -> str:
+    normalized = str(value or "").strip().lower().replace("-", "_").replace(" ", "_")
+    aliases = {
+        "text": "text_explainer",
+        "explainer": "text_explainer",
+        "meaning": "text_explainer",
+        "body": "body_campaign",
+        "campaign": "body_campaign",
+        "photoshoot": "body_campaign",
+        "process": "process_studio",
+        "studio": "process_studio",
+        "source": "creative_source",
+        "creative": "creative_source",
+        "motion": "body_campaign",
+        "cta": "cta_drop",
+        "drop": "cta_drop",
+        "proof": "community_proof",
+        "community": "community_proof",
+    }
+    normalized = aliases.get(normalized, normalized)
+    allowed = {"text_explainer", "product", "body_campaign", "process_studio", "creative_source", "cta_drop", "community_proof"}
+    return normalized if normalized in allowed else "creative_source"
+
+
+def _infer_feed_role(item: dict) -> str:
+    text = " ".join(
+        [
+            item.get("format", ""),
+            item.get("pillar", ""),
+            item.get("visual_role", ""),
+            item.get("launch_role", ""),
+            item.get("hook", ""),
+            " ".join(item.get("selected_assets") or item.get("source_files") or []),
+        ]
+    ).lower()
+    if any(term in text for term in ("q&a", "faq", "comment", "review", "testimonial", "community", "ugc")):
+        return "community_proof"
+    if any(term in text for term in ("cta", "available", "shop", "drop cta", "live")):
+        return "cta_drop"
+    if any(term in text for term in ("intro", "reset", "what is", "drop context")):
+        return "text_explainer"
+    if any(term in text for term in ("jrr", "body", "model", "campaign", "photoshoot", "wearability", "fit", "movement", "reel")):
+        return "body_campaign"
+    if any(term in text for term in ("process", "studio", "brush", "pencil", "scanner", "heic", "proof")):
+        return "process_studio"
+    if any(term in text for term in ("product", "mockup", "hoodie", "t-shirt", "tee", "tank", "shorts", "garment")) or item.get("product_keys"):
+        return "product"
+    if any(term in text for term in ("origin", "source", "painting", "canvas", "adrift", "design", "creative")):
+        return "creative_source"
+    if item.get("text_dominant") or any(term in text for term in ("intro", "reset", "explain", "what is", "meaning", "context")):
+        return "text_explainer"
+    return "text_explainer"
 
 
 def _generate_calendar_items() -> list[dict]:
@@ -2876,10 +3552,13 @@ def _launch_recovery_items() -> list[dict]:
     source_assets = _launch_asset_names(raw_assets, ["adrift", "painting", "design", "canvas"], limit=3)
     origin_assets = source_assets[:2] if len(source_assets) >= 2 else source_assets
     product_sets = _launch_product_sets(raw_assets, limit_per_product=4)
-    product_assets = [name for group in product_sets for name in group][:4] or _launch_asset_names(raw_assets, ["mockup", "hoodie", "shirt", "tee", "tank", "grommet"], limit=4)
-    product_clarity_assets = product_sets[0][:2] if len(product_sets) > 0 else product_assets[:2]
-    product_focus_assets = product_sets[1][:4] if len(product_sets) > 1 else product_assets[2:6] or product_assets
-    cta_product_assets = product_sets[2][:2] if len(product_sets) > 2 else (product_sets[0][2:4] if product_sets else product_assets[:2])
+    product_assets = [name for group in product_sets for name in group["names"]][:4] or _launch_asset_names(raw_assets, ["mockup", "hoodie", "shirt", "tee", "tank", "grommet"], limit=4)
+    product_clarity_group = product_sets[0] if len(product_sets) > 0 else {"key": "", "names": product_assets[:2]}
+    product_focus_group = product_sets[1] if len(product_sets) > 1 else {"key": "", "names": product_assets[2:6] or product_assets}
+    cta_product_group = product_sets[2] if len(product_sets) > 2 else (product_sets[0] if product_sets else {"key": "", "names": product_assets[:2]})
+    product_clarity_assets = product_clarity_group["names"][:2]
+    product_focus_assets = product_focus_group["names"][:4]
+    cta_product_assets = cta_product_group["names"][:2]
     body_assets = _launch_asset_names(raw_assets, ["jrr", "photoshoot", "campaign", "model"], limit=4)
     process_assets = _launch_asset_names(raw_assets, ["heic", "process", "studio", "img_20", "img_19"], limit=4)
     motion_assets = _launch_asset_names(raw_assets, [".mov", "mov", "video"], limit=3)
@@ -2894,6 +3573,7 @@ def _launch_recovery_items() -> list[dict]:
             "caption": "One painting. Seven designs. A physical source reconstructed into wearable fragments.",
             "source_files": source_assets or fallback_visual,
             "visual_role": "meaning",
+            "visual_surface": "text_slide",
             "launch_role": "Intro / reset",
             "curator_reason": "This is the context reset that makes the drop legible before more product posts.",
             "on_screen_text": ["WHAT IS [4DRFT]?", "ONE PAINTING", "SEVEN DESIGNS", "RECONSTRUCTED TO WEAR"],
@@ -2913,10 +3593,11 @@ def _launch_recovery_items() -> list[dict]:
             "caption": "The source stays in the studio. The fragments move into the world.",
             "source_files": origin_assets or fallback_visual[:2],
             "visual_role": "source",
+            "visual_surface": "source_art",
             "launch_role": "Origin story",
             "curator_reason": "Source-first post explains the art system and gives the feed a clear narrative anchor.",
             "on_screen_text": ["CANVAS", "CAPTURE", "RECONSTRUCT", "DROP"],
-            "text_dominant": True,
+            "text_dominant": False,
             "text_slides": [
                 {"eyebrow": "01", "headline": "CANVAS", "body": "A physical painting begins the system.", "palette": "light"},
                 {"eyebrow": "02", "headline": "CAPTURE", "body": "The source is documented, cropped, and studied.", "palette": "dark"},
@@ -2931,7 +3612,9 @@ def _launch_recovery_items() -> list[dict]:
             "hook": "The garment is the object.",
             "caption": "Product clarity after the origin story: the artwork becomes something wearable.",
             "source_files": product_clarity_assets or body_assets[:2] or fallback_visual[:2],
+            "product_keys_override": [product_clarity_group["key"]] if product_clarity_group.get("key") else [],
             "visual_role": "product",
+            "visual_surface": "product_mockup",
             "launch_role": "Product clarity",
             "curator_reason": "Commercially clear product post prevents the launch from feeling only conceptual.",
             "on_screen_text": ["GARMENT OBJECT"],
@@ -2944,6 +3627,7 @@ def _launch_recovery_items() -> list[dict]:
             "caption": "Fit, scale, and movement make the reconstruction real.",
             "source_files": body_assets or motion_assets or product_assets[:2],
             "visual_role": "body",
+            "visual_surface": "campaign_photo",
             "launch_role": "Model / body proof",
             "curator_reason": "Body proof repairs the gap between concept and desire.",
             "on_screen_text": ["FIT", "SCALE", "MOVEMENT"],
@@ -2956,10 +3640,11 @@ def _launch_recovery_items() -> list[dict]:
             "caption": "Process evidence: source, reconstruction, product detail.",
             "source_files": process_assets or source_assets or fallback_visual,
             "visual_role": "process",
+            "visual_surface": "process_detail",
             "launch_role": "Process proof",
             "curator_reason": "Process post gives credibility and breaks up product/body posts with evidence.",
             "on_screen_text": ["PROCESS", "PROOF", "SYSTEM"],
-            "text_dominant": True,
+            "text_dominant": False,
             "text_slides": [
                 {"eyebrow": "Process", "headline": "THE SYSTEM IS BUILT", "body": "Before product, there is evidence: source, crop, reconstruction, placement.", "palette": "dark"},
                 {"eyebrow": "Proof", "headline": "NOT STYLED. BUILT.", "body": "Process frames make the garment feel intentional instead of random.", "palette": "light"},
@@ -2973,7 +3658,9 @@ def _launch_recovery_items() -> list[dict]:
             "hook": "Start with one piece.",
             "caption": "A focused product carousel: front, back, detail, context.",
             "source_files": product_focus_assets or body_assets or fallback_visual,
+            "product_keys_override": [product_focus_group["key"]] if product_focus_group.get("key") else [],
             "visual_role": "product",
+            "visual_surface": "product_mockup",
             "launch_role": "Individual product focus",
             "curator_reason": "Begins the product-by-product ramp after the audience understands the line.",
             "on_screen_text": ["FRONT", "BACK", "DETAIL", "SOURCE"],
@@ -2985,7 +3672,9 @@ def _launch_recovery_items() -> list[dict]:
             "hook": "[4DRFT] is live.",
             "caption": "Fine art reconstructed. Shop the current drop.",
             "source_files": (body_assets[:1] + cta_product_assets) or fallback_visual,
+            "product_keys_override": [cta_product_group["key"]] if cta_product_group.get("key") else [],
             "visual_role": "meaning",
+            "visual_surface": "cta_graphic",
             "launch_role": "CTA / availability",
             "curator_reason": "Closes the recovery sequence by making the drop available and understandable.",
             "on_screen_text": ["[4DRFT]", "AVAILABLE NOW"],
@@ -3007,8 +3696,8 @@ def _launch_recovery_items() -> list[dict]:
                 "platform": "Instagram",
                 "source_files": names,
                 "selected_assets": selected_assets,
-                "product_keys": sorted(product_keys_for_names(names, raw_assets)),
-                "product_rotation_note": product_rotation_note(product_keys_for_names(names, raw_assets), raw_assets),
+                "product_keys": sorted(spec.get("product_keys_override") or product_keys_for_names(names, raw_assets)),
+                "product_rotation_note": product_rotation_note(spec.get("product_keys_override") or product_keys_for_names(names, raw_assets), raw_assets),
                 "visual_fingerprint": visual_fingerprint_for_names([image["name"] for image in visual_group.get("images", [])] if visual_group else names, raw_assets),
                 "visual_group": visual_group,
                 "feed_position": index,
@@ -3049,7 +3738,7 @@ def _launch_asset_names(raw_assets: list[dict], needles: list[str], limit: int =
     return found
 
 
-def _launch_product_sets(raw_assets: list[dict], limit_per_product: int = 4) -> list[list[str]]:
+def _launch_product_sets(raw_assets: list[dict], limit_per_product: int = 4) -> list[dict]:
     groups: dict[str, list[dict]] = {}
     for asset in raw_assets:
         if asset.get("creativeBucket") != "Store Products":
@@ -3059,20 +3748,24 @@ def _launch_product_sets(raw_assets: list[dict], limit_per_product: int = 4) -> 
             continue
         groups.setdefault(key, []).append(asset)
 
+    usage_counts = _launch_product_usage_counts()
     ordered_groups = sorted(
         groups.values(),
         key=lambda assets: (
+            usage_counts.get(_normalize_product_key(_product_group_key(assets[0])), 0),
+            _launch_product_boost(_product_group_key(assets[0])),
             -max(int(asset.get("designSurfaceScore", 0)) for asset in assets),
-            _product_group_key(assets[0]),
+            _normalize_product_key(_product_group_key(assets[0])),
         ),
     )
-    selected: list[list[str]] = []
+    selected: list[dict] = []
     for assets in ordered_groups:
+        key = _product_group_key(assets[0])
         assets = sorted(
             assets,
             key=lambda asset: (
-                -int(asset.get("designSurfaceScore", 0)),
                 _mockup_preference(asset.get("name", "")),
+                -int(asset.get("designSurfaceScore", 0)),
                 asset.get("name", "").lower(),
             ),
         )
@@ -3084,8 +3777,50 @@ def _launch_product_sets(raw_assets: list[dict], limit_per_product: int = 4) -> 
             if len(names) >= limit_per_product:
                 break
         if names:
-            selected.append(names)
+            selected.append({"key": key, "names": names})
     return selected
+
+
+def _launch_product_usage_counts() -> Counter:
+    counts: Counter = Counter()
+    for item in _load_calendar():
+        if item.get("recovery_sequence"):
+            continue
+        for key in item.get("product_keys") or []:
+            normalized = _normalize_product_key(key)
+            if normalized:
+                counts[normalized] += 1
+    for path in sorted(CONTENT_PLAN_DIR.glob("*-plan.json"), key=lambda item: item.stat().st_mtime, reverse=True)[:6]:
+        try:
+            plan = json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            continue
+        for post in plan.get("posts", []):
+            for key in post.get("product_keys") or []:
+                normalized = _normalize_product_key(key)
+                if normalized:
+                    counts[normalized] += 1
+    return counts
+
+
+def _launch_product_boost(key: str) -> int:
+    normalized = _normalize_product_key(key)
+    if "hoodie" in normalized:
+        return 0
+    if "short" in normalized:
+        return 1
+    if "waffle" in normalized:
+        return 2
+    if "bodycon" in normalized:
+        return 3
+    if "tank" in normalized:
+        return 4
+    return 5
+
+
+def _normalize_product_key(value: str) -> str:
+    cleaned = re.sub(r"\s+", " ", re.sub(r"[_-]+", " ", str(value).lower())).strip()
+    return re.sub(r"(?<=\D)\d+$", "", cleaned).strip()
 
 
 def _product_group_key(asset: dict) -> str:
@@ -3094,7 +3829,7 @@ def _product_group_key(asset: dict) -> str:
     if "Products" in parts:
         index = parts.index("Products")
         if len(parts) > index + 1:
-            return parts[index + 1].lower()
+            return _normalize_product_key(parts[index + 1])
     return ""
 
 
@@ -3105,7 +3840,10 @@ def _mockup_number(name: str) -> int:
 
 def _mockup_preference(name: str) -> int:
     number = _mockup_number(name)
-    preferred = [9, 7, 8, 6, 1, 2, 3, 4, 5, 10]
+    # Visible launch/product slots should show the designed sellable product
+    # first. Blank model shots are still useful, but only as supporting fit
+    # references after the actual front/back design sources.
+    preferred = [1, 2, 9, 7, 8, 6, 3, 4, 5, 10]
     if number in preferred:
         return preferred.index(number)
     return 100 + number
@@ -3176,6 +3914,9 @@ def _calendar_strategy(items: list[dict]) -> dict:
     duplicate_warnings = []
     raw_assets = _safe_raw_assets_for_rotation()
     visual_warnings = grid_visual_warnings(items)
+    feed_role_warnings = _feed_role_warnings(items)
+    visual_surface_warnings = _visual_surface_warnings(items)
+    product_accuracy_warnings = _product_accuracy_warnings(items)
     photoshoot_gaps = _photoshoot_gap_warnings(items)
     design_surfaces = _design_surface_candidates(raw_assets)
     needs_work = _needs_work_queue(items)
@@ -3205,6 +3946,9 @@ def _calendar_strategy(items: list[dict]) -> dict:
         "product_rotation": _calendar_product_rotation_summary(product_counts),
         "performance": performance_summary(),
         "visual_warnings": visual_warnings,
+        "feed_role_warnings": feed_role_warnings,
+        "visual_surface_warnings": visual_surface_warnings,
+        "product_accuracy_warnings": product_accuracy_warnings,
         "photoshoot_gaps": photoshoot_gaps,
         "design_surface_candidates": design_surfaces,
         "needs_work": needs_work,
@@ -3220,9 +3964,114 @@ def _calendar_strategy(items: list[dict]) -> dict:
             "Avoid clustering posts with the same palette, brightness, density, or visual family in one row unless the row intentionally needs that weight.",
             "Use Photoshoot / Campaign assets as premium body/campaign anchors once available.",
             "Use folded cloth, canvas, quiet product-detail crops, and negative-space mockups as text backdrops, transition slides, or feed breakers when the grid needs breathing room.",
+            "Never place the same feed role directly back-to-back unless explicitly approved.",
+            "Never place the same visual surface directly back-to-back; strategy role and visible post type both need rhythm.",
         ],
         "duplicate_warnings": duplicate_warnings,
     }
+
+
+def _visual_surface_warnings(items: list[dict]) -> list[dict]:
+    ordered = sorted(items, key=lambda value: value.get("feed_position", 999))
+    warnings = []
+    previous = None
+    for index, item in enumerate(ordered):
+        surface = item.get("visual_surface") or _infer_visual_surface(item)
+        if previous and previous["surface"] == surface:
+            warnings.append(
+                {
+                    "type": "adjacent_visual_surface_repeat",
+                    "severity": "high",
+                    "visual_surface": surface,
+                    "post_ids": [previous["id"], item.get("id")],
+                    "positions": [index - 1, index],
+                    "note": f"Adjacent posts repeat {titleize(surface)}. The feed may look repetitive even if the strategy roles differ.",
+                    "suggested_action": f"Insert or move a { _suggest_bridge_surface(surface) } post between them.",
+                }
+            )
+        previous = {"id": item.get("id"), "surface": surface}
+    return warnings
+
+
+def _feed_role_warnings(items: list[dict]) -> list[dict]:
+    ordered = sorted(items, key=lambda value: value.get("feed_position", 999))
+    warnings = []
+    previous = None
+    for index, item in enumerate(ordered):
+        role = item.get("feed_role") or _infer_feed_role(item)
+        if previous and previous["role"] == role:
+            warnings.append(
+                {
+                    "type": "adjacent_feed_role_repeat",
+                    "severity": "high",
+                    "feed_role": role,
+                    "post_ids": [previous["id"], item.get("id")],
+                    "positions": [index - 1, index],
+                    "note": f"Adjacent posts repeat {titleize(role)}. Swap one with a different role or add a missing bridge post.",
+                    "suggested_action": f"Insert or move a { _suggest_bridge_role(role) } post between them.",
+                }
+            )
+        previous = {"id": item.get("id"), "role": role}
+    return warnings
+
+
+def _product_accuracy_warnings(items: list[dict]) -> list[dict]:
+    warnings = []
+    for item in sorted(items, key=lambda value: value.get("feed_position", 999)):
+        product_led = item.get("product_keys") and item.get("feed_role") in {"product", "body_campaign", "cta_drop"}
+        if not product_led:
+            continue
+        concepts = [concept for concept in item.get("ai_visual_concepts", []) if concept.get("image_path")]
+        qa_items = item.get("visual_qa") or [concept.get("visual_qa") for concept in concepts if concept.get("visual_qa")]
+        if not concepts:
+            warnings.append(
+                {
+                    "type": "missing_product_visual_qa",
+                    "severity": "medium",
+                    "post_id": item.get("id"),
+                    "note": f"{item.get('hook') or item.get('id')} has product assets but no generated visual QA record yet.",
+                    "suggested_action": "Generate or QA a model/product visual before approving.",
+                }
+            )
+            continue
+        if not any(qa.get("status") == "pass" for qa in qa_items if qa):
+            warnings.append(
+                {
+                    "type": "unverified_product_accuracy",
+                    "severity": "high",
+                    "post_id": item.get("id"),
+                    "note": f"{item.get('hook') or item.get('id')} has generated visuals but no product-accuracy pass yet.",
+                    "suggested_action": "Run Visual QA and iterate with QA fixes if front/back branding or garment details are off.",
+                }
+            )
+    return warnings
+
+
+def _suggest_bridge_role(role: str) -> str:
+    suggestions = {
+        "text_explainer": "product or body/campaign",
+        "product": "process/studio or body/campaign",
+        "body_campaign": "product or process/studio",
+        "process_studio": "product or text/explainer",
+        "creative_source": "product or body/campaign",
+        "cta_drop": "process/studio or community/proof",
+        "community_proof": "product or creative/source",
+    }
+    return suggestions.get(role, "contrasting")
+
+
+def _suggest_bridge_surface(surface: str) -> str:
+    suggestions = {
+        "text_slide": "campaign photo or product mockup",
+        "product_mockup": "process detail or campaign photo",
+        "model_shoot": "text slide or process detail",
+        "campaign_photo": "product mockup or source art",
+        "process_detail": "product mockup or campaign photo",
+        "source_art": "product mockup or model shoot",
+        "cta_graphic": "process detail or campaign photo",
+        "feed_breaker": "product mockup or campaign photo",
+    }
+    return suggestions.get(surface, "contrasting visual surface")
 
 
 def _needs_work_queue(items: list[dict]) -> list[dict]:
@@ -3259,7 +4108,7 @@ def _feed_row_objectives(items: list[dict]) -> list[dict]:
     objectives = []
     for row_index in range(0, min(len(ordered), 18), 3):
         row = ordered[row_index : row_index + 3]
-        roles = [item.get("visual_role") or _infer_visual_role(item) for item in row]
+        roles = [item.get("feed_role") or _infer_feed_role(item) for item in row]
         products = [", ".join(item.get("product_keys", [])) for item in row if item.get("product_keys")]
         objective = "Balance context, desire, and product clarity."
         if row_index == 0:

@@ -1,0 +1,45 @@
+services:
+  - type: web
+    name: brandname-growth-dashboard
+    runtime: python
+    plan: starter
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn src.dashboard:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /healthz
+    disk:
+      name: brandname-growth-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: DATA_DIR
+        value: /var/data
+      - key: DASHBOARD_AUTH_ENABLED
+        value: "true"
+      - key: DASHBOARD_USERNAME
+        value: brandname
+      - key: DASHBOARD_PASSWORD
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: OPENAI_MODEL
+        value: gpt-5.4-mini
+      - key: BRAND_WEBSITE_URL
+        value: https://www.brandnamedesign.co/
+      - key: GOOGLE_DRIVE_ENABLED
+        value: "false"
+      - key: GOOGLE_DRIVE_ROOT_FOLDER_ID
+        sync: false
+      - key: GOOGLE_AUTH_MODE
+        value: oauth
+      - key: GOOGLE_OAUTH_CLIENT_FILE
+        value: /var/data/oauth_client.json
+      - key: GOOGLE_OAUTH_TOKEN_FILE
+        value: /var/data/token.json
+      - key: GOOGLE_APPLICATION_CREDENTIALS
+        value: /var/data/credentials.json
+      - key: VISUAL_OUTPUT_ENABLED
+        value: "false"
+      - key: IMAGE_CONCEPTS_ENABLED
+        value: "false"
+      - key: SHOPIFY_WRITE_ENABLED
+        value: "false"

@@ -6,10 +6,7 @@ import json
 from pathlib import Path
 from uuid import uuid4
 
-from .settings import ROOT_DIR
-
-
-MEMORY_DIR = ROOT_DIR / "memory"
+from .settings import MEMORY_DIR
 FEEDBACK_PATH = MEMORY_DIR / "feedback.jsonl"
 
 

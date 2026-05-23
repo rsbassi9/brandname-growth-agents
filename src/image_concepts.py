@@ -105,6 +105,7 @@ def generate_post_visual_image(
 
 
 def _build_post_prompt(item: dict, concept_type: str, brief: str, direction: str) -> str:
+    normalized_type = concept_type.replace("_iteration", "")
     type_instruction = {
         "model_shoot": (
             "Create a realistic editorial photoshoot image with an AI-generated model wearing the exact referenced garment. "
@@ -122,14 +123,17 @@ def _build_post_prompt(item: dict, concept_type: str, brief: str, direction: str
             "Create a premium curator reference image. If the brief asks for product/body/campaign, make a realistic editorial product reference. "
             "If it asks for process, make a brush, pencil, canvas, scanner, studio, or digital-file detail. If it asks for a feed breaker, make a tactile surface or color/texture composition."
         ),
-    }.get(concept_type, "Create one premium visual concept image tied to the referenced post assets.")
+    }.get(normalized_type, "Create one premium visual concept image tied to the referenced post assets.")
 
     return "\n".join(
         [
             "Create one premium editorial image for Brand Name Design.",
             type_instruction,
             "Use the provided reference images as the source of truth. Do not invent new garments, graphics, products, colorways, logos, or readable text.",
-            "When multiple reference images show the same product, synthesize the garment identity across all of them: front, back, close detail, fabric, color, fit, and graphic placement.",
+            "When multiple reference images show the same product, separate their roles: design mockups define the actual sellable artwork/logo/graphic placement; blank model references define fit, drape, crop, neckline, sleeves, and material behavior only; detail references define fabric and construction.",
+            "If a blank model reference conflicts with a designed product mockup, keep the model fit but apply the designed product graphic/logo/artwork from the front_design/back_design references. Never output the blank as the final designed product when a design source exists.",
+            "Product placement requirements:",
+            item.get("product_reference_requirements", "Use the selected product folder references to preserve exact garment side, graphic placement, small logo placement, trims, grommets, tags, hems, and silhouette."),
             "If the selected product has a minimal front logo, chest mark, hem mark, tag, grommet, or other small front-side branding/detail in the references, preserve it visibly on front-facing model shots.",
             "Small garment branding may be approximate and non-readable, but it must be present in the correct location when the product reference shows it.",
             "If a model appears, make the person realistic, fashion-editorial, and natural. Avoid uncanny faces, extra limbs, distorted hands, fake typography, or generic fashion-ad styling.",

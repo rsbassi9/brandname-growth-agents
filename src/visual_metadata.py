@@ -6,10 +6,10 @@ from statistics import mean
 
 from PIL import Image, ImageStat
 
-from .settings import OUTPUTS_DIR, ROOT_DIR
+from .settings import MEMORY_DIR, OUTPUTS_DIR
 
 
-VISUAL_METADATA_PATH = ROOT_DIR / "memory" / "visual_metadata.json"
+VISUAL_METADATA_PATH = MEMORY_DIR / "visual_metadata.json"
 
 
 def load_visual_metadata() -> dict[str, dict]:
@@ -135,4 +135,3 @@ def _image_type(palette: str, density: str, brightness: str) -> str:
     if palette == "black/dark":
         return "dark-anchor"
     return "photo/mixed"
-

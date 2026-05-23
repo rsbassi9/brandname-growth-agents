@@ -1,16 +1,34 @@
 from pathlib import Path
 import os
+import shutil
 
 from dotenv import load_dotenv
 
 
 ROOT_DIR = Path(__file__).resolve().parents[1]
+load_dotenv(ROOT_DIR / ".env", override=True)
+
+DATA_DIR = Path(os.getenv("DATA_DIR", str(ROOT_DIR))).resolve()
 BRAND_CONTEXT_DIR = ROOT_DIR / "brand_context"
 AGENT_INSTRUCTIONS_DIR = ROOT_DIR / "agent_instructions"
-OUTPUTS_DIR = ROOT_DIR / "outputs"
-PRODUCT_INVENTORY_DIR = BRAND_CONTEXT_DIR / "product_inventory"
+MEMORY_DIR = DATA_DIR / "memory"
+OUTPUTS_DIR = DATA_DIR / "outputs"
+PRODUCT_INVENTORY_DIR = DATA_DIR / "brand_context" / "product_inventory"
 
-load_dotenv(ROOT_DIR / ".env", override=True)
+def _seed_persistent_dir(source: Path, destination: Path) -> None:
+    if destination.exists() and any(destination.iterdir()):
+        return
+    if source.exists():
+        shutil.copytree(source, destination, dirs_exist_ok=True)
+    else:
+        destination.mkdir(parents=True, exist_ok=True)
+
+
+if DATA_DIR != ROOT_DIR:
+    DATA_DIR.mkdir(parents=True, exist_ok=True)
+    _seed_persistent_dir(ROOT_DIR / "memory", MEMORY_DIR)
+    _seed_persistent_dir(ROOT_DIR / "outputs", OUTPUTS_DIR)
+    _seed_persistent_dir(BRAND_CONTEXT_DIR / "product_inventory", PRODUCT_INVENTORY_DIR)
 
 OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-5.4-mini")
 BRAND_WEBSITE_URL = os.getenv("BRAND_WEBSITE_URL", "https://www.brandnamedesign.co/")
@@ -31,3 +49,6 @@ SHOPIFY_STORE_DOMAIN = os.getenv("SHOPIFY_STORE_DOMAIN", "")
 SHOPIFY_ADMIN_ACCESS_TOKEN = os.getenv("SHOPIFY_ADMIN_ACCESS_TOKEN", "")
 SHOPIFY_API_VERSION = os.getenv("SHOPIFY_API_VERSION", "2025-04")
 SHOPIFY_WRITE_ENABLED = os.getenv("SHOPIFY_WRITE_ENABLED", "false").lower() == "true"
+DASHBOARD_USERNAME = os.getenv("DASHBOARD_USERNAME", "brandname")
+DASHBOARD_PASSWORD = os.getenv("DASHBOARD_PASSWORD", "")
+DASHBOARD_AUTH_ENABLED = os.getenv("DASHBOARD_AUTH_ENABLED", "false").lower() == "true"

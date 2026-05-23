@@ -426,6 +426,8 @@ function calendarCard(item) {
       </div>
       <strong>${escapeHtml(item.hook || "Scheduled post")}</strong>
       <span>${escapeHtml(item.format || "Post")} / ${escapeHtml(item.pillar || "General")}</span>
+      ${feedRoleBadge(item)}
+      ${visualSurfaceBadge(item)}
       ${item.launch_role ? `<small>${escapeHtml(item.launch_role)}</small>` : ""}
       <small>${escapeHtml(item.status || "Draft")} ${adjacent ? `/ ${escapeHtml(adjacent)}` : ""}</small>
       ${stateControls("post", item.id, item.status || "Draft", item.hook || item.id, "calendar-card-actions")}
@@ -456,6 +458,18 @@ function productRotationBadge(item) {
   const label = item.product_keys.slice(0, 2).map(titleize).join(" / ");
   const note = item.product_rotation_note || "Product family tracked for rotation.";
   return `<div class="rotation-badge" title="${escapeHtml(note)}">${escapeHtml(label)}</div>`;
+}
+
+function feedRoleBadge(item) {
+  const role = item.feed_role || "";
+  if (!role) return "";
+  return `<div class="rotation-badge feed-role-badge" title="Curator rhythm role">${escapeHtml(titleize(role))}</div>`;
+}
+
+function visualSurfaceBadge(item) {
+  const surface = item.visual_surface || "";
+  if (!surface) return "";
+  return `<div class="rotation-badge" title="Visible post surface">${escapeHtml(titleize(surface))}</div>`;
 }
 
 function qualityBadge(item) {
@@ -582,11 +596,12 @@ function renderFeed() {
       <div class="feed-media">${assets[0] ? assetThumb(assets[0]) : calendarVisualThumb(item)}</div>
       <div class="feed-overlay">
         <strong>${index + 1}. ${escapeHtml(item.format || "Post")}</strong>
-        <span>${escapeHtml(item.scheduled_date || "")} / ${escapeHtml(item.visual_role || item.pillar || "")}${visualFingerprintLabel(item) ? ` / ${escapeHtml(visualFingerprintLabel(item))}` : ""}</span>
+        <span>${escapeHtml(item.scheduled_date || "")} / ${escapeHtml(item.feed_role || item.visual_role || item.pillar || "")}${visualFingerprintLabel(item) ? ` / ${escapeHtml(visualFingerprintLabel(item))}` : ""}</span>
         ${item.launch_role ? `<span>${escapeHtml(item.launch_role)}</span>` : ""}
       </div>
       ${item.curator_reason ? `<div class="curator-note">${escapeHtml(item.curator_reason)}</div>` : ""}
       ${stateControls("post", item.id, item.status || "Draft", item.hook || item.id, "feed-state-actions")}
+      ${feedRoleBadge(item)}
       ${productRotationBadge(item)}
       ${duplicateBadge(item)}
     `;
@@ -736,6 +751,9 @@ function renderStrategy() {
   if (!calendarStrategy || !state.strategy) return;
   const duplicateWarnings = state.strategy.duplicate_warnings || [];
   const visualWarnings = state.strategy.visual_warnings || [];
+  const feedRoleWarnings = state.strategy.feed_role_warnings || [];
+  const visualSurfaceWarnings = state.strategy.visual_surface_warnings || [];
+  const productAccuracyWarnings = state.strategy.product_accuracy_warnings || [];
   const photoshootGaps = state.strategy.photoshoot_gaps || [];
   const needsWork = state.strategy.needs_work || [];
   const rowObjectives = state.strategy.row_objectives || [];
@@ -793,6 +811,24 @@ function renderStrategy() {
           <div class="duplicate-panel">
             <p class="eyebrow">Visual Rhythm Watch</p>
             <ul>${visualWarnings.slice(0, 6).map((item) => `<li>${visualWarningText(item)}</li>`).join("")}</ul>
+          </div>
+        ` : ""}
+        ${feedRoleWarnings.length ? `
+          <div class="duplicate-panel">
+            <p class="eyebrow">Feed Role Rhythm Watch</p>
+            <ul>${feedRoleWarnings.slice(0, 6).map((item) => `<li>${visualWarningText(item)}</li>`).join("")}</ul>
+          </div>
+        ` : ""}
+        ${visualSurfaceWarnings.length ? `
+          <div class="duplicate-panel">
+            <p class="eyebrow">Visual Surface Watch</p>
+            <ul>${visualSurfaceWarnings.slice(0, 6).map((item) => `<li>${visualWarningText(item)}</li>`).join("")}</ul>
+          </div>
+        ` : ""}
+        ${productAccuracyWarnings.length ? `
+          <div class="duplicate-panel">
+            <p class="eyebrow">Product Accuracy Watch</p>
+            <ul>${productAccuracyWarnings.slice(0, 6).map((item) => `<li>${visualWarningText(item)}</li>`).join("")}</ul>
           </div>
         ` : ""}
         ${photoshootGaps.length ? `
@@ -2082,18 +2118,124 @@ function builderPostActions(item) {
       </div>
       <p id="visualConceptStatus" class="status"></p>
       <div id="visualConceptOpen" class="generated-open-slot"></div>
+      ${productTruthCard(item)}
       ${compositionPlanCard(item)}
       ${concepts.length ? `
         <div class="concept-links">
           ${concepts.map((concept) => `
             <button class="concept-link" type="button" data-concept-path="${escapeForAttribute(concept.image_path || concept.path)}" data-concept-kind="${concept.image_path ? "image" : "text"}">
               ${concept.image_path ? `<img src="/media?path=${encodeURIComponent(concept.image_path)}" alt="${escapeHtml(concept.concept_type || "concept")}" loading="lazy" />` : ""}
-              <span><strong>${escapeHtml(titleize(concept.concept_type || "visual concept"))}</strong><small>${concept.image_path ? "Open Generated Image" : escapeHtml(shortPath(concept.path))}</small></span>
+              <span><strong>${escapeHtml(titleize(concept.concept_type || "visual concept"))}</strong><small>${concept.image_path ? "Open Generated Image" : escapeHtml(shortPath(concept.path))}</small>${concept.visual_qa ? `<small>QA: ${escapeHtml(titleize(concept.visual_qa.status || "needs_review"))}</small>` : ""}</span>
             </button>
+            ${concept.image_path ? `
+              <div class="builder-action-row concept-actions">
+                <button class="secondary" type="button" data-qa-concept="${escapeForAttribute(concept.image_path)}" data-qa-type="${escapeForAttribute(concept.concept_type || "model_shoot")}">Run Visual QA</button>
+                <button class="secondary" type="button" data-iterate-qa="${escapeForAttribute(concept.image_path)}" data-qa-type="${escapeForAttribute(concept.concept_type || "model_shoot")}">Iterate With QA Fixes</button>
+                ${concept.product_composite?.image_path ? `<button class="secondary" type="button" data-open-generated-image="${escapeForAttribute(concept.product_composite.image_path)}" data-open-generated-item="${escapeForAttribute(item.id)}" data-open-generated-concept="${escapeForAttribute(concept.concept_type || "model_shoot")}">Open Composite</button>` : ""}
+              </div>
+              ${concept.product_composite?.image_path ? `<p class="helper-text">Composite fallback created from ${escapeHtml(shortPath(concept.product_composite.reference_path || ""))}. Use it as a product-accuracy reference, not a final retouch.</p>` : ""}
+              ${visualQaCard(concept.visual_qa)}
+            ` : ""}
           `).join("")}
         </div>
       ` : ""}
     </section>
+  `;
+}
+
+function productTruthCard(item) {
+  const profiles = item.product_truth || [];
+  if (!profiles.length && !item.product_reference_requirements) return "";
+  return `
+    <details class="composition-plan-card product-truth-card" open>
+      <summary>Product Truth</summary>
+      ${profiles.map((profile) => `
+        <article>
+          <strong>${escapeHtml(profile.display_name || profile.product_key || "Product")}</strong>
+          <p>${escapeHtml(profile.silhouette || "")}</p>
+          <p>${escapeHtml(profile.fabric_wash || "")}</p>
+          <small>Front refs: ${escapeHtml((profile.reference_files?.front || []).slice(0, 4).join(", ") || "none")}</small>
+          <small>Back refs: ${escapeHtml((profile.reference_files?.back || []).slice(0, 4).join(", ") || "none")}</small>
+          ${profile.front_graphic_policy ? `<small>Front policy: ${escapeHtml(titleize(profile.front_graphic_policy))}</small>` : ""}
+          ${profile.back_graphic_policy ? `<small>Back policy: ${escapeHtml(titleize(profile.back_graphic_policy))}</small>` : ""}
+          ${referenceRoleList(profile)}
+          ${profile.reference_role_notes?.length ? `<ul>${profile.reference_role_notes.map((note) => `<li>${escapeHtml(note)}</li>`).join("")}</ul>` : ""}
+        </article>
+      `).join("")}
+      ${item.product_reference_requirements ? productRequirementsPanel(item.product_reference_requirements) : ""}
+    </details>
+  `;
+}
+
+function productRequirementsPanel(text) {
+  const lines = String(text || "").split(/\n+/).map((line) => line.trim()).filter(Boolean);
+  const groups = [
+    ["Product", ["Product:", "Garment type:", "Silhouette:", "Fabric/wash:", "Front graphic policy:", "Back graphic policy:"]],
+    ["References", ["Design sources:", "Fit/model sources:", "Material/detail sources:", "Front refs:", "Back refs:", "Detail refs:"]],
+    ["Rules", ["Use blank_fit_model", "Use front_design", "Front requirements:", "Back requirements:", "Detail requirements:"]],
+    ["Guardrails", ["Must never omit:", "Must not invent:"]],
+  ].map(([title, prefixes]) => ({
+    title,
+    lines: lines.filter((line) => prefixes.some((prefix) => line.startsWith(prefix))),
+  })).filter((group) => group.lines.length);
+  const covered = new Set(groups.flatMap((group) => group.lines));
+  const other = lines.filter((line) => !covered.has(line));
+  if (other.length) groups.push({ title: "Other", lines: other });
+  return `
+    <div class="requirements-panel">
+      ${groups.map((group) => `
+        <section>
+          <h4>${escapeHtml(group.title)}</h4>
+          <dl>
+            ${group.lines.map(requirementLine).join("")}
+          </dl>
+        </section>
+      `).join("")}
+    </div>
+  `;
+}
+
+function requirementLine(line) {
+  const parts = line.split(":");
+  if (parts.length > 1 && !line.startsWith("Use ")) {
+    const label = parts.shift();
+    return `<div><dt>${escapeHtml(label)}</dt><dd>${escapeHtml(parts.join(":").trim())}</dd></div>`;
+  }
+  return `<div class="full"><dd>${escapeHtml(line)}</dd></div>`;
+}
+
+function referenceRoleList(profile) {
+  const roles = profile.reference_roles || {};
+  const rows = [
+    ["Actual Design", roles.front_design || []],
+    ["Back Design", roles.back_design || []],
+    ["Fit Model Only", roles.blank_fit_model || []],
+    ["Material Detail", roles.material_detail || []],
+    ["Folded Surface", roles.folded_surface || []],
+    ["Unknown", roles.unknown || []],
+  ].filter(([, files]) => files.length);
+  if (!rows.length) return "";
+  return `
+    <div class="reference-role-list">
+      ${rows.map(([label, files]) => `
+        <div>
+          <span>${escapeHtml(label)}</span>
+          <small>${escapeHtml(files.slice(0, 5).join(", "))}${files.length > 5 ? ` +${files.length - 5}` : ""}</small>
+        </div>
+      `).join("")}
+    </div>
+  `;
+}
+
+function visualQaCard(qa) {
+  if (!qa) return "";
+  return `
+    <details class="composition-plan-card visual-qa-card">
+      <summary>Visual QA / ${escapeHtml(titleize(qa.status || "needs_review"))}</summary>
+      <p>${escapeHtml(qa.summary || "")}</p>
+      ${(qa.checks || []).length ? `<ul>${qa.checks.map((check) => `<li>${escapeHtml(titleize(check.status || "check"))}: ${escapeHtml(check.note || check.check || "")}</li>`).join("")}</ul>` : ""}
+      ${(qa.fixes || []).length ? `<p class="eyebrow">Iteration Fixes</p><ul>${qa.fixes.map((fix) => `<li>${escapeHtml(fix)}</li>`).join("")}</ul>` : ""}
+    </details>
   `;
 }
 
@@ -2225,6 +2367,62 @@ function bindBuilderPostActions(item) {
       });
     });
   });
+  builderWorkspace.querySelectorAll("[data-qa-concept]").forEach((button) => {
+    button.addEventListener("click", () => runVisualQa(item.id, button.dataset.qaConcept, button.dataset.qaType || "model_shoot"));
+  });
+  builderWorkspace.querySelectorAll("[data-iterate-qa]").forEach((button) => {
+    button.addEventListener("click", () => iterateWithQaFixes(item.id, button.dataset.iterateQa, button.dataset.qaType || "model_shoot"));
+  });
+  bindGeneratedImageButtons(builderWorkspace);
+}
+
+async function runVisualQa(itemId, imagePath, conceptType) {
+  const status = document.getElementById("visualConceptStatus");
+  if (status) status.textContent = "Running visual QA...";
+  const response = await fetch(`/api/calendar/${encodeURIComponent(itemId)}/visual-concept/qa`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ image_path: imagePath, concept_type: conceptType }),
+  });
+  if (!response.ok) {
+    if (status) status.textContent = "Visual QA failed.";
+    return;
+  }
+  const data = await response.json();
+  state.calendar = data.items || state.calendar;
+  state.strategy = data.strategy || state.strategy;
+  state.selectedCalendarItem = state.calendar.find((entry) => entry.id === itemId) || state.selectedCalendarItem;
+  if (status) status.textContent = `Visual QA: ${titleize(data.qa?.status || "needs_review")}`;
+  renderCalendar();
+  renderFeed();
+  renderBuilder();
+}
+
+async function iterateWithQaFixes(itemId, imagePath, conceptType) {
+  const status = document.getElementById("visualConceptStatus");
+  if (status) status.textContent = "Iterating with QA fixes...";
+  const response = await fetch(`/api/calendar/${encodeURIComponent(itemId)}/visual-concept/iterate-qa`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      image_path: imagePath,
+      concept_type: conceptType,
+      direction: document.getElementById("visualConceptDirection")?.value || "",
+    }),
+  });
+  if (!response.ok) {
+    if (status) status.textContent = "QA iteration failed.";
+    return;
+  }
+  const data = await response.json();
+  state.calendar = data.items || state.calendar;
+  state.selectedCalendarItem = state.calendar.find((entry) => entry.id === itemId) || state.selectedCalendarItem;
+  if (status) status.textContent = data.image_error
+    ? `QA iteration brief saved, render failed: ${data.image_error}`
+    : `QA iteration rendered: ${shortPath(data.concept?.image_path || "")}`;
+  renderCalendar();
+  renderFeed();
+  renderBuilder();
 }
 
 async function saveTextSlides(itemId) {
@@ -2431,7 +2629,7 @@ function visualItemBrief(item) {
 }
 
 function renderBuilderAssetLibrary() {
-  const buckets = ["All", "Text Backdrops", "Feed Breakers", "Store Products", "Shoot Photos", "Photoshoot / Campaign", "Process / Studio", "Design Assets", "Video"];
+  const buckets = ["All", "Generated Assets", "AI Generated", "Text Backdrops", "Feed Breakers", "Store Products", "Shoot Photos", "Photoshoot / Campaign", "Process / Studio", "Design Assets", "Video"];
   builderAssetFilters.innerHTML = buckets.map((bucket) => `
     <button class="filter-chip ${state.builderAssetFilter === bucket ? "active" : ""}" type="button" data-filter="${escapeHtml(bucket)}">${escapeHtml(bucket)}</button>
   `).join("");
@@ -2445,31 +2643,46 @@ function renderBuilderAssetLibrary() {
   const assets = state.rawAssets
     .filter((asset) => {
       if (state.builderAssetFilter === "All") return true;
+      if (state.builderAssetFilter === "Generated Assets") return asset.source === "generated_asset";
       if (state.builderAssetFilter === "Text Backdrops") return (asset.designRoles || []).some((role) => ["text_backdrop", "texture_backdrop", "canvas_surface"].includes(role));
       if (state.builderAssetFilter === "Feed Breakers") return (asset.designRoles || []).includes("feed_breaker") || Number(asset.designSurfaceScore || 0) >= 5;
       return asset.creativeBucket === state.builderAssetFilter;
     })
-    .sort((a, b) => Number(b.designSurfaceScore || 0) - Number(a.designSurfaceScore || 0))
+    .sort((a, b) => {
+      const ratingDiff = Number(b.rating || 0) - Number(a.rating || 0);
+      if (ratingDiff) return ratingDiff;
+      const scoreDiff = Number(b.designSurfaceScore || 0) - Number(a.designSurfaceScore || 0);
+      if (scoreDiff) return scoreDiff;
+      return String(a.name || "").localeCompare(String(b.name || ""));
+    })
     .slice(0, 96);
   builderAssetLibrary.innerHTML = assets.map((asset) => `
-    <button class="library-asset" type="button" title="${escapeHtml(asset.name)}" data-asset-name="${escapeForAttribute(asset.name)}">
+    <button class="library-asset" type="button" title="${escapeHtml(asset.name)}" data-asset-name="${escapeForAttribute(asset.name)}" data-asset-path="${escapeForAttribute(asset.path || "")}" data-asset-source="${escapeForAttribute(asset.source || "drive_asset")}">
       ${assetThumb(asset)}
       <span>${escapeHtml(asset.name)}</span>
+      ${asset.rating ? `<small>Rated ${escapeHtml(String(asset.rating))}/5</small>` : ""}
       ${(asset.designRoles || []).length ? `<small>${escapeHtml((asset.designRoles || []).slice(0, 3).map(titleize).join(" / "))}</small>` : ""}
+      ${asset.source === "generated_asset" ? `<small>${escapeHtml(asset.creativeBucket || "Generated")}</small>` : ""}
     </button>
   `).join("") || '<div class="empty-note">No Drive assets found for this filter.</div>';
   builderAssetLibrary.querySelectorAll("[data-asset-name]").forEach((button) => {
-    button.addEventListener("click", () => updateBuilderAsset(button.dataset.assetName));
+    button.addEventListener("click", () => updateBuilderAsset({
+      name: button.dataset.assetName,
+      path: button.dataset.assetPath,
+      source: button.dataset.assetSource,
+    }));
   });
 }
 
-async function updateBuilderAsset(assetName) {
+async function updateBuilderAsset(asset) {
   if (!state.selectedCalendarItem) return;
+  const isGenerated = asset.source === "generated_asset" && asset.path;
   const response = await fetch(`/api/calendar/${encodeURIComponent(state.selectedCalendarItem.id)}/slots/${state.builderSlotIndex}`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
-      asset_name: assetName,
+      asset_name: isGenerated ? undefined : asset.name,
+      image_path: isGenerated ? asset.path : undefined,
       role: document.getElementById("builderSlotRole")?.value || undefined,
       notes: document.getElementById("builderSlotNotes")?.value || "",
       overlay_text: document.getElementById("builderSlotOverlay")?.value || "",
@@ -2636,6 +2849,9 @@ function assetLabel(asset) {
 }
 
 function driveMediaUrl(asset) {
+  if (asset.source === "generated_asset" || asset.path) {
+    return `/media?path=${encodeURIComponent(asset.path)}`;
+  }
   return `/drive-media?file_id=${encodeURIComponent(asset.id)}&name=${encodeURIComponent(asset.name)}&mime_type=${encodeURIComponent(asset.mimeType)}`;
 }
 
@@ -2737,7 +2953,7 @@ async function loadRawAssets() {
 
 function renderDriveAssets() {
   if (!state.selectedItem || state.selectedItem.kind !== "image") return;
-  const assets = state.rawAssets.filter(isPreviewableImage).slice(0, 120);
+  const assets = state.rawAssets.filter((asset) => asset.source !== "generated_asset").filter(isPreviewableImage).slice(0, 120);
   if (!assets.length) {
     driveAssetList.innerHTML = '<div class="empty-note">No web-safe Drive images found.</div>';
     return;

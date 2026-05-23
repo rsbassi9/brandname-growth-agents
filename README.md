@@ -94,6 +94,61 @@ memory/feedback.jsonl
 
 Every future agent run reads recent feedback and uses it as learning context.
 
+## Hosted Read/Write Dashboard
+
+For access from anywhere, deploy the FastAPI dashboard as a hosted web service. GitHub Pages can only host the read-only static mirror; it cannot run the Python backend, save feedback, read Drive, or run agents.
+
+This repo includes a Render blueprint:
+
+```text
+render.yaml
+```
+
+Render setup:
+1. Push this repo to GitHub.
+2. In Render, create a new Blueprint from this repo.
+3. Use the `render.yaml` file at the repo root.
+4. Set these required secrets:
+
+```text
+OPENAI_API_KEY=your_openai_api_key
+DASHBOARD_PASSWORD=a_long_private_password
+```
+
+5. Keep `DASHBOARD_AUTH_ENABLED=true` in Render.
+6. Deploy the service.
+
+The hosted app uses:
+
+```text
+uvicorn src.dashboard:app --host 0.0.0.0 --port $PORT
+```
+
+The blueprint mounts a persistent disk at:
+
+```text
+/var/data
+```
+
+and sets:
+
+```text
+DATA_DIR=/var/data
+```
+
+That keeps generated outputs, dashboard memory, feedback, calendar edits, and uploaded product references across redeploys. On first boot, the app seeds `/var/data/memory`, `/var/data/outputs`, and `/var/data/brand_context/product_inventory` from the repo if the disk is empty.
+
+Optional hosted settings:
+
+```text
+GOOGLE_DRIVE_ENABLED=true
+GOOGLE_DRIVE_ROOT_FOLDER_ID=your_folder_id
+GOOGLE_AUTH_MODE=service_account
+GOOGLE_APPLICATION_CREDENTIALS=/var/data/credentials.json
+```
+
+For OAuth on a hosted service, place `oauth_client.json` and `token.json` on the persistent disk or use a service account. The Drive folder must be shared with the authenticating Google identity.
+
 ## Google Drive
 
 Google Drive is optional for the MVP.

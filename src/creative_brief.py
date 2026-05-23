@@ -4,10 +4,10 @@ from datetime import datetime
 import json
 from typing import Any
 
-from .settings import ROOT_DIR
+from .settings import MEMORY_DIR
 
 
-CREATIVE_BRIEF_PATH = ROOT_DIR / "memory" / "creative_brief.json"
+CREATIVE_BRIEF_PATH = MEMORY_DIR / "creative_brief.json"
 
 DEFAULT_BRIEF = {
     "current_drop_focus": "",

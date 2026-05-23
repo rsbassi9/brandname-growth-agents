@@ -4,10 +4,10 @@ from datetime import datetime
 import json
 from typing import Any
 
-from .settings import ROOT_DIR
+from .settings import MEMORY_DIR
 
 
-CAMPAIGN_MEMORY_PATH = ROOT_DIR / "memory" / "campaign_memory.json"
+CAMPAIGN_MEMORY_PATH = MEMORY_DIR / "campaign_memory.json"
 
 
 DEFAULT_CAMPAIGN_MEMORY = {

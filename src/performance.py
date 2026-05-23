@@ -4,10 +4,10 @@ from datetime import date, datetime
 import json
 from typing import Any
 
-from .settings import ROOT_DIR
+from .settings import MEMORY_DIR
 
 
-PERFORMANCE_PATH = ROOT_DIR / "memory" / "performance_records.json"
+PERFORMANCE_PATH = MEMORY_DIR / "performance_records.json"
 
 METRIC_FIELDS = ["reach", "saves", "shares", "follows", "profile_visits", "clicks", "orders"]
 

@@ -647,6 +647,88 @@ main {
   overflow-wrap: anywhere;
 }
 
+.feed-role-badge {
+  border-color: rgba(226, 218, 177, 0.42);
+  background: rgba(226, 218, 177, 0.12);
+  color: #f0e8bf;
+}
+
+.reference-role-list {
+  display: grid;
+  gap: 8px;
+  margin: 10px 0;
+}
+
+.reference-role-list div {
+  display: grid;
+  gap: 3px;
+  padding: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.reference-role-list span {
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0;
+}
+
+.requirements-panel {
+  display: grid;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.requirements-panel section {
+  padding: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.requirements-panel h4 {
+  margin: 0 0 10px;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+}
+
+.requirements-panel dl {
+  display: grid;
+  gap: 8px;
+  margin: 0;
+}
+
+.requirements-panel dl > div {
+  display: grid;
+  grid-template-columns: minmax(92px, 0.32fr) 1fr;
+  gap: 10px;
+  align-items: start;
+}
+
+.requirements-panel dl > div.full {
+  grid-template-columns: 1fr;
+}
+
+.requirements-panel dt {
+  color: var(--muted);
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+}
+
+.requirements-panel dd {
+  margin: 0;
+  color: var(--text);
+  font-size: 12px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
 .quality-badge {
   width: max-content;
   border: 1px solid rgba(141, 214, 159, 0.32);

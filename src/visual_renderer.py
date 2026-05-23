@@ -6,7 +6,7 @@ from typing import Any
 
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 
-from .settings import OUTPUTS_DIR, ROOT_DIR
+from .settings import MEMORY_DIR, OUTPUTS_DIR, ROOT_DIR
 
 
 CANVAS = (1080, 1350)
@@ -14,7 +14,7 @@ BACKGROUND = (244, 242, 237)
 INK = (22, 22, 20)
 MUTED = (102, 98, 90)
 ACCENT = (126, 34, 38)
-TEXT_EDIT_LOG_PATH = ROOT_DIR / "memory" / "text_slide_edits.jsonl"
+TEXT_EDIT_LOG_PATH = MEMORY_DIR / "text_slide_edits.jsonl"
 
 FONT_PATHS = {
     "brand": [

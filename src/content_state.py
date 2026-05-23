@@ -5,11 +5,11 @@ import json
 from pathlib import Path
 from typing import Any
 
-from .settings import ROOT_DIR
+from .settings import MEMORY_DIR
 
 
-CONTENT_STATE_PATH = ROOT_DIR / "memory" / "content_state.json"
-CONTENT_STATE_EVENTS_PATH = ROOT_DIR / "memory" / "content_state_events.jsonl"
+CONTENT_STATE_PATH = MEMORY_DIR / "content_state.json"
+CONTENT_STATE_EVENTS_PATH = MEMORY_DIR / "content_state_events.jsonl"
 
 LIFECYCLE_STATES = [
     "Draft",
@@ -109,4 +109,3 @@ def _append_state_event(key: str, before: dict[str, Any], after: dict[str, Any],
     CONTENT_STATE_EVENTS_PATH.parent.mkdir(parents=True, exist_ok=True)
     with CONTENT_STATE_EVENTS_PATH.open("a", encoding="utf-8") as handle:
         handle.write(json.dumps(event) + "\n")
-

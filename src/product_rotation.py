@@ -125,6 +125,7 @@ def _product_key_from_filename(name: str) -> str:
 def _clean_key(value: str) -> str:
     cleaned = re.sub(r"[_-]+", " ", value).strip().lower()
     cleaned = re.sub(r"\s+", " ", cleaned)
+    cleaned = re.sub(r"(?<=\D)\d+$", "", cleaned).strip()
     return cleaned
 
 

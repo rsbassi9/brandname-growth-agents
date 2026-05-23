@@ -5,7 +5,7 @@ import shutil
 from datetime import datetime
 from pathlib import Path
 
-from .settings import PRODUCT_INVENTORY_DIR, ROOT_DIR
+from .settings import DATA_DIR, PRODUCT_INVENTORY_DIR, ROOT_DIR
 from .visual_renderer import _slug
 
 
@@ -34,7 +34,7 @@ def save_product_image(source_path: Path, original_name: str, notes: str = "", p
     item = {
         "filename": destination.name,
         "path": str(destination),
-        "relative_path": str(destination.relative_to(ROOT_DIR)),
+        "relative_path": _relative_inventory_path(destination),
         "product_name": product_name.strip() or Path(original_name).stem,
         "notes": notes.strip(),
         "created_at": datetime.now().isoformat(timespec="seconds"),
@@ -43,6 +43,15 @@ def save_product_image(source_path: Path, original_name: str, notes: str = "", p
     manifest.append(item)
     MANIFEST_PATH.write_text(json.dumps(manifest, indent=2), encoding="utf-8")
     return item
+
+
+def _relative_inventory_path(path: Path) -> str:
+    for root in (ROOT_DIR, DATA_DIR):
+        try:
+            return str(path.relative_to(root))
+        except ValueError:
+            continue
+    return str(path)
 
 
 def product_inventory_summary() -> str:

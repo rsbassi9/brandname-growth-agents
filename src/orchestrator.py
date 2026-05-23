@@ -28,6 +28,7 @@ from .settings import (
     BRAND_CONTEXT_DIR,
     BRAND_WEBSITE_URL,
     IMAGE_CONCEPTS_ENABLED,
+    MEMORY_DIR,
     ROOT_DIR,
     VISUAL_ASSET_LIMIT,
     VISUAL_OUTPUT_ENABLED,
@@ -115,7 +116,7 @@ def build_shared_context(asset_inventory_summary: str | None = None) -> str:
 
 
 def _composition_learning_context() -> str:
-    calendar_path = ROOT_DIR / "memory" / "content_calendar.json"
+    calendar_path = MEMORY_DIR / "content_calendar.json"
     if not calendar_path.exists():
         return "No creative composition plans have been saved yet."
     try:
@@ -139,7 +140,7 @@ def _composition_learning_context() -> str:
 
 
 def _calendar_quality_context() -> str:
-    calendar_path = ROOT_DIR / "memory" / "content_calendar.json"
+    calendar_path = MEMORY_DIR / "content_calendar.json"
     if not calendar_path.exists():
         return "No calendar quality memory yet."
     try:
