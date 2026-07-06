@@ -1,0 +1,978 @@
+{
+  "profiles": {
+    "distressed grommet eyelet tank top": {
+      "product_key": "distressed grommet eyelet tank top",
+      "display_name": "Distressed Grommet Eyelet Tank Top",
+      "garment_type": "tank top",
+      "reference_files": {
+        "front": [
+          "Distressed Grommet Eyelet Tank Top-mockups-1.png"
+        ],
+        "back": [
+          "Distressed Grommet Eyelet Tank Top-mockups-2.png"
+        ],
+        "detail": [
+          "Distressed Grommet Eyelet Tank Top-mockups-3.png",
+          "Distressed Grommet Eyelet Tank Top-mockups-4.png",
+          "Distressed Grommet Eyelet Tank Top-mockups-5.png"
+        ],
+        "folded_texture": [],
+        "hero": [
+          "Distressed Grommet Eyelet Tank Top-mockups-1.png",
+          "Distressed Grommet Eyelet Tank Top-mockups-2.png",
+          "Distressed Grommet Eyelet Tank Top-mockups-6.png",
+          "Distressed Grommet Eyelet Tank Top-mockups-7.png",
+          "Distressed Grommet Eyelet Tank Top-mockups-8.png",
+          "Distressed Grommet Eyelet Tank Top-mockups-9.png"
+        ]
+      },
+      "reference_roles": {
+        "back_design": [
+          "Distressed Grommet Eyelet Tank Top-mockups-2.png"
+        ],
+        "blank_fit_model": [
+          "Distressed Grommet Eyelet Tank Top-mockups-6.png",
+          "Distressed Grommet Eyelet Tank Top-mockups-7.png",
+          "Distressed Grommet Eyelet Tank Top-mockups-8.png",
+          "Distressed Grommet Eyelet Tank Top-mockups-9.png",
+          "Distressed Grommet Eyelet Tank Top-mockups-10.png"
+        ],
+        "folded_surface": [],
+        "front_design": [
+          "Distressed Grommet Eyelet Tank Top-mockups-1.png"
+        ],
+        "material_detail": [
+          "Distressed Grommet Eyelet Tank Top-mockups-3.png",
+          "Distressed Grommet Eyelet Tank Top-mockups-4.png",
+          "Distressed Grommet Eyelet Tank Top-mockups-5.png"
+        ],
+        "texture_backdrop": [],
+        "unknown": []
+      },
+      "reference_role_notes": [
+        "Designed product references define the final sellable graphics/logos/artwork.",
+        "Blank model references define fit, drape, crop, neckline, sleeves, and material behavior only.",
+        "Detail and surface references define texture, construction, hems, fabric weight, and feed backdrops."
+      ],
+      "front_graphic_policy": "use_front_design",
+      "back_graphic_policy": "use_back_design",
+      "preferred_generation_refs": {
+        "design_sources": [
+          "Distressed Grommet Eyelet Tank Top-mockups-1.png",
+          "Distressed Grommet Eyelet Tank Top-mockups-2.png"
+        ],
+        "fit_sources": [
+          "Distressed Grommet Eyelet Tank Top-mockups-6.png",
+          "Distressed Grommet Eyelet Tank Top-mockups-7.png",
+          "Distressed Grommet Eyelet Tank Top-mockups-8.png",
+          "Distressed Grommet Eyelet Tank Top-mockups-9.png"
+        ],
+        "material_sources": [
+          "Distressed Grommet Eyelet Tank Top-mockups-3.png",
+          "Distressed Grommet Eyelet Tank Top-mockups-4.png",
+          "Distressed Grommet Eyelet Tank Top-mockups-5.png"
+        ]
+      },
+      "front_requirements": [
+        "For front-facing renders, use front_design references as the source of truth for actual sellable product artwork, logo, graphic placement, and product color.",
+        "Use blank_fit_model references only for fit/silhouette/material behavior. Do not let blank model shots erase actual product artwork."
+      ],
+      "back_requirements": [
+        "For back-facing renders, use back_design references as the source of truth for actual sellable product artwork and placement.",
+        "Do not move back artwork onto the front of the garment."
+      ],
+      "detail_requirements": [
+        "Preserve visible trims, tags, hems, grommets, neck shape, sleeve/arm opening, fabric texture, and wash."
+      ],
+      "silhouette": "tank top, grommet/eyelet detail",
+      "fabric_wash": "match product references",
+      "must_never_omit": [
+        "side-specific branding/graphic placement",
+        "garment silhouette",
+        "fabric color/wash",
+        "grommet/eyelet detail"
+      ],
+      "must_not_invent": [
+        "readable fake text",
+        "new brand names",
+        "new garment graphics not shown in the product folder",
+        "moving back graphics onto the front",
+        "removing visible front marks/logos when front references show them"
+      ]
+    },
+    "essential bodycon crewneck t shirt": {
+      "product_key": "essential bodycon crewneck t shirt",
+      "display_name": "Essential Bodycon Crewneck T Shirt",
+      "garment_type": "t-shirt",
+      "reference_files": {
+        "front": [
+          "Essential Bodycon Crewneck T-Shirt-mockups-1.png"
+        ],
+        "back": [
+          "Essential Bodycon Crewneck T-Shirt-mockups-2.png"
+        ],
+        "detail": [
+          "Essential Bodycon Crewneck T-Shirt-mockups-3.png",
+          "Essential Bodycon Crewneck T-Shirt-mockups-4.png",
+          "Essential Bodycon Crewneck T-Shirt-mockups-5.png"
+        ],
+        "folded_texture": [],
+        "hero": [
+          "Essential Bodycon Crewneck T-Shirt-mockups-1.png",
+          "Essential Bodycon Crewneck T-Shirt-mockups-2.png",
+          "Essential Bodycon Crewneck T-Shirt-mockups-6.png",
+          "Essential Bodycon Crewneck T-Shirt-mockups-7.png",
+          "Essential Bodycon Crewneck T-Shirt-mockups-8.png",
+          "Essential Bodycon Crewneck T-Shirt-mockups-9.png"
+        ]
+      },
+      "reference_roles": {
+        "back_design": [
+          "Essential Bodycon Crewneck T-Shirt-mockups-2.png"
+        ],
+        "blank_fit_model": [
+          "Essential Bodycon Crewneck T-Shirt-mockups-6.png",
+          "Essential Bodycon Crewneck T-Shirt-mockups-7.png",
+          "Essential Bodycon Crewneck T-Shirt-mockups-8.png",
+          "Essential Bodycon Crewneck T-Shirt-mockups-9.png",
+          "Essential Bodycon Crewneck T-Shirt-mockups-10.png"
+        ],
+        "folded_surface": [],
+        "front_design": [
+          "Essential Bodycon Crewneck T-Shirt-mockups-1.png"
+        ],
+        "material_detail": [
+          "Essential Bodycon Crewneck T-Shirt-mockups-3.png",
+          "Essential Bodycon Crewneck T-Shirt-mockups-4.png",
+          "Essential Bodycon Crewneck T-Shirt-mockups-5.png"
+        ],
+        "texture_backdrop": [],
+        "unknown": []
+      },
+      "reference_role_notes": [
+        "Designed product references define the final sellable graphics/logos/artwork.",
+        "Blank model references define fit, drape, crop, neckline, sleeves, and material behavior only.",
+        "Detail and surface references define texture, construction, hems, fabric weight, and feed backdrops."
+      ],
+      "front_graphic_policy": "use_front_design",
+      "back_graphic_policy": "use_back_design",
+      "preferred_generation_refs": {
+        "design_sources": [
+          "Essential Bodycon Crewneck T-Shirt-mockups-1.png",
+          "Essential Bodycon Crewneck T-Shirt-mockups-2.png"
+        ],
+        "fit_sources": [
+          "Essential Bodycon Crewneck T-Shirt-mockups-6.png",
+          "Essential Bodycon Crewneck T-Shirt-mockups-7.png",
+          "Essential Bodycon Crewneck T-Shirt-mockups-8.png",
+          "Essential Bodycon Crewneck T-Shirt-mockups-9.png"
+        ],
+        "material_sources": [
+          "Essential Bodycon Crewneck T-Shirt-mockups-3.png",
+          "Essential Bodycon Crewneck T-Shirt-mockups-4.png",
+          "Essential Bodycon Crewneck T-Shirt-mockups-5.png"
+        ]
+      },
+      "front_requirements": [
+        "For front-facing renders, use front_design references as the source of truth for actual sellable product artwork, logo, graphic placement, and product color.",
+        "Use blank_fit_model references only for fit/silhouette/material behavior. Do not let blank model shots erase actual product artwork."
+      ],
+      "back_requirements": [
+        "For back-facing renders, use back_design references as the source of truth for actual sellable product artwork and placement.",
+        "Do not move back artwork onto the front of the garment."
+      ],
+      "detail_requirements": [
+        "Preserve visible trims, tags, hems, grommets, neck shape, sleeve/arm opening, fabric texture, and wash."
+      ],
+      "silhouette": "t-shirt, close body fit",
+      "fabric_wash": "match product references",
+      "must_never_omit": [
+        "side-specific branding/graphic placement",
+        "garment silhouette",
+        "fabric color/wash"
+      ],
+      "must_not_invent": [
+        "readable fake text",
+        "new brand names",
+        "new garment graphics not shown in the product folder",
+        "moving back graphics onto the front",
+        "removing visible front marks/logos when front references show them"
+      ]
+    },
+    "essential heavyweight cotton t shirt": {
+      "product_key": "essential heavyweight cotton t shirt",
+      "display_name": "Essential Heavyweight Cotton T Shirt",
+      "garment_type": "t-shirt",
+      "reference_files": {
+        "front": [
+          "Essential Heavyweight Cotton T-Shirt-mockups-1.png"
+        ],
+        "back": [
+          "Essential Heavyweight Cotton T-Shirt-mockups-2.png"
+        ],
+        "detail": [
+          "Essential Heavyweight Cotton T-Shirt-mockups-3.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-4.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-5.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-30.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-31.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-32.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-33.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-34.png"
+        ],
+        "folded_texture": [],
+        "hero": [
+          "Essential Heavyweight Cotton T-Shirt-mockups-1.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-2.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-6.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-7.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-8.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-9.png"
+        ]
+      },
+      "reference_roles": {
+        "back_design": [
+          "Essential Heavyweight Cotton T-Shirt-mockups-2.png"
+        ],
+        "blank_fit_model": [
+          "Essential Heavyweight Cotton T-Shirt-mockups-6.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-7.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-8.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-9.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-10.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-11.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-12.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-13.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-14.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-15.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-16.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-17.png"
+        ],
+        "folded_surface": [],
+        "front_design": [
+          "Essential Heavyweight Cotton T-Shirt-mockups-1.png"
+        ],
+        "material_detail": [
+          "Essential Heavyweight Cotton T-Shirt-mockups-3.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-4.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-5.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-30.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-31.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-32.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-33.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-34.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-35.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-36.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-37.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-38.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-39.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-40.png"
+        ],
+        "texture_backdrop": [],
+        "unknown": [
+          "Essential Heavyweight Cotton T-Shirt-mockups-18.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-19.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-20.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-21.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-22.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-23.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-24.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-25.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-26.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-27.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-28.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-29.png"
+        ]
+      },
+      "reference_role_notes": [
+        "Designed product references define the final sellable graphics/logos/artwork.",
+        "Blank model references define fit, drape, crop, neckline, sleeves, and material behavior only.",
+        "Detail and surface references define texture, construction, hems, fabric weight, and feed backdrops.",
+        "Unknown references may need manual tagging in brand_context/product_reference_roles.csv."
+      ],
+      "front_graphic_policy": "use_front_design",
+      "back_graphic_policy": "use_back_design",
+      "preferred_generation_refs": {
+        "design_sources": [
+          "Essential Heavyweight Cotton T-Shirt-mockups-1.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-2.png"
+        ],
+        "fit_sources": [
+          "Essential Heavyweight Cotton T-Shirt-mockups-6.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-7.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-8.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-9.png"
+        ],
+        "material_sources": [
+          "Essential Heavyweight Cotton T-Shirt-mockups-3.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-4.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-5.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-30.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-31.png",
+          "Essential Heavyweight Cotton T-Shirt-mockups-32.png"
+        ]
+      },
+      "front_requirements": [
+        "For front-facing renders, use front_design references as the source of truth for actual sellable product artwork, logo, graphic placement, and product color.",
+        "Use blank_fit_model references only for fit/silhouette/material behavior. Do not let blank model shots erase actual product artwork."
+      ],
+      "back_requirements": [
+        "For back-facing renders, use back_design references as the source of truth for actual sellable product artwork and placement.",
+        "Do not move back artwork onto the front of the garment."
+      ],
+      "detail_requirements": [
+        "Preserve visible trims, tags, hems, grommets, neck shape, sleeve/arm opening, fabric texture, and wash."
+      ],
+      "silhouette": "t-shirt",
+      "fabric_wash": "heavyweight cotton",
+      "must_never_omit": [
+        "side-specific branding/graphic placement",
+        "garment silhouette",
+        "fabric color/wash"
+      ],
+      "must_not_invent": [
+        "readable fake text",
+        "new brand names",
+        "new garment graphics not shown in the product folder",
+        "moving back graphics onto the front",
+        "removing visible front marks/logos when front references show them"
+      ]
+    },
+    "essential wide neck baby t shirt": {
+      "product_key": "essential wide neck baby t shirt",
+      "display_name": "Essential Wide Neck Baby T Shirt",
+      "garment_type": "t-shirt",
+      "reference_files": {
+        "front": [
+          "Essential Wide Neck Baby T-shirt-mockups-1.png"
+        ],
+        "back": [
+          "Essential Wide Neck Baby T-shirt-mockups-2.png"
+        ],
+        "detail": [
+          "Essential Wide Neck Baby T-shirt-mockups-3.png",
+          "Essential Wide Neck Baby T-shirt-mockups-4.png",
+          "Essential Wide Neck Baby T-shirt-mockups-5.png"
+        ],
+        "folded_texture": [],
+        "hero": [
+          "Essential Wide Neck Baby T-shirt-mockups-1.png",
+          "Essential Wide Neck Baby T-shirt-mockups-2.png",
+          "Essential Wide Neck Baby T-shirt-mockups-6.png",
+          "Essential Wide Neck Baby T-shirt-mockups-7.png",
+          "Essential Wide Neck Baby T-shirt-mockups-8.png",
+          "Essential Wide Neck Baby T-shirt-mockups-9.png"
+        ]
+      },
+      "reference_roles": {
+        "back_design": [
+          "Essential Wide Neck Baby T-shirt-mockups-2.png"
+        ],
+        "blank_fit_model": [
+          "Essential Wide Neck Baby T-shirt-mockups-6.png",
+          "Essential Wide Neck Baby T-shirt-mockups-7.png",
+          "Essential Wide Neck Baby T-shirt-mockups-8.png",
+          "Essential Wide Neck Baby T-shirt-mockups-9.png",
+          "Essential Wide Neck Baby T-shirt-mockups-10.png",
+          "Essential Wide Neck Baby T-shirt-mockups-11.png",
+          "Essential Wide Neck Baby T-shirt-mockups-12.png",
+          "Essential Wide Neck Baby T-shirt-mockups-13.png",
+          "Essential Wide Neck Baby T-shirt-mockups-14.png",
+          "Essential Wide Neck Baby T-shirt-mockups-15.png",
+          "Essential Wide Neck Baby T-shirt-mockups-16.png",
+          "Essential Wide Neck Baby T-shirt-mockups-17.png"
+        ],
+        "folded_surface": [],
+        "front_design": [
+          "Essential Wide Neck Baby T-shirt-mockups-1.png"
+        ],
+        "material_detail": [
+          "Essential Wide Neck Baby T-shirt-mockups-3.png",
+          "Essential Wide Neck Baby T-shirt-mockups-4.png",
+          "Essential Wide Neck Baby T-shirt-mockups-5.png"
+        ],
+        "texture_backdrop": [],
+        "unknown": []
+      },
+      "reference_role_notes": [
+        "Designed product references define the final sellable graphics/logos/artwork.",
+        "Blank model references define fit, drape, crop, neckline, sleeves, and material behavior only.",
+        "Detail and surface references define texture, construction, hems, fabric weight, and feed backdrops."
+      ],
+      "front_graphic_policy": "use_front_design",
+      "back_graphic_policy": "use_back_design",
+      "preferred_generation_refs": {
+        "design_sources": [
+          "Essential Wide Neck Baby T-shirt-mockups-1.png",
+          "Essential Wide Neck Baby T-shirt-mockups-2.png"
+        ],
+        "fit_sources": [
+          "Essential Wide Neck Baby T-shirt-mockups-6.png",
+          "Essential Wide Neck Baby T-shirt-mockups-7.png",
+          "Essential Wide Neck Baby T-shirt-mockups-8.png",
+          "Essential Wide Neck Baby T-shirt-mockups-9.png"
+        ],
+        "material_sources": [
+          "Essential Wide Neck Baby T-shirt-mockups-3.png",
+          "Essential Wide Neck Baby T-shirt-mockups-4.png",
+          "Essential Wide Neck Baby T-shirt-mockups-5.png"
+        ]
+      },
+      "front_requirements": [
+        "For front-facing renders, use front_design references as the source of truth for actual sellable product artwork, logo, graphic placement, and product color.",
+        "Use blank_fit_model references only for fit/silhouette/material behavior. Do not let blank model shots erase actual product artwork."
+      ],
+      "back_requirements": [
+        "For back-facing renders, use back_design references as the source of truth for actual sellable product artwork and placement.",
+        "Do not move back artwork onto the front of the garment."
+      ],
+      "detail_requirements": [
+        "Preserve visible trims, tags, hems, grommets, neck shape, sleeve/arm opening, fabric texture, and wash."
+      ],
+      "silhouette": "t-shirt, wide neck",
+      "fabric_wash": "match product references",
+      "must_never_omit": [
+        "side-specific branding/graphic placement",
+        "garment silhouette",
+        "fabric color/wash"
+      ],
+      "must_not_invent": [
+        "readable fake text",
+        "new brand names",
+        "new garment graphics not shown in the product folder",
+        "moving back graphics onto the front",
+        "removing visible front marks/logos when front references show them"
+      ]
+    },
+    "french terry boxy tank top": {
+      "product_key": "french terry boxy tank top",
+      "display_name": "French Terry Boxy Tank Top",
+      "garment_type": "tank top",
+      "reference_files": {
+        "front": [
+          "French Terry Boxy Tank Top-mockups-1.png"
+        ],
+        "back": [
+          "French Terry Boxy Tank Top-mockups-2.png"
+        ],
+        "detail": [
+          "French Terry Boxy Tank Top-mockups-3.png",
+          "French Terry Boxy Tank Top-mockups-4.png",
+          "French Terry Boxy Tank Top-mockups-5.png"
+        ],
+        "folded_texture": [],
+        "hero": [
+          "French Terry Boxy Tank Top-mockups-1.png",
+          "French Terry Boxy Tank Top-mockups-1.png",
+          "French Terry Boxy Tank Top-mockups-2.png",
+          "French Terry Boxy Tank Top-mockups-2.png",
+          "French Terry Boxy Tank Top-mockups-6.png",
+          "French Terry Boxy Tank Top-mockups-6.png"
+        ]
+      },
+      "reference_roles": {
+        "back_design": [
+          "French Terry Boxy Tank Top-mockups-2.png"
+        ],
+        "blank_fit_model": [
+          "French Terry Boxy Tank Top-mockups-6.png",
+          "French Terry Boxy Tank Top-mockups-7.png",
+          "French Terry Boxy Tank Top-mockups-8.png",
+          "French Terry Boxy Tank Top-mockups-9.png",
+          "French Terry Boxy Tank Top-mockups-10.png",
+          "French Terry Boxy Tank Top-mockups-11.png",
+          "French Terry Boxy Tank Top-mockups-12.png",
+          "French Terry Boxy Tank Top-mockups-13.png",
+          "French Terry Boxy Tank Top-mockups-14.png"
+        ],
+        "folded_surface": [],
+        "front_design": [
+          "French Terry Boxy Tank Top-mockups-1.png"
+        ],
+        "material_detail": [
+          "French Terry Boxy Tank Top-mockups-3.png",
+          "French Terry Boxy Tank Top-mockups-4.png",
+          "French Terry Boxy Tank Top-mockups-5.png"
+        ],
+        "texture_backdrop": [],
+        "unknown": []
+      },
+      "reference_role_notes": [
+        "Designed product references define the final sellable graphics/logos/artwork.",
+        "Blank model references define fit, drape, crop, neckline, sleeves, and material behavior only.",
+        "Detail and surface references define texture, construction, hems, fabric weight, and feed backdrops."
+      ],
+      "front_graphic_policy": "use_front_design",
+      "back_graphic_policy": "use_back_design",
+      "preferred_generation_refs": {
+        "design_sources": [
+          "French Terry Boxy Tank Top-mockups-1.png",
+          "French Terry Boxy Tank Top-mockups-2.png"
+        ],
+        "fit_sources": [
+          "French Terry Boxy Tank Top-mockups-6.png",
+          "French Terry Boxy Tank Top-mockups-7.png",
+          "French Terry Boxy Tank Top-mockups-8.png",
+          "French Terry Boxy Tank Top-mockups-9.png"
+        ],
+        "material_sources": [
+          "French Terry Boxy Tank Top-mockups-3.png",
+          "French Terry Boxy Tank Top-mockups-4.png",
+          "French Terry Boxy Tank Top-mockups-5.png"
+        ]
+      },
+      "front_requirements": [
+        "For front-facing renders, use front_design references as the source of truth for actual sellable product artwork, logo, graphic placement, and product color.",
+        "Use blank_fit_model references only for fit/silhouette/material behavior. Do not let blank model shots erase actual product artwork."
+      ],
+      "back_requirements": [
+        "For back-facing renders, use back_design references as the source of truth for actual sellable product artwork and placement.",
+        "Do not move back artwork onto the front of the garment."
+      ],
+      "detail_requirements": [
+        "Preserve visible trims, tags, hems, grommets, neck shape, sleeve/arm opening, fabric texture, and wash."
+      ],
+      "silhouette": "tank top, boxy fit",
+      "fabric_wash": "french terry",
+      "must_never_omit": [
+        "side-specific branding/graphic placement",
+        "garment silhouette",
+        "fabric color/wash"
+      ],
+      "must_not_invent": [
+        "readable fake text",
+        "new brand names",
+        "new garment graphics not shown in the product folder",
+        "moving back graphics onto the front",
+        "removing visible front marks/logos when front references show them"
+      ]
+    },
+    "mineral wash waffle knit shorts": {
+      "product_key": "mineral wash waffle knit shorts",
+      "display_name": "Mineral Wash Waffle Knit Shorts",
+      "garment_type": "shorts",
+      "reference_files": {
+        "front": [
+          "Mineral Wash Waffle Knit Shorts-mockups-1.png"
+        ],
+        "back": [
+          "Mineral Wash Waffle Knit Shorts-mockups-2.png"
+        ],
+        "detail": [
+          "Mineral Wash Waffle Knit Shorts-mockups-3.png",
+          "Mineral Wash Waffle Knit Shorts-mockups-4.png",
+          "Mineral Wash Waffle Knit Shorts-mockups-5.png",
+          "Mineral Wash Waffle Knit Shorts-mockups-18.png",
+          "Mineral Wash Waffle Knit Shorts-mockups-19.png",
+          "Mineral Wash Waffle Knit Shorts-mockups-20.png"
+        ],
+        "folded_texture": [],
+        "hero": [
+          "Mineral Wash Waffle Knit Shorts-mockups-1.png",
+          "Mineral Wash Waffle Knit Shorts-mockups-2.png",
+          "Mineral Wash Waffle Knit Shorts-mockups-6.png",
+          "Mineral Wash Waffle Knit Shorts-mockups-7.png",
+          "Mineral Wash Waffle Knit Shorts-mockups-8.png",
+          "Mineral Wash Waffle Knit Shorts-mockups-9.png"
+        ]
+      },
+      "reference_roles": {
+        "back_design": [
+          "Mineral Wash Waffle Knit Shorts-mockups-2.png"
+        ],
+        "blank_fit_model": [
+          "Mineral Wash Waffle Knit Shorts-mockups-6.png",
+          "Mineral Wash Waffle Knit Shorts-mockups-7.png",
+          "Mineral Wash Waffle Knit Shorts-mockups-8.png",
+          "Mineral Wash Waffle Knit Shorts-mockups-9.png",
+          "Mineral Wash Waffle Knit Shorts-mockups-10.png",
+          "Mineral Wash Waffle Knit Shorts-mockups-11.png",
+          "Mineral Wash Waffle Knit Shorts-mockups-12.png",
+          "Mineral Wash Waffle Knit Shorts-mockups-13.png",
+          "Mineral Wash Waffle Knit Shorts-mockups-14.png",
+          "Mineral Wash Waffle Knit Shorts-mockups-15.png",
+          "Mineral Wash Waffle Knit Shorts-mockups-16.png",
+          "Mineral Wash Waffle Knit Shorts-mockups-17.png"
+        ],
+        "folded_surface": [],
+        "front_design": [
+          "Mineral Wash Waffle Knit Shorts-mockups-1.png"
+        ],
+        "material_detail": [
+          "Mineral Wash Waffle Knit Shorts-mockups-3.png",
+          "Mineral Wash Waffle Knit Shorts-mockups-4.png",
+          "Mineral Wash Waffle Knit Shorts-mockups-5.png"
+        ],
+        "texture_backdrop": [],
+        "unknown": [
+          "Mineral Wash Waffle Knit Shorts-mockups-18.png",
+          "Mineral Wash Waffle Knit Shorts-mockups-19.png",
+          "Mineral Wash Waffle Knit Shorts-mockups-20.png"
+        ]
+      },
+      "reference_role_notes": [
+        "Designed product references define the final sellable graphics/logos/artwork.",
+        "Blank model references define fit, drape, crop, neckline, sleeves, and material behavior only.",
+        "Detail and surface references define texture, construction, hems, fabric weight, and feed backdrops.",
+        "Unknown references may need manual tagging in brand_context/product_reference_roles.csv."
+      ],
+      "front_graphic_policy": "use_front_design",
+      "back_graphic_policy": "use_back_design",
+      "preferred_generation_refs": {
+        "design_sources": [
+          "Mineral Wash Waffle Knit Shorts-mockups-1.png",
+          "Mineral Wash Waffle Knit Shorts-mockups-2.png"
+        ],
+        "fit_sources": [
+          "Mineral Wash Waffle Knit Shorts-mockups-6.png",
+          "Mineral Wash Waffle Knit Shorts-mockups-7.png",
+          "Mineral Wash Waffle Knit Shorts-mockups-8.png",
+          "Mineral Wash Waffle Knit Shorts-mockups-9.png"
+        ],
+        "material_sources": [
+          "Mineral Wash Waffle Knit Shorts-mockups-3.png",
+          "Mineral Wash Waffle Knit Shorts-mockups-4.png",
+          "Mineral Wash Waffle Knit Shorts-mockups-5.png"
+        ]
+      },
+      "front_requirements": [
+        "For front-facing renders, use front_design references as the source of truth for actual sellable product artwork, logo, graphic placement, and product color.",
+        "Use blank_fit_model references only for fit/silhouette/material behavior. Do not let blank model shots erase actual product artwork."
+      ],
+      "back_requirements": [
+        "For back-facing renders, use back_design references as the source of truth for actual sellable product artwork and placement.",
+        "Do not move back artwork onto the front of the garment."
+      ],
+      "detail_requirements": [
+        "Preserve visible trims, tags, hems, grommets, neck shape, sleeve/arm opening, fabric texture, and wash."
+      ],
+      "silhouette": "shorts",
+      "fabric_wash": "mineral wash",
+      "must_never_omit": [
+        "side-specific branding/graphic placement",
+        "garment silhouette",
+        "fabric color/wash"
+      ],
+      "must_not_invent": [
+        "readable fake text",
+        "new brand names",
+        "new garment graphics not shown in the product folder",
+        "moving back graphics onto the front",
+        "removing visible front marks/logos when front references show them"
+      ]
+    },
+    "mineral wash waffle knit t shirt": {
+      "product_key": "mineral wash waffle knit t shirt",
+      "display_name": "Mineral Wash Waffle Knit T Shirt",
+      "garment_type": "t-shirt",
+      "reference_files": {
+        "front": [
+          "Mineral Wash Waffle Knit T-Shirt-mockups-1.png"
+        ],
+        "back": [
+          "Mineral Wash Waffle Knit T-Shirt-mockups-2.png"
+        ],
+        "detail": [
+          "Mineral Wash Waffle Knit T-Shirt-mockups-3.png",
+          "Mineral Wash Waffle Knit T-Shirt-mockups-4.png",
+          "Mineral Wash Waffle Knit T-Shirt-mockups-5.png",
+          "Mineral Wash Waffle Knit T-Shirt-mockups-18.png",
+          "Mineral Wash Waffle Knit T-Shirt-mockups-19.png",
+          "Mineral Wash Waffle Knit T-Shirt-mockups-20.png"
+        ],
+        "folded_texture": [],
+        "hero": [
+          "Mineral Wash Waffle Knit T-Shirt-mockups-1.png",
+          "Mineral Wash Waffle Knit T-Shirt-mockups-2.png",
+          "Mineral Wash Waffle Knit T-Shirt-mockups-6.png",
+          "Mineral Wash Waffle Knit T-Shirt-mockups-7.png",
+          "Mineral Wash Waffle Knit T-Shirt-mockups-8.png",
+          "Mineral Wash Waffle Knit T-Shirt-mockups-9.png"
+        ]
+      },
+      "reference_roles": {
+        "back_design": [
+          "Mineral Wash Waffle Knit T-Shirt-mockups-2.png"
+        ],
+        "blank_fit_model": [
+          "Mineral Wash Waffle Knit T-Shirt-mockups-6.png",
+          "Mineral Wash Waffle Knit T-Shirt-mockups-7.png",
+          "Mineral Wash Waffle Knit T-Shirt-mockups-8.png",
+          "Mineral Wash Waffle Knit T-Shirt-mockups-9.png",
+          "Mineral Wash Waffle Knit T-Shirt-mockups-10.png",
+          "Mineral Wash Waffle Knit T-Shirt-mockups-11.png",
+          "Mineral Wash Waffle Knit T-Shirt-mockups-12.png",
+          "Mineral Wash Waffle Knit T-Shirt-mockups-13.png",
+          "Mineral Wash Waffle Knit T-Shirt-mockups-14.png",
+          "Mineral Wash Waffle Knit T-Shirt-mockups-15.png",
+          "Mineral Wash Waffle Knit T-Shirt-mockups-16.png",
+          "Mineral Wash Waffle Knit T-Shirt-mockups-17.png"
+        ],
+        "folded_surface": [],
+        "front_design": [
+          "Mineral Wash Waffle Knit T-Shirt-mockups-1.png"
+        ],
+        "material_detail": [
+          "Mineral Wash Waffle Knit T-Shirt-mockups-3.png",
+          "Mineral Wash Waffle Knit T-Shirt-mockups-4.png",
+          "Mineral Wash Waffle Knit T-Shirt-mockups-5.png"
+        ],
+        "texture_backdrop": [],
+        "unknown": [
+          "Mineral Wash Waffle Knit T-Shirt-mockups-18.png",
+          "Mineral Wash Waffle Knit T-Shirt-mockups-19.png",
+          "Mineral Wash Waffle Knit T-Shirt-mockups-20.png"
+        ]
+      },
+      "reference_role_notes": [
+        "Designed product references define the final sellable graphics/logos/artwork.",
+        "Blank model references define fit, drape, crop, neckline, sleeves, and material behavior only.",
+        "Detail and surface references define texture, construction, hems, fabric weight, and feed backdrops.",
+        "Unknown references may need manual tagging in brand_context/product_reference_roles.csv."
+      ],
+      "front_graphic_policy": "use_front_design",
+      "back_graphic_policy": "use_back_design",
+      "preferred_generation_refs": {
+        "design_sources": [
+          "Mineral Wash Waffle Knit T-Shirt-mockups-1.png",
+          "Mineral Wash Waffle Knit T-Shirt-mockups-2.png"
+        ],
+        "fit_sources": [
+          "Mineral Wash Waffle Knit T-Shirt-mockups-6.png",
+          "Mineral Wash Waffle Knit T-Shirt-mockups-7.png",
+          "Mineral Wash Waffle Knit T-Shirt-mockups-8.png",
+          "Mineral Wash Waffle Knit T-Shirt-mockups-9.png"
+        ],
+        "material_sources": [
+          "Mineral Wash Waffle Knit T-Shirt-mockups-3.png",
+          "Mineral Wash Waffle Knit T-Shirt-mockups-4.png",
+          "Mineral Wash Waffle Knit T-Shirt-mockups-5.png"
+        ]
+      },
+      "front_requirements": [
+        "For front-facing renders, use front_design references as the source of truth for actual sellable product artwork, logo, graphic placement, and product color.",
+        "Use blank_fit_model references only for fit/silhouette/material behavior. Do not let blank model shots erase actual product artwork."
+      ],
+      "back_requirements": [
+        "For back-facing renders, use back_design references as the source of truth for actual sellable product artwork and placement.",
+        "Do not move back artwork onto the front of the garment."
+      ],
+      "detail_requirements": [
+        "Preserve visible trims, tags, hems, grommets, neck shape, sleeve/arm opening, fabric texture, and wash."
+      ],
+      "silhouette": "t-shirt",
+      "fabric_wash": "mineral wash",
+      "must_never_omit": [
+        "side-specific branding/graphic placement",
+        "garment silhouette",
+        "fabric color/wash"
+      ],
+      "must_not_invent": [
+        "readable fake text",
+        "new brand names",
+        "new garment graphics not shown in the product folder",
+        "moving back graphics onto the front",
+        "removing visible front marks/logos when front references show them"
+      ]
+    },
+    "vintage wash drop shoulder t shirt": {
+      "product_key": "vintage wash drop shoulder t shirt",
+      "display_name": "Vintage Wash Drop Shoulder T Shirt",
+      "garment_type": "t-shirt",
+      "reference_files": {
+        "front": [],
+        "back": [],
+        "detail": [
+          "Vintage Wash Drop Shoulder T-shirt-mockups-1.png",
+          "Vintage Wash Drop Shoulder T-shirt-mockups-2.png",
+          "Vintage Wash Drop Shoulder T-shirt-mockups-3.png",
+          "Vintage Wash Drop Shoulder T-shirt-mockups-4.png",
+          "Vintage Wash Drop Shoulder T-shirt-mockups-5.png",
+          "Vintage Wash Drop Shoulder T-shirt-mockups-6.png",
+          "Vintage Wash Drop Shoulder T-shirt-mockups-7.png",
+          "Vintage Wash Drop Shoulder T-shirt-mockups-8.png"
+        ],
+        "folded_texture": [],
+        "hero": [
+          "Vintage Wash Drop Shoulder T-shirt-mockups-1.png",
+          "Vintage Wash Drop Shoulder T-shirt-mockups-1.png",
+          "Vintage Wash Drop Shoulder T-shirt-mockups-1.png",
+          "Vintage Wash Drop Shoulder T-shirt-mockups-2.png",
+          "Vintage Wash Drop Shoulder T-shirt-mockups-2.png",
+          "Vintage Wash Drop Shoulder T-shirt-mockups-2.png"
+        ]
+      },
+      "reference_roles": {
+        "back_design": [],
+        "blank_fit_model": [],
+        "folded_surface": [],
+        "front_design": [],
+        "material_detail": [
+          "Vintage Wash Drop Shoulder T-shirt-mockups-1.png",
+          "Vintage Wash Drop Shoulder T-shirt-mockups-2.png",
+          "Vintage Wash Drop Shoulder T-shirt-mockups-3.png",
+          "Vintage Wash Drop Shoulder T-shirt-mockups-4.png",
+          "Vintage Wash Drop Shoulder T-shirt-mockups-5.png",
+          "Vintage Wash Drop Shoulder T-shirt-mockups-6.png",
+          "Vintage Wash Drop Shoulder T-shirt-mockups-7.png",
+          "Vintage Wash Drop Shoulder T-shirt-mockups-8.png",
+          "Vintage Wash Drop Shoulder T-shirt-mockups-9.png",
+          "Vintage Wash Drop Shoulder T-shirt-mockups-10.png",
+          "Vintage Wash Drop Shoulder T-shirt-mockups-11.png",
+          "Vintage Wash Drop Shoulder T-shirt-mockups-12.png",
+          "Vintage Wash Drop Shoulder T-shirt-mockups-13.png",
+          "Vintage Wash Drop Shoulder T-shirt-mockups-14.png",
+          "Vintage Wash Drop Shoulder T-shirt-mockups-15.png",
+          "Vintage Wash Drop Shoulder T-shirt-mockups-16.png",
+          "Vintage Wash Drop Shoulder T-shirt-mockups-17.png",
+          "Vintage Wash Drop Shoulder T-shirt-mockups-18.png"
+        ],
+        "texture_backdrop": [],
+        "unknown": []
+      },
+      "reference_role_notes": [
+        "Detail and surface references define texture, construction, hems, fabric weight, and feed backdrops."
+      ],
+      "front_graphic_policy": "fit_reference_only_no_invented_front_graphic",
+      "back_graphic_policy": "fit_reference_only_no_invented_back_graphic",
+      "preferred_generation_refs": {
+        "design_sources": [],
+        "fit_sources": [],
+        "material_sources": [
+          "Vintage Wash Drop Shoulder T-shirt-mockups-1.png",
+          "Vintage Wash Drop Shoulder T-shirt-mockups-2.png",
+          "Vintage Wash Drop Shoulder T-shirt-mockups-3.png",
+          "Vintage Wash Drop Shoulder T-shirt-mockups-4.png",
+          "Vintage Wash Drop Shoulder T-shirt-mockups-5.png",
+          "Vintage Wash Drop Shoulder T-shirt-mockups-6.png"
+        ]
+      },
+      "front_requirements": [
+        "For front-facing renders, use front_design references as the source of truth for actual sellable product artwork, logo, graphic placement, and product color.",
+        "Use blank_fit_model references only for fit/silhouette/material behavior. Do not let blank model shots erase actual product artwork."
+      ],
+      "back_requirements": [
+        "For back-facing renders, use back_design references as the source of truth for actual sellable product artwork and placement.",
+        "Do not move back artwork onto the front of the garment."
+      ],
+      "detail_requirements": [
+        "Preserve visible trims, tags, hems, grommets, neck shape, sleeve/arm opening, fabric texture, and wash."
+      ],
+      "silhouette": "t-shirt, drop shoulder",
+      "fabric_wash": "vintage wash",
+      "must_never_omit": [
+        "side-specific branding/graphic placement",
+        "garment silhouette",
+        "fabric color/wash"
+      ],
+      "must_not_invent": [
+        "readable fake text",
+        "new brand names",
+        "new garment graphics not shown in the product folder",
+        "moving back graphics onto the front",
+        "removing visible front marks/logos when front references show them"
+      ]
+    },
+    "vintage washed frayed hem hoodie": {
+      "product_key": "vintage washed frayed hem hoodie",
+      "display_name": "Vintage Washed Frayed Hem Hoodie",
+      "garment_type": "hoodie",
+      "reference_files": {
+        "front": [],
+        "back": [],
+        "detail": [
+          "Vintage Washed Frayed-Hem Hoodie-mockups-1.png",
+          "Vintage Washed Frayed-Hem Hoodie-mockups-2.png",
+          "Vintage Washed Frayed-Hem Hoodie-mockups-3.png",
+          "Vintage Washed Frayed-Hem Hoodie-mockups-4.png",
+          "Vintage Washed Frayed-Hem Hoodie-mockups-5.png",
+          "Vintage Washed Frayed-Hem Hoodie-mockups-6.png",
+          "Vintage Washed Frayed-Hem Hoodie-mockups-7.png",
+          "Vintage Washed Frayed-Hem Hoodie-mockups-8.png"
+        ],
+        "folded_texture": [],
+        "hero": [
+          "Vintage Washed Frayed-Hem Hoodie-mockups-1.png",
+          "Vintage Washed Frayed-Hem Hoodie-mockups-2.png",
+          "Vintage Washed Frayed-Hem Hoodie-mockups-3.png",
+          "Vintage Washed Frayed-Hem Hoodie-mockups-4.png",
+          "Vintage Washed Frayed-Hem Hoodie-mockups-5.png",
+          "Vintage Washed Frayed-Hem Hoodie-mockups-6.png"
+        ]
+      },
+      "reference_roles": {
+        "back_design": [],
+        "blank_fit_model": [],
+        "folded_surface": [],
+        "front_design": [],
+        "material_detail": [
+          "Vintage Washed Frayed-Hem Hoodie-mockups-1.png",
+          "Vintage Washed Frayed-Hem Hoodie-mockups-2.png",
+          "Vintage Washed Frayed-Hem Hoodie-mockups-3.png",
+          "Vintage Washed Frayed-Hem Hoodie-mockups-4.png",
+          "Vintage Washed Frayed-Hem Hoodie-mockups-5.png",
+          "Vintage Washed Frayed-Hem Hoodie-mockups-6.png",
+          "Vintage Washed Frayed-Hem Hoodie-mockups-7.png",
+          "Vintage Washed Frayed-Hem Hoodie-mockups-8.png",
+          "Vintage Washed Frayed-Hem Hoodie-mockups-9.png",
+          "Vintage Washed Frayed-Hem Hoodie-mockups-10.png",
+          "Vintage Washed Frayed-Hem Hoodie-mockups-11.png",
+          "Vintage Washed Frayed-Hem Hoodie-mockups-12.png",
+          "Vintage Washed Frayed-Hem Hoodie-mockups-13.png",
+          "Vintage Washed Frayed-Hem Hoodie-mockups-14.png",
+          "Vintage Washed Frayed-Hem Hoodie-mockups-15.png",
+          "Vintage Washed Frayed-Hem Hoodie-mockups-16.png",
+          "Vintage Washed Frayed-Hem Hoodie-mockups-17.png",
+          "Vintage Washed Frayed-Hem Hoodie-mockups-18.png",
+          "Vintage Washed Frayed-Hem Hoodie-mockups-19.png"
+        ],
+        "texture_backdrop": [],
+        "unknown": []
+      },
+      "reference_role_notes": [
+        "Detail and surface references define texture, construction, hems, fabric weight, and feed backdrops."
+      ],
+      "front_graphic_policy": "fit_reference_only_no_invented_front_graphic",
+      "back_graphic_policy": "fit_reference_only_no_invented_back_graphic",
+      "preferred_generation_refs": {
+        "design_sources": [],
+        "fit_sources": [],
+        "material_sources": [
+          "Vintage Washed Frayed-Hem Hoodie-mockups-1.png",
+          "Vintage Washed Frayed-Hem Hoodie-mockups-2.png",
+          "Vintage Washed Frayed-Hem Hoodie-mockups-3.png",
+          "Vintage Washed Frayed-Hem Hoodie-mockups-4.png",
+          "Vintage Washed Frayed-Hem Hoodie-mockups-5.png",
+          "Vintage Washed Frayed-Hem Hoodie-mockups-6.png"
+        ]
+      },
+      "front_requirements": [
+        "For front-facing renders, use front_design references as the source of truth for actual sellable product artwork, logo, graphic placement, and product color.",
+        "Use blank_fit_model references only for fit/silhouette/material behavior. Do not let blank model shots erase actual product artwork."
+      ],
+      "back_requirements": [
+        "For back-facing renders, use back_design references as the source of truth for actual sellable product artwork and placement.",
+        "Do not move back artwork onto the front of the garment."
+      ],
+      "detail_requirements": [
+        "Preserve visible trims, tags, hems, grommets, neck shape, sleeve/arm opening, fabric texture, and wash."
+      ],
+      "silhouette": "hoodie, frayed hem",
+      "fabric_wash": "vintage wash",
+      "must_never_omit": [
+        "side-specific branding/graphic placement",
+        "garment silhouette",
+        "fabric color/wash",
+        "frayed hem"
+      ],
+      "must_not_invent": [
+        "readable fake text",
+        "new brand names",
+        "new garment graphics not shown in the product folder",
+        "moving back graphics onto the front",
+        "removing visible front marks/logos when front references show them"
+      ]
+    }
+  },
+  "updated_at": "2026-05-19T16:17:57"
+}

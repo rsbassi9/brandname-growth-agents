@@ -1,0 +1,23 @@
+[
+  {
+    "id": "prompt-20260525135134",
+    "post_id": "launch-recovery-01-intro",
+    "tool": "fal.ai",
+    "purpose": "Carousel support for Context",
+    "prompt": "Create a premium visual asset for Brand Name Design, an art-translation streetwear brand.\nPost hook: [4DRFT] begins with a system..\nStrategic job: Serve the context phase of the current launch narrative.\nLaunch phase: Context.\nUse these references as soft inspiration, not strict replication: IMG_7935.JPG, IMG_7936.JPG, IMG_7937.JPG, IMG_7938.JPG, IMG_7939.JPG, IMG_7940.JPG, IMG_7941.JPG.\nVisual language: physical oil painting evidence, digital reconstruction, wearable fragment, quiet studio archive, minimal premium tension.\nComposition should feel intentional, mysterious, and editorial, with realistic material detail and space for sparse overlay text.\nAvoid generic fashion ecommerce, loud hype styling, smiling catalogue energy, fake logos, malformed garments, unreadable typography, and over-polished AI gloss.",
+    "negative_prompt": "generic clothing store, fast fashion catalogue, glossy stock photo, fake brand marks, distorted garment, unreadable text, crowded layout",
+    "aspect_ratio": "4:5",
+    "duration": "",
+    "reference_assets": [
+      "IMG_7935.JPG",
+      "IMG_7936.JPG",
+      "IMG_7937.JPG",
+      "IMG_7938.JPG",
+      "IMG_7939.JPG",
+      "IMG_7940.JPG",
+      "IMG_7941.JPG"
+    ],
+    "status": "Prompt Draft",
+    "created_at": "2026-05-25T13:51:34"
+  }
+]

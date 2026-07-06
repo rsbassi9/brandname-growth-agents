@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Brand Name Review Dashboard</title>
-    <link rel="stylesheet" href="/static/styles.css?v=reference-roles-2" />
+    <link rel="stylesheet" href="/static/styles.css?v=strategy-hub-1" />
   </head>
   <body>
     <aside class="sidebar">
@@ -30,6 +30,7 @@
         <button class="mode-button" data-mode="launch" type="button">Drop Launch</button>
         <button class="mode-button" data-mode="direction" type="button">Direction</button>
         <p>Learn</p>
+        <button class="mode-button" data-mode="strategy" type="button">Strategy Hub</button>
         <button class="mode-button" data-mode="performance" type="button">Performance</button>
         <button class="mode-button" data-mode="shoot" type="button">Shoot Planner</button>
         <button class="mode-button" data-mode="merchandising" type="button">Merchandising</button>
@@ -169,6 +170,16 @@
         </div>
         <div id="performanceSummary" class="strategy-panel"></div>
         <div id="performanceList" class="performance-list"></div>
+      </section>
+
+      <section id="strategyView" class="action-view hidden">
+        <div class="calendar-header">
+          <div>
+            <p class="eyebrow">Strategy Hub</p>
+            <h3>Teach the dashboard the journey, real posts, and next growth moves.</h3>
+          </div>
+        </div>
+        <div id="strategyHub" class="strategy-hub"></div>
       </section>
 
       <section id="shootView" class="action-view hidden">
@@ -417,6 +428,6 @@
       </section>
     </div>
 
-    <script src="/static/app.js?v=reference-roles-2"></script>
+    <script src="/static/app.js?v=strategy-hub-1"></script>
   </body>
 </html>

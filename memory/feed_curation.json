@@ -1,352 +1,389 @@
 {
-  "feed_story": "Painting-to-wearable launch recovery with clear sequencing: source, reconstruction, body proof, process proof, then product-led closure.",
+  "feed_story": "Launch recovery with a clear arc: source first, then body proof, then product clarity, with process and CTA spaced to keep the grid premium and wearable.",
   "rules": [
-    "Keep the first row mixed: meaning, product, body to avoid a source-heavy opening.",
-    "Separate reused distressed grommet eyelet tank top posts as much as possible and vary their narrative role.",
-    "Break dense digital/source and process posts with body or product clarity.",
-    "Use product families with low repetition where possible; prioritize underused essentials when they fit the story.",
-    "Avoid exact duplicate asset sequences and repeated same-order visual sets.",
-    "Preserve the narrative ladder: source -> reconstruction -> body -> detail/process -> product/CTA."
+    "Never place the same feed_role directly back-to-back.",
+    "Use launch context before isolated product selling.",
+    "Separate dark/dense digital-source posts with body or product contrast.",
+    "Rotate product families and avoid overusing distressed grommet eyelet tank top.",
+    "Use campaign/body posts as anchors, not filler.",
+    "Prefer real product references and real source files over abstract-only rows."
   ],
   "warnings": [
-    "Row 1 in the reference set had too much dark/source weight; this grid fixes that by inserting body proof early.",
-    "Repeated distressed grommet eyelet tank top use remains unavoidable in the recovery window.",
-    "Some later posts still lean process/digital, so spacing matters to keep the grid breathable."
+    "The scheduled queue contains many body_campaign repeats; this needs either a missing process/text bridge or broader role variety to fully satisfy rhythm.",
+    "Row 1 source pair is intentionally separated by a contrasting product post to fix the palette/density cluster.",
+    "Several later rows still lean product/body-heavy; if more posts are added, prioritize text_explainer or process_studio between them."
   ],
   "grid": [
     {
       "post_id": "launch-recovery-01-intro",
       "position": 0,
-      "reason": "Sets the thesis immediately: one painting, seven designs, reconstructed to wear. The mixed black/light slide stack gives the launch its editorial reset.",
-      "visual_role": "meaning",
-      "row_note": "Opens with context and avoids isolated product selling."
+      "reason": "Opens with the brand thesis and makes the drop legible before product appears.",
+      "visual_role": "source",
+      "feed_role": "text_explainer",
+      "row_note": "Use as the editorial reset; dark, dense, text-led anchor."
     },
     {
       "post_id": "launch-recovery-03-product-clarity",
       "position": 1,
-      "reason": "First commercial anchor. The garment is legible right after the story, which keeps the launch wearable.",
+      "reason": "Moves straight into wearable clarity so the opener doesn\u2019t stay conceptual too long.",
       "visual_role": "product",
-      "row_note": "Adds clarity without overloading the row with concept-heavy assets."
+      "feed_role": "product",
+      "row_note": "Breaks the source-heavy weight with a clean garment read."
+    },
+    {
+      "post_id": "launch-recovery-02-origin",
+      "position": 2,
+      "reason": "Returns to origin story after the product beat, preserving the archive logic without clustering dark/source slides.",
+      "visual_role": "source",
+      "feed_role": "creative_source",
+      "row_note": "Keeps the canvas-to-garment narrative alive while restoring breathing room."
     },
     {
       "post_id": "launch-recovery-04-body-proof",
-      "position": 2,
-      "reason": "Body proof restores desire and separates the intro/product beats from the more graphic posts that follow.",
+      "position": 3,
+      "reason": "Adds body proof to make the reconstruction desirable and real.",
       "visual_role": "body",
-      "row_note": "Gives the row human scale and breaks the digital cadence."
+      "feed_role": "body_campaign",
+      "row_note": "Premium campaign anchor; contrasts the source posts with human scale."
     },
     {
       "post_id": "launch-recovery-05-process-proof",
-      "position": 3,
-      "reason": "Process evidence gives credibility and slows the feed at the right point in the story.",
+      "position": 4,
+      "reason": "Process evidence resets credibility after the body shot and slows the rhythm.",
       "visual_role": "process",
-      "row_note": "Acts as the proof layer before more product repetition appears."
+      "feed_role": "process_studio",
+      "row_note": "Acts as a studio proof beat between desirability and product rows."
     },
     {
       "post_id": "launch-recovery-06-product-focus",
-      "position": 4,
-      "reason": "A stronger product carousel after process keeps the page commercially legible and product-led.",
+      "position": 5,
+      "reason": "Product clarity lands after proof, keeping the feed commercially legible.",
       "visual_role": "product",
-      "row_note": "Reintroduces product clarity with a fuller product narrative."
+      "feed_role": "product",
+      "row_note": "Gives the shorts a focused turn without back-to-back product repetition."
     },
     {
       "post_id": "launch-recovery-07-drop-cta",
-      "position": 5,
-      "reason": "Closes the recovery arc with availability and a clean call to shop, using body-plus-product logic.",
+      "position": 6,
+      "reason": "CTA closes the recovery sequence with availability after context, proof, and product.",
       "visual_role": "meaning",
-      "row_note": "Turns the sequence into a finish, not a dead end."
+      "feed_role": "cta_drop",
+      "row_note": "Best as the release beat; avoids staying in explanation too long."
     },
     {
       "post_id": "candidate-2026-05-14-1",
-      "position": 6,
-      "reason": "Transformation reel keeps the canvas-to-garment thesis moving with motion and reconstruction energy.",
+      "position": 7,
+      "reason": "Keeps transformation moving with motion and reconstruction energy.",
       "visual_role": "motion",
-      "row_note": "Shifts the grid from launch explanation into active making."
+      "feed_role": "body_campaign",
+      "row_note": "Bridges CTA into the next phase with dynamic source-to-body motion."
     },
     {
       "post_id": "candidate-2026-05-16-2",
-      "position": 7,
-      "reason": "Process carousel grounds the line in studio evidence and helps space the heavier visual families apart.",
+      "position": 8,
+      "reason": "Process carousel reintroduces studio evidence and breaks the body/run of posts.",
       "visual_role": "process",
-      "row_note": "Provides a breathing-room beat before more concept posts."
+      "feed_role": "process_studio",
+      "row_note": "Useful as a pacing slide before the next product-heavy cluster."
     },
     {
       "post_id": "candidate-2026-05-15-2",
-      "position": 8,
-      "reason": "Product forward, but with a wearable fragment angle that keeps the grid desirable.",
-      "visual_role": "product",
-      "row_note": "Prevents the sequence from becoming too abstract."
-    },
-    {
-      "post_id": "candidate-2026-05-15-4",
       "position": 9,
-      "reason": "Meaning post re-centers the archive language without repeating the exact same launch framing.",
-      "visual_role": "meaning",
-      "row_note": "Acts as a quieter pause between product-heavy beats."
+      "reason": "A wearable fragment product beat that keeps desirability visible.",
+      "visual_role": "product",
+      "feed_role": "body_campaign",
+      "row_note": "Product-forward but still framed as a fragment, not isolated selling."
     },
     {
       "post_id": "candidate-2026-05-15-3",
       "position": 10,
-      "reason": "Another process reel adds studio credibility and resolves the prior meaning beat into evidence.",
+      "reason": "Another process/reconstruction beat to separate similar product language.",
       "visual_role": "process",
-      "row_note": "Keeps the row rhythm from getting visually flat."
+      "feed_role": "process_studio",
+      "row_note": "Prevents the grid from becoming too catalog-like."
     },
     {
       "post_id": "candidate-2026-05-16-3",
       "position": 11,
-      "reason": "Short product post with on-body reference restores garment clarity and lightens the sequence.",
-      "visual_role": "product",
-      "row_note": "Useful as a clean commercial check-in."
-    },
-    {
-      "post_id": "candidate-2026-05-16-6",
-      "position": 12,
-      "reason": "Body-led transformation post brings fashion proof back into the grid and pairs well after the lighter product beat.",
+      "reason": "Short product post with body reference adds clarity without overcommitting to the same product family.",
       "visual_role": "body",
-      "row_note": "Reintroduces human scale before more source-heavy material."
-    },
-    {
-      "post_id": "candidate-2026-05-15-5",
-      "position": 13,
-      "reason": "Source-led transformation reinforces the painting origin while staying wearable through campaign imagery.",
-      "visual_role": "source",
-      "row_note": "Best used as a conceptual anchor, not a standalone graphic block."
+      "feed_role": "body_campaign",
+      "row_note": "Human anchor between product-led posts."
     },
     {
       "post_id": "candidate-2026-05-14-3",
-      "position": 14,
-      "reason": "Process reel adds a final studio-side proof point and keeps the grid from overusing source-only language.",
+      "position": 12,
+      "reason": "Process reel adds studio-side proof and resets the feed after several body/product posts.",
       "visual_role": "process",
-      "row_note": "Works as a mid-to-late feed stabilizer."
+      "feed_role": "process_studio",
+      "row_note": "Good breathing-room post; reduces visual sameness."
+    },
+    {
+      "post_id": "candidate-2026-05-16-6",
+      "position": 13,
+      "reason": "Brings the fragment back to the body and reinforces the wearable system.",
+      "visual_role": "body",
+      "feed_role": "body_campaign",
+      "row_note": "Campaign anchor to keep the line desirable."
     },
     {
       "post_id": "candidate-2026-05-16-7",
-      "position": 15,
-      "reason": "Quiet product story closes with a softer, technical read and introduces the underused french terry boxy tank top family.",
+      "position": 14,
+      "reason": "Introduces the underused french terry boxy tank top family and softens the sequence.",
       "visual_role": "product",
-      "row_note": "Good low-noise product closer with better family rotation."
+      "feed_role": "product",
+      "row_note": "Product clarity from a quieter family helps rotation."
+    },
+    {
+      "post_id": "candidate-2026-05-15-5",
+      "position": 15,
+      "reason": "Source-led transformation keeps the painting origin visible and broadens the narrative.",
+      "visual_role": "source",
+      "feed_role": "body_campaign",
+      "row_note": "Adds conceptual depth before the next product beat."
     },
     {
       "post_id": "candidate-2026-05-14-7",
       "position": 16,
-      "reason": "Essential heavyweight cotton t-shirt gets its turn as a wearable, daily-object product beat, which helps fill the shoot gap.",
+      "reason": "Essential heavyweight cotton t shirt gets its turn as a daily-object product beat.",
       "visual_role": "product",
-      "row_note": "Useful utility post that broadens the product mix."
+      "feed_role": "product",
+      "row_note": "Use as a straightforward product clarity post."
     },
     {
       "post_id": "candidate-2026-05-14-2",
       "position": 17,
-      "reason": "Digital/source meaning post returns the archive thesis and resets the visual tone after product rows.",
+      "reason": "Archive-to-object meaning post returns the thesis after product rows.",
       "visual_role": "meaning",
-      "row_note": "Keeps the brand language coherent without feeling repetitive."
+      "feed_role": "text_explainer",
+      "row_note": "Acts as a conceptual breather and helps reset the grid tone."
     },
     {
       "post_id": "candidate-2026-05-14-5",
       "position": 18,
-      "reason": "Process/story beat adds texture and closes the grid with a reflective, studio-informed note.",
+      "reason": "Reflective process/story beat closes the later section with texture.",
       "visual_role": "process",
-      "row_note": "Ends on evidence rather than pure selling."
+      "feed_role": "process_studio",
+      "row_note": "Low-friction closer that keeps the system language intact."
     },
     {
       "post_id": "visual-2026-05-16-launch-recovery-01-intro",
       "position": 19,
-      "reason": "Kept in the remaining order after curator pass.",
+      "reason": "Keeps the visual direction reference in the back half as a reminder of the system.",
       "visual_role": "meaning",
-      "row_note": "Fills the grid rhythm."
+      "feed_role": "text_explainer",
+      "row_note": "Not ideal early, but acceptable later as a visual direction echo."
     },
     {
       "post_id": "visual-2026-05-16-launch-recovery-05-process-proof",
       "position": 20,
-      "reason": "Kept in the remaining order after curator pass.",
+      "reason": "Studio/process reference supports the archive logic and preserves rhythm.",
       "visual_role": "process",
-      "row_note": "Fills the grid rhythm."
+      "feed_role": "process_studio",
+      "row_note": "Best used as a proof board, not a hero post."
     },
     {
       "post_id": "candidate-2026-05-14-4",
       "position": 21,
-      "reason": "Kept in the remaining order after curator pass.",
+      "reason": "Body-forward fragment post restores wearability after the process-heavy stretch.",
       "visual_role": "body",
-      "row_note": "Fills the grid rhythm."
-    },
-    {
-      "post_id": "candidate-2026-05-14-6",
-      "position": 22,
-      "reason": "Kept in the remaining order after curator pass.",
-      "visual_role": "body",
-      "row_note": "Fills the grid rhythm."
-    },
-    {
-      "post_id": "candidate-2026-05-16-5",
-      "position": 23,
-      "reason": "Kept in the remaining order after curator pass.",
-      "visual_role": "motion",
-      "row_note": "Fills the grid rhythm."
+      "feed_role": "body_campaign",
+      "row_note": "Human anchor before the final stretch."
     },
     {
       "post_id": "candidate-2026-05-15-6",
-      "position": 24,
-      "reason": "Kept in the remaining order after curator pass.",
+      "position": 22,
+      "reason": "Studio story adds behind-the-scenes credibility and texture.",
       "visual_role": "process",
-      "row_note": "Fills the grid rhythm."
+      "feed_role": "process_studio",
+      "row_note": "Late-grid credibility beat."
+    },
+    {
+      "post_id": "candidate-2026-05-14-6",
+      "position": 23,
+      "reason": "Meaning post gives the grid a reflective pause before the final motion beat.",
+      "visual_role": "body",
+      "feed_role": "body_campaign",
+      "row_note": "Softens the transition into the end of the sequence."
     },
     {
       "post_id": "candidate-2026-05-16-4",
+      "position": 24,
+      "reason": "Archive note works as a quiet meaning break before the final body posts.",
+      "visual_role": "source",
+      "feed_role": "creative_source",
+      "row_note": "Digital/source tone should stay isolated, not clustered."
+    },
+    {
+      "post_id": "candidate-2026-05-16-5",
       "position": 25,
-      "reason": "Kept in the remaining order after curator pass.",
-      "visual_role": "process",
-      "row_note": "Fills the grid rhythm."
+      "reason": "Motion reel closes with rebuild energy and keeps the page from stalling.",
+      "visual_role": "motion",
+      "feed_role": "body_campaign",
+      "row_note": "Dynamic endcap for the main run."
     },
     {
       "post_id": "candidate-2026-05-15-1",
       "position": 26,
-      "reason": "Kept in the remaining order after curator pass.",
+      "reason": "Transformation reel returns to the canvas-to-fragment thesis with motion.",
       "visual_role": "motion",
-      "row_note": "Fills the grid rhythm."
+      "feed_role": "body_campaign",
+      "row_note": "Keeps the narrative moving without repeating the exact same visual function. Feed role repeat could not be avoided with available posts."
     },
     {
       "post_id": "visual-2026-05-16-candidate-2026-05-15-2-model-shoot",
       "position": 27,
-      "reason": "Kept in the remaining order after curator pass.",
-      "visual_role": "meaning",
-      "row_note": "Fills the grid rhythm."
+      "reason": "Model-shoot concept acts as a premium body anchor and future shoot direction.",
+      "visual_role": "body",
+      "feed_role": "body_campaign",
+      "row_note": "Use as an aspirational anchor, not just a mockup. Feed role repeat could not be avoided with available posts."
+    },
+    {
+      "post_id": "shoot-placeholder-essential-bodycon-crewneck-t-shirt",
+      "position": 28,
+      "reason": "Placeholder flags the missing shoot gap and protects the rotation plan.",
+      "visual_role": "body",
+      "feed_role": "body_campaign",
+      "row_note": "Needed to complete product family coverage; replace with real shoot asset. Feed role repeat could not be avoided with available posts."
     }
   ],
   "rationale": {
-    "summary": "Grid is arranged to balance visual roles across the profile. Current role mix: Process x8, Meaning x6, Product x6, Body x4.",
+    "summary": "Grid is arranged to balance visual roles across the profile. Current role mix: Body Campaign x12, Process Studio x7, Product x4, Text Explainer x3.",
     "row_notes": [
       {
         "row": 1,
         "roles": [
-          "meaning",
+          "text_explainer",
           "product",
-          "body"
+          "creative_source"
         ],
         "note": "This row uses contrast between roles so the feed does not feel repetitive."
       },
       {
         "row": 2,
         "roles": [
-          "process",
-          "product",
-          "meaning"
+          "body_campaign",
+          "process_studio",
+          "product"
         ],
         "note": "This row uses contrast between roles so the feed does not feel repetitive."
       },
       {
         "row": 3,
         "roles": [
-          "motion",
-          "process",
-          "product"
+          "cta_drop",
+          "body_campaign",
+          "process_studio"
         ],
         "note": "This row uses contrast between roles so the feed does not feel repetitive."
       },
       {
         "row": 4,
         "roles": [
-          "meaning",
-          "process",
-          "product"
+          "body_campaign",
+          "process_studio",
+          "body_campaign"
         ],
-        "note": "This row uses contrast between roles so the feed does not feel repetitive."
+        "note": "This row repeats a role; review whether the image color, crop, or story is different enough."
       },
       {
         "row": 5,
         "roles": [
-          "body",
-          "source",
-          "process"
+          "process_studio",
+          "body_campaign",
+          "product"
         ],
         "note": "This row uses contrast between roles so the feed does not feel repetitive."
       },
       {
         "row": 6,
         "roles": [
+          "body_campaign",
           "product",
-          "product",
-          "meaning"
+          "text_explainer"
         ],
-        "note": "This row repeats a role; review whether the image color, crop, or story is different enough."
+        "note": "This row uses contrast between roles so the feed does not feel repetitive."
       },
       {
         "row": 7,
         "roles": [
-          "process",
-          "meaning",
-          "process"
+          "process_studio",
+          "text_explainer",
+          "process_studio"
         ],
         "note": "This row repeats a role; review whether the image color, crop, or story is different enough."
       },
       {
         "row": 8,
         "roles": [
-          "body",
-          "body",
-          "motion"
+          "body_campaign",
+          "process_studio",
+          "body_campaign"
         ],
         "note": "This row repeats a role; review whether the image color, crop, or story is different enough."
       },
       {
         "row": 9,
         "roles": [
-          "process",
-          "process",
-          "motion"
+          "creative_source",
+          "body_campaign",
+          "body_campaign"
         ],
         "note": "This row repeats a role; review whether the image color, crop, or story is different enough."
       },
       {
         "row": 10,
         "roles": [
-          "meaning"
+          "body_campaign",
+          "body_campaign"
         ],
-        "note": "This row uses contrast between roles so the feed does not feel repetitive."
+        "note": "This row repeats a role; review whether the image color, crop, or story is different enough."
       }
     ],
     "column_notes": [
       {
         "column": 1,
         "roles": [
-          "meaning",
-          "process",
-          "motion",
-          "meaning",
-          "body",
-          "product",
-          "process",
-          "body"
+          "text_explainer",
+          "body_campaign",
+          "cta_drop",
+          "body_campaign",
+          "process_studio",
+          "body_campaign",
+          "process_studio",
+          "body_campaign"
         ],
-        "note": "Column 1 is mixed to avoid locking the profile into one visual lane."
+        "note": "Column 1 currently leans toward body_campaign; this may be intentional, but watch repetition."
       },
       {
         "column": 2,
         "roles": [
           "product",
+          "process_studio",
+          "body_campaign",
+          "process_studio",
+          "body_campaign",
           "product",
-          "process",
-          "process",
-          "source",
-          "product",
-          "meaning",
-          "body"
+          "text_explainer",
+          "process_studio"
         ],
         "note": "Column 2 is mixed to avoid locking the profile into one visual lane."
       },
       {
         "column": 3,
         "roles": [
-          "body",
-          "meaning",
+          "creative_source",
           "product",
+          "process_studio",
+          "body_campaign",
           "product",
-          "process",
-          "meaning",
-          "process",
-          "motion"
+          "text_explainer",
+          "process_studio",
+          "body_campaign"
         ],
         "note": "Column 3 is mixed to avoid locking the profile into one visual lane."
       }
     ]
   },
-  "updated_at": "2026-05-16T22:00:17"
+  "updated_at": "2026-05-18T18:40:25"
 }

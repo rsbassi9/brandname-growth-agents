@@ -1,0 +1,67 @@
+[
+  {
+    "phase": "Foundation",
+    "items": [
+      "Manual Instagram memory/import",
+      "Calendar reconciliation/status updates",
+      "Brand timeline",
+      "Journey/vibe memory",
+      "Asset usage memory",
+      "Product truth profiles"
+    ]
+  },
+  {
+    "phase": "Content Strategy",
+    "items": [
+      "Post opinion/strategist notes",
+      "Why this post exists",
+      "Launch phase system",
+      "Confidence scores",
+      "Creative requests queue"
+    ]
+  },
+  {
+    "phase": "External Creative",
+    "items": [
+      "Creative prompt field for fal.ai/Runway/Kling",
+      "Prompt lifecycle tracking",
+      "Attach generated external files from Drive"
+    ]
+  },
+  {
+    "phase": "SEO",
+    "items": [
+      "Google Search Console integration",
+      "PageSpeed Insights integration",
+      "Shopify read-only SEO audit",
+      "SEO draft approvals"
+    ]
+  },
+  {
+    "phase": "Ads",
+    "items": [
+      "Ad concept strategy",
+      "Ad readiness scoring",
+      "Tracking health checklist",
+      "Meta Ads read-only reporting later"
+    ]
+  },
+  {
+    "phase": "Automation Later",
+    "items": [
+      "Official Instagram Graph API sync",
+      "Weekly strategist review",
+      "Approval-gated Shopify/SEO writes"
+    ]
+  },
+  {
+    "phase": "UI / UX Workflow",
+    "items": [
+      "Strategy Hub home",
+      "Fewer modes, clearer grouped workflow",
+      "Visual status lanes for Draft, Posted, Measured, Learned",
+      "Compact insight cards instead of long report walls",
+      "Post builder shows strategy, assets, prompt, SEO, and ad use from one screen"
+    ]
+  }
+]

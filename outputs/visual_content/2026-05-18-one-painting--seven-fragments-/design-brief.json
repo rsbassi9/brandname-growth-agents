@@ -1,0 +1,86 @@
+{
+  "title": "One painting. Seven fragments.",
+  "platform": "Instagram",
+  "format": "carousel",
+  "asset_strategy": "Lead with the painting as source truth, then move through scan/reconstruction evidence, then land on a wearable fragment with body proof. Use one quieter product/detail slide to keep the row breathable and premium. Keep text minimal, protocol-based, and archive-like.",
+  "slides": [
+    {
+      "slide": 1,
+      "headline": "ONE PAINTING.",
+      "subhead": "SEVEN FRAGMENTS.",
+      "asset_hint": "ADRIFT_colour_oilpaint_v5.png",
+      "layout": "cover",
+      "notes": "Source image dominates. Bone background framing, severe crop, heavy negative space."
+    },
+    {
+      "slide": 2,
+      "headline": "SCAN / ACTIVE",
+      "subhead": "CAPTURED SURFACE",
+      "asset_hint": "IMG_1793.HEIC",
+      "layout": "archive",
+      "notes": "Treat as optical evidence. Technical label feel, close crop, no extra noise."
+    },
+    {
+      "slide": 3,
+      "headline": "RECONSTRUCTED",
+      "subhead": "SYSTEM ALIGNMENT",
+      "asset_hint": "IMG_1794.HEIC",
+      "layout": "detail",
+      "notes": "Show the translation state. Sparse coordinates and scan marks, restrained red accent."
+    },
+    {
+      "slide": 4,
+      "headline": "FRAGMENT 01",
+      "subhead": "EXTRACTED FORM",
+      "asset_hint": "4DRFT_design2_blacktext_FINAL copy.png",
+      "layout": "split",
+      "notes": "Use as a design-system bridge between art and garment. Keep it clean and proof-like."
+    },
+    {
+      "slide": 5,
+      "headline": "WORN",
+      "subhead": "BODY AS PROJECTION",
+      "asset_hint": "JRR_4000.jpg",
+      "layout": "product",
+      "notes": "On-body hero. Oversized silhouette, concrete/daylight, confidence, candid motion."
+    },
+    {
+      "slide": 6,
+      "headline": "FRAGMENT 02",
+      "subhead": "MATERIAL EVIDENCE",
+      "asset_hint": "Essential Heavyweight Cotton T-Shirt-mockups-9.png",
+      "layout": "detail",
+      "notes": "Quiet product surface for breathing room. Let texture and garment scale read clearly."
+    },
+    {
+      "slide": 7,
+      "headline": "FOLLOW THE ARCHIVE",
+      "subhead": "DROP / SYSTEM / BODY",
+      "asset_hint": "JRR_4001.jpg",
+      "layout": "archive",
+      "notes": "Close with a clean campaign endpoint. Fashion desirability first, concept second."
+    }
+  ],
+  "caption": "Extracted from canvas. Reconstructed as wear. Follow the archive.",
+  "image_concepts": [
+    {
+      "name": "Canvas to body hero",
+      "brief": "A premium campaign image that makes the garment desirable first while clearly showing it originates from painted source material.",
+      "source_asset_hint": "ADRIFT_colour_oilpaint_v5.png + JRR_4000.jpg",
+      "prompt": "Premium fashion campaign image, image-only source visual, oversized streetwear silhouette on a confident model in a concrete-and-glass gallery/studio environment, near-black and bone palette with oxidized red accents derived from a physical oil painting, the painting visible as source projection/reflection/material evidence rather than decorative collage, textile texture emphasized, product-as-identity, candid motion, cinematic natural light, clean negative space, technical archive atmosphere, optical scan feeling, coordinate-system tension, bone background, sparse premium composition, no readable text, no typography, no logos, no fake labels, no graffiti, no neon, no bokeh"
+    },
+    {
+      "name": "Reconstruction evidence detail",
+      "brief": "A source-first image that feels like the system extracting and aligning the fragment from the painting into garment logic.",
+      "source_asset_hint": "IMG_1793.HEIC + IMG_1794.HEIC",
+      "prompt": "Editorial source visual, image-only, close-to-medium shot of a reconstruction workflow in a minimal studio archive setting, physical painting fragment translated into digital alignment layers and then into a wearable garment surface, technical scan evidence, crop marks, optical registration, coordinate references implied visually, near-black shadows, bone background surfaces, oxidized red from source artwork, premium restrained streetwear campaign language, oversized garment presence on body or hanging, tactile textile texture, concrete metal glass textures, confident styling, candid motion blur, fashion brand marketing energy, no readable text, no typography, no fake interface text, no graffiti, no neon gradients"
+    },
+    {
+      "name": "Archive fragment streetwear portrait",
+      "brief": "A social-first image that sells the fragment as a desirable garment in a real city/studio context.",
+      "source_asset_hint": "JRR_4001.jpg + JRR_4004.jpg",
+      "prompt": "Premium streetwear portrait, image-only source visual, styled body in oversized silhouette with a graphic garment that feels extracted from an artwork, city-studio-gallery context, confident posture and candid movement, concrete and brushed metal textures, subtle shadow and wind, tactile fabric detail, near-black and bone palette with oxidized red source-color accent, the art origin visible as a faint overlay, projection, reflection, or material evidence rather than text, fashion campaign desirability, clean composition, sparse premium archive atmosphere, no readable text, no typography, no logos, no fake labels, no graffiti, no hype-drop styling"
+    }
+  ],
+  "approval_status": "Draft"
+}

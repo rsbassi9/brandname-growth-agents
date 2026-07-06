@@ -15,12 +15,14 @@ from collections import Counter
 
 from fastapi import FastAPI, File, Form, HTTPException, Request, UploadFile
 from fastapi.responses import FileResponse
+from openai import AuthenticationError, OpenAIError, RateLimitError
 from fastapi.staticfiles import StaticFiles
 from PIL import Image
 from pydantic import BaseModel, Field
 
 from .drive_service import GoogleDriveService
 from .learning import FeedbackEntry, append_feedback, load_feedback
+from .local_workflow import run_local_daily_workflow
 from .orchestrator import run_daily_workflow
 from .performance import load_performance_records, performance_summary, save_performance_record
 from .product_inventory import IMAGE_SUFFIXES, load_product_inventory, save_product_image
@@ -31,9 +33,11 @@ from .product_rotation import (
     product_rotation_note,
 )
 from .settings import (
+    AI_IMAGE_GENERATION_ENABLED,
     DASHBOARD_AUTH_ENABLED,
     DASHBOARD_PASSWORD,
     DASHBOARD_USERNAME,
+    LOCAL_ONLY_AGENT_RUNS,
     MEMORY_DIR,
     OUTPUTS_DIR,
     PRODUCT_INVENTORY_DIR,
@@ -47,6 +51,14 @@ from .creative_brief import load_creative_brief, save_creative_brief
 from .file_store import save_markdown
 from .image_concepts import generate_post_visual_image
 from .shopify_service import ShopifyService
+from .strategy_memory import (
+    add_brand_timeline_item,
+    add_external_prompt,
+    create_external_prompt_for_calendar_item,
+    import_instagram_csv,
+    reconcile_instagram_posts,
+    strategy_hub,
+)
 from .visual_compositor import composite_product_reference
 from .visual_fingerprint import grid_visual_warnings, visual_fingerprint_for_names
 from .visual_metadata import metadata_for_output, warm_output_visual_metadata
@@ -145,6 +157,15 @@ class CalendarSlotUpdateRequest(BaseModel):
 
 class FeedOrderRequest(BaseModel):
     ordered_ids: list[str]
+
+
+class SlotOrderRequest(BaseModel):
+    ordered_indexes: list[int]
+
+
+class ArchiveRestoreRequest(BaseModel):
+    archive_id: str
+    item_ids: list[str] = Field(default_factory=list)
 
 
 class FeedCurateRequest(BaseModel):
@@ -252,6 +273,29 @@ class VisualNeedReferenceRequest(BaseModel):
     need: str
     direction: str = ""
     color_goal: str = ""
+
+
+class InstagramImportRequest(BaseModel):
+    csv_text: str = ""
+
+
+class TimelineItemRequest(BaseModel):
+    date: str = ""
+    title: str = ""
+    type: str = "note"
+    notes: str = ""
+
+
+class ExternalPromptRequest(BaseModel):
+    post_id: str = ""
+    tool: str = "fal.ai"
+    purpose: str = ""
+    prompt: str = ""
+    negative_prompt: str = ""
+    aspect_ratio: str = "4:5"
+    duration: str = ""
+    reference_assets: list[str] = Field(default_factory=list)
+    status: str = "Prompt Draft"
 
 
 @app.get("/")
@@ -408,6 +452,78 @@ def campaign_memory() -> dict:
     return load_campaign_memory()
 
 
+@app.get("/api/strategy-hub")
+def strategy_hub_api() -> dict:
+    return strategy_hub(_load_calendar(), GoogleDriveService().list_raw_assets())
+
+
+@app.post("/api/instagram/import")
+def import_instagram(payload: InstagramImportRequest) -> dict:
+    posts = import_instagram_csv(payload.csv_text)
+    return {"posts": posts, "strategy": strategy_hub(_load_calendar(), GoogleDriveService().list_raw_assets())}
+
+
+@app.post("/api/instagram/reconcile")
+def reconcile_instagram() -> dict:
+    items = _load_calendar()
+    before_by_id = {item.get("id", ""): dict(item) for item in items}
+    reconciliation = reconcile_instagram_posts(items, apply=True)
+    updated_items = _save_calendar(
+        reconciliation.get("items", items),
+        change_source="instagram_reconcile",
+        before_by_id=before_by_id,
+    )
+    for match in reconciliation.get("matches", []):
+        update_content_state(
+            "post",
+            match.get("calendar_item_id", ""),
+            status=match.get("status", "Posted"),
+            title=match.get("calendar_hook", ""),
+            notes=f"Matched imported Instagram post at {match.get('score', 0)} confidence.",
+            metadata={
+                "post_key": match.get("post_key", ""),
+                "permalink": (match.get("post") or {}).get("permalink", ""),
+                "metrics": {
+                    "likes": (match.get("post") or {}).get("likes", 0),
+                    "comments": (match.get("post") or {}).get("comments", 0),
+                    "saves": (match.get("post") or {}).get("saves", 0),
+                    "reach": (match.get("post") or {}).get("reach", 0),
+                },
+            },
+            source="instagram_reconcile",
+        )
+    return {
+        "items": _load_calendar(),
+        "reconciliation": reconciliation,
+        "strategy": strategy_hub(updated_items, GoogleDriveService().list_raw_assets()),
+        "curation": _curation_with_rationale(_load_feed_curation(), updated_items),
+    }
+
+
+@app.post("/api/brand-timeline")
+def add_timeline_item(payload: TimelineItemRequest) -> dict:
+    timeline = add_brand_timeline_item(payload.model_dump())
+    return {"timeline": timeline, "strategy": strategy_hub(_load_calendar(), GoogleDriveService().list_raw_assets())}
+
+
+@app.post("/api/external-prompts")
+def add_prompt(payload: ExternalPromptRequest) -> dict:
+    prompts = add_external_prompt(payload.model_dump())
+    return {"prompts": prompts, "strategy": strategy_hub(_load_calendar(), GoogleDriveService().list_raw_assets())}
+
+
+@app.post("/api/calendar/{item_id}/external-prompt")
+def create_calendar_external_prompt(item_id: str) -> dict:
+    item = _calendar_item_or_404(item_id)
+    prompt = create_external_prompt_for_calendar_item(item)
+    prompts = add_external_prompt(prompt)
+    return {
+        "prompt": prompts[0] if prompts else prompt,
+        "prompts": prompts,
+        "strategy": strategy_hub(_load_calendar(), GoogleDriveService().list_raw_assets()),
+    }
+
+
 @app.post("/api/campaign-memory")
 def save_campaign(payload: CampaignMemoryRequest) -> dict:
     return save_campaign_memory(payload.memory, payload.source)
@@ -438,8 +554,23 @@ def shoot_reference_image(payload: ShootReferenceRequest) -> dict:
         "source_files": [],
         "selected_assets": [],
     }
+    concept_type = _reference_concept_type(payload.brief, payload.direction, payload.priority)
+    if not AI_IMAGE_GENERATION_ENABLED:
+        path = save_markdown(
+            "image_concepts",
+            f"{item['id']}-{concept_type}-reference-brief",
+            _disabled_image_generation_brief(item, concept_type, payload.brief, payload.direction),
+        )
+        return {
+            "concept": {
+                "path": str(path),
+                "image_path": "",
+                "concept_type": concept_type,
+                "image_error": "AI image generation is disabled. Brief saved without rendering.",
+                "created_at": datetime.now().isoformat(timespec="seconds"),
+            }
+        }
     try:
-        concept_type = _reference_concept_type(payload.brief, payload.direction, payload.priority)
         concept = generate_post_visual_image(
             item=item,
             concept_type=concept_type,
@@ -512,6 +643,21 @@ def visual_need_reference_image(payload: VisualNeedReferenceRequest) -> dict:
         "source_files": [],
         "selected_assets": [],
     }
+    if not AI_IMAGE_GENERATION_ENABLED:
+        path = save_markdown(
+            "image_concepts",
+            f"{item['id']}-curator-process-reference-brief",
+            _disabled_image_generation_brief(item, "curator_process_reference", brief, payload.direction),
+        )
+        return {
+            "concept": {
+                "path": str(path),
+                "image_path": "",
+                "concept_type": "curator_process_reference",
+                "image_error": "AI image generation is disabled. Brief saved without rendering.",
+                "created_at": datetime.now().isoformat(timespec="seconds"),
+            }
+        }
     try:
         concept = generate_post_visual_image(
             item=item,
@@ -846,7 +992,24 @@ def save_review_ratings(payload: ReviewRatingsRequest) -> dict:
 
 @app.post("/api/run")
 def run_agents() -> dict:
-    paths = asyncio.run(run_daily_workflow())
+    if LOCAL_ONLY_AGENT_RUNS:
+        paths = run_local_daily_workflow()
+        _append_automation_log("manual_local_run_complete", {"paths": paths})
+        return {"paths": paths, "mode": "local_only"}
+    try:
+        paths = asyncio.run(run_daily_workflow())
+    except AuthenticationError as exc:
+        raise HTTPException(
+            status_code=401,
+            detail="OpenAI authentication failed. Check OPENAI_API_KEY in .env and confirm the key belongs to an active API project.",
+        ) from exc
+    except RateLimitError as exc:
+        raise HTTPException(
+            status_code=402,
+            detail="OpenAI quota or rate limit failed. Check platform billing, project credits, and usage limits, then rerun the workflow.",
+        ) from exc
+    except OpenAIError as exc:
+        raise HTTPException(status_code=502, detail=f"OpenAI request failed: {exc}") from exc
     _append_automation_log("manual_run_complete", {"paths": paths})
     return {"paths": paths}
 
@@ -911,6 +1074,79 @@ def launch_recovery_calendar() -> dict:
     }
 
 
+@app.post("/api/calendar/clean-relaunch")
+def clean_relaunch_calendar() -> dict:
+    existing = _load_calendar()
+    if existing:
+        _archive_calendar(existing, "clean_relaunch")
+    removed = [item_id for item_id in _load_removed_calendar_items() if not str(item_id).startswith("launch-recovery-")]
+    _save_removed_calendar_items(removed)
+    recovery = _save_calendar(_launch_recovery_items(), sync_order="feed", change_source="clean_relaunch")
+    plan_path = _save_content_plan(recovery)
+    return {
+        "items": recovery,
+        "strategy": _calendar_strategy(recovery),
+        "curation": _curation_with_rationale(_load_feed_curation(), recovery),
+        "plan_path": str(plan_path),
+    }
+
+
+@app.get("/api/calendar/archives")
+def calendar_archives() -> dict:
+    return {"archives": _calendar_archives()}
+
+
+@app.post("/api/calendar/archives/restore")
+def restore_calendar_archive(payload: ArchiveRestoreRequest) -> dict:
+    archive = _load_calendar_archive(payload.archive_id)
+    if not archive:
+        raise HTTPException(status_code=404, detail="Archived calendar not found")
+    archived_items = archive.get("items", [])
+    requested = set(payload.item_ids)
+    restore_items = [item for item in archived_items if not requested or item.get("id") in requested]
+    if not restore_items:
+        raise HTTPException(status_code=400, detail="No archived posts matched the restore request")
+
+    active = _load_calendar()
+    before_by_id = {item.get("id"): dict(item) for item in active}
+    active_ids = {item.get("id") for item in active}
+    next_position = len(active)
+    for archived in restore_items:
+        item = json.loads(json.dumps(archived))
+        base_id = str(item.get("id") or "restored-post")
+        restored_id = base_id
+        suffix = 2
+        while restored_id in active_ids:
+            restored_id = f"{base_id}-restored-{suffix}"
+            suffix += 1
+        item["id"] = restored_id
+        item["status"] = item.get("status") or "Draft"
+        item["feed_position"] = next_position
+        item["scheduled_date"] = _next_open_date(date.today().isoformat(), {entry.get("scheduled_date") for entry in active if entry.get("scheduled_date")})
+        item["calendar_note"] = f"Restored from archive {payload.archive_id}."
+        item.setdefault("edit_history", []).append(
+            {
+                "created_at": datetime.now().isoformat(timespec="seconds"),
+                "source": "archive_restore",
+                "archive_id": payload.archive_id,
+                "original_id": base_id,
+            }
+        )
+        active.append(item)
+        active_ids.add(restored_id)
+        next_position += 1
+
+    active = _save_calendar(active, sync_order="feed", change_source="archive_restore", before_by_id=before_by_id)
+    plan_path = _save_content_plan(active)
+    return {
+        "restored_count": len(restore_items),
+        "items": active,
+        "strategy": _calendar_strategy(active),
+        "curation": _curation_with_rationale(_load_feed_curation(), active),
+        "plan_path": str(plan_path),
+    }
+
+
 @app.patch("/api/calendar/{item_id}")
 def update_calendar_item(item_id: str, payload: CalendarUpdateRequest) -> dict:
     items = _load_calendar()
@@ -944,6 +1180,44 @@ def update_calendar_item(item_id: str, payload: CalendarUpdateRequest) -> dict:
             _save_content_plan(items)
             updated = next((entry for entry in items if entry.get("id") == item_id), item)
             return {"item": updated, "items": items, "strategy": _calendar_strategy(items)}
+    raise HTTPException(status_code=404, detail="Calendar item not found")
+
+
+@app.post("/api/calendar/{item_id}/slots/reorder")
+def reorder_calendar_slots(item_id: str, payload: SlotOrderRequest) -> dict:
+    items = _load_calendar()
+    before_by_id = {item.get("id"): dict(item) for item in items}
+    for item in items:
+        if item.get("id") != item_id:
+            continue
+
+        slots = _visual_slots_for_item(item)
+        ordered_indexes = []
+        for index in payload.ordered_indexes:
+            if 0 <= index < len(slots) and index not in ordered_indexes:
+                ordered_indexes.append(index)
+        ordered_indexes.extend(index for index in range(len(slots)) if index not in ordered_indexes)
+        reordered = [_normalize_visual_slot(slots[index], new_index) for new_index, index in enumerate(ordered_indexes)]
+        timestamp = datetime.now().isoformat(timespec="seconds")
+        for slot in reordered:
+            slot["updated_at"] = timestamp
+        item["visual_slots"] = reordered
+        asset_names = [entry.get("asset_name", "").strip() for entry in reordered if entry.get("asset_name", "").strip()]
+        if asset_names:
+            item["selected_assets"] = asset_names
+            item["source_files"] = asset_names
+        item.setdefault("edit_history", []).append(
+            {
+                "created_at": timestamp,
+                "source": "slot_reorder",
+                "ordered_indexes": ordered_indexes,
+            }
+        )
+        item["updated_at"] = timestamp
+        items = _save_calendar(items, change_source="slot_reorder", before_by_id=before_by_id)
+        _save_content_plan(items)
+        updated = next((entry for entry in items if entry.get("id") == item_id), item)
+        return {"item": updated, "items": items, "strategy": _calendar_strategy(items), "slots": _visual_slots_for_item(updated)}
     raise HTTPException(status_code=404, detail="Calendar item not found")
 
 
@@ -1052,18 +1326,21 @@ async def create_visual_concept(item_id: str, payload: VisualConceptRequest) -> 
     image_result: dict[str, str] = {}
     image_error = ""
     reference_paths: list[Path] = []
-    try:
-        item["product_reference_requirements"] = _product_reference_requirements(item)
-        reference_paths = _reference_paths_for_item(item)
-        image_result = generate_post_visual_image(
-            item=item,
-            concept_type=payload.concept_type,
-            brief=result,
-            direction=payload.direction,
-            reference_paths=reference_paths,
-        )
-    except Exception as exc:
-        image_error = str(exc)
+    if AI_IMAGE_GENERATION_ENABLED:
+        try:
+            item["product_reference_requirements"] = _product_reference_requirements(item)
+            reference_paths = _reference_paths_for_item(item)
+            image_result = generate_post_visual_image(
+                item=item,
+                concept_type=payload.concept_type,
+                brief=result,
+                direction=payload.direction,
+                reference_paths=reference_paths,
+            )
+        except Exception as exc:
+            image_error = str(exc)
+    else:
+        image_error = "AI image generation is disabled. Brief saved without rendering."
 
     concept = {
         "path": str(path),
@@ -1217,17 +1494,20 @@ async def iterate_visual_concept(
     path = save_markdown("image_concepts", f"{item_id}-{concept_type}-iteration-brief", result)
     image_result: dict[str, str] = {}
     image_error = ""
-    try:
-        item["product_reference_requirements"] = _product_reference_requirements(item)
-        image_result = generate_post_visual_image(
-            item=item,
-            concept_type=f"{concept_type}_iteration",
-            brief=result,
-            direction=direction,
-            reference_paths=reference_paths,
-        )
-    except Exception as exc:
-        image_error = str(exc)
+    if AI_IMAGE_GENERATION_ENABLED:
+        try:
+            item["product_reference_requirements"] = _product_reference_requirements(item)
+            image_result = generate_post_visual_image(
+                item=item,
+                concept_type=f"{concept_type}_iteration",
+                brief=result,
+                direction=direction,
+                reference_paths=reference_paths,
+            )
+        except Exception as exc:
+            image_error = str(exc)
+    else:
+        image_error = "AI image generation is disabled. Iteration brief saved without rendering."
 
     concept = {
         "path": str(path),
@@ -2152,6 +2432,8 @@ def _load_calendar() -> list[dict]:
             item["product_reference_requirements"] = product_truth_requirements(item.get("product_keys") or [])
         item["quality_score"] = _score_calendar_item(item)
         item["needs_work"] = _needs_work_reasons(item)
+        item["launch_phase"] = _launch_phase_for_item(item)
+        item["strategic_opinion"] = _strategic_opinion_for_item(item)
         _attach_state(item, "post", item.get("id", ""), item.get("status", "Draft"))
     return items
 
@@ -2169,6 +2451,66 @@ def _load_removed_calendar_items() -> list[str]:
 def _save_removed_calendar_items(items: list[str]) -> None:
     REMOVED_CALENDAR_PATH.parent.mkdir(parents=True, exist_ok=True)
     REMOVED_CALENDAR_PATH.write_text(json.dumps(sorted(set(items)), indent=2), encoding="utf-8")
+
+
+def _archive_calendar(items: list[dict], reason: str) -> Path:
+    archive_dir = MEMORY_DIR / "archived_calendars"
+    archive_dir.mkdir(parents=True, exist_ok=True)
+    path = archive_dir / f"{datetime.now().strftime('%Y%m%d-%H%M%S')}-{_slugify(reason)}.json"
+    payload = {
+        "reason": reason,
+        "created_at": datetime.now().isoformat(timespec="seconds"),
+        "items": items,
+    }
+    path.write_text(json.dumps(payload, indent=2), encoding="utf-8")
+    return path
+
+
+def _calendar_archive_dir() -> Path:
+    return MEMORY_DIR / "archived_calendars"
+
+
+def _calendar_archives() -> list[dict]:
+    archive_dir = _calendar_archive_dir()
+    if not archive_dir.exists():
+        return []
+    archives = []
+    for path in sorted(archive_dir.glob("*.json"), reverse=True):
+        try:
+            payload = json.loads(path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            continue
+        items = payload.get("items", [])
+        archives.append(
+            {
+                "id": path.stem,
+                "path": str(path),
+                "reason": payload.get("reason", ""),
+                "created_at": payload.get("created_at", ""),
+                "item_count": len(items) if isinstance(items, list) else 0,
+                "preview": [
+                    {
+                        "id": item.get("id", ""),
+                        "hook": item.get("hook", ""),
+                        "format": item.get("format", ""),
+                        "scheduled_date": item.get("scheduled_date", ""),
+                    }
+                    for item in (items if isinstance(items, list) else [])[:8]
+                ],
+            }
+        )
+    return archives
+
+
+def _load_calendar_archive(archive_id: str) -> dict | None:
+    archive_path = _calendar_archive_dir() / f"{Path(archive_id).stem}.json"
+    if not archive_path.exists() or archive_path.parent != _calendar_archive_dir():
+        return None
+    try:
+        payload = json.loads(archive_path.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return None
+    return payload if isinstance(payload, dict) else None
 
 
 def _merge_calendar_edits(generated: list[dict], existing: list[dict]) -> list[dict]:
@@ -2465,6 +2807,8 @@ def _ensure_quality_scores(items: list[dict]) -> list[dict]:
     for item in items:
         item["quality_score"] = _score_calendar_item(item)
         item["needs_work"] = _needs_work_reasons(item)
+        item["launch_phase"] = _launch_phase_for_item(item)
+        item["strategic_opinion"] = _strategic_opinion_for_item(item)
     return items
 
 
@@ -2525,6 +2869,63 @@ def _needs_work_reasons(item: dict) -> list[dict]:
     if not _asset_names_for_item(item) and not visual_group.get("images"):
         reasons.append({"type": "needs_image", "note": "No visual asset attached."})
     return reasons
+
+
+def _launch_phase_for_item(item: dict) -> str:
+    text = " ".join(
+        [
+            item.get("launch_role", ""),
+            item.get("pillar", ""),
+            item.get("hook", ""),
+            item.get("format", ""),
+            " ".join(item.get("selected_assets") or item.get("source_files") or []),
+        ]
+    ).lower()
+    if any(term in text for term in ("intro", "context", "what", "reset")):
+        return "Context"
+    if any(term in text for term in ("origin", "source", "painting", "canvas", "reconstruct")):
+        return "Proof"
+    if any(term in text for term in ("body", "model", "photoshoot", "wear", "fit", "movement")):
+        return "Desire"
+    if any(term in text for term in ("product", "garment", "object", "mockup")) or item.get("product_keys"):
+        return "Product Clarity"
+    if any(term in text for term in ("process", "studio", "system", "built")):
+        return "Trust"
+    if any(term in text for term in ("cta", "live", "available", "shop")):
+        return "CTA"
+    return "Aftermath"
+
+
+def _strategic_opinion_for_item(item: dict) -> dict:
+    phase = _launch_phase_for_item(item)
+    score = (item.get("quality_score") or _score_calendar_item(item)).get("overall", 0)
+    assets = _asset_names_for_item(item)
+    action = "post"
+    if score < 68:
+        action = "revise"
+    if item.get("status") in {"Needs Image", "Needs Copy"}:
+        action = "hold"
+    risk = "May feel too raw without a design/composition pass." if score < 72 else "Low risk if assets and caption stay restrained."
+    if item.get("duplicate_status") and item.get("duplicate_status") != "unique":
+        risk = item.get("duplicate_note", risk)
+    belief = {
+        "Context": "The audience understands this is an art-translation system, not a generic clothing drop.",
+        "Proof": "The source and reconstruction process feel real and intentional.",
+        "Desire": "The product feels wearable and visually desirable before being explained.",
+        "Product Clarity": "The viewer can understand the garment as an object worth considering.",
+        "Trust": "The process gives the brand credibility and texture.",
+        "CTA": "The viewer knows what is available and why now matters.",
+        "Aftermath": "The story continues after the first launch moment.",
+    }.get(phase, "The post moves the brand story forward.")
+    return {
+        "phase": phase,
+        "job": f"Serve the {phase.lower()} phase of the current launch narrative.",
+        "belief_shift": belief,
+        "risk": risk,
+        "recommendation": action,
+        "next_action": "Approve manually." if action == "post" else "Revise assets/copy before posting.",
+        "asset_basis": assets[:6],
+    }
 
 
 def _shoot_request_summary(request: dict) -> str:
@@ -2975,6 +3376,28 @@ def _fallback_visual_brief(item: dict, concept_type: str, direction: str, error:
             "",
             "## Brief Fallback Note",
             f"The agent brief call failed, so this deterministic local brief was used instead. Error: {error[:500]}",
+        ]
+    )
+
+
+def _disabled_image_generation_brief(item: dict, concept_type: str, brief: str, direction: str) -> str:
+    return "\n".join(
+        [
+            "# Image Generation Disabled",
+            "",
+            "Approval status: Draft for review",
+            "",
+            f"Post id: {item.get('id', '')}",
+            f"Concept type: {concept_type}",
+            "",
+            "## Brief",
+            brief or item.get("hook", ""),
+            "",
+            "## Direction",
+            direction or "Use existing Drive/source assets only. Do not render a new AI image.",
+            "",
+            "## Production Note",
+            "AI image generation is disabled by `AI_IMAGE_GENERATION_ENABLED=false`. Use this as a real-shoot, Drive-asset, or carousel composition brief.",
         ]
     )
 
@@ -3439,12 +3862,13 @@ def _generate_calendar_items() -> list[dict]:
     candidates = prioritize_candidates_for_rotation(_recent_candidates(), raw_assets)
     visual_groups = []
     days = _collect_days()
-    if days:
+    if days and not LOCAL_ONLY_AGENT_RUNS:
         visual_groups = days[0].get("visuals", [])
     prior_ordered, prior_sets = _prior_asset_fingerprints()
     seen_ordered: set[str] = set()
 
-    start = date.today()
+    start = _local_candidate_start_date() if LOCAL_ONLY_AGENT_RUNS else date.today()
+    feed_offset = _local_feed_position_offset() if LOCAL_ONLY_AGENT_RUNS else 0
     items: list[dict] = []
 
     for index, candidate in enumerate(candidates):
@@ -3458,7 +3882,8 @@ def _generate_calendar_items() -> list[dict]:
             seen_ordered.add(ordered_fingerprint)
         scheduled = start + timedelta(days=len(items))
         visual_group = _best_visual_group_for_candidate(candidate, visual_groups)
-        candidate_id = f"candidate-{candidate['index']}" if index == 0 else f"candidate-{_day_from_path(candidate['source_path']) or index}-{candidate['index']}"
+        source_slug = _slugify(Path(candidate.get("source_path", "")).stem.replace("-content-candidates", ""))
+        candidate_id = f"candidate-{source_slug or _day_from_path(candidate['source_path']) or index}-{candidate['index']}"
         duplicate_status = "previous_same_assets" if set_fingerprint and set_fingerprint in prior_sets else "unique"
         items.append(
             {
@@ -3477,7 +3902,7 @@ def _generate_calendar_items() -> list[dict]:
                 "candidate_index": candidate["index"],
                 "candidate_source_path": candidate["source_path"],
                 "visual_group": visual_group,
-                "feed_position": index,
+                "feed_position": feed_offset + index,
                 "selected_assets": candidate.get("source_files", []),
                 "asset_fingerprint": ordered_fingerprint,
                 "asset_set_fingerprint": set_fingerprint,
@@ -3487,7 +3912,7 @@ def _generate_calendar_items() -> list[dict]:
             }
         )
 
-    items.extend(_visual_calendar_items(visual_groups, len(items), start))
+    items.extend(_visual_calendar_items(visual_groups, feed_offset + len(items), start))
     return _apply_duplicate_notes(_dedupe_calendar_items(items))
 
 
@@ -3496,12 +3921,42 @@ def _recent_candidates(limit: int = 18) -> list[dict]:
     if not folder.exists():
         return []
     paths = sorted(folder.glob("*content-candidates.md"), key=lambda item: item.stat().st_mtime, reverse=True)
+    if LOCAL_ONLY_AGENT_RUNS:
+        paths = [path for path in paths if "local-cycle-" in path.name]
     candidates: list[dict] = []
     for path in paths:
         candidates.extend(_parse_candidates(path))
         if len(candidates) >= limit:
             break
     return candidates[:limit]
+
+
+def _local_candidate_start_date() -> date:
+    if not CALENDAR_PATH.exists():
+        return date.today()
+    try:
+        items = json.loads(CALENDAR_PATH.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return date.today()
+    launch_dates = []
+    for item in items:
+        if not str(item.get("id", "")).startswith("launch-recovery-"):
+            continue
+        try:
+            launch_dates.append(date.fromisoformat(item.get("scheduled_date", "")))
+        except ValueError:
+            continue
+    return (max(launch_dates) + timedelta(days=1)) if launch_dates else date.today()
+
+
+def _local_feed_position_offset() -> int:
+    if not CALENDAR_PATH.exists():
+        return 0
+    try:
+        items = json.loads(CALENDAR_PATH.read_text(encoding="utf-8"))
+    except json.JSONDecodeError:
+        return 0
+    return len([item for item in items if str(item.get("id", "")).startswith("launch-recovery-")])
 
 
 def _visual_calendar_items(visual_groups: list[dict], start_index: int, start: date) -> list[dict]:
@@ -3549,6 +4004,7 @@ def _visual_calendar_items(visual_groups: list[dict], start_index: int, start: d
 def _launch_recovery_items() -> list[dict]:
     raw_assets = _safe_raw_assets_for_rotation()
     groups = _latest_visual_groups()
+    first_post_assets = _first_post_inspiration_asset_names(raw_assets, limit=8)
     source_assets = _launch_asset_names(raw_assets, ["adrift", "painting", "design", "canvas"], limit=3)
     origin_assets = source_assets[:2] if len(source_assets) >= 2 else source_assets
     product_sets = _launch_product_sets(raw_assets, limit_per_product=4)
@@ -3559,32 +4015,59 @@ def _launch_recovery_items() -> list[dict]:
     product_clarity_assets = product_clarity_group["names"][:2]
     product_focus_assets = product_focus_group["names"][:4]
     cta_product_assets = cta_product_group["names"][:2]
-    body_assets = _launch_asset_names(raw_assets, ["jrr", "photoshoot", "campaign", "model"], limit=4)
+    body_assets = _launch_bucket_asset_names(raw_assets, "Photoshoot / Campaign", limit=4) or _launch_asset_names(raw_assets, ["jrr", "photoshoot", "campaign", "model"], limit=4)
     process_assets = _launch_asset_names(raw_assets, ["heic", "process", "studio", "img_20", "img_19"], limit=4)
     motion_assets = _launch_asset_names(raw_assets, [".mov", "mov", "video"], limit=3)
     fallback_visual = [image["name"] for group in groups[:1] for image in group.get("images", [])[:3]]
 
+    intro_spec = {
+        "id": "launch-recovery-01-intro",
+        "format": "Carousel",
+        "pillar": "Drop Context",
+        "hook": "What [4DRFT] actually is.",
+        "caption": "One painting. Seven designs. A physical source reconstructed into wearable fragments.",
+        "source_files": source_assets or fallback_visual,
+        "visual_role": "meaning",
+        "visual_surface": "text_slide",
+        "launch_role": "Intro / reset",
+        "curator_reason": "This is the context reset that makes the drop legible before more product posts.",
+        "on_screen_text": ["WHAT IS [4DRFT]?", "ONE PAINTING", "SEVEN DESIGNS", "RECONSTRUCTED TO WEAR"],
+        "text_dominant": True,
+        "text_slides": [
+            {"eyebrow": "Drop reset", "headline": "WHAT IS [4DRFT]?", "body": "A new line built from one physical painting.", "palette": "dark"},
+            {"eyebrow": "Source", "headline": "ONE PAINTING", "body": "The painting stays in the studio. The fragments move into the world.", "palette": "light"},
+            {"eyebrow": "System", "headline": "SEVEN DESIGNS", "body": "Each garment carries a reconstructed piece of the original source.", "palette": "dark"},
+            {"eyebrow": "Object", "headline": "RECONSTRUCTED TO WEAR", "body": "Not a graphic pasted on clothing. A source rebuilt as product.", "palette": "dark"},
+        ],
+    }
+    if first_post_assets:
+        intro_spec.update(
+            {
+                "format": "Carousel",
+                "hook": "[4DRFT] begins with a system.",
+                "caption": "The first sequence is built from the human reference folder: source, reconstruction, object, atmosphere.",
+                "source_files": first_post_assets,
+                "selected_assets": first_post_assets,
+                "visual_role": "meaning",
+                "visual_surface": "campaign_photo",
+                "launch_role": "Human-directed intro / first post",
+                "curator_reason": (
+                    "Uses the user-built first-post folder as a soft inspiration reference. Preserve its descending-number image order, "
+                    "but let agents extract only stylistic cues: pacing, restraint, image rhythm, contrast, and product/context balance."
+                ),
+                "on_screen_text": ["SOURCE", "SYSTEM", "FRAGMENT", "WEAR"],
+                "text_dominant": False,
+                "text_slides": [],
+                "inspiration_reference": True,
+                "inspiration_notes": (
+                    "Human feedback loop: this first-post carousel is inspiration, not a hard template. Agents should compare it against "
+                    "their intended intro post and borrow stylistic cues only where they improve the launch."
+                ),
+            }
+        )
+
     specs = [
-        {
-            "id": "launch-recovery-01-intro",
-            "format": "Carousel",
-            "pillar": "Drop Context",
-            "hook": "What [4DRFT] actually is.",
-            "caption": "One painting. Seven designs. A physical source reconstructed into wearable fragments.",
-            "source_files": source_assets or fallback_visual,
-            "visual_role": "meaning",
-            "visual_surface": "text_slide",
-            "launch_role": "Intro / reset",
-            "curator_reason": "This is the context reset that makes the drop legible before more product posts.",
-            "on_screen_text": ["WHAT IS [4DRFT]?", "ONE PAINTING", "SEVEN DESIGNS", "RECONSTRUCTED TO WEAR"],
-            "text_dominant": True,
-            "text_slides": [
-                {"eyebrow": "Drop reset", "headline": "WHAT IS [4DRFT]?", "body": "A new line built from one physical painting.", "palette": "dark"},
-                {"eyebrow": "Source", "headline": "ONE PAINTING", "body": "The painting stays in the studio. The fragments move into the world.", "palette": "light"},
-                {"eyebrow": "System", "headline": "SEVEN DESIGNS", "body": "Each garment carries a reconstructed piece of the original source.", "palette": "dark"},
-                {"eyebrow": "Object", "headline": "RECONSTRUCTED TO WEAR", "body": "Not a graphic pasted on clothing. A source rebuilt as product.", "palette": "dark"},
-            ],
-        },
+        intro_spec,
         {
             "id": "launch-recovery-02-origin",
             "format": "Carousel",
@@ -3687,7 +4170,7 @@ def _launch_recovery_items() -> list[dict]:
             spec["text_slides"] = normalize_text_slides(spec["text_slides"])
         names = [name for name in spec["source_files"] if name]
         visual_group = _launch_recovery_visual_group(spec)
-        selected_assets = [] if spec.get("text_dominant") and visual_group else names
+        selected_assets = spec.get("selected_assets") if "selected_assets" in spec else ([] if spec.get("text_dominant") and visual_group else names)
         items.append(
             {
                 **spec,
@@ -3736,6 +4219,45 @@ def _launch_asset_names(raw_assets: list[dict], needles: list[str], limit: int =
         if len(found) >= limit:
             break
     return found
+
+
+def _launch_bucket_asset_names(raw_assets: list[dict], bucket: str, limit: int = 4) -> list[str]:
+    assets = [
+        asset
+        for asset in raw_assets
+        if asset.get("creativeBucket") == bucket
+        and str(asset.get("mimeType", "")).startswith("image/")
+    ]
+    assets = sorted(
+        assets,
+        key=lambda asset: (
+            -_last_number(asset.get("name", "")),
+            asset.get("name", "").lower(),
+        ),
+    )
+    return [asset.get("name", "") for asset in assets if asset.get("name")][:limit]
+
+
+def _first_post_inspiration_asset_names(raw_assets: list[dict], limit: int = 8) -> list[str]:
+    assets = [
+        asset
+        for asset in raw_assets
+        if asset.get("creativeBucket") == "First Post Inspiration"
+        and str(asset.get("mimeType", "")).startswith("image/")
+    ]
+    assets = sorted(
+        assets,
+        key=lambda asset: (
+            _last_number(asset.get("name", "")),
+            asset.get("name", "").lower(),
+        ),
+    )
+    return [asset.get("name", "") for asset in assets if asset.get("name")][:limit]
+
+
+def _last_number(value: str) -> int:
+    matches = re.findall(r"\d+", value)
+    return int(matches[-1]) if matches else -1
 
 
 def _launch_product_sets(raw_assets: list[dict], limit_per_product: int = 4) -> list[dict]:
@@ -4699,7 +5221,7 @@ def _candidate_structure(text: str) -> str:
 
 
 def _clean_candidate_title(title: str) -> str:
-    return re.sub(r"^\d+\)\s*", "", title).strip() or "Draft"
+    return re.sub(r"^\d+[\).]\s*", "", title).strip() or "Draft"
 
 
 def _clean_markdown_value(value: str) -> str:

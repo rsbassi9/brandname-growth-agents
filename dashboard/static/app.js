@@ -18,6 +18,7 @@ let state = {
   communityFaq: null,
   ownedPlan: null,
   automation: null,
+  strategyHub: null,
   highlights: [],
   contentStates: {},
   lifecycleStates: [],
@@ -96,6 +97,7 @@ const refreshCommunityFaqButton = document.getElementById("refreshCommunityFaq")
 const ownedPlan = document.getElementById("ownedPlan");
 const refreshOwnedPlanButton = document.getElementById("refreshOwnedPlan");
 const automationPanel = document.getElementById("automationPanel");
+const strategyHub = document.getElementById("strategyHub");
 const highlightGrid = document.getElementById("highlightGrid");
 const refreshHighlightsButton = document.getElementById("refreshHighlights");
 
@@ -137,6 +139,7 @@ async function hydrateSecondaryData() {
     loadCommunityFaq(),
     loadOwnedPlan(),
     loadAutomation(),
+    loadStrategyHub(),
     loadHighlights(),
   ]);
   renderDashboard();
@@ -153,6 +156,7 @@ async function ensureModeData(mode) {
   if (mode === "community" && !state.communityFaq) jobs.push(loadCommunityFaq());
   if (mode === "owned" && !state.ownedPlan) jobs.push(loadOwnedPlan());
   if (mode === "automation" && !state.automation) jobs.push(loadAutomation());
+  if (mode === "strategy" && !state.strategyHub) jobs.push(loadStrategyHub());
   if (mode === "highlights" && !state.highlights.length) jobs.push(loadHighlights());
   if (jobs.length) {
     document.body.classList.add("is-loading");
@@ -228,6 +232,11 @@ async function loadAutomation() {
   state.automation = await response.json();
 }
 
+async function loadStrategyHub() {
+  const response = await fetch("/api/strategy-hub");
+  state.strategyHub = await response.json();
+}
+
 async function loadHighlights() {
   const response = await fetch("/api/highlights");
   state.highlights = (await response.json()).highlights || [];
@@ -259,6 +268,7 @@ function renderDashboard() {
   renderCommunityFaq();
   renderOwnedPlan();
   renderAutomation();
+  renderStrategyHub();
   renderBuilder();
   renderWorkspace();
   renderInlineComments();
@@ -282,6 +292,7 @@ function renderMode() {
   document.getElementById("communityView").classList.toggle("hidden", state.mode !== "community");
   document.getElementById("ownedView").classList.toggle("hidden", state.mode !== "owned");
   document.getElementById("automationView").classList.toggle("hidden", state.mode !== "automation");
+  document.getElementById("strategyView").classList.toggle("hidden", state.mode !== "strategy");
   document.querySelectorAll(".mode-button").forEach((button) => {
     button.classList.toggle("active", button.dataset.mode === state.mode);
   });
@@ -296,6 +307,7 @@ function renderMode() {
     seo: "Review SEO changes before they touch Shopify.",
     ads: "Review ad readiness before any campaign action.",
     performance: "Record what posted, what worked, and what agents should learn.",
+    strategy: "Keep the dashboard grounded in the real brand journey.",
     shoot: "Turn feed and content gaps into a practical shoot list.",
     merchandising: "Rotate products intentionally before the feed gets repetitive.",
     launch: "Coordinate a drop across content, profile, SEO, ads, and shoots.",
@@ -428,6 +440,8 @@ function calendarCard(item) {
       <span>${escapeHtml(item.format || "Post")} / ${escapeHtml(item.pillar || "General")}</span>
       ${feedRoleBadge(item)}
       ${visualSurfaceBadge(item)}
+      ${postStatusBadge(item)}
+      ${strategistBadge(item)}
       ${item.launch_role ? `<small>${escapeHtml(item.launch_role)}</small>` : ""}
       <small>${escapeHtml(item.status || "Draft")} ${adjacent ? `/ ${escapeHtml(adjacent)}` : ""}</small>
       ${stateControls("post", item.id, item.status || "Draft", item.hook || item.id, "calendar-card-actions")}
@@ -470,6 +484,22 @@ function visualSurfaceBadge(item) {
   const surface = item.visual_surface || "";
   if (!surface) return "";
   return `<div class="rotation-badge" title="Visible post surface">${escapeHtml(titleize(surface))}</div>`;
+}
+
+function postStatusBadge(item) {
+  const status = item.status || "";
+  if (!["Posted", "Measured", "Learned"].includes(status) && !item.post_url) return "";
+  const confidence = item.instagram_match_confidence ? ` / ${item.instagram_match_confidence}% match` : "";
+  const label = item.post_url ? `${status || "Posted"}${confidence}` : status;
+  return `<div class="rotation-badge posted-badge" title="Imported Instagram memory">${escapeHtml(label)}</div>`;
+}
+
+function strategistBadge(item) {
+  const opinion = item.strategic_opinion || {};
+  const recommendation = opinion.recommendation || "";
+  if (!item.launch_phase && !recommendation) return "";
+  const label = [item.launch_phase, recommendation ? titleize(recommendation) : ""].filter(Boolean).join(" / ");
+  return `<div class="rotation-badge strategy-badge" title="${escapeHtml(opinion.next_action || opinion.job || "Strategist signal")}">${escapeHtml(label)}</div>`;
 }
 
 function qualityBadge(item) {
@@ -1625,6 +1655,191 @@ function renderAutomation() {
   automationPanel.querySelector("[data-save-automation]")?.addEventListener("click", saveAutomation);
 }
 
+function renderStrategyHub() {
+  if (!strategyHub) return;
+  const hub = state.strategyHub || {};
+  const instagram = hub.instagram || {};
+  const reconciliation = hub.reconciliation || {};
+  const assetUsage = hub.asset_usage || {};
+  strategyHub.innerHTML = `
+    <section class="strategy-flow">
+      ${(hub.workflow_concept || []).map((lane) => `
+        <article>
+          <strong>${escapeHtml(lane.lane || "")}</strong>
+          <span>${escapeHtml(lane.description || "")}</span>
+        </article>
+      `).join("")}
+    </section>
+    <section class="strategy-grid">
+      <article class="creative-brief-card">
+        <p class="eyebrow">Implementation Checklist</p>
+        ${(hub.roadmap || []).map((phase) => `
+          <details class="strategy-details" open>
+            <summary>${escapeHtml(phase.phase || "Phase")}</summary>
+            <ul>${(phase.items || []).map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul>
+          </details>
+        `).join("")}
+      </article>
+      <article class="creative-brief-card">
+        <p class="eyebrow">Instagram Memory</p>
+        <div class="metric-row">
+          <div><strong>${escapeHtml(String(instagram.posted_count || 0))}</strong><span>imported posts</span></div>
+          <div><strong>${escapeHtml(String(instagram.matched_calendar_count || 0))}</strong><span>matched calendar posts</span></div>
+          <div><strong>${escapeHtml(Object.entries(instagram.format_counts || {}).map(([key, value]) => `${key}: ${value}`).join(" / ") || "No formats")}</strong><span>format mix</span></div>
+        </div>
+        <textarea data-instagram-csv placeholder="${escapeForAttribute(instagram.import_template || "posted_date,permalink,caption,format,likes,comments,saves,reach,notes")}"></textarea>
+        <div class="action-buttons">
+          <button class="secondary" type="button" data-import-instagram>Import Instagram CSV</button>
+          <button class="secondary" type="button" data-reconcile-instagram>Reconcile Calendar</button>
+        </div>
+        <p class="status" data-instagram-status></p>
+        <div class="strategy-list compact-list">
+          ${(reconciliation.matches || []).slice(0, 6).map((match) => `
+            <div>
+              <strong>${escapeHtml(match.calendar_hook || match.calendar_item_id || "Matched post")} / ${escapeHtml(String(match.score || 0))}%</strong>
+              <span>${escapeHtml((match.reasons || []).join(", ") || "Suggested match")}</span>
+            </div>
+          `).join("") || '<div class="empty-note">After importing posts, reconcile to mark planned posts as Posted or Measured.</div>'}
+        </div>
+        <div class="strategy-list">
+          ${(instagram.posts || []).slice(0, 8).map((post) => `
+            <div><strong>${escapeHtml(post.posted_date || "No date")} / ${escapeHtml(post.format || "Post")}</strong><span>${escapeHtml(post.caption || post.permalink || "Imported post")}</span></div>
+          `).join("") || '<div class="empty-note">Import real posts to make planning aware of what already happened.</div>'}
+        </div>
+      </article>
+      <article class="creative-brief-card">
+        <p class="eyebrow">Brand Timeline</p>
+        <div class="performance-grid">
+          <input data-timeline-date placeholder="YYYY-MM-DD" />
+          <input data-timeline-title placeholder="Moment title" />
+          <input data-timeline-type placeholder="origin / content / sale / shoot" />
+        </div>
+        <textarea data-timeline-notes placeholder="What happened and why it matters to the brand story"></textarea>
+        <div class="action-buttons"><button class="secondary" type="button" data-save-timeline>Add Moment</button></div>
+        <p class="status" data-timeline-status></p>
+        <div class="strategy-list">
+          ${(hub.timeline || []).map((item) => `
+            <div><strong>${escapeHtml(item.date || "Undated")} / ${escapeHtml(item.title || "")}</strong><span>${escapeHtml(item.notes || "")}</span></div>
+          `).join("")}
+        </div>
+      </article>
+      <article class="creative-brief-card">
+        <p class="eyebrow">Asset Usage Memory</p>
+        <p class="helper-text">${escapeHtml(String(assetUsage.tracked_asset_count || 0))} assets currently tracked across calendar/imported memory.</p>
+        <h4>Most Used</h4>
+        <div class="strategy-list compact-list">
+          ${(assetUsage.most_used || []).slice(0, 10).map((asset) => `<div><strong>${escapeHtml(asset.name || "")}</strong><span>${escapeHtml(asset.bucket || "Asset")} / ${escapeHtml(String(asset.count || 0))} uses</span></div>`).join("") || '<div class="empty-note">No tracked usage yet.</div>'}
+        </div>
+        <h4>Unused Opportunities</h4>
+        <div class="strategy-list compact-list">
+          ${(assetUsage.unused || []).slice(0, 10).map((asset) => `<div><strong>${escapeHtml(asset.name || "")}</strong><span>${escapeHtml(asset.bucket || "Asset")}</span></div>`).join("")}
+        </div>
+      </article>
+      <article class="creative-brief-card wide-card">
+        <p class="eyebrow">External Creative Prompts</p>
+        <div class="performance-grid">
+          <input data-prompt-post placeholder="Post ID / campaign" />
+          <input data-prompt-tool placeholder="fal.ai" value="fal.ai" />
+          <input data-prompt-ratio placeholder="4:5" value="4:5" />
+        </div>
+        <textarea data-prompt-purpose placeholder="Purpose: video, product motion, process scene, ad variant"></textarea>
+        <textarea data-prompt-body placeholder="Prompt to take into fal.ai, Runway, Kling, etc."></textarea>
+        <textarea data-prompt-negative placeholder="Negative prompt"></textarea>
+        <div class="action-buttons"><button class="secondary" type="button" data-save-prompt>Save Creative Prompt</button></div>
+        <p class="status" data-prompt-status></p>
+        <div class="strategy-list">
+          ${(hub.external_prompts || []).slice(0, 8).map((prompt) => `
+            <div><strong>${escapeHtml(prompt.tool || "Tool")} / ${escapeHtml(prompt.purpose || "Prompt")}</strong><span>${escapeHtml(prompt.prompt || "")}</span></div>
+          `).join("") || '<div class="empty-note">No external prompts saved yet.</div>'}
+        </div>
+      </article>
+    </section>
+  `;
+  strategyHub.querySelector("[data-import-instagram]")?.addEventListener("click", importInstagramCsv);
+  strategyHub.querySelector("[data-reconcile-instagram]")?.addEventListener("click", reconcileInstagramMemory);
+  strategyHub.querySelector("[data-save-timeline]")?.addEventListener("click", saveTimelineMoment);
+  strategyHub.querySelector("[data-save-prompt]")?.addEventListener("click", saveExternalPrompt);
+}
+
+async function refreshStrategyHub(data = null) {
+  if (data?.strategy) {
+    state.strategyHub = data.strategy;
+  } else {
+    await loadStrategyHub();
+  }
+  renderStrategyHub();
+}
+
+async function importInstagramCsv() {
+  const status = strategyHub.querySelector("[data-instagram-status]");
+  if (status) status.textContent = "Importing Instagram memory...";
+  const response = await fetch("/api/instagram/import", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ csv_text: strategyHub.querySelector("[data-instagram-csv]")?.value || "" }),
+  });
+  const data = await response.json();
+  if (status) status.textContent = response.ok ? "Instagram memory imported." : "Import failed.";
+  if (response.ok) await refreshStrategyHub(data);
+}
+
+async function reconcileInstagramMemory() {
+  const status = strategyHub.querySelector("[data-instagram-status]");
+  if (status) status.textContent = "Reconciling Instagram posts against the calendar...";
+  const response = await fetch("/api/instagram/reconcile", { method: "POST" });
+  const data = await response.json();
+  if (!response.ok) {
+    if (status) status.textContent = "Reconciliation failed.";
+    return;
+  }
+  state.calendar = data.items || state.calendar;
+  state.strategy = data.strategy || state.strategy;
+  state.curation = data.curation || state.curation;
+  if (status) status.textContent = `${data.reconciliation?.matched_count || 0} posts matched. Review confidence before using the metrics.`;
+  await refreshStrategyHub(data);
+  renderCalendar();
+  renderFeed();
+  renderBuilder();
+}
+
+async function saveTimelineMoment() {
+  const status = strategyHub.querySelector("[data-timeline-status]");
+  if (status) status.textContent = "Saving timeline moment...";
+  const response = await fetch("/api/brand-timeline", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      date: strategyHub.querySelector("[data-timeline-date]")?.value || "",
+      title: strategyHub.querySelector("[data-timeline-title]")?.value || "",
+      type: strategyHub.querySelector("[data-timeline-type]")?.value || "",
+      notes: strategyHub.querySelector("[data-timeline-notes]")?.value || "",
+    }),
+  });
+  const data = await response.json();
+  if (status) status.textContent = response.ok ? "Timeline updated." : "Save failed.";
+  if (response.ok) await refreshStrategyHub(data);
+}
+
+async function saveExternalPrompt() {
+  const status = strategyHub.querySelector("[data-prompt-status]");
+  if (status) status.textContent = "Saving creative prompt...";
+  const response = await fetch("/api/external-prompts", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      post_id: strategyHub.querySelector("[data-prompt-post]")?.value || "",
+      tool: strategyHub.querySelector("[data-prompt-tool]")?.value || "fal.ai",
+      purpose: strategyHub.querySelector("[data-prompt-purpose]")?.value || "",
+      prompt: strategyHub.querySelector("[data-prompt-body]")?.value || "",
+      negative_prompt: strategyHub.querySelector("[data-prompt-negative]")?.value || "",
+      aspect_ratio: strategyHub.querySelector("[data-prompt-ratio]")?.value || "4:5",
+    }),
+  });
+  const data = await response.json();
+  if (status) status.textContent = response.ok ? "Prompt saved." : "Save failed.";
+  if (response.ok) await refreshStrategyHub(data);
+}
+
 async function saveAutomation() {
   const status = automationPanel.querySelector("[data-automation-status]");
   if (status) status.textContent = "Saving automation schedule...";
@@ -2060,7 +2275,7 @@ function renderBuilder() {
   bindBuilderPostActions(item);
   builderAssetTray.innerHTML = slots.map((slot, index) => {
     return `
-    <button class="asset-chip ${state.builderSlotIndex === index ? "active" : ""}" type="button" title="${escapeHtml(slot.name || slot.asset_name || "Slide")}" data-slot="${index}">
+    <button class="asset-chip ${state.builderSlotIndex === index ? "active" : ""}" type="button" title="${escapeHtml(slot.name || slot.asset_name || "Slide")}" data-slot="${index}" draggable="true">
       ${slotThumb(slot)}
       <span>${index + 1}. ${escapeHtml(slot.name || slot.asset_name || "Slide")}</span>
     </button>
@@ -2071,8 +2286,47 @@ function renderBuilder() {
       state.builderSlotIndex = Number(button.dataset.slot);
       renderBuilder();
     });
+    button.addEventListener("dragstart", (event) => {
+      event.dataTransfer.effectAllowed = "move";
+      event.dataTransfer.setData("text/plain", button.dataset.slot);
+      button.classList.add("dragging");
+    });
+    button.addEventListener("dragend", () => button.classList.remove("dragging"));
+    button.addEventListener("dragover", (event) => {
+      event.preventDefault();
+      event.dataTransfer.dropEffect = "move";
+      button.classList.add("drop-target");
+    });
+    button.addEventListener("dragleave", () => button.classList.remove("drop-target"));
+    button.addEventListener("drop", (event) => {
+      event.preventDefault();
+      button.classList.remove("drop-target");
+      reorderBuilderSlots(Number(event.dataTransfer.getData("text/plain")), Number(button.dataset.slot));
+    });
   });
   renderBuilderAssetLibrary();
+}
+
+async function reorderBuilderSlots(fromIndex, toIndex) {
+  if (!state.selectedCalendarItem || !Number.isFinite(fromIndex) || !Number.isFinite(toIndex) || fromIndex === toIndex) return;
+  const slots = builderSlots(state.selectedCalendarItem);
+  const ordered = slots.map((_, index) => index);
+  const [moved] = ordered.splice(fromIndex, 1);
+  ordered.splice(toIndex, 0, moved);
+  const response = await fetch(`/api/calendar/${encodeURIComponent(state.selectedCalendarItem.id)}/slots/reorder`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ ordered_indexes: ordered }),
+  });
+  if (!response.ok) return;
+  const data = await response.json();
+  state.calendar = data.items || state.calendar;
+  state.strategy = data.strategy || state.strategy;
+  state.selectedCalendarItem = state.calendar.find((entry) => entry.id === state.selectedCalendarItem?.id) || state.selectedCalendarItem;
+  state.builderSlotIndex = toIndex;
+  renderCalendar();
+  renderFeed();
+  renderBuilder();
 }
 
 function builderPostActions(item) {
@@ -2102,9 +2356,11 @@ function builderPostActions(item) {
       <div class="builder-action-row">
         <button class="secondary" type="button" data-save-post-edits>Save Post Edits</button>
         <button class="secondary" type="button" data-improve-design>Improve Design</button>
+        <button class="secondary" type="button" data-create-external-prompt>Create fal.ai Prompt</button>
       </div>
       <p id="builderEditStatus" class="status"></p>
       ${item.calendar_note ? `<div class="duplicate-badge">${escapeHtml(item.calendar_note)}</div>` : ""}
+      ${strategyOpinionCard(item)}
       ${item.edit_history?.length ? briefList("Recent Changes", item.edit_history.slice(-3).map((entry) => `${entry.created_at}: ${Object.keys(entry.changes || {}).join(", ")}`)) : ""}
       ${stateControls("post", item.id, item.status || "Draft", item.hook || item.id, "builder-state-actions")}
       <label>
@@ -2140,6 +2396,23 @@ function builderPostActions(item) {
         </div>
       ` : ""}
     </section>
+  `;
+}
+
+function strategyOpinionCard(item) {
+  const opinion = item.strategic_opinion || {};
+  if (!opinion.job && !item.launch_phase) return "";
+  return `
+    <details class="composition-plan-card" open>
+      <summary>Strategist Opinion</summary>
+      <article>
+        <strong>${escapeHtml(item.launch_phase || opinion.phase || "Strategy")}</strong>
+        <p>${escapeHtml(opinion.job || "Clarify why this post belongs in the sequence.")}</p>
+        <p>${escapeHtml(opinion.belief_shift || "")}</p>
+        <small>Risk: ${escapeHtml(opinion.risk || "Review manually.")}</small>
+        <small>Recommendation: ${escapeHtml(titleize(opinion.recommendation || "review"))}</small>
+      </article>
+    </details>
   `;
 }
 
@@ -2338,6 +2611,7 @@ function bindBuilderPostActions(item) {
   });
   builderWorkspace.querySelector("[data-save-post-edits]")?.addEventListener("click", () => saveBuilderPostEdits(item.id));
   builderWorkspace.querySelector("[data-improve-design]")?.addEventListener("click", () => improveBuilderDesign(item.id));
+  builderWorkspace.querySelector("[data-create-external-prompt]")?.addEventListener("click", () => createExternalPromptForPost(item.id));
   builderWorkspace.querySelector("[data-save-text-slides]")?.addEventListener("click", () => saveTextSlides(item.id));
   builderWorkspace.querySelector("[data-save-slot-notes]")?.addEventListener("click", () => saveBuilderSlot(item.id));
   builderWorkspace.querySelector("[data-remove-selected-draft]")?.addEventListener("click", () => removeCalendarItem(item.id));
@@ -2457,6 +2731,20 @@ async function saveTextSlides(itemId) {
   renderCalendar();
   renderFeed();
   renderBuilder();
+}
+
+async function createExternalPromptForPost(itemId) {
+  const status = document.getElementById("builderEditStatus");
+  if (status) status.textContent = "Drafting external creative prompt...";
+  const response = await fetch(`/api/calendar/${encodeURIComponent(itemId)}/external-prompt`, { method: "POST" });
+  const data = await response.json();
+  if (!response.ok) {
+    if (status) status.textContent = "Could not create external prompt.";
+    return;
+  }
+  state.strategyHub = data.strategy || state.strategyHub;
+  if (status) status.textContent = `Prompt saved for ${data.prompt?.tool || "external creative"}. See Strategy Hub.`;
+  renderStrategyHub();
 }
 
 async function saveBuilderPostEdits(itemId) {
@@ -3090,7 +3378,14 @@ runAgentsButton.addEventListener("click", async () => {
   setRunState("running", `Running agents... started ${startedAt.toLocaleTimeString()}`);
   const response = await fetch("/api/run", { method: "POST" });
   if (!response.ok) {
-    setRunState("error", "Run failed. Check terminal logs.");
+    let detail = "Run failed. Check terminal logs.";
+    try {
+      const data = await response.json();
+      detail = data.detail || detail;
+    } catch (error) {
+      detail = response.statusText || detail;
+    }
+    setRunState("error", detail);
     return;
   }
   const data = await response.json();

@@ -19,6 +19,7 @@ from .asset_design_roles import enrich_asset_design_roles
 
 DRIVE_READONLY_SCOPES = ["https://www.googleapis.com/auth/drive.readonly"]
 CREATIVE_BUCKET_ORDER = [
+    "First Post Inspiration",
     "Store Products",
     "Shoot Photos",
     "Photoshoot / Campaign",
@@ -93,6 +94,7 @@ class GoogleDriveService:
             "",
             "Creative use map:",
             "- Store Products: product-specific photos from the Products folder. Use these as the approved garment/product inventory for concepts and product selections.",
+            "- First Post Inspiration: human-built first-post references. Treat these as soft style and sequencing cues, not hard rules.",
             "- Shoot Photos: all JRR series files. Use these as main campaign shots for product posts, launches, and polished carousels.",
             "- Photoshoot / Campaign: newer editorial or campaign shoot folders. Use these as premium feed anchors, model/body proof, and visual pacing pieces.",
             "- Process / Studio: behind-the-scenes HEIC files. Use these for studio/process posts and making-of context.",
@@ -332,10 +334,18 @@ class GoogleDriveService:
             return "Video"
 
         folder_path = item.get("folderPath", "").lower()
+        normalized_folder = folder_path.replace("\\", "/")
+        if (
+            "first post" in normalized_folder
+            or "first-post" in normalized_folder
+            or "first_post" in normalized_folder
+            or ("inspiration" in normalized_folder and "post" in normalized_folder)
+        ):
+            return "First Post Inspiration"
+
         if "/products/" in folder_path or folder_path.endswith("/products"):
             return "Store Products"
 
-        normalized_folder = folder_path.replace("\\", "/")
         if "photoshoot" in normalized_folder or "campaign" in normalized_folder:
             return "Photoshoot / Campaign"
 
@@ -359,6 +369,7 @@ class GoogleDriveService:
 
     def _bucket_display_limit(self, bucket: str) -> int:
         return {
+            "First Post Inspiration": 80,
             "Store Products": 80,
             "Shoot Photos": 40,
             "Photoshoot / Campaign": 80,

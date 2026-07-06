@@ -198,10 +198,13 @@ Add these repo settings:
 - Optional secret: `GOOGLE_OAUTH_TOKEN_JSON` if you want CI to authenticate with OAuth
 - Optional secret: `GOOGLE_APPLICATION_CREDENTIALS_JSON` if you want CI to authenticate with a service account
 - Optional variable: `OPENAI_MODEL`
+- Optional variable: `LOCAL_ONLY_AGENT_RUNS`
 - Optional variable: `GOOGLE_DRIVE_ENABLED`
 - Optional variable: `GOOGLE_AUTH_MODE`
 - Optional variable: `VISUAL_OUTPUT_ENABLED`
 - Optional variable: `VISUAL_ASSET_LIMIT`
+- Optional variable: `AI_IMAGE_GENERATION_ENABLED`
+- Optional variable: `IMAGE_CONCEPTS_ENABLED`
 
 ## Project Folders
 
@@ -246,7 +249,9 @@ If Google Drive is disabled or no images are available, the renderer creates tex
 
 ## OpenAI Image Concepts
 
-When `IMAGE_CONCEPTS_ENABLED=true`, each run asks the Visual Designer agent for three image briefs and generates three OpenAI image concepts.
+Image generation is opt-in. Keep `AI_IMAGE_GENERATION_ENABLED=false` when you want post generators and dashboard tools to run from Drive/source assets without spending OpenAI image credits.
+
+When both `AI_IMAGE_GENERATION_ENABLED=true` and `IMAGE_CONCEPTS_ENABLED=true`, each run asks the Visual Designer agent for three image briefs and generates three OpenAI image concepts.
 
 These are exploratory source visuals, not final posts. The prompts intentionally ask for no embedded text so the dashboard or renderer can apply brand typography consistently.
 
@@ -256,10 +261,15 @@ Outputs are saved under:
 outputs/image_concepts/
 ```
 
+## Local-Only Runs
+
+Set `LOCAL_ONLY_AGENT_RUNS=true` to make Run Today write deterministic markdown outputs from the current Drive asset inventory and brand rules without calling OpenAI for text or images. This is useful when API quota is unavailable or when you want a review-ready asset/rules pass only.
+
 Useful settings:
 
 ```text
-IMAGE_CONCEPTS_ENABLED=true
+AI_IMAGE_GENERATION_ENABLED=false
+IMAGE_CONCEPTS_ENABLED=false
 IMAGE_CONCEPT_COUNT=3
 IMAGE_CONCEPT_MODEL=gpt-image-1
 IMAGE_CONCEPT_SIZE=1024x1536

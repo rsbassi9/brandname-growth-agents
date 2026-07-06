@@ -9,6 +9,7 @@ from openai import OpenAI, OpenAIError
 from PIL import Image, ImageOps
 
 from .settings import (
+    AI_IMAGE_GENERATION_ENABLED,
     IMAGE_CONCEPT_COUNT,
     IMAGE_CONCEPT_MODEL,
     IMAGE_CONCEPT_QUALITY,
@@ -24,6 +25,8 @@ POST_VISUAL_REFERENCE_LIMIT = 10
 
 
 def generate_image_concepts(plan: dict, asset_paths: list[Path]) -> dict[str, str]:
+    if not AI_IMAGE_GENERATION_ENABLED:
+        return {}
     concepts = plan.get("image_concepts", [])[:IMAGE_CONCEPT_COUNT]
     if not concepts:
         return {}
@@ -80,6 +83,9 @@ def generate_post_visual_image(
     direction: str,
     reference_paths: list[Path],
 ) -> dict[str, str]:
+    if not AI_IMAGE_GENERATION_ENABLED:
+        raise RuntimeError("AI image generation is disabled. Set AI_IMAGE_GENERATION_ENABLED=true to render new AI images.")
+
     stamp = datetime.now().strftime("%Y-%m-%d")
     post_id = _slug(item.get("id", "post"))
     output_dir = OUTPUTS_DIR / "image_concepts" / f"{stamp}-{post_id}-{_slug(concept_type)}"

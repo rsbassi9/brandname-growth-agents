@@ -1,0 +1,27 @@
+AI image concept brief — revised model_shoot
+
+- Status: Draft
+- Format: Feed Post
+- Content pillar: Product
+- Source files: `Essential Wide Neck Baby T-shirt-mockups-7.png`, `Essential Wide Neck Baby T-shirt-mockups-9.png`
+- Asset roles:
+  - `Essential Wide Neck Baby T-shirt-mockups-7.png`: front product reference; anchors silhouette, black wash, and front mark placement
+  - `Essential Wide Neck Baby T-shirt-mockups-9.png`: alternate front product reference; confirms cropped fit, wide neck, sleeve shape, hem
+- Hook: The garment is the object.
+- Caption: Product clarity after the origin story: the artwork becomes something wearable.
+- On-screen text: `GARMENT OBJECT`
+- Reel or carousel structure: Single image; model portrait crop with garment as focal point
+- Edit notes:
+  - Keep pose, lighting, and silhouette unchanged
+  - Preserve black fabric, wide neck, fitted cropped body, sleeve shape, and hem exactly
+  - Add the correct small front logo/mark/graphic exactly where it appears in the product mockups
+  - Match size, proportion, and colours to the references
+  - No new typography, no invented graphics, no back graphic on the front
+  - Keep the front detail subtle and minimal if the reference is minimal
+- AI visual direction:
+  - Realistic editorial model shot, front-facing or slight angle, with the Essential Wide Neck Baby T Shirt as the exact garment reference; preserve the small front logo/mark at the same placement and scale as the mockups, with the model styling and studio light held constant
+- Why this should work:
+  - It fixes product truth without changing the image’s strongest parts
+  - The garment stays premium and commercially legible
+  - Small accurate branding reads as authentic, not overdesigned
+- Posting priority: 8

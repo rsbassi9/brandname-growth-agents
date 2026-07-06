@@ -31,6 +31,7 @@ if DATA_DIR != ROOT_DIR:
     _seed_persistent_dir(BRAND_CONTEXT_DIR / "product_inventory", PRODUCT_INVENTORY_DIR)
 
 OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-5.4-mini")
+LOCAL_ONLY_AGENT_RUNS = os.getenv("LOCAL_ONLY_AGENT_RUNS", "false").lower() == "true"
 BRAND_WEBSITE_URL = os.getenv("BRAND_WEBSITE_URL", "https://www.brandnamedesign.co/")
 GOOGLE_DRIVE_ENABLED = os.getenv("GOOGLE_DRIVE_ENABLED", "false").lower() == "true"
 GOOGLE_DRIVE_ROOT_FOLDER_ID = os.getenv("GOOGLE_DRIVE_ROOT_FOLDER_ID", "")
@@ -40,6 +41,7 @@ GOOGLE_OAUTH_CLIENT_FILE = os.getenv("GOOGLE_OAUTH_CLIENT_FILE", "oauth_client.j
 GOOGLE_OAUTH_TOKEN_FILE = os.getenv("GOOGLE_OAUTH_TOKEN_FILE", "token.json")
 VISUAL_OUTPUT_ENABLED = os.getenv("VISUAL_OUTPUT_ENABLED", "false").lower() == "true"
 VISUAL_ASSET_LIMIT = int(os.getenv("VISUAL_ASSET_LIMIT", "12"))
+AI_IMAGE_GENERATION_ENABLED = os.getenv("AI_IMAGE_GENERATION_ENABLED", "false").lower() == "true"
 IMAGE_CONCEPTS_ENABLED = os.getenv("IMAGE_CONCEPTS_ENABLED", "false").lower() == "true"
 IMAGE_CONCEPT_COUNT = int(os.getenv("IMAGE_CONCEPT_COUNT", "3"))
 IMAGE_CONCEPT_MODEL = os.getenv("IMAGE_CONCEPT_MODEL", "gpt-image-1")

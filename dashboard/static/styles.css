@@ -492,16 +492,16 @@ main {
 
 .calendar-grid {
   display: grid;
-  grid-template-columns: repeat(7, minmax(130px, 1fr));
-  gap: 12px;
+  grid-template-columns: repeat(5, minmax(190px, 1fr));
+  gap: 18px;
 }
 
 .calendar-day {
-  min-height: 260px;
+  min-height: 330px;
   border: 1px solid var(--line);
   border-radius: 10px;
   background: var(--surface);
-  padding: 10px;
+  padding: 14px;
   display: grid;
   align-content: start;
   gap: 10px;
@@ -547,7 +547,7 @@ main {
 .calendar-card-media {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  min-height: 120px;
+  min-height: 170px;
 }
 
 .calendar-card-media img,
@@ -560,9 +560,18 @@ main {
 }
 
 .calendar-card-copy {
-  padding: 10px;
+  padding: 12px;
   display: grid;
-  gap: 5px;
+  gap: 7px;
+}
+
+.asset-chip.dragging {
+  opacity: 0.45;
+}
+
+.asset-chip.drop-target {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
 }
 
 .calendar-card-meta,
@@ -630,6 +639,18 @@ main {
   font-weight: 850;
   text-transform: uppercase;
   overflow-wrap: anywhere;
+}
+
+.posted-badge {
+  border-color: rgba(88, 181, 128, 0.55);
+  background: rgba(88, 181, 128, 0.12);
+  color: #c5f6d6;
+}
+
+.strategy-badge {
+  border-color: rgba(218, 184, 105, 0.5);
+  background: rgba(218, 184, 105, 0.12);
+  color: #f5ddb0;
 }
 
 .rotation-badge {
@@ -1218,6 +1239,101 @@ main {
 
 .performance-view {
   padding: 24px 28px 42px;
+}
+
+.strategy-hub {
+  display: grid;
+  gap: 18px;
+}
+
+.strategy-flow {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(140px, 1fr));
+  gap: 10px;
+}
+
+.strategy-flow article {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  padding: 12px;
+  display: grid;
+  gap: 8px;
+  min-height: 110px;
+}
+
+.strategy-flow strong {
+  color: var(--ink);
+}
+
+.strategy-flow span,
+.strategy-list span,
+.metric-row span {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.strategy-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+
+.wide-card {
+  grid-column: 1 / -1;
+}
+
+.strategy-details {
+  border-top: 1px solid var(--line);
+  padding: 10px 0;
+}
+
+.strategy-details summary {
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.strategy-details ul {
+  margin: 8px 0 0;
+  padding-left: 18px;
+  color: var(--muted);
+}
+
+.metric-row {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.metric-row div {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.025);
+  padding: 10px;
+  display: grid;
+  gap: 4px;
+}
+
+.strategy-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.strategy-list div {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px;
+  display: grid;
+  gap: 5px;
+  background: rgba(255, 255, 255, 0.025);
+}
+
+.compact-list {
+  max-height: 280px;
+  overflow: auto;
 }
 
 .performance-list {
@@ -2460,6 +2576,9 @@ textarea {
     min-height: auto;
     border-right: 0;
     border-bottom: 1px solid var(--line);
+    position: static;
+    max-height: none;
+    overflow: visible;
   }
 
   .topbar,

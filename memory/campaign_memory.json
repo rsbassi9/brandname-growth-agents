@@ -15,12 +15,14 @@
       "Row 1 has 2 posts with similar palette: black/dark. Consider moving one to create breathing room.",
       "Row 1 has 2 posts with similar brightness: dark. Consider moving one to create breathing room.",
       "Row 1 has 2 posts with similar visual style: digital/source. Consider moving one to create breathing room.",
-      "Row 1 has 2 posts with similar density: dense. Consider moving one to create breathing room."
+      "Row 1 has 2 posts with similar density: dense. Consider moving one to create breathing room.",
+      "Use the user-built First Post Inspiration folder as a soft style reference when available: borrow pacing, restraint, sequence, contrast, and image rhythm, but do not treat it as a hard template."
     ],
     "calendar_commitments": [
       "7 launch recovery posts scheduled first.",
       "27 total planned posts in calendar.",
-      "Current planned product mix: distressed grommet eyelet tank top: 6, essential heavyweight cotton t shirt: 1, french terry boxy tank top2: 1. Watch repeated product families: distressed grommet eyelet tank top."
+      "Current planned product mix: distressed grommet eyelet tank top: 6, essential heavyweight cotton t shirt: 1, french terry boxy tank top2: 1. Watch repeated product families: distressed grommet eyelet tank top.",
+      "Relaunch body/CTA posts should prefer Photoshoot / Campaign assets before older Raw Content JRR files."
     ],
     "shoot_gaps": [
       "Underused product family: essential heavyweight cotton t shirt.",
@@ -40,6 +42,52 @@
     "summary": "Use campaign recovery as the operating brief: context first, then product clarity, body proof, process proof, product focus, and CTA. Future generated posts should fill feed gaps instead of acting as isolated ideas."
   },
   "revisions": [
+    {
+      "updated_at": "2026-05-23T12:35:44",
+      "source": "first_post_feedback_loop",
+      "memory": {
+        "campaign_focus": "[4DRFT] launch recovery",
+        "active_narrative": "Explain one painting -> seven designs -> wearable fragments before isolated product selling.",
+        "feed_objective": "Grid is arranged to balance visual roles across the profile. Current role mix: Process x7, Product x6, Motion x5, Meaning x4.",
+        "product_priorities": [
+          "Vintage Wash Drop Shoulder T Shirt3",
+          "Mineral Wash Waffle Knit Shorts",
+          "Mineral Wash Waffle Knit T Shirt",
+          "Vintage Washed Frayed Hem Hoodie",
+          "Essential Wide Neck Baby T Shirt",
+          "Essential Bodycon Crewneck T Shirt"
+        ],
+        "visual_needs": [
+          "Row 1 has 2 posts with similar palette: black/dark. Consider moving one to create breathing room.",
+          "Row 1 has 2 posts with similar brightness: dark. Consider moving one to create breathing room.",
+          "Row 1 has 2 posts with similar visual style: digital/source. Consider moving one to create breathing room.",
+          "Row 1 has 2 posts with similar density: dense. Consider moving one to create breathing room.",
+          "Use the user-built First Post Inspiration folder as a soft style reference when available: borrow pacing, restraint, sequence, contrast, and image rhythm, but do not treat it as a hard template."
+        ],
+        "calendar_commitments": [
+          "7 launch recovery posts scheduled first.",
+          "27 total planned posts in calendar.",
+          "Current planned product mix: distressed grommet eyelet tank top: 6, essential heavyweight cotton t shirt: 1, french terry boxy tank top2: 1. Watch repeated product families: distressed grommet eyelet tank top.",
+          "Relaunch body/CTA posts should prefer Photoshoot / Campaign assets before older Raw Content JRR files."
+        ],
+        "shoot_gaps": [
+          "Underused product family: essential heavyweight cotton t shirt.",
+          "Underused product family: french terry boxy tank top2."
+        ],
+        "channel_implications": [
+          "Launch plan connects content sequence, profile curation, SEO, Ads readiness, merchandising, and shoot gaps.",
+          "SEO approved: 0.",
+          "Ads ready: 0."
+        ],
+        "avoid_list": [
+          "Avoid random isolated product posts before the drop story is clear.",
+          "Avoid repeating same image sets in the same order.",
+          "Avoid rows dominated by black/source-heavy/process-heavy posts unless intentional.",
+          "Avoid corny captions or generic streetwear language."
+        ],
+        "summary": "Use campaign recovery as the operating brief: context first, then product clarity, body proof, process proof, product focus, and CTA. Future generated posts should fill feed gaps instead of acting as isolated ideas."
+      }
+    },
     {
       "updated_at": "2026-05-16T15:33:45",
       "source": "dashboard_refresh",

@@ -1439,7 +1439,7 @@
     "contrast_value": 139,
     "density": "medium",
     "image_type": "dark-anchor",
-    "mtime": 1779005359.7961726
+    "mtime": 1779074479.5779607
   },
   "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-17-launch-recovery-05-process-proof\\slide-02.png": {
     "dominant_rgb": [
@@ -1453,7 +1453,7 @@
     "contrast_value": 185,
     "density": "dense",
     "image_type": "photo/mixed",
-    "mtime": 1779005359.6884415
+    "mtime": 1779074479.4258995
   },
   "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-17-launch-recovery-05-process-proof\\slide-01.png": {
     "dominant_rgb": [
@@ -1467,7 +1467,7 @@
     "contrast_value": 158.33,
     "density": "medium",
     "image_type": "dark-anchor",
-    "mtime": 1779005359.5794916
+    "mtime": 1779074479.2784655
   },
   "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-17-launch-recovery-02-origin\\slide-04.png": {
     "dominant_rgb": [
@@ -1481,7 +1481,7 @@
     "contrast_value": 179,
     "density": "dense",
     "image_type": "photo/mixed",
-    "mtime": 1779005359.4145453
+    "mtime": 1779074479.0252416
   },
   "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-17-launch-recovery-02-origin\\slide-03.png": {
     "dominant_rgb": [
@@ -1495,7 +1495,7 @@
     "contrast_value": 145,
     "density": "medium",
     "image_type": "dark-anchor",
-    "mtime": 1779005359.319816
+    "mtime": 1779074478.9305506
   },
   "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-17-launch-recovery-02-origin\\slide-02.png": {
     "dominant_rgb": [
@@ -1509,7 +1509,7 @@
     "contrast_value": 146,
     "density": "medium",
     "image_type": "dark-anchor",
-    "mtime": 1779005359.2031488
+    "mtime": 1779074478.8291662
   },
   "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-17-launch-recovery-02-origin\\slide-01.png": {
     "dominant_rgb": [
@@ -1523,7 +1523,7 @@
     "contrast_value": 179.33,
     "density": "dense",
     "image_type": "photo/mixed",
-    "mtime": 1779005359.1123855
+    "mtime": 1779074478.7271366
   },
   "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-17-launch-recovery-01-intro\\slide-04.png": {
     "dominant_rgb": [
@@ -1537,7 +1537,7 @@
     "contrast_value": 154.67,
     "density": "medium",
     "image_type": "dark-anchor",
-    "mtime": 1779005359.023919
+    "mtime": 1779074478.615744
   },
   "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-17-launch-recovery-01-intro\\slide-03.png": {
     "dominant_rgb": [
@@ -1551,7 +1551,7 @@
     "contrast_value": 144.67,
     "density": "medium",
     "image_type": "dark-anchor",
-    "mtime": 1779005358.858537
+    "mtime": 1779074478.4990127
   },
   "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-17-launch-recovery-01-intro\\slide-02.png": {
     "dominant_rgb": [
@@ -1565,7 +1565,7 @@
     "contrast_value": 182,
     "density": "dense",
     "image_type": "photo/mixed",
-    "mtime": 1779005358.7387173
+    "mtime": 1779074478.3887062
   },
   "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-17-launch-recovery-01-intro\\slide-01.png": {
     "dominant_rgb": [
@@ -1579,6 +1579,2652 @@
     "contrast_value": 156.67,
     "density": "medium",
     "image_type": "dark-anchor",
-    "mtime": 1779005358.603947
+    "mtime": 1779074478.270459
+  },
+  "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-18-one-painting--seven-fragments-\\slide-07.png": {
+    "dominant_rgb": [
+      202,
+      200,
+      196
+    ],
+    "palette": "grey/washed",
+    "brightness": "bright",
+    "brightness_value": 199.33,
+    "contrast_value": 233,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1779150850.958959
+  },
+  "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-18-one-painting--seven-fragments-\\slide-06.png": {
+    "dominant_rgb": [
+      196,
+      195,
+      190
+    ],
+    "palette": "grey/washed",
+    "brightness": "bright",
+    "brightness_value": 193.67,
+    "contrast_value": 251.67,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1779150850.2658026
+  },
+  "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-18-one-painting--seven-fragments-\\slide-05.png": {
+    "dominant_rgb": [
+      208,
+      207,
+      203
+    ],
+    "palette": "light/neutral",
+    "brightness": "bright",
+    "brightness_value": 206.0,
+    "contrast_value": 183.67,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1779150849.5760407
+  },
+  "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-18-one-painting--seven-fragments-\\slide-04.png": {
+    "dominant_rgb": [
+      208,
+      207,
+      202
+    ],
+    "palette": "light/neutral",
+    "brightness": "bright",
+    "brightness_value": 205.67,
+    "contrast_value": 197.67,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1779150848.9437706
+  },
+  "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-18-one-painting--seven-fragments-\\slide-03.png": {
+    "dominant_rgb": [
+      206,
+      204,
+      200
+    ],
+    "palette": "grey/washed",
+    "brightness": "bright",
+    "brightness_value": 203.33,
+    "contrast_value": 217,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1779150848.3430514
+  },
+  "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-18-one-painting--seven-fragments-\\slide-02.png": {
+    "dominant_rgb": [
+      168,
+      166,
+      161
+    ],
+    "palette": "grey/washed",
+    "brightness": "mid",
+    "brightness_value": 165.0,
+    "contrast_value": 242,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1779150848.0168524
+  },
+  "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-18-one-painting--seven-fragments-\\slide-01.png": {
+    "dominant_rgb": [
+      205,
+      204,
+      200
+    ],
+    "palette": "grey/washed",
+    "brightness": "bright",
+    "brightness_value": 203.0,
+    "contrast_value": 197.67,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1779150847.3642309
+  },
+  "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-18-launch-recovery-01-intro\\slide-01.png": {
+    "dominant_rgb": [
+      13,
+      12,
+      13
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 12.67,
+    "contrast_value": 156.67,
+    "density": "medium",
+    "image_type": "dark-anchor",
+    "mtime": 1779152994.2278595
+  },
+  "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-18-launch-recovery-01-intro\\slide-02.png": {
+    "dominant_rgb": [
+      239,
+      236,
+      231
+    ],
+    "palette": "light/neutral",
+    "brightness": "bright",
+    "brightness_value": 235.33,
+    "contrast_value": 182,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1779152994.318085
+  },
+  "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-18-launch-recovery-01-intro\\slide-03.png": {
+    "dominant_rgb": [
+      13,
+      12,
+      13
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 12.67,
+    "contrast_value": 144.67,
+    "density": "medium",
+    "image_type": "dark-anchor",
+    "mtime": 1779152994.4023185
+  },
+  "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-18-launch-recovery-01-intro\\slide-04.png": {
+    "dominant_rgb": [
+      14,
+      13,
+      14
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 13.67,
+    "contrast_value": 154.67,
+    "density": "medium",
+    "image_type": "dark-anchor",
+    "mtime": 1779152994.4962244
+  },
+  "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-18-launch-recovery-02-origin\\slide-01.png": {
+    "dominant_rgb": [
+      240,
+      237,
+      232
+    ],
+    "palette": "light/neutral",
+    "brightness": "bright",
+    "brightness_value": 236.33,
+    "contrast_value": 179.33,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1779152994.5786226
+  },
+  "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-18-launch-recovery-02-origin\\slide-02.png": {
+    "dominant_rgb": [
+      12,
+      11,
+      12
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 11.67,
+    "contrast_value": 146,
+    "density": "medium",
+    "image_type": "dark-anchor",
+    "mtime": 1779152994.6655836
+  },
+  "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-18-launch-recovery-02-origin\\slide-03.png": {
+    "dominant_rgb": [
+      13,
+      12,
+      13
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 12.67,
+    "contrast_value": 145,
+    "density": "medium",
+    "image_type": "dark-anchor",
+    "mtime": 1779152994.7502363
+  },
+  "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-18-launch-recovery-02-origin\\slide-04.png": {
+    "dominant_rgb": [
+      240,
+      237,
+      232
+    ],
+    "palette": "light/neutral",
+    "brightness": "bright",
+    "brightness_value": 236.33,
+    "contrast_value": 179,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1779152994.8320017
+  },
+  "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-18-launch-recovery-05-process-proof\\slide-01.png": {
+    "dominant_rgb": [
+      14,
+      13,
+      14
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 13.67,
+    "contrast_value": 158.33,
+    "density": "medium",
+    "image_type": "dark-anchor",
+    "mtime": 1779152994.9535215
+  },
+  "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-18-launch-recovery-05-process-proof\\slide-02.png": {
+    "dominant_rgb": [
+      239,
+      236,
+      231
+    ],
+    "palette": "light/neutral",
+    "brightness": "bright",
+    "brightness_value": 235.33,
+    "contrast_value": 185,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1779152995.052074
+  },
+  "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-18-launch-recovery-05-process-proof\\slide-03.png": {
+    "dominant_rgb": [
+      13,
+      12,
+      13
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 12.67,
+    "contrast_value": 139,
+    "density": "medium",
+    "image_type": "dark-anchor",
+    "mtime": 1779152995.137579
+  },
+  "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-19-launch-recovery-05-process-proof\\slide-03.png": {
+    "dominant_rgb": [
+      13,
+      12,
+      13
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 12.67,
+    "contrast_value": 139,
+    "density": "medium",
+    "image_type": "dark-anchor",
+    "mtime": 1779223608.505766
+  },
+  "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-19-launch-recovery-05-process-proof\\slide-02.png": {
+    "dominant_rgb": [
+      239,
+      236,
+      231
+    ],
+    "palette": "light/neutral",
+    "brightness": "bright",
+    "brightness_value": 235.33,
+    "contrast_value": 185,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1779223608.4084232
+  },
+  "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-19-launch-recovery-05-process-proof\\slide-01.png": {
+    "dominant_rgb": [
+      14,
+      13,
+      14
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 13.67,
+    "contrast_value": 158.33,
+    "density": "medium",
+    "image_type": "dark-anchor",
+    "mtime": 1779223608.3175795
+  },
+  "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-19-launch-recovery-02-origin\\slide-04.png": {
+    "dominant_rgb": [
+      240,
+      237,
+      232
+    ],
+    "palette": "light/neutral",
+    "brightness": "bright",
+    "brightness_value": 236.33,
+    "contrast_value": 179,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1779223608.1550415
+  },
+  "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-19-launch-recovery-02-origin\\slide-03.png": {
+    "dominant_rgb": [
+      13,
+      12,
+      13
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 12.67,
+    "contrast_value": 145,
+    "density": "medium",
+    "image_type": "dark-anchor",
+    "mtime": 1779223608.0752015
+  },
+  "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-19-launch-recovery-02-origin\\slide-02.png": {
+    "dominant_rgb": [
+      12,
+      11,
+      12
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 11.67,
+    "contrast_value": 146,
+    "density": "medium",
+    "image_type": "dark-anchor",
+    "mtime": 1779223607.9916909
+  },
+  "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-19-launch-recovery-02-origin\\slide-01.png": {
+    "dominant_rgb": [
+      240,
+      237,
+      232
+    ],
+    "palette": "light/neutral",
+    "brightness": "bright",
+    "brightness_value": 236.33,
+    "contrast_value": 179.33,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1779223607.9275713
+  },
+  "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-19-launch-recovery-01-intro\\slide-04.png": {
+    "dominant_rgb": [
+      14,
+      13,
+      14
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 13.67,
+    "contrast_value": 154.67,
+    "density": "medium",
+    "image_type": "dark-anchor",
+    "mtime": 1779234353.971
+  },
+  "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-19-launch-recovery-01-intro\\slide-03.png": {
+    "dominant_rgb": [
+      13,
+      12,
+      13
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 12.67,
+    "contrast_value": 144.67,
+    "density": "medium",
+    "image_type": "dark-anchor",
+    "mtime": 1779234353.916634
+  },
+  "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-19-launch-recovery-01-intro\\slide-02.png": {
+    "dominant_rgb": [
+      239,
+      236,
+      231
+    ],
+    "palette": "light/neutral",
+    "brightness": "bright",
+    "brightness_value": 235.33,
+    "contrast_value": 182,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1779234353.8604112
+  },
+  "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-19-launch-recovery-01-intro\\slide-01.png": {
+    "dominant_rgb": [
+      13,
+      12,
+      13
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 12.67,
+    "contrast_value": 156.67,
+    "density": "medium",
+    "image_type": "dark-anchor",
+    "mtime": 1779234353.8080196
+  },
+  "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\image_concepts\\2026-05-16-candidate-2026-05-15-2-model-shoot\\model-shoot-render-product-composite.png": {
+    "dominant_rgb": [
+      169,
+      171,
+      166
+    ],
+    "palette": "grey/washed",
+    "brightness": "mid",
+    "brightness_value": 168.67,
+    "contrast_value": 190.67,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1779227530.6323793
+  },
+  "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\image_concepts\\2026-05-19-launch-recovery-03-product-clarity-model-shoot\\model-shoot-render-product-composite.png": {
+    "dominant_rgb": [
+      102,
+      95,
+      88
+    ],
+    "palette": "grey/washed",
+    "brightness": "mid",
+    "brightness_value": 95.0,
+    "contrast_value": 234.67,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1779228356.2729876
+  },
+  "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\image_concepts\\2026-05-19-launch-recovery-03-product-clarity-model-shoot\\model-shoot-render.png": {
+    "dominant_rgb": [
+      101,
+      93,
+      87
+    ],
+    "palette": "grey/washed",
+    "brightness": "mid",
+    "brightness_value": 93.67,
+    "contrast_value": 234.67,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1779228350.2461102
+  },
+  "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\image_concepts\\2026-05-19-launch-recovery-03-product-clarity-model-shoot-iteration\\model-shoot-iteration-render-product-composite.png": {
+    "dominant_rgb": [
+      101,
+      93,
+      87
+    ],
+    "palette": "grey/washed",
+    "brightness": "mid",
+    "brightness_value": 93.67,
+    "contrast_value": 237.33,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1779230302.0043347
+  },
+  "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\image_concepts\\2026-05-19-launch-recovery-03-product-clarity-model-shoot-iteration\\model-shoot-iteration-render.png": {
+    "dominant_rgb": [
+      98,
+      90,
+      84
+    ],
+    "palette": "grey/washed",
+    "brightness": "mid",
+    "brightness_value": 90.67,
+    "contrast_value": 237.33,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1779228806.136342
+  },
+  "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-23-launch-recovery-01-intro\\slide-04.png": {
+    "dominant_rgb": [
+      14,
+      13,
+      14
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 13.67,
+    "contrast_value": 154.67,
+    "density": "medium",
+    "image_type": "dark-anchor",
+    "mtime": 1779564897.941038
+  },
+  "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-23-launch-recovery-01-intro\\slide-03.png": {
+    "dominant_rgb": [
+      13,
+      12,
+      13
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 12.67,
+    "contrast_value": 144.67,
+    "density": "medium",
+    "image_type": "dark-anchor",
+    "mtime": 1779564897.8991766
+  },
+  "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-23-launch-recovery-01-intro\\slide-02.png": {
+    "dominant_rgb": [
+      239,
+      236,
+      231
+    ],
+    "palette": "light/neutral",
+    "brightness": "bright",
+    "brightness_value": 235.33,
+    "contrast_value": 182,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1779564897.855569
+  },
+  "C:\\Users\\Rajvir\\Documents\\brandname-growth-agents\\outputs\\visual_content\\2026-05-23-launch-recovery-01-intro\\slide-01.png": {
+    "dominant_rgb": [
+      13,
+      12,
+      13
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 12.67,
+    "contrast_value": 156.67,
+    "density": "medium",
+    "image_type": "dark-anchor",
+    "mtime": 1779564897.8081067
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-23-launch-recovery-01-intro/slide-04.png": {
+    "dominant_rgb": [
+      14,
+      13,
+      14
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 13.67,
+    "contrast_value": 154.67,
+    "density": "medium",
+    "image_type": "dark-anchor",
+    "mtime": 1779564897.941038
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-23-launch-recovery-01-intro/slide-03.png": {
+    "dominant_rgb": [
+      13,
+      12,
+      13
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 12.67,
+    "contrast_value": 144.67,
+    "density": "medium",
+    "image_type": "dark-anchor",
+    "mtime": 1779564897.8991766
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-23-launch-recovery-01-intro/slide-02.png": {
+    "dominant_rgb": [
+      239,
+      236,
+      231
+    ],
+    "palette": "light/neutral",
+    "brightness": "bright",
+    "brightness_value": 235.33,
+    "contrast_value": 182,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1779564897.855569
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-23-launch-recovery-01-intro/slide-01.png": {
+    "dominant_rgb": [
+      13,
+      12,
+      13
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 12.67,
+    "contrast_value": 156.67,
+    "density": "medium",
+    "image_type": "dark-anchor",
+    "mtime": 1779564897.8081067
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-19-launch-recovery-01-intro/slide-04.png": {
+    "dominant_rgb": [
+      14,
+      13,
+      14
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 13.67,
+    "contrast_value": 154.67,
+    "density": "medium",
+    "image_type": "dark-anchor",
+    "mtime": 1779234353.971
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-19-launch-recovery-01-intro/slide-03.png": {
+    "dominant_rgb": [
+      13,
+      12,
+      13
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 12.67,
+    "contrast_value": 144.67,
+    "density": "medium",
+    "image_type": "dark-anchor",
+    "mtime": 1779234353.916634
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-19-launch-recovery-01-intro/slide-02.png": {
+    "dominant_rgb": [
+      239,
+      236,
+      231
+    ],
+    "palette": "light/neutral",
+    "brightness": "bright",
+    "brightness_value": 235.33,
+    "contrast_value": 182,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1779234353.8604112
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-19-launch-recovery-01-intro/slide-01.png": {
+    "dominant_rgb": [
+      13,
+      12,
+      13
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 12.67,
+    "contrast_value": 156.67,
+    "density": "medium",
+    "image_type": "dark-anchor",
+    "mtime": 1779234353.8080196
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/image_concepts/2026-05-19-launch-recovery-03-product-clarity-model-shoot-iteration/model-shoot-iteration-render-product-composite.png": {
+    "dominant_rgb": [
+      101,
+      93,
+      87
+    ],
+    "palette": "grey/washed",
+    "brightness": "mid",
+    "brightness_value": 93.67,
+    "contrast_value": 237.33,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1779230302.0043347
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/image_concepts/2026-05-19-launch-recovery-03-product-clarity-model-shoot-iteration/model-shoot-iteration-render.png": {
+    "dominant_rgb": [
+      98,
+      90,
+      84
+    ],
+    "palette": "grey/washed",
+    "brightness": "mid",
+    "brightness_value": 90.67,
+    "contrast_value": 237.33,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1779228806.136342
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/image_concepts/2026-05-19-launch-recovery-03-product-clarity-model-shoot/model-shoot-render-product-composite.png": {
+    "dominant_rgb": [
+      102,
+      95,
+      88
+    ],
+    "palette": "grey/washed",
+    "brightness": "mid",
+    "brightness_value": 95.0,
+    "contrast_value": 234.67,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1779228356.2729876
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/image_concepts/2026-05-19-launch-recovery-03-product-clarity-model-shoot/model-shoot-render.png": {
+    "dominant_rgb": [
+      101,
+      93,
+      87
+    ],
+    "palette": "grey/washed",
+    "brightness": "mid",
+    "brightness_value": 93.67,
+    "contrast_value": 234.67,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1779228350.2461102
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/image_concepts/2026-05-16-candidate-2026-05-15-2-model-shoot/model-shoot-render-product-composite.png": {
+    "dominant_rgb": [
+      169,
+      171,
+      166
+    ],
+    "palette": "grey/washed",
+    "brightness": "mid",
+    "brightness_value": 168.67,
+    "contrast_value": 190.67,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1779227530.6323793
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-19-launch-recovery-05-process-proof/slide-03.png": {
+    "dominant_rgb": [
+      13,
+      12,
+      13
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 12.67,
+    "contrast_value": 139,
+    "density": "medium",
+    "image_type": "dark-anchor",
+    "mtime": 1779223608.505766
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-19-launch-recovery-05-process-proof/slide-02.png": {
+    "dominant_rgb": [
+      239,
+      236,
+      231
+    ],
+    "palette": "light/neutral",
+    "brightness": "bright",
+    "brightness_value": 235.33,
+    "contrast_value": 185,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1779223608.4084232
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-19-launch-recovery-05-process-proof/slide-01.png": {
+    "dominant_rgb": [
+      14,
+      13,
+      14
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 13.67,
+    "contrast_value": 158.33,
+    "density": "medium",
+    "image_type": "dark-anchor",
+    "mtime": 1779223608.3175795
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-19-launch-recovery-02-origin/slide-04.png": {
+    "dominant_rgb": [
+      240,
+      237,
+      232
+    ],
+    "palette": "light/neutral",
+    "brightness": "bright",
+    "brightness_value": 236.33,
+    "contrast_value": 179,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1779223608.1550415
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-19-launch-recovery-02-origin/slide-03.png": {
+    "dominant_rgb": [
+      13,
+      12,
+      13
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 12.67,
+    "contrast_value": 145,
+    "density": "medium",
+    "image_type": "dark-anchor",
+    "mtime": 1779223608.0752015
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-19-launch-recovery-02-origin/slide-02.png": {
+    "dominant_rgb": [
+      12,
+      11,
+      12
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 11.67,
+    "contrast_value": 146,
+    "density": "medium",
+    "image_type": "dark-anchor",
+    "mtime": 1779223607.9916909
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-19-launch-recovery-02-origin/slide-01.png": {
+    "dominant_rgb": [
+      240,
+      237,
+      232
+    ],
+    "palette": "light/neutral",
+    "brightness": "bright",
+    "brightness_value": 236.33,
+    "contrast_value": 179.33,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1779223607.9275713
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-18-launch-recovery-05-process-proof/slide-03.png": {
+    "dominant_rgb": [
+      13,
+      12,
+      13
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 12.67,
+    "contrast_value": 139,
+    "density": "medium",
+    "image_type": "dark-anchor",
+    "mtime": 1779152995.137579
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-18-launch-recovery-05-process-proof/slide-02.png": {
+    "dominant_rgb": [
+      239,
+      236,
+      231
+    ],
+    "palette": "light/neutral",
+    "brightness": "bright",
+    "brightness_value": 235.33,
+    "contrast_value": 185,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1779152995.052074
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-18-launch-recovery-05-process-proof/slide-01.png": {
+    "dominant_rgb": [
+      14,
+      13,
+      14
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 13.67,
+    "contrast_value": 158.33,
+    "density": "medium",
+    "image_type": "dark-anchor",
+    "mtime": 1779152994.9535215
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-18-launch-recovery-02-origin/slide-04.png": {
+    "dominant_rgb": [
+      240,
+      237,
+      232
+    ],
+    "palette": "light/neutral",
+    "brightness": "bright",
+    "brightness_value": 236.33,
+    "contrast_value": 179,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1779152994.8320017
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-18-launch-recovery-02-origin/slide-03.png": {
+    "dominant_rgb": [
+      13,
+      12,
+      13
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 12.67,
+    "contrast_value": 145,
+    "density": "medium",
+    "image_type": "dark-anchor",
+    "mtime": 1779152994.7502363
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-18-launch-recovery-02-origin/slide-02.png": {
+    "dominant_rgb": [
+      12,
+      11,
+      12
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 11.67,
+    "contrast_value": 146,
+    "density": "medium",
+    "image_type": "dark-anchor",
+    "mtime": 1779152994.6655836
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-18-launch-recovery-02-origin/slide-01.png": {
+    "dominant_rgb": [
+      240,
+      237,
+      232
+    ],
+    "palette": "light/neutral",
+    "brightness": "bright",
+    "brightness_value": 236.33,
+    "contrast_value": 179.33,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1779152994.5786226
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-18-launch-recovery-01-intro/slide-04.png": {
+    "dominant_rgb": [
+      14,
+      13,
+      14
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 13.67,
+    "contrast_value": 154.67,
+    "density": "medium",
+    "image_type": "dark-anchor",
+    "mtime": 1779152994.4962244
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-18-launch-recovery-01-intro/slide-03.png": {
+    "dominant_rgb": [
+      13,
+      12,
+      13
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 12.67,
+    "contrast_value": 144.67,
+    "density": "medium",
+    "image_type": "dark-anchor",
+    "mtime": 1779152994.4023185
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-18-launch-recovery-01-intro/slide-02.png": {
+    "dominant_rgb": [
+      239,
+      236,
+      231
+    ],
+    "palette": "light/neutral",
+    "brightness": "bright",
+    "brightness_value": 235.33,
+    "contrast_value": 182,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1779152994.318085
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-18-launch-recovery-01-intro/slide-01.png": {
+    "dominant_rgb": [
+      13,
+      12,
+      13
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 12.67,
+    "contrast_value": 156.67,
+    "density": "medium",
+    "image_type": "dark-anchor",
+    "mtime": 1779152994.2278595
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-18-one-painting--seven-fragments-/slide-07.png": {
+    "dominant_rgb": [
+      202,
+      200,
+      196
+    ],
+    "palette": "grey/washed",
+    "brightness": "bright",
+    "brightness_value": 199.33,
+    "contrast_value": 233,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1779150850.958959
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-18-one-painting--seven-fragments-/slide-06.png": {
+    "dominant_rgb": [
+      196,
+      195,
+      190
+    ],
+    "palette": "grey/washed",
+    "brightness": "bright",
+    "brightness_value": 193.67,
+    "contrast_value": 251.67,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1779150850.2658026
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-18-one-painting--seven-fragments-/slide-05.png": {
+    "dominant_rgb": [
+      208,
+      207,
+      203
+    ],
+    "palette": "light/neutral",
+    "brightness": "bright",
+    "brightness_value": 206.0,
+    "contrast_value": 183.67,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1779150849.5760407
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-18-one-painting--seven-fragments-/slide-04.png": {
+    "dominant_rgb": [
+      208,
+      207,
+      202
+    ],
+    "palette": "light/neutral",
+    "brightness": "bright",
+    "brightness_value": 205.67,
+    "contrast_value": 197.67,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1779150848.9437706
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-18-one-painting--seven-fragments-/slide-03.png": {
+    "dominant_rgb": [
+      206,
+      204,
+      200
+    ],
+    "palette": "grey/washed",
+    "brightness": "bright",
+    "brightness_value": 203.33,
+    "contrast_value": 217,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1779150848.3430514
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-18-one-painting--seven-fragments-/slide-02.png": {
+    "dominant_rgb": [
+      168,
+      166,
+      161
+    ],
+    "palette": "grey/washed",
+    "brightness": "mid",
+    "brightness_value": 165.0,
+    "contrast_value": 242,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1779150848.0168524
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-18-one-painting--seven-fragments-/slide-01.png": {
+    "dominant_rgb": [
+      205,
+      204,
+      200
+    ],
+    "palette": "grey/washed",
+    "brightness": "bright",
+    "brightness_value": 203.0,
+    "contrast_value": 197.67,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1779150847.3642309
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-17-launch-recovery-05-process-proof/slide-03.png": {
+    "dominant_rgb": [
+      13,
+      12,
+      13
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 12.67,
+    "contrast_value": 139,
+    "density": "medium",
+    "image_type": "dark-anchor",
+    "mtime": 1779074479.5779607
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-17-launch-recovery-05-process-proof/slide-02.png": {
+    "dominant_rgb": [
+      239,
+      236,
+      231
+    ],
+    "palette": "light/neutral",
+    "brightness": "bright",
+    "brightness_value": 235.33,
+    "contrast_value": 185,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1779074479.4258995
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-17-launch-recovery-05-process-proof/slide-01.png": {
+    "dominant_rgb": [
+      14,
+      13,
+      14
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 13.67,
+    "contrast_value": 158.33,
+    "density": "medium",
+    "image_type": "dark-anchor",
+    "mtime": 1779074479.2784655
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-17-launch-recovery-02-origin/slide-04.png": {
+    "dominant_rgb": [
+      240,
+      237,
+      232
+    ],
+    "palette": "light/neutral",
+    "brightness": "bright",
+    "brightness_value": 236.33,
+    "contrast_value": 179,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1779074479.0252416
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-17-launch-recovery-02-origin/slide-03.png": {
+    "dominant_rgb": [
+      13,
+      12,
+      13
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 12.67,
+    "contrast_value": 145,
+    "density": "medium",
+    "image_type": "dark-anchor",
+    "mtime": 1779074478.9305506
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-17-launch-recovery-02-origin/slide-02.png": {
+    "dominant_rgb": [
+      12,
+      11,
+      12
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 11.67,
+    "contrast_value": 146,
+    "density": "medium",
+    "image_type": "dark-anchor",
+    "mtime": 1779074478.8291662
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-17-launch-recovery-02-origin/slide-01.png": {
+    "dominant_rgb": [
+      240,
+      237,
+      232
+    ],
+    "palette": "light/neutral",
+    "brightness": "bright",
+    "brightness_value": 236.33,
+    "contrast_value": 179.33,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1779074478.7271366
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-17-launch-recovery-01-intro/slide-04.png": {
+    "dominant_rgb": [
+      14,
+      13,
+      14
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 13.67,
+    "contrast_value": 154.67,
+    "density": "medium",
+    "image_type": "dark-anchor",
+    "mtime": 1779074478.615744
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-17-launch-recovery-01-intro/slide-03.png": {
+    "dominant_rgb": [
+      13,
+      12,
+      13
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 12.67,
+    "contrast_value": 144.67,
+    "density": "medium",
+    "image_type": "dark-anchor",
+    "mtime": 1779074478.4990127
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-17-launch-recovery-01-intro/slide-02.png": {
+    "dominant_rgb": [
+      239,
+      236,
+      231
+    ],
+    "palette": "light/neutral",
+    "brightness": "bright",
+    "brightness_value": 235.33,
+    "contrast_value": 182,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1779074478.3887062
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-17-launch-recovery-01-intro/slide-01.png": {
+    "dominant_rgb": [
+      13,
+      12,
+      13
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 12.67,
+    "contrast_value": 156.67,
+    "density": "medium",
+    "image_type": "dark-anchor",
+    "mtime": 1779074478.270459
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/image_concepts/2026-05-17-shoot-reference-must-shoot-process-detail/process-detail-render.png": {
+    "dominant_rgb": [
+      109,
+      107,
+      98
+    ],
+    "palette": "grey/washed",
+    "brightness": "mid",
+    "brightness_value": 104.67,
+    "contrast_value": 233,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1779004247.1024663
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/image_concepts/2026-05-17-launch-recovery-03-product-clarity-model-shoot/model-shoot-render.png": {
+    "dominant_rgb": [
+      59,
+      50,
+      42
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 50.33,
+    "contrast_value": 196.33,
+    "density": "dense",
+    "image_type": "graphic-heavy",
+    "mtime": 1779003881.8327942
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-16-launch-recovery-05-process-proof/slide-03.png": {
+    "dominant_rgb": [
+      13,
+      12,
+      13
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 12.67,
+    "contrast_value": 139,
+    "density": "medium",
+    "image_type": "dark-anchor",
+    "mtime": 1778994650.5735617
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-16-launch-recovery-05-process-proof/slide-02.png": {
+    "dominant_rgb": [
+      239,
+      236,
+      231
+    ],
+    "palette": "light/neutral",
+    "brightness": "bright",
+    "brightness_value": 235.33,
+    "contrast_value": 185,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778994650.448295
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-16-launch-recovery-05-process-proof/slide-01.png": {
+    "dominant_rgb": [
+      14,
+      13,
+      14
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 13.67,
+    "contrast_value": 158.33,
+    "density": "medium",
+    "image_type": "dark-anchor",
+    "mtime": 1778994650.3450055
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-16-launch-recovery-02-origin/slide-04.png": {
+    "dominant_rgb": [
+      240,
+      237,
+      232
+    ],
+    "palette": "light/neutral",
+    "brightness": "bright",
+    "brightness_value": 236.33,
+    "contrast_value": 179,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778994650.2075543
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-16-launch-recovery-02-origin/slide-03.png": {
+    "dominant_rgb": [
+      13,
+      12,
+      13
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 12.67,
+    "contrast_value": 145,
+    "density": "medium",
+    "image_type": "dark-anchor",
+    "mtime": 1778994650.1275606
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-16-launch-recovery-02-origin/slide-02.png": {
+    "dominant_rgb": [
+      12,
+      11,
+      12
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 11.67,
+    "contrast_value": 146,
+    "density": "medium",
+    "image_type": "dark-anchor",
+    "mtime": 1778994650.0342145
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-16-launch-recovery-02-origin/slide-01.png": {
+    "dominant_rgb": [
+      240,
+      237,
+      232
+    ],
+    "palette": "light/neutral",
+    "brightness": "bright",
+    "brightness_value": 236.33,
+    "contrast_value": 179.33,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778994649.9313064
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-16-launch-recovery-01-intro/slide-04.png": {
+    "dominant_rgb": [
+      14,
+      13,
+      14
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 13.67,
+    "contrast_value": 154.67,
+    "density": "medium",
+    "image_type": "dark-anchor",
+    "mtime": 1778994649.836321
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-16-launch-recovery-01-intro/slide-03.png": {
+    "dominant_rgb": [
+      13,
+      12,
+      13
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 12.67,
+    "contrast_value": 144.67,
+    "density": "medium",
+    "image_type": "dark-anchor",
+    "mtime": 1778994649.7410686
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-16-launch-recovery-01-intro/slide-02.png": {
+    "dominant_rgb": [
+      239,
+      236,
+      231
+    ],
+    "palette": "light/neutral",
+    "brightness": "bright",
+    "brightness_value": 235.33,
+    "contrast_value": 182,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778994649.6281056
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-16-launch-recovery-01-intro/slide-01.png": {
+    "dominant_rgb": [
+      13,
+      12,
+      13
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 12.67,
+    "contrast_value": 156.67,
+    "density": "medium",
+    "image_type": "dark-anchor",
+    "mtime": 1778994649.5357988
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-16-one-painting--three-states-/slide-06.png": {
+    "dominant_rgb": [
+      203,
+      202,
+      197
+    ],
+    "palette": "grey/washed",
+    "brightness": "bright",
+    "brightness_value": 200.67,
+    "contrast_value": 249.33,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778972058.258382
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-16-one-painting--three-states-/slide-05.png": {
+    "dominant_rgb": [
+      208,
+      207,
+      203
+    ],
+    "palette": "light/neutral",
+    "brightness": "bright",
+    "brightness_value": 206.0,
+    "contrast_value": 181,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778972057.5599663
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-16-one-painting--three-states-/slide-04.png": {
+    "dominant_rgb": [
+      208,
+      207,
+      202
+    ],
+    "palette": "light/neutral",
+    "brightness": "bright",
+    "brightness_value": 205.67,
+    "contrast_value": 196,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778972056.9624674
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-16-one-painting--three-states-/slide-03.png": {
+    "dominant_rgb": [
+      206,
+      204,
+      200
+    ],
+    "palette": "grey/washed",
+    "brightness": "bright",
+    "brightness_value": 203.33,
+    "contrast_value": 217,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778972056.3897028
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-16-one-painting--three-states-/slide-02.png": {
+    "dominant_rgb": [
+      168,
+      166,
+      161
+    ],
+    "palette": "grey/washed",
+    "brightness": "mid",
+    "brightness_value": 165.0,
+    "contrast_value": 243,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778972055.948389
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-16-one-painting--three-states-/slide-01.png": {
+    "dominant_rgb": [
+      206,
+      204,
+      200
+    ],
+    "palette": "grey/washed",
+    "brightness": "bright",
+    "brightness_value": 203.33,
+    "contrast_value": 193.67,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778972054.9984567
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/image_concepts/2026-05-16-candidate-2026-05-15-2-model-shoot/model-shoot-render.png": {
+    "dominant_rgb": [
+      172,
+      174,
+      169
+    ],
+    "palette": "grey/washed",
+    "brightness": "mid",
+    "brightness_value": 171.67,
+    "contrast_value": 183,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778949727.150413
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-16-from-canvas-to-wearable-fragment/slide-06.png": {
+    "dominant_rgb": [
+      203,
+      202,
+      197
+    ],
+    "palette": "grey/washed",
+    "brightness": "bright",
+    "brightness_value": 200.67,
+    "contrast_value": 249.33,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778948732.306232
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-16-from-canvas-to-wearable-fragment/slide-05.png": {
+    "dominant_rgb": [
+      208,
+      207,
+      202
+    ],
+    "palette": "light/neutral",
+    "brightness": "bright",
+    "brightness_value": 205.67,
+    "contrast_value": 181,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778948731.4464245
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-16-from-canvas-to-wearable-fragment/slide-04.png": {
+    "dominant_rgb": [
+      209,
+      207,
+      202
+    ],
+    "palette": "light/neutral",
+    "brightness": "bright",
+    "brightness_value": 206.0,
+    "contrast_value": 195,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778948730.7318466
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-16-from-canvas-to-wearable-fragment/slide-03.png": {
+    "dominant_rgb": [
+      206,
+      205,
+      201
+    ],
+    "palette": "grey/washed",
+    "brightness": "bright",
+    "brightness_value": 204.0,
+    "contrast_value": 216,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778948730.053506
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-16-from-canvas-to-wearable-fragment/slide-02.png": {
+    "dominant_rgb": [
+      168,
+      166,
+      161
+    ],
+    "palette": "grey/washed",
+    "brightness": "mid",
+    "brightness_value": 165.0,
+    "contrast_value": 244,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778948729.6481855
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-16-from-canvas-to-wearable-fragment/slide-01.png": {
+    "dominant_rgb": [
+      206,
+      204,
+      200
+    ],
+    "palette": "grey/washed",
+    "brightness": "bright",
+    "brightness_value": 203.33,
+    "contrast_value": 191,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778948728.9738104
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/_replaced_images/model-shoot-render-20260516-094159.png": {
+    "dominant_rgb": [
+      48,
+      45,
+      41
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 44.67,
+    "contrast_value": 170,
+    "density": "medium",
+    "image_type": "dark-anchor",
+    "mtime": 1778948383.183812
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-15-canvas---reconstruct---wear/slide-06.png": {
+    "dominant_rgb": [
+      197,
+      195,
+      190
+    ],
+    "palette": "grey/washed",
+    "brightness": "bright",
+    "brightness_value": 194.0,
+    "contrast_value": 253.33,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778895372.4329493
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-15-canvas---reconstruct---wear/slide-05.png": {
+    "dominant_rgb": [
+      206,
+      204,
+      200
+    ],
+    "palette": "grey/washed",
+    "brightness": "bright",
+    "brightness_value": 203.33,
+    "contrast_value": 185.33,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778895369.803377
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-15-canvas---reconstruct---wear/slide-04.png": {
+    "dominant_rgb": [
+      208,
+      207,
+      202
+    ],
+    "palette": "light/neutral",
+    "brightness": "bright",
+    "brightness_value": 205.67,
+    "contrast_value": 199.33,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778895368.0568795
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-15-canvas---reconstruct---wear/slide-03.png": {
+    "dominant_rgb": [
+      208,
+      207,
+      203
+    ],
+    "palette": "light/neutral",
+    "brightness": "bright",
+    "brightness_value": 206.0,
+    "contrast_value": 220.67,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778895366.4203591
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-15-canvas---reconstruct---wear/slide-02.png": {
+    "dominant_rgb": [
+      168,
+      166,
+      161
+    ],
+    "palette": "grey/washed",
+    "brightness": "mid",
+    "brightness_value": 165.0,
+    "contrast_value": 243,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778895365.5386114
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-15-canvas---reconstruct---wear/slide-01.png": {
+    "dominant_rgb": [
+      206,
+      205,
+      200
+    ],
+    "palette": "grey/washed",
+    "brightness": "bright",
+    "brightness_value": 203.67,
+    "contrast_value": 193.67,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778895364.0421891
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-15-source---reconstruction---body/slide-05.png": {
+    "dominant_rgb": [
+      204,
+      203,
+      199
+    ],
+    "palette": "grey/washed",
+    "brightness": "bright",
+    "brightness_value": 202.0,
+    "contrast_value": 186.33,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778891777.8240416
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-15-source---reconstruction---body/slide-04.png": {
+    "dominant_rgb": [
+      209,
+      207,
+      202
+    ],
+    "palette": "light/neutral",
+    "brightness": "bright",
+    "brightness_value": 206.0,
+    "contrast_value": 200.33,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778891776.7186954
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-15-source---reconstruction---body/slide-03.png": {
+    "dominant_rgb": [
+      207,
+      206,
+      202
+    ],
+    "palette": "grey/washed",
+    "brightness": "bright",
+    "brightness_value": 205.0,
+    "contrast_value": 219.67,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778891774.4358156
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-15-source---reconstruction---body/slide-02.png": {
+    "dominant_rgb": [
+      167,
+      165,
+      160
+    ],
+    "palette": "grey/washed",
+    "brightness": "mid",
+    "brightness_value": 164.0,
+    "contrast_value": 244,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778891773.6878688
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-15-source---reconstruction---body/slide-01.png": {
+    "dominant_rgb": [
+      205,
+      203,
+      199
+    ],
+    "palette": "grey/washed",
+    "brightness": "bright",
+    "brightness_value": 202.33,
+    "contrast_value": 195,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778891771.9611037
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-15-canvas---capture---reconstruct---wear/slide-05.png": {
+    "dominant_rgb": [
+      206,
+      204,
+      200
+    ],
+    "palette": "grey/washed",
+    "brightness": "bright",
+    "brightness_value": 203.33,
+    "contrast_value": 186,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778890533.5729067
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-15-canvas---capture---reconstruct---wear/slide-04.png": {
+    "dominant_rgb": [
+      208,
+      207,
+      202
+    ],
+    "palette": "light/neutral",
+    "brightness": "bright",
+    "brightness_value": 205.67,
+    "contrast_value": 196,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778890532.5236032
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-15-canvas---capture---reconstruct---wear/slide-03.png": {
+    "dominant_rgb": [
+      208,
+      207,
+      203
+    ],
+    "palette": "light/neutral",
+    "brightness": "bright",
+    "brightness_value": 206.0,
+    "contrast_value": 220.67,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778890531.1984756
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-15-canvas---capture---reconstruct---wear/slide-02.png": {
+    "dominant_rgb": [
+      168,
+      166,
+      161
+    ],
+    "palette": "grey/washed",
+    "brightness": "mid",
+    "brightness_value": 165.0,
+    "contrast_value": 243,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778890530.5403283
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-15-canvas---capture---reconstruct---wear/slide-01.png": {
+    "dominant_rgb": [
+      205,
+      204,
+      199
+    ],
+    "palette": "grey/washed",
+    "brightness": "bright",
+    "brightness_value": 202.67,
+    "contrast_value": 196,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778890529.365253
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/image_concepts/2026-05-14-a-painting-becomes-a-system/concept-01-canvas-to-body.png": {
+    "dominant_rgb": [
+      213,
+      214,
+      212
+    ],
+    "palette": "light/neutral",
+    "brightness": "bright",
+    "brightness_value": 213.0,
+    "contrast_value": 196.67,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778815140.1482615
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/image_concepts/2026-05-14-canvas---capture---reconstruct---wear/concept-02-wearable-fragment-hero.png": {
+    "dominant_rgb": [
+      104,
+      94,
+      86
+    ],
+    "palette": "grey/washed",
+    "brightness": "mid",
+    "brightness_value": 94.67,
+    "contrast_value": 218.33,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778815113.5940382
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/image_concepts/2026-05-14-canvas---capture---reconstruct---wear/concept-01-source-fragment-hero.png": {
+    "dominant_rgb": [
+      123,
+      118,
+      109
+    ],
+    "palette": "grey/washed",
+    "brightness": "mid",
+    "brightness_value": 116.67,
+    "contrast_value": 231.67,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778815045.3380852
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-14-canvas---capture---reconstruct---wear/slide-06.png": {
+    "dominant_rgb": [
+      197,
+      195,
+      190
+    ],
+    "palette": "grey/washed",
+    "brightness": "bright",
+    "brightness_value": 194.0,
+    "contrast_value": 253.33,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778814975.9679444
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-14-canvas---capture---reconstruct---wear/slide-05.png": {
+    "dominant_rgb": [
+      208,
+      207,
+      203
+    ],
+    "palette": "light/neutral",
+    "brightness": "bright",
+    "brightness_value": 206.0,
+    "contrast_value": 183.67,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778814975.1402128
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-14-canvas---capture---reconstruct---wear/slide-04.png": {
+    "dominant_rgb": [
+      208,
+      207,
+      202
+    ],
+    "palette": "light/neutral",
+    "brightness": "bright",
+    "brightness_value": 205.67,
+    "contrast_value": 196,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778814974.610592
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-14-canvas---capture---reconstruct---wear/slide-03.png": {
+    "dominant_rgb": [
+      206,
+      204,
+      200
+    ],
+    "palette": "grey/washed",
+    "brightness": "bright",
+    "brightness_value": 203.33,
+    "contrast_value": 217,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778814974.0831542
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-14-canvas---capture---reconstruct---wear/slide-02.png": {
+    "dominant_rgb": [
+      168,
+      166,
+      161
+    ],
+    "palette": "grey/washed",
+    "brightness": "mid",
+    "brightness_value": 165.0,
+    "contrast_value": 243,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778814973.7063148
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-14-canvas---capture---reconstruct---wear/slide-01.png": {
+    "dominant_rgb": [
+      206,
+      204,
+      200
+    ],
+    "palette": "grey/washed",
+    "brightness": "bright",
+    "brightness_value": 203.33,
+    "contrast_value": 193.67,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778814972.956083
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/image_concepts/2026-05-14-a-painting-becomes-a-system/concept-03-fragment-in-motion.png": {
+    "dominant_rgb": [
+      81,
+      72,
+      67
+    ],
+    "palette": "grey/washed",
+    "brightness": "dark",
+    "brightness_value": 73.33,
+    "contrast_value": 188.67,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778806358.2480102
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/image_concepts/2026-05-14-a-painting-becomes-a-system/concept-02-reconstruction-hero.png": {
+    "dominant_rgb": [
+      87,
+      74,
+      63
+    ],
+    "palette": "grey/washed",
+    "brightness": "dark",
+    "brightness_value": 74.67,
+    "contrast_value": 192.67,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778806302.1358967
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/_replaced_images/concept-01-canvas-to-body-20260514-201854.png": {
+    "dominant_rgb": [
+      88,
+      77,
+      66
+    ],
+    "palette": "grey/washed",
+    "brightness": "dark",
+    "brightness_value": 77.0,
+    "contrast_value": 196.67,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778806130.5354366
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-14-a-painting-becomes-a-system/slide-06.png": {
+    "dominant_rgb": [
+      201,
+      180,
+      168
+    ],
+    "palette": "mixed",
+    "brightness": "mid",
+    "brightness_value": 183.0,
+    "contrast_value": 248,
+    "density": "dense",
+    "image_type": "graphic-heavy",
+    "mtime": 1778806004.0267203
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-14-a-painting-becomes-a-system/slide-05.png": {
+    "dominant_rgb": [
+      180,
+      177,
+      174
+    ],
+    "palette": "grey/washed",
+    "brightness": "mid",
+    "brightness_value": 177.0,
+    "contrast_value": 254.33,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778806001.595563
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-14-a-painting-becomes-a-system/slide-04.png": {
+    "dominant_rgb": [
+      166,
+      164,
+      161
+    ],
+    "palette": "grey/washed",
+    "brightness": "mid",
+    "brightness_value": 163.67,
+    "contrast_value": 253.33,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778805999.867648
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-14-a-painting-becomes-a-system/slide-03.png": {
+    "dominant_rgb": [
+      185,
+      190,
+      188
+    ],
+    "palette": "grey/washed",
+    "brightness": "bright",
+    "brightness_value": 187.67,
+    "contrast_value": 254.33,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778805998.3812337
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-14-a-painting-becomes-a-system/slide-02.png": {
+    "dominant_rgb": [
+      198,
+      181,
+      170
+    ],
+    "palette": "grey/washed",
+    "brightness": "mid",
+    "brightness_value": 183.0,
+    "contrast_value": 252.33,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778805995.5334866
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-14-a-painting-becomes-a-system/slide-01.png": {
+    "dominant_rgb": [
+      191,
+      172,
+      164
+    ],
+    "palette": "mixed",
+    "brightness": "mid",
+    "brightness_value": 175.67,
+    "contrast_value": 247.67,
+    "density": "dense",
+    "image_type": "graphic-heavy",
+    "mtime": 1778805994.8113918
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/image_concepts/2026-05-14-archive-fragment---01/concept-03-worn-fragment-in-city-light.png": {
+    "dominant_rgb": [
+      83,
+      73,
+      69
+    ],
+    "palette": "grey/washed",
+    "brightness": "dark",
+    "brightness_value": 75.0,
+    "contrast_value": 243.33,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778804883.6944046
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/image_concepts/2026-05-14-archive-fragment---01/concept-02-reconstruction-pass.png": {
+    "dominant_rgb": [
+      109,
+      100,
+      92
+    ],
+    "palette": "grey/washed",
+    "brightness": "mid",
+    "brightness_value": 100.33,
+    "contrast_value": 231.33,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778804763.6206622
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/image_concepts/2026-05-14-archive-fragment---01/concept-01-canvas-to-body-hero.png": {
+    "dominant_rgb": [
+      94,
+      87,
+      82
+    ],
+    "palette": "grey/washed",
+    "brightness": "mid",
+    "brightness_value": 87.67,
+    "contrast_value": 219.33,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778804711.9610062
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-14-archive-fragment---01/slide-06.png": {
+    "dominant_rgb": [
+      191,
+      166,
+      152
+    ],
+    "palette": "mixed",
+    "brightness": "mid",
+    "brightness_value": 169.67,
+    "contrast_value": 250,
+    "density": "dense",
+    "image_type": "graphic-heavy",
+    "mtime": 1778804580.295201
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-14-archive-fragment---01/slide-05.png": {
+    "dominant_rgb": [
+      180,
+      177,
+      174
+    ],
+    "palette": "grey/washed",
+    "brightness": "mid",
+    "brightness_value": 177.0,
+    "contrast_value": 254.33,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778804576.6804993
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-14-archive-fragment---01/slide-04.png": {
+    "dominant_rgb": [
+      179,
+      176,
+      173
+    ],
+    "palette": "grey/washed",
+    "brightness": "mid",
+    "brightness_value": 176.0,
+    "contrast_value": 254.33,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778804574.4978395
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-14-archive-fragment---01/slide-03.png": {
+    "dominant_rgb": [
+      174,
+      177,
+      175
+    ],
+    "palette": "grey/washed",
+    "brightness": "mid",
+    "brightness_value": 175.33,
+    "contrast_value": 253,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778804572.4121408
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-14-archive-fragment---01/slide-02.png": {
+    "dominant_rgb": [
+      197,
+      180,
+      169
+    ],
+    "palette": "grey/washed",
+    "brightness": "mid",
+    "brightness_value": 182.0,
+    "contrast_value": 253,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778804569.361552
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-14-archive-fragment---01/slide-01.png": {
+    "dominant_rgb": [
+      191,
+      173,
+      164
+    ],
+    "palette": "mixed",
+    "brightness": "mid",
+    "brightness_value": 176.0,
+    "contrast_value": 249,
+    "density": "dense",
+    "image_type": "graphic-heavy",
+    "mtime": 1778804569.0126963
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/image_concepts/2026-05-14-from-canvas-to-fragment/concept-01-canvas-to-body-hero.png": {
+    "dominant_rgb": [
+      87,
+      77,
+      70
+    ],
+    "palette": "grey/washed",
+    "brightness": "dark",
+    "brightness_value": 78.0,
+    "contrast_value": 193.67,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778802318.9826255
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-14-from-canvas-to-fragment/slide-06.png": {
+    "dominant_rgb": [
+      192,
+      167,
+      153
+    ],
+    "palette": "mixed",
+    "brightness": "mid",
+    "brightness_value": 170.67,
+    "contrast_value": 245,
+    "density": "dense",
+    "image_type": "graphic-heavy",
+    "mtime": 1778802189.8818095
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-14-from-canvas-to-fragment/slide-05.png": {
+    "dominant_rgb": [
+      180,
+      177,
+      174
+    ],
+    "palette": "grey/washed",
+    "brightness": "mid",
+    "brightness_value": 177.0,
+    "contrast_value": 250,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778802186.9210253
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-14-from-canvas-to-fragment/slide-04.png": {
+    "dominant_rgb": [
+      179,
+      177,
+      174
+    ],
+    "palette": "grey/washed",
+    "brightness": "mid",
+    "brightness_value": 176.67,
+    "contrast_value": 250,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778802185.3685565
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-14-from-canvas-to-fragment/slide-03.png": {
+    "dominant_rgb": [
+      175,
+      177,
+      175
+    ],
+    "palette": "grey/washed",
+    "brightness": "mid",
+    "brightness_value": 175.67,
+    "contrast_value": 253,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778802183.9832203
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-14-from-canvas-to-fragment/slide-02.png": {
+    "dominant_rgb": [
+      198,
+      181,
+      170
+    ],
+    "palette": "grey/washed",
+    "brightness": "mid",
+    "brightness_value": 183.0,
+    "contrast_value": 252.33,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1778802180.246483
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-05-14-from-canvas-to-fragment/slide-01.png": {
+    "dominant_rgb": [
+      191,
+      173,
+      165
+    ],
+    "palette": "mixed",
+    "brightness": "mid",
+    "brightness_value": 176.33,
+    "contrast_value": 245.67,
+    "density": "dense",
+    "image_type": "graphic-heavy",
+    "mtime": 1778802177.616582
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/image_concepts/2026-04-29-seven-designs--one-painting-/concept-03-motion-in-the-archive.png": {
+    "dominant_rgb": [
+      56,
+      46,
+      37
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 46.33,
+    "contrast_value": 179.33,
+    "density": "dense",
+    "image_type": "graphic-heavy",
+    "mtime": 1777503122.1156135
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/image_concepts/2026-04-29-seven-designs--one-painting-/concept-02-scan-evidence-fragment.png": {
+    "dominant_rgb": [
+      95,
+      87,
+      80
+    ],
+    "palette": "grey/washed",
+    "brightness": "mid",
+    "brightness_value": 87.33,
+    "contrast_value": 215.67,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1777503071.831811
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/image_concepts/2026-04-29-seven-designs--one-painting-/concept-01-canvas-to-body-hero.png": {
+    "dominant_rgb": [
+      56,
+      53,
+      40
+    ],
+    "palette": "black/dark",
+    "brightness": "dark",
+    "brightness_value": 49.67,
+    "contrast_value": 182,
+    "density": "dense",
+    "image_type": "graphic-heavy",
+    "mtime": 1777503043.0147083
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-04-29-seven-designs--one-painting-/slide-07.png": {
+    "dominant_rgb": [
+      171,
+      172,
+      168
+    ],
+    "palette": "grey/washed",
+    "brightness": "mid",
+    "brightness_value": 170.33,
+    "contrast_value": 249.33,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1777503004.9961214
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-04-29-seven-designs--one-painting-/slide-06.png": {
+    "dominant_rgb": [
+      180,
+      170,
+      163
+    ],
+    "palette": "grey/washed",
+    "brightness": "mid",
+    "brightness_value": 171.0,
+    "contrast_value": 248.33,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1777503003.2540424
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-04-29-seven-designs--one-painting-/slide-05.png": {
+    "dominant_rgb": [
+      191,
+      186,
+      181
+    ],
+    "palette": "grey/washed",
+    "brightness": "bright",
+    "brightness_value": 186.0,
+    "contrast_value": 242.33,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1777503001.4575155
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-04-29-seven-designs--one-painting-/slide-04.png": {
+    "dominant_rgb": [
+      185,
+      190,
+      188
+    ],
+    "palette": "grey/washed",
+    "brightness": "bright",
+    "brightness_value": 187.67,
+    "contrast_value": 254.33,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1777502996.837075
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-04-29-seven-designs--one-painting-/slide-03.png": {
+    "dominant_rgb": [
+      166,
+      163,
+      160
+    ],
+    "palette": "grey/washed",
+    "brightness": "mid",
+    "brightness_value": 163.0,
+    "contrast_value": 252.67,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1777502994.2890813
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-04-29-seven-designs--one-painting-/slide-02.png": {
+    "dominant_rgb": [
+      178,
+      161,
+      153
+    ],
+    "palette": "grey/washed",
+    "brightness": "mid",
+    "brightness_value": 164.0,
+    "contrast_value": 250,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1777502993.0292275
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-04-29-seven-designs--one-painting-/slide-01.png": {
+    "dominant_rgb": [
+      178,
+      163,
+      154
+    ],
+    "palette": "grey/washed",
+    "brightness": "mid",
+    "brightness_value": 165.0,
+    "contrast_value": 252,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1777502991.2390962
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/image_concepts/2026-04-29-seven-designs--one-painting-/concept-03-wearable-fragment-plate.png": {
+    "dominant_rgb": [
+      134,
+      129,
+      119
+    ],
+    "palette": "grey/washed",
+    "brightness": "mid",
+    "brightness_value": 127.33,
+    "contrast_value": 190.67,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1777500778.58534
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/image_concepts/2026-04-29-seven-designs--one-painting-/concept-02-reconstruction-plate.png": {
+    "dominant_rgb": [
+      118,
+      114,
+      100
+    ],
+    "palette": "grey/washed",
+    "brightness": "mid",
+    "brightness_value": 110.67,
+    "contrast_value": 215.33,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1777500750.0344822
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/image_concepts/2026-04-29-seven-designs--one-painting-/concept-01-source-painting-plate.png": {
+    "dominant_rgb": [
+      121,
+      118,
+      110
+    ],
+    "palette": "grey/washed",
+    "brightness": "mid",
+    "brightness_value": 116.33,
+    "contrast_value": 204,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1777500692.9815423
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-04-29-canvas---reconstruction---fragment/slide-06.png": {
+    "dominant_rgb": [
+      209,
+      202,
+      196
+    ],
+    "palette": "grey/washed",
+    "brightness": "bright",
+    "brightness_value": 202.33,
+    "contrast_value": 178.33,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1777499218.3300557
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-04-29-canvas---reconstruction---fragment/slide-05.png": {
+    "dominant_rgb": [
+      215,
+      209,
+      203
+    ],
+    "palette": "light/neutral",
+    "brightness": "bright",
+    "brightness_value": 209.0,
+    "contrast_value": 177.67,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1777499218.252053
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-04-29-canvas---reconstruction---fragment/slide-04.png": {
+    "dominant_rgb": [
+      215,
+      209,
+      203
+    ],
+    "palette": "light/neutral",
+    "brightness": "bright",
+    "brightness_value": 209.0,
+    "contrast_value": 185.33,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1777499218.174099
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-04-29-canvas---reconstruction---fragment/slide-03.png": {
+    "dominant_rgb": [
+      209,
+      201,
+      195
+    ],
+    "palette": "grey/washed",
+    "brightness": "bright",
+    "brightness_value": 201.67,
+    "contrast_value": 178.67,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1777499218.0947144
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-04-29-canvas---reconstruction---fragment/slide-02.png": {
+    "dominant_rgb": [
+      209,
+      202,
+      196
+    ],
+    "palette": "grey/washed",
+    "brightness": "bright",
+    "brightness_value": 202.33,
+    "contrast_value": 172,
+    "density": "medium",
+    "image_type": "photo/mixed",
+    "mtime": 1777499218.0071578
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-04-29-canvas---reconstruction---fragment/slide-01.png": {
+    "dominant_rgb": [
+      209,
+      202,
+      195
+    ],
+    "palette": "grey/washed",
+    "brightness": "bright",
+    "brightness_value": 202.0,
+    "contrast_value": 178.33,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1777499217.9318295
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-04-29-from-canvas-to-fragment/slide-06.png": {
+    "dominant_rgb": [
+      210,
+      202,
+      196
+    ],
+    "palette": "grey/washed",
+    "brightness": "bright",
+    "brightness_value": 202.67,
+    "contrast_value": 177,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1777492719.8174732
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-04-29-from-canvas-to-fragment/slide-05.png": {
+    "dominant_rgb": [
+      215,
+      208,
+      202
+    ],
+    "palette": "light/neutral",
+    "brightness": "bright",
+    "brightness_value": 208.33,
+    "contrast_value": 177.67,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1777492719.7564855
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-04-29-from-canvas-to-fragment/slide-04.png": {
+    "dominant_rgb": [
+      209,
+      202,
+      195
+    ],
+    "palette": "grey/washed",
+    "brightness": "bright",
+    "brightness_value": 202.0,
+    "contrast_value": 176.33,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1777492719.7039847
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-04-29-from-canvas-to-fragment/slide-03.png": {
+    "dominant_rgb": [
+      214,
+      208,
+      202
+    ],
+    "palette": "light/neutral",
+    "brightness": "bright",
+    "brightness_value": 208.0,
+    "contrast_value": 179.33,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1777492719.6491077
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-04-29-from-canvas-to-fragment/slide-02.png": {
+    "dominant_rgb": [
+      209,
+      202,
+      195
+    ],
+    "palette": "grey/washed",
+    "brightness": "bright",
+    "brightness_value": 202.0,
+    "contrast_value": 183.33,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1777492719.5979054
+  },
+  "/sessions/loving-funny-fermi/mnt/Documents/brandname-growth-agents/outputs/visual_content/2026-04-29-from-canvas-to-fragment/slide-01.png": {
+    "dominant_rgb": [
+      209,
+      202,
+      195
+    ],
+    "palette": "grey/washed",
+    "brightness": "bright",
+    "brightness_value": 202.0,
+    "contrast_value": 181.33,
+    "density": "dense",
+    "image_type": "photo/mixed",
+    "mtime": 1777492719.5420258
   }
 }
