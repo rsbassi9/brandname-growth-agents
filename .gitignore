@@ -9,3 +9,7 @@ site/
 credentials.json
 oauth_client.json
 token.json
+local-dashboard.log
+dashboard-server.err.log
+dashboard-server.out.log
+dashboard/*.log
