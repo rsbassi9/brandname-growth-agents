@@ -137,4 +137,22 @@ Scaffold: `npm create vite@latest frontend -- --template react-ts`, add Tailwind
 
 ## PHASE P4 — Multi-modal expansion
 
-**P4-1.** **Video prompt packs**: for a calendar item or asset, generate a structured pack (JSON + pretty view): hook, shot list, on-screen text, and ready-to-paste prompts formatted for **muapi.ai (primary)** plus fal.ai/Runway/Kling (secondary tabs) — external generation, manual paste, per `docs/strategy_hub_implementation_plan.md`. Do NOT integrate Higgsfield. New asset type `video_script` u
+**P4-1.** **Video prompt packs**: for a calendar item or asset, generate a structured pack (JSON + pretty view): hook, shot list, on-screen text, and ready-to-paste prompts formatted for **muapi.ai (primary)** plus fal.ai/Runway/Kling (secondary tabs) — external generation, manual paste, per `docs/strategy_hub_implementation_plan.md`. Do NOT integrate Higgsfield. New asset type `video_script` uses this.
+**P4-2.** **Voiceover (stub-first)**: asset type `voiceover`: generate script via agents; if `BRAND_TTS_PROVIDER=elevenlabs` and `BRAND_ELEVENLABS_API_KEY` set, call ElevenLabs TTS REST (`POST /v1/text-to-speech/{voice_id}`), store MP3 as version file; otherwise store script-only version with status note "TTS not configured". Never call the API in tests.
+**P4-3.** Image iterate/QA flow from legacy (`/api/calendar/{id}/qa`, iterate endpoints in old dashboard.py) rebuilt as: version → "Critique" (agent QA text stored on version) → "Iterate" (new version with critique folded into prompt). Wire into Library detail drawer.
+**P4-4.** **Photoshoot ingestion & reference-grounded generation**: new table `source_assets` (id, origin enum: drive|local|shopify, path/url, tags_json, product_handle nullable, created_at). CLI + endpoint to index raw photoshoot folders (via existing `drive.py` service) and Shopify product images (via `shopify.py`). In Playground and image-generation flows, user can attach 1–4 source assets as reference images — pass them through the existing reference-image roles in the ported `images.py` prompt logic. Library gets a "Source photos" tab.
+**P4-5.** **Ads workspace (Meta ads suggestions)**: page + router where the `ad_strategist` agent produces structured briefs (Pydantic schema: objective, audience, placement, hook, primary text ×3 variants, headline ×3, CTA, recommended creative = linked asset/source photo) stored as asset type `ad_brief`. Export as copy-to-clipboard blocks for manual entry into Meta Ads Manager. No Meta API integration (read or write) in this phase.
+
+**GATE P4:** all flows pass tests with mocked providers; a `video_script`, a script-only `voiceover`, and an `ad_brief` asset can be created in local-only mode from the UI; a source photo can be indexed and attached as a reference.
+
+## PHASE P5 — Cutover & cleanup
+
+**P5-1.** Delete `src/dashboard.py`, `dashboard/` static app, `pages/`, `site/`, `run_dashboard.cmd`, `render.yaml` (hosting was for the old static mirror). Update README: new run instructions (`uvicorn app.main:app` + `cd frontend && npm run dev`), architecture diagram (text), env var table.
+**P5-2.** Keep `src/` modules that P1 ported ONLY if `app/` still imports them; otherwise delete. `agent_instructions/`, `brand_context/`, `memory/` (now legacy data source), `outputs/`, `fonts/` all stay.
+**P5-3.** Final sweep: `ruff check app/ --fix` clean; no `except Exception: pass` anywhere in `app/` (grep must return zero); no TODOs without `TODO(fable-review)` tag.
+
+**GATE P5 (FINAL):** fresh clone simulation — `pip install -r requirements.txt -r requirements-dev.txt`, `pytest -q` green, `python -m app.services.migrate_legacy`, `uvicorn app.main:app` boots, `npm ci && npm run build && npm test` in `frontend/` green, and the local-only end-to-end generate flow works in a browser.
+
+## PHASE P6 — Report
+
+Write `docs/EXECUTION_REPORT.md`: table of every task P0-1 … P5-3 with commit hash and gate results; list of every `TODO(fable-review)`; anything you could not complete and exactly why. Do not mark this plan complete if any gate failed.
