@@ -3,12 +3,12 @@
 **Prepared by:** Claude Fable 5 (full audit performed 2026-07-06: static review + live smoke test of the dashboard server in a Linux sandbox).
 **Executor:** Claude Sonnet. This document is your ONLY source of truth. Follow it exactly, phase by phase, in order.
 
-## EXECUTION STATUS (updated 2026-07-06 by Fable)
+## EXECUTION STATUS (updated 2026-07-07 by Codex)
 
 - ✅ **P0 COMPLETE** — commits `2f106e4` (P0-1 key rotation doc), `ad9b15e` (P0-2 dotenv fix), `61539ba` (P0-3 log cleanup), `afe75a1` (checkpoint), `146747f` (P0-5 tooling). GATE P0 passed.
 - ✅ **P1 COMPLETE** — commit `e497450`: full `app/` backend (models, versioned `/api/v1` API, async job queue, legacy migration, ported services with defect fixes, two-tier model config incl. `BRAND_OPENAI_BASE_URL` for NVIDIA NIM/Ollama, nightly backup). **GATE P1 verified:** 47/47 tests pass; `uvicorn app.main:app` boots with no env vars, `/api/v1/system/health` → 200; migration idempotent (17 calendar items / 43 feedback events / 271 assets / 271 versions on both runs).
-- ▶️ **P2 IN PROGRESS** — commits `c9b9511` (P2-1 React/Vite/Tailwind studio shell, fixed navigation, typed API client, React Query setup, job drawer, placeholder route surfaces, shell test), `073808d` (P2-2 Playground generate flow: typed form, persisted defaults, `/api/v1/generate`, SSE progress, result preview, session history, mocked flow test), and `11c588d` (P2-3 Library filters, paginated/infinite loading, asset detail drawer, all-version compare, select-version, regenerate job progress, mocked filter/select test). **Verified after P2-3:** `npm test` (3/3), `npm run build`, backend `.venv\Scripts\python.exe -m pytest -q` (47/47), and Library API smoke (`GET /api/v1/assets?limit=1&offset=0`) pass.
-- **NEXT: P2-4** Campaigns list/create/detail with grouped assets and "Generate in campaign" shortcut. Then P2-5 → P6 in order.
+- ▶️ **P2 IN PROGRESS** — commits `c9b9511` (P2-1 React/Vite/Tailwind studio shell, fixed navigation, typed API client, React Query setup, job drawer, placeholder route surfaces, shell test), `073808d` (P2-2 Playground generate flow: typed form, persisted defaults, `/api/v1/generate`, SSE progress, result preview, session history, mocked flow test), `11c588d` (P2-3 Library filters, paginated/infinite loading, asset detail drawer, all-version compare, select-version, regenerate job progress, mocked filter/select test), and `7273eb7` (P2-4 Campaigns list/create/detail, grouped campaign assets, and Playground shortcut prefill). **Verified after P2-4:** `npm test` (4/4), `npm run build`, and backend `.venv\Scripts\python.exe -m pytest -q` (47/47) pass.
+- **NEXT: P2-5** Calendar and Feed Grid against the new API. Then P2-6 → P6 in order.
 
 ---
 
@@ -116,7 +116,15 @@ app/
 
 Scaffold: `npm create vite@latest frontend -- --template react-ts`, add Tailwind, shadcn/ui, React Router, TanStack Query. Dev proxy to `:8000`; production served by FastAPI from `frontend/dist`.
 
-**Layout (fixed):** left sidebar nav — Playground, Campaigns, Library, Calendar, Feed Grid, Strategy Hub, System. Top bar: brand name, local-only-mode badge (amber when on), global job indicator (spinner + count of running jobs, click → job drawer).
+**Layout (fixed):** left sidebar nav — Playground, Campaigns, Library, Calendar, Feed Grid, Ads, Strategy Hub, System. Top bar: brand name, local-only-mode badge (amber when on), global job indicator (spinner + count of running jobs, click → job drawer).
+
+**P2-0 (DESIGN SPEC — binding for all P2–P4 UI work).** Aesthetic: light editorial "gallery studio" — the photoshoots ARE the interface. Implement as CSS custom properties in `frontend/src/styles/tokens.css` and use ONLY tokens:
+- Surfaces: white base, warm neutrals `#F1EFE8`/`#D3D1C7` for placeholders/chips, ink `#2C2C2A`; hairline 0.5px borders; generous whitespace (24px section padding minimum); radius 8–12px; no shadows/gradients.
+- One accent: coral `#D85A30` (light fill `#FAECE7`, deep text `#4A1B0C`) — used ONLY for selection state and primary generation actions.
+- Type: serif display face (self-hosted, from `fonts/`) for brand/campaign headings with letter-spacing; 12–13px sans UI text; uppercase 10px letter-spaced labels on imagery.
+- Signature components: top bar with "Premium model" toggle (two-tier config from P1-8) + live job progress pill; Playground compose panel (asset-type chips, brief textarea, reference-photo attachment slots from source assets, dark ink Generate button); generation-history filmstrip (v1/v2/v3 takes, selected take coral-ringed with ✓); asset gallery in true aspect ratios (4:5, 9:16) with status badges; caption card with one-click copy; action row (muapi.ai prompt pack / Meta ad brief / Schedule).
+- Latency rules (mandatory): skeletons matching final layout; optimistic mutations; SSE job progress streams into the pill and filmstrip without blocking; images lazy-loaded with intrinsic aspect boxes (zero layout shift); library grid virtualized past 60 items.
+- Motion: 150ms ease-out on state changes only.
 
 **P2-1.** App shell, routing, API client (typed from `schemas.py` shapes), job drawer with SSE subscription.
 **P2-2.** **Playground**: left panel = input (type selector: Copy / Image Concept / Carousel / Video Script; brief textarea; params: model, tone, template; defaults persisted to localStorage) → Generate button → right panel = live progress then result preview (text rendered as styled card; images/carousels as gallery). Below: session history strip of this playground's generations, each restorable into the editor. This mirrors ElevenLabs' playground pattern exactly.
