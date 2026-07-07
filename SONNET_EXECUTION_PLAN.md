@@ -25,6 +25,7 @@
 7. **Commit discipline:** one commit per numbered task, message format `P<phase>-<task>: <summary>` (e.g. `P1-3: add SQLite models and migration for calendar items`). Run the phase's test command before every commit.
 8. **Tech stack is fixed** (do not substitute): Python 3.11+/FastAPI/SQLAlchemy 2.x/SQLite/pytest; frontend React 18+ + Vite + TypeScript + Tailwind CSS + shadcn/ui + TanStack Query + React Router. Charting not required.
 9. **Definition of Done for every task** = code + tests + Verification Gate command passing.
+10. **UI carry-over (binding for every phase that touches `frontend/`):** components are built ONLY from `frontend/src/styles/tokens.css` custom properties. Before EVERY UI commit run the compliance scan (same one verified in `5d837ec`): `grep -rnE "#[0-9a-fA-F]{3,8}|box-shadow|linear-gradient" frontend/src --include="*.tsx" --include="*.css" | grep -v styles/tokens.css` — must return nothing. REUSE the existing studio inventory before writing anything new: app shell/top bar, premium toggle, job drawer + progress pill, compose panel, generation-history filmstrip, asset gallery aspect cards, caption card, status badges, skeletons, import-style wizards. New-phase views COMPOSE these (P8 Performance tab = Learn-lane cards + CSS bar rows; P9 calendar items = existing chips/cards with dnd-kit wrappers; P10 SEO tab = audit table + issue chips + caption-card copy pattern; P11 Standup = report card + action buttons). A genuinely new component must obey all P2-0 latency rules (skeletons, optimistic mutations, lazy images with intrinsic aspect boxes, virtualization past 60 items, 150ms motion) and be APPENDED to this inventory list in the same commit. New tokens (e.g., P9-3 channel hues) are additive to tokens.css only — never inline values; coral stays selection/primary-action only.
 
 ---
 
@@ -120,7 +121,7 @@ Scaffold: `npm create vite@latest frontend -- --template react-ts`, add Tailwind
 
 **Layout (fixed):** left sidebar nav — Playground, Campaigns, Library, Calendar, Feed Grid, Ads, Strategy Hub, System. Top bar: brand name, local-only-mode badge (amber when on), global job indicator (spinner + count of running jobs, click → job drawer).
 
-**P2-0 (DESIGN SPEC — binding for all P2–P4 UI work).** Aesthetic: light editorial "gallery studio" — the photoshoots ARE the interface. Implement as CSS custom properties in `frontend/src/styles/tokens.css` and use ONLY tokens:
+**P2-0 (DESIGN SPEC — binding for ALL UI work in EVERY phase, P2 through P11 and any future phase).** Aesthetic: light editorial "gallery studio" — the photoshoots ARE the interface. Implement as CSS custom properties in `frontend/src/styles/tokens.css` and use ONLY tokens:
 - Surfaces: white base, warm neutrals `#F1EFE8`/`#D3D1C7` for placeholders/chips, ink `#2C2C2A`; hairline 0.5px borders; generous whitespace (24px section padding minimum); radius 8–12px; no shadows/gradients.
 - One accent: coral `#D85A30` (light fill `#FAECE7`, deep text `#4A1B0C`) — used ONLY for selection state and primary generation actions.
 - Type: serif display face (self-hosted, from `fonts/`) for brand/campaign headings with letter-spacing; 12–13px sans UI text; uppercase 10px letter-spaced labels on imagery.
