@@ -10,12 +10,13 @@
 - ✅ **P2-0 BINDING DESIGN SPEC ACTIVE** — all P2–P4 UI work must use `frontend/src/styles/tokens.css` first, then build components only from those CSS custom properties.
 - ▶️ **P2 IN PROGRESS** — commits `c9b9511` (P2-1 React/Vite/Tailwind studio shell, fixed navigation, typed API client, React Query setup, job drawer, placeholder route surfaces, shell test), `073808d` (P2-2 Playground generate flow: typed form, persisted defaults, `/api/v1/generate`, SSE progress, result preview, session history, mocked flow test), `11c588d` (P2-3 Library filters, paginated/infinite loading, asset detail drawer, all-version compare, select-version, regenerate job progress, mocked filter/select test), `7273eb7` (P2-4 Campaigns list/create/detail, grouped campaign assets, and Playground shortcut prefill), `24927d0` (P2-5 tokenized design layer, Calendar month CRUD, and Feed Grid reorder persistence), and `5d837ec` (P2 UI compliance amendment: Ads nav/route, shell premium toggle, self-hosted token fonts, no-shadow drawers, coral selected states, Playground reference slots/filmstrip, Library aspect cards). **Verified after P2 UI compliance:** raw palette/shadow scan clean, `npm test` (6/6), `npm run build`, and backend `.venv\Scripts\python.exe -m pytest -q` (47/47) pass.
 - **NEXT: P2-6** Strategy Hub five-lane implementation. Then P2-7 → P6 in order.
+- ℹ️ **P7–P11 registered** — appended 2026-07-07 by Fable: P7 Brand Brain (retrieval memory + compounding brand profile), P8 performance ingestion & best-time model, P9 drag-and-drop calendar planner, P10 SEO team, P11 repurposing pipelines + weekly standup (new FINAL gate). Execute after P6, in order.
 
 ---
 
 ## 0. BINDING RULES — READ FIRST, RE-READ EVERY PHASE
 
-1. **Execute phases strictly in order (P0 → P6).** Never start a phase until the previous phase's Verification Gate passes.
+1. **Execute phases strictly in order (P0 → P11).** Never start a phase until the previous phase's Verification Gate passes.
 2. **Do not invent scope.** If something seems missing or ambiguous, implement the literal instruction here and add a `TODO(fable-review):` comment. Do NOT design your own alternative.
 3. **Never make paid external API calls** (OpenAI, Shopify, Google Drive) during development or tests. All tests must mock external clients. `LOCAL_ONLY_AGENT_RUNS=true` must be respected by EVERY execution path (see P1-4).
 4. **Never print, copy, or commit secrets.** `.env`, `oauth_client.json`, `token.json` contain live credentials. They stay gitignored. Never echo their contents.
@@ -161,8 +162,67 @@ Scaffold: `npm create vite@latest frontend -- --template react-ts`, add Tailwind
 **P5-2.** Keep `src/` modules that P1 ported ONLY if `app/` still imports them; otherwise delete. `agent_instructions/`, `brand_context/`, `memory/` (now legacy data source), `outputs/`, `fonts/` all stay.
 **P5-3.** Final sweep: `ruff check app/ --fix` clean; no `except Exception: pass` anywhere in `app/` (grep must return zero); no TODOs without `TODO(fable-review)` tag.
 
-**GATE P5 (FINAL):** fresh clone simulation — `pip install -r requirements.txt -r requirements-dev.txt`, `pytest -q` green, `python -m app.services.migrate_legacy`, `uvicorn app.main:app` boots, `npm ci && npm run build && npm test` in `frontend/` green, and the local-only end-to-end generate flow works in a browser.
+**GATE P5:** fresh clone simulation — `pip install -r requirements.txt -r requirements-dev.txt`, `pytest -q` green, `python -m app.services.migrate_legacy`, `uvicorn app.main:app` boots, `npm ci && npm run build && npm test` in `frontend/` green, and the local-only end-to-end generate flow works in a browser.
 
 ## PHASE P6 — Report
 
 Write `docs/EXECUTION_REPORT.md`: table of every task P0-1 … P5-3 with commit hash and gate results; list of every `TODO(fable-review)`; anything you could not complete and exactly why. Do not mark this plan complete if any gate failed.
+
+## PHASE P7 — Brand Brain: retrieval memory + compounding brand profile
+
+This phase makes the platform LEARN: everything digested (photos, products, feedback, context files) and produced (versions, captions) becomes retrievable memory that grounds every future generation. Rules 3, 6 apply in full — no paid calls in tests, context files are data.
+
+**P7-1. Tables** (models + schemas): `brain_documents` (id, kind enum: asset_version|feedback|product|context_file|metric_insight, ref_id nullable, text TEXT, meta_json, created_at; UNIQUE(kind, ref_id) where ref_id is set); `brain_embeddings` (id, document_id FK UNIQUE, model, dim INT, vector BLOB float32 little-endian, created_at); `brand_profile_versions` (id, version_no, profile_md TEXT, distilled_from_json, created_at) — immutable, same discipline as `asset_versions`.
+**P7-2. Embedding service** `app/services/brain.py`: `embed_texts(list[str])` through the existing OpenAI client wrapper (`BRAND_EMBED_MODEL` setting, honors `BRAND_OPENAI_BASE_URL` so NIM/Ollama endpoints work). When `LOCAL_ONLY_AGENT_RUNS=true`: deterministic hashing vectorizer (feature-hash tokens → 256-dim float32, L2-normalized; identical input → identical vector) — tests use ONLY this path. `search(query, k=5, kinds=None)` = cosine similarity in numpy over vectors loaded from SQLite. No vector DB (corpus is thousands of docs); tag `TODO(fable-review)` if it ever exceeds ~50k.
+**P7-3. Ingestion:** (a) hooks — on `asset_versions` insert and `feedback_events` insert, enqueue a new job kind `brain_index`; (b) backfill CLI `python -m app.services.brain backfill` — idempotent via the UNIQUE constraint — covering existing versions, feedback, Shopify products (ported `shopify.py`, read-only), and `brand_context/*.md` (ingest as data; never modify — Rule 6).
+**P7-4. Retrieval-grounded generation:** `services/generation.py` prepends a "BRAND MEMORY" block to every generation prompt: latest `brand_profile_versions` profile + top-5 similar docs, ranking winners first (is_selected versions and positive feedback). Injected document ids MUST be recorded in `prompt_snapshot`/params so every generation is auditable. Playground shows a read-only "memory used" disclosure row under results.
+**P7-5. Profile distillation:** weekly scheduled job on the P3-1 scheduler (cadence in `settings_kv`, off by default) `distill_brand_profile`: agent reads recent feedback_events + selected-vs-unselected version pairs → writes a NEW `brand_profile_versions` row (sections: voice rules, banned phrases, visual codes, proven hooks, audience notes). Strategy Hub "Know" lane renders the current profile + version history with a diff view. Old versions are never deleted.
+**P7-6. Tests** (min 15): hashing vectorizer determinism; cosine ranking golden fixture; both ingestion hooks fire; backfill idempotent; injected memory ids recorded in prompt_snapshot; distillation with mocked agent creates an immutable new version; local-only mode makes zero network calls (assert at the wrapper).
+
+**GATE P7:** `pytest -q` green; local-only smoke: backfill → generate a Copy asset → its prompt_snapshot lists injected memory ids; Know lane shows profile v1.
+
+## PHASE P8 — Performance ingestion & best-time model (no platform APIs)
+
+Engagement data enters ONLY via file import (manual CSV export or paste). Meta/TikTok/Instagram APIs are explicitly OUT of scope in this phase.
+
+**P8-1. Tables:** `published_posts` (id, calendar_item_id FK nullable, asset_id FK nullable, channel enum: instagram|tiktok|facebook|other, external_ref nullable, permalink nullable, published_at, created_at); `post_metrics` (id, published_post_id FK, captured_at, impressions/reach/likes/comments/shares/saves/clicks — all nullable INT, engagement_rate REAL computed at insert as (likes+comments+shares+saves)/reach, NULL when reach is 0/NULL). Dedupe key (published_post_id, captured_at).
+**P8-2. Import:** `POST /api/v1/performance/import` (multipart CSV + channel): auto-detect Instagram and TikTok export header formats (two header maps in code; unknown headers → response lists detected columns for the UI's manual-mapping step). Rows upsert `published_posts` by (channel, permalink or external_ref) and append `post_metrics`. UI: import wizard in a new "Performance" tab of the Learn lane (upload → mapping preview table → confirm), plus a paste-a-table fallback.
+**P8-3. Linking + insights:** auto-match published_posts to calendar_items by (date ±1 day, channel) only where unambiguous; manual link/unlink UI on both sides. On each import, write `metric_insight` docs into the Brand Brain (P7) for top- and bottom-quartile posts ("{type} with hook '{first line}' achieved {ER}% on {channel}") — future generations learn from real performance.
+**P8-4. Best-time model:** pure aggregation, NO ML: mean engagement_rate by (channel, weekday, hour) using each post's latest metrics; only cells with n ≥ 3 qualify. `GET /api/v1/performance/best-times?channel=` → ranked slots + sample sizes. Deterministic on fixture data.
+**P8-5. Learn-lane dashboard:** top posts table, weekly ER trend, performance by asset type — shadcn cards + CSS bar rows only (Rule 8: no chart library).
+**P8-6. Tests** (min 12): header auto-detect for both formats; upsert/dedupe on re-import; ER math incl. zero/NULL reach; ambiguous auto-link stays unlinked; best-times threshold + determinism; quartile insights written to brain_documents.
+
+**GATE P8:** import a fixture IG CSV through the UI → posts + metrics visible; best-times returns the expected ranking from the fixture; insight docs exist in `brain_documents`.
+
+## PHASE P9 — Calendar planner v2: drag-and-drop
+
+**Rule 8 amendment (owner-approved 2026-07-07): `@dnd-kit/core` + `@dnd-kit/sortable` are the ONLY new frontend dependencies permitted for this phase.**
+
+**P9-1. Views + drag:** Calendar gains a week view alongside month. Every item draggable to another day/slot via dnd-kit → optimistic update + `PATCH /api/v1/calendar/{id}` {date, slot}; roll back with an error toast on failure. Keep dnd-kit default keyboard sensors (accessibility).
+**P9-2. Unscheduled tray:** right rail listing draft assets that have no calendar item (existing assets API filter), searchable by type. Dragging one onto a day creates a calendar_item linked to that asset (POST, optimistic).
+**P9-3. Channel color coding:** extend `tokens.css` with muted channel hues derived from the P2-0 neutral palette — coral remains selection/primary-action ONLY. Channel chip on every calendar item.
+**P9-4. Suggested slots:** ghost chips (dashed hairline outline, "Suggested · Thu 18:00") rendered from P8-4 best-times for the item's channel; dropping on a ghost (or clicking it) schedules that slot. Hidden entirely when P8 has no qualifying cells.
+**P9-5. Guardrails:** `settings_kv` max items/day/channel (default 3) → soft warning banner on exceed, never a hard block; duplicate-asset-same-week warning.
+**P9-6. Tests** (min 10): move/reschedule handlers + PATCH payloads unit-tested directly (if jsdom drag simulation is flaky, test the handlers and state transitions — do NOT ship flaky tests); tray drop creates a linked item; rollback on API failure; ghost slots from mocked best-times; guardrail warnings.
+
+**GATE P9:** manual smoke — drag an item to a new day, reload, it persisted; drag a draft from the tray onto a day, item created and linked; `npm test` + `npm run build` green.
+
+## PHASE P10 — SEO team: catalog audit + content plan (read-only Shopify)
+
+**P10-1. Audit service** `app/services/seo_audit.py` — pure functions over the read-only catalog from ported `shopify.py`. Per-product checks: title length 50–60 chars; meta description present and 140–160 chars; every image has alt text; target keyword present in title/description (keyword source: P10-3 map when it exists, else product type); duplicate titles across the catalog. New table `seo_audits` (id, product_handle, score INT 0–100 weighted across checks — document weights in code, issues_json, audited_at). `POST /api/v1/seo/audit` (job) + `GET /api/v1/seo/audits`.
+**P10-2. Fix generator:** per audited product, agent generates paste-ready fixes (new title, meta description, alt text per image) stored as new asset type `seo_fix` (additive enum migration; existing assets untouched), grounded through the Brand Brain retrieval path (P7-4) + `memory/product_truth.json`. **NO Shopify writes ever** — `SHOPIFY_WRITE_ENABLED` stays false; output is copy-to-clipboard blocks.
+**P10-3. Keyword & content plan:** agent produces a `seo_plan` asset: keyword map (product/collection → primary + secondary keywords) and a blog plan (post title, outline, target keyword, internal links to specific product URLs). Regenerable; versions immutable as always.
+**P10-4. UI:** rename the Ads nav entry to "Ads & SEO"; SEO tab = audit table (product, score, issue chips, "Generate fix"), fix detail with per-field copy buttons, plan view.
+**P10-5. Tests** (min 12): every audit rule with pass/fail fixtures; exact score weighting; duplicate detection; fix/plan generation with mocked agent + grounding recorded; enum migration additive.
+
+**GATE P10:** audit over a fixture catalog yields deterministic scores; a `seo_fix` and a `seo_plan` asset created end-to-end in local-only mode from the UI.
+
+## PHASE P11 — Repurposing pipelines, recycling, weekly standup — FINAL
+
+**P11-1. Repurpose pipeline:** new job kind `repurpose_shoot`: input = 1–10 `source_assets` (P4-4) → creates a campaign + fan-out child jobs: post copy, reel `video_script` (P4-1 pack), story set (3-frame copy), `ad_brief` (P4-5), and a product-page refresh suggestion (`seo_fix`, when a product is linked). Progress aggregates in the job drawer; partial failure keeps completed assets and leaves failed steps individually retryable.
+**P11-2. Recycling:** monthly scheduled job (off by default): top-quartile ER posts (P8) older than 45 days → draft "remix" assets (meta_json.remix_of set). NEVER auto-schedules — remixes land in the P9 unscheduled tray.
+**P11-3. Weekly standup:** scheduled job → new table `standup_reports` (id, week_start, report_md, recommendations_json, created_at) + "Standup" tab in the Learn lane: what published (P8 links), top/bottom performer, next week's plan (calendar), and exactly 3 agent recommendations grounded in Brand Brain + metrics — each with an "Add to calendar as draft" button (creates a draft asset + tray entry).
+**P11-4. Docs:** extend `docs/EXECUTION_REPORT.md` with rows P7-1 … P11-5; update README (Performance import, Brand Brain, standup/recycle cadence settings).
+**P11-5. Tests** (min 12): fan-out orchestration incl. partial failure + retry; recycle window + quartile selection math; standup assembly with mocked agent; add-to-calendar action.
+
+**GATE P11 (FINAL):** full P5-gate fresh-clone simulation PLUS, in local-only mode with zero network calls: brain backfill, fixture metrics import, `repurpose_shoot` on fixture source assets, and a generated standup report visible in the UI.
