@@ -3,6 +3,12 @@
 **Prepared by:** Claude Fable 5 (full audit performed 2026-07-06: static review + live smoke test of the dashboard server in a Linux sandbox).
 **Executor:** Claude Sonnet. This document is your ONLY source of truth. Follow it exactly, phase by phase, in order.
 
+## EXECUTION STATUS (updated 2026-07-06 by Fable)
+
+- ✅ **P0 COMPLETE** — commits `2f106e4` (P0-1 key rotation doc), `ad9b15e` (P0-2 dotenv fix), `61539ba` (P0-3 log cleanup), `afe75a1` (checkpoint), `146747f` (P0-5 tooling). GATE P0 passed.
+- ✅ **P1 COMPLETE** — commit `e497450`: full `app/` backend (models, versioned `/api/v1` API, async job queue, legacy migration, ported services with defect fixes, two-tier model config incl. `BRAND_OPENAI_BASE_URL` for NVIDIA NIM/Ollama, nightly backup). **GATE P1 verified:** 47/47 tests pass; `uvicorn app.main:app` boots with no env vars, `/api/v1/system/health` → 200; migration idempotent (17 calendar items / 43 feedback events / 271 assets / 271 versions on both runs).
+- ▶️ **NEXT: P2** (frontend studio). Then P3 → P6 in order.
+
 ---
 
 ## 0. BINDING RULES — READ FIRST, RE-READ EVERY PHASE
@@ -42,7 +48,12 @@ The benchmark patterns to replicate, translated to marketing content:
 | Async convert job + poll/webhook | `POST /api/v1/generate` → job id → SSE progress → result |
 | Voice/model panel with saved defaults | Model + brand-context + template picker panel, defaults persisted |
 | Asset library ("mine vs explore") | **Library**: searchable, filterable (type/campaign/status/date) view of all generated assets |
-| Multi-modal suite (TTS, music, SFX, video) | Copy, image concepts, rendered carousels, video scripts + prompt packs (fal.ai/Runway/Kling), optional TTS voiceover via ElevenLabs-compatible API stub (P5) |
+| Multi-modal suite (TTS, music, SFX, video) | Copy, image concepts, rendered carousels, video scripts + prompt packs (muapi.ai primary; fal.ai/Runway/Kling secondary), optional TTS voiceover via ElevenLabs-compatible API stub (P5) |
+
+**Owner directives (2026-07-06, binding):**
+- The brand is **BRAND NAME** (streetwear), Shopify store: `https://www.brandnamedesign.co/`. Use these as setting defaults (`BRAND_NAME="BRAND NAME"`, `BRAND_SHOPIFY_URL="https://www.brandnamedesign.co/"`). Never hardcode either string outside settings defaults.
+- Product mission: an **all-in-one marketing agent** — Meta ads suggestions, content creation (posts/reels/ads), and SEO optimization — that grounds generation in the owner's **raw photoshoots and product images** so output quality is campaign-ready.
+- **Cost policy:** run as cheap as possible with the best achievable results. Free/cheap providers first: muapi.ai for image/video generation prompt packs, local LLMs (Ollama or any OpenAI-compatible endpoint) and NVIDIA NIM (`https://integrate.api.nvidia.com/v1`) for text. Higgsfield is explicitly EXCLUDED (too expensive). Implement a two-tier model config: `BRAND_MODEL_DEFAULT` (cheap/local) used everywhere by default, `BRAND_MODEL_PREMIUM` (optional) selectable per-generation in the UI ("Use premium model" toggle). All OpenAI-SDK calls go through one client wrapper honoring `BRAND_OPENAI_BASE_URL` + `BRAND_OPENAI_API_KEY`.
 
 **Honest positioning (do not oversell in UI copy):** this project's *workflow* (brand context → strategy → calendar → asset → feedback learning) is deeper than ElevenLabs' per-asset flow; its *platform* (DB, jobs, history, UI polish) is what's being built here.
 
@@ -126,20 +137,4 @@ Scaffold: `npm create vite@latest frontend -- --template react-ts`, add Tailwind
 
 ## PHASE P4 — Multi-modal expansion
 
-**P4-1.** **Video prompt packs**: for a calendar item or asset, generate a structured pack (JSON + pretty view): hook, shot list, on-screen text, and ready-to-paste prompts for fal.ai, Runway, and Kling (per `docs/strategy_hub_implementation_plan.md` — external generation, manual paste). New asset type `video_script` uses this.
-**P4-2.** **Voiceover (stub-first)**: asset type `voiceover`: generate script via agents; if `BRAND_TTS_PROVIDER=elevenlabs` and `BRAND_ELEVENLABS_API_KEY` set, call ElevenLabs TTS REST (`POST /v1/text-to-speech/{voice_id}`), store MP3 as version file; otherwise store script-only version with status note "TTS not configured". Never call the API in tests.
-**P4-3.** Image iterate/QA flow from legacy (`/api/calendar/{id}/qa`, iterate endpoints in old dashboard.py) rebuilt as: version → "Critique" (agent QA text stored on version) → "Iterate" (new version with critique folded into prompt). Wire into Library detail drawer.
-
-**GATE P4:** all three new flows pass tests with mocked providers; a `video_script` and a script-only `voiceover` asset can be created in local-only mode from the UI.
-
-## PHASE P5 — Cutover & cleanup
-
-**P5-1.** Delete `src/dashboard.py`, `dashboard/` static app, `pages/`, `site/`, `run_dashboard.cmd`, `render.yaml` (hosting was for the old static mirror). Update README: new run instructions (`uvicorn app.main:app` + `cd frontend && npm run dev`), architecture diagram (text), env var table.
-**P5-2.** Keep `src/` modules that P1 ported ONLY if `app/` still imports them; otherwise delete. `agent_instructions/`, `brand_context/`, `memory/` (now legacy data source), `outputs/`, `fonts/` all stay.
-**P5-3.** Final sweep: `ruff check app/ --fix` clean; no `except Exception: pass` anywhere in `app/` (grep must return zero); no TODOs without `TODO(fable-review)` tag.
-
-**GATE P5 (FINAL):** fresh clone simulation — `pip install -r requirements.txt -r requirements-dev.txt`, `pytest -q` green, `python -m app.services.migrate_legacy`, `uvicorn app.main:app` boots, `npm ci && npm run build && npm test` in `frontend/` green, and the local-only end-to-end generate flow works in a browser.
-
-## PHASE P6 — Report
-
-Write `docs/EXECUTION_REPORT.md`: table of every task P0-1 … P5-3 with commit hash and gate results; list of every `TODO(fable-review)`; anything you could not complete and exactly why. Do not mark this plan complete if any gate failed.
+**P4-1.** **Video prompt packs**: for a calendar item or asset, generate a structured pack (JSON + pretty view): hook, shot list, on-screen text, and ready-to-paste prompts formatted for **muapi.ai (primary)** plus fal.ai/Runway/Kling (secondary tabs) — external generation, manual paste, per `docs/strategy_hub_implementation_plan.md`. Do NOT integrate Higgsfield. New asset type `video_script` u
