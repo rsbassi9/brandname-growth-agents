@@ -57,6 +57,12 @@ function formatType(type: string) {
   return type.replace("_", " ");
 }
 
+function assetAspect(type: string) {
+  if (type === "video_script") return "aspect-[9/16]";
+  if (type === "image_concept" || type === "carousel") return "aspect-[4/5]";
+  return "aspect-[4/5]";
+}
+
 function selectedVersion(asset?: AssetDetailOut | null) {
   return asset?.versions.find((version) => version.is_selected) || asset?.versions[asset.versions.length - 1] || null;
 }
@@ -326,22 +332,24 @@ function AssetCard({
     <button
       type="button"
       className={cn(
-        "min-h-44 rounded-lg border bg-surface p-4 text-left transition hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-        selected ? "border-primary shadow-focus" : "border-border",
+        "rounded-lg border bg-surface p-3 text-left transition-colors duration-ui ease-ui hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+        selected ? "border-accent bg-accent-soft" : "border-border",
       )}
       onClick={onOpen}
     >
-      <div className="flex items-start justify-between gap-3">
+      <div className={cn("flex flex-col justify-between rounded-md border border-border bg-muted p-3", assetAspect(asset.type))}>
         <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground">
           <Icon className="h-5 w-5" />
         </span>
-        <Badge tone={asset.status === "selected" ? "success" : "neutral"}>{asset.status}</Badge>
+        <div>
+          <h2 className="line-clamp-3 text-base font-semibold">{asset.title}</h2>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <Badge tone="ink">{formatType(asset.type)}</Badge>
+            <Badge tone={asset.status === "selected" ? "success" : "neutral"}>{asset.status}</Badge>
+          </div>
+        </div>
       </div>
-      <h2 className="mt-4 line-clamp-2 text-base font-semibold">{asset.title}</h2>
-      <div className="mt-4 flex flex-wrap gap-2">
-        <Badge tone="ink">{formatType(asset.type)}</Badge>
-        <Badge>{new Date(asset.created_at).toLocaleDateString()}</Badge>
-      </div>
+      <p className="mt-3 text-xs text-muted-foreground">{new Date(asset.created_at).toLocaleDateString()}</p>
     </button>
   );
 }
@@ -378,7 +386,7 @@ function AssetDrawer({
       />
       <aside
         className={cn(
-          "absolute right-0 top-0 flex h-full w-full max-w-4xl flex-col border-l border-border bg-background shadow-xl transition-transform duration-ui ease-ui",
+          "absolute right-0 top-0 flex h-full w-full max-w-4xl flex-col border-l border-border bg-background transition-transform duration-ui ease-ui",
           open ? "translate-x-0" : "translate-x-full",
         )}
         aria-label="Asset detail"
@@ -459,7 +467,7 @@ function VersionPanel({
   onSelect: () => void;
 }) {
   return (
-    <Panel className={cn("space-y-3", selected && "border-success/40 bg-success-soft")}>
+    <Panel className={cn("space-y-3", selected && "border-accent bg-accent-soft")}>
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <div className="flex flex-wrap items-center gap-2">

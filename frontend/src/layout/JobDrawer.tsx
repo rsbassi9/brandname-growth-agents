@@ -26,7 +26,7 @@ export function JobDrawer({ open, onClose }: { open: boolean; onClose: () => voi
       />
       <aside
         className={cn(
-          "absolute right-0 top-0 h-full w-full max-w-md border-l border-border bg-background shadow-xl transition-transform duration-ui ease-ui",
+          "absolute right-0 top-0 h-full w-full max-w-md border-l border-border bg-background transition-transform duration-ui ease-ui",
           open ? "translate-x-0" : "translate-x-full",
         )}
         aria-label="Job drawer"

@@ -50,7 +50,9 @@ describe("AppShell", () => {
     expect(screen.getByRole("link", { name: /library/i })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /calendar/i })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /feed grid/i })).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /ads/i })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /strategy hub/i })).toBeInTheDocument();
     expect(screen.getByRole("link", { name: /system/i })).toBeInTheDocument();
+    expect(screen.getByLabelText(/premium model/i)).toBeInTheDocument();
   });
 });

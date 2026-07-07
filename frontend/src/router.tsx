@@ -1,6 +1,7 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 
 import { AppShell } from "@/layout/AppShell";
+import { AdsPage } from "@/pages/AdsPage";
 import { CalendarPage } from "@/pages/CalendarPage";
 import { CampaignsPage } from "@/pages/CampaignsPage";
 import { FeedGridPage } from "@/pages/FeedGridPage";
@@ -20,6 +21,7 @@ export const router = createBrowserRouter([
       { path: "library", element: <LibraryPage /> },
       { path: "calendar", element: <CalendarPage /> },
       { path: "feed", element: <FeedGridPage /> },
+      { path: "ads", element: <AdsPage /> },
       { path: "strategy", element: <StrategyHubPage /> },
       { path: "system", element: <SystemPage /> },
     ],

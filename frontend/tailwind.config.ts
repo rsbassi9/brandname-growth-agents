@@ -60,11 +60,12 @@ export default {
         sm: "0.25rem",
       },
       fontFamily: {
-        sans: ["Inter", "ui-sans-serif", "system-ui", "sans-serif"],
-        mono: ["JetBrains Mono", "ui-monospace", "monospace"],
+        sans: ["var(--font-sans)"],
+        display: ["var(--font-display)"],
+        mono: ["var(--font-mono)"],
       },
       boxShadow: {
-        focus: "0 0 0 3px hsl(var(--ring) / 0.24)",
+        focus: "none",
       },
       transitionDuration: {
         ui: "var(--duration-ui)",

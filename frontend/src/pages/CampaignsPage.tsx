@@ -155,7 +155,7 @@ export function CampaignsPage() {
               <Panel className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
                 <div className="min-w-0">
                   <div className="flex flex-wrap items-center gap-2">
-                    <h2 className="text-xl font-semibold">{selectedCampaign.name}</h2>
+                    <h2 className="font-display text-xl font-normal">{selectedCampaign.name}</h2>
                     <Badge>{selectedCampaign.status}</Badge>
                   </div>
                   <p className="mt-3 max-w-3xl text-sm leading-6 text-muted-foreground">
@@ -224,13 +224,13 @@ function CampaignButton({
     <button
       type="button"
       className={cn(
-        "w-full rounded-lg border bg-surface p-3 text-left transition hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
-        selected ? "border-primary shadow-focus" : "border-border",
+        "w-full rounded-lg border bg-surface p-3 text-left transition-colors duration-ui ease-ui hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+        selected ? "border-accent bg-accent-soft" : "border-border",
       )}
       onClick={onClick}
     >
       <div className="flex items-start justify-between gap-3">
-        <p className="line-clamp-2 text-sm font-semibold">{campaign.name}</p>
+        <p className="line-clamp-2 font-display text-base font-normal">{campaign.name}</p>
         <Badge>{campaign.status}</Badge>
       </div>
       <p className="mt-2 line-clamp-2 text-xs leading-5 text-muted-foreground">{campaign.goal || "No goal set."}</p>
@@ -244,7 +244,7 @@ function AssetGroup({ type, assets }: { type: string; assets: AssetOut[] }) {
     <Panel>
       <div className="mb-4 flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
-          <span className="flex h-9 w-9 items-center justify-center rounded-md bg-primary text-primary-foreground">
+          <span className="flex h-9 w-9 items-center justify-center rounded-md bg-accent-soft text-accent-soft-foreground">
             <Icon className="h-4 w-4" />
           </span>
           <h3 className="text-sm font-semibold capitalize">{formatType(type)}</h3>

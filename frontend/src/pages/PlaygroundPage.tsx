@@ -6,6 +6,7 @@ import { useLocation } from "react-router-dom";
 
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
+import { PREMIUM_MODEL_EVENT, PREMIUM_MODEL_KEY } from "@/layout/AppShell";
 import { PageHeader, Panel } from "@/components/ui/Panel";
 import {
   api,
@@ -57,7 +58,7 @@ const initialDefaults: PlaygroundDefaults = {
   model: "",
   tone: "quiet confidence",
   template: "default",
-  premium: false,
+  premium: localStorage.getItem(PREMIUM_MODEL_KEY) === "true",
 };
 
 function readJson<T>(key: string, fallback: T): T {
@@ -116,7 +117,21 @@ export function PlaygroundPage() {
 
   useEffect(() => {
     localStorage.setItem(DEFAULTS_KEY, JSON.stringify(defaults));
+    localStorage.setItem(PREMIUM_MODEL_KEY, String(defaults.premium));
   }, [defaults]);
+
+  useEffect(() => {
+    function syncPremium(event: Event) {
+      const nextValue = event instanceof CustomEvent ? Boolean(event.detail) : localStorage.getItem(PREMIUM_MODEL_KEY) === "true";
+      setDefaults((current) => ({ ...current, premium: nextValue }));
+    }
+    window.addEventListener(PREMIUM_MODEL_EVENT, syncPremium);
+    window.addEventListener("storage", syncPremium);
+    return () => {
+      window.removeEventListener(PREMIUM_MODEL_EVENT, syncPremium);
+      window.removeEventListener("storage", syncPremium);
+    };
+  }, []);
 
   useEffect(() => {
     if (routeState.campaignId) {
@@ -297,9 +312,9 @@ export function PlaygroundPage() {
                       key={item.value}
                       type="button"
                       className={cn(
-                        "flex min-h-11 items-center gap-2 rounded-md border px-3 text-left text-sm font-medium transition-colors",
+                        "flex min-h-11 items-center gap-2 rounded-md border px-3 text-left text-sm font-medium transition-colors duration-ui ease-ui",
                         selected
-                          ? "border-primary bg-primary text-primary-foreground"
+                          ? "border-accent bg-accent-soft text-accent-soft-foreground"
                           : "border-border bg-background hover:bg-muted",
                       )}
                       aria-pressed={selected}
@@ -381,15 +396,25 @@ export function PlaygroundPage() {
                   onChange={(event) => updateDefaults({ model: event.target.value })}
                 />
               </label>
-              <label className="flex min-h-11 items-center gap-2 rounded-md border border-border px-3 text-sm font-medium">
+              <label className="flex min-h-11 items-center gap-2 rounded-md border border-border bg-surface px-3 text-sm font-medium">
                 <input
                   type="checkbox"
-                  className="h-4 w-4 accent-ink"
+                  className="h-4 w-4 accent-accent"
                   checked={defaults.premium}
                   onChange={(event) => updateDefaults({ premium: event.target.checked })}
                 />
                 Premium
               </label>
+            </div>
+
+            <div className="grid grid-cols-4 gap-2" aria-label="Reference photos">
+              {Array.from({ length: 4 }, (_, index) => (
+                <div
+                  key={index}
+                  className="aspect-[4/5] rounded-md border border-dashed border-border bg-muted/40"
+                  aria-label={`Reference slot ${index + 1}`}
+                />
+              ))}
             </div>
           </form>
         </Panel>
@@ -473,7 +498,10 @@ export function PlaygroundPage() {
             <button
               key={item.id}
               type="button"
-              className="min-h-24 w-72 shrink-0 rounded-lg border border-border bg-surface p-3 text-left transition hover:bg-muted"
+              className={cn(
+                "min-h-24 w-72 shrink-0 rounded-lg border bg-surface p-3 text-left transition-colors duration-ui ease-ui hover:bg-muted",
+                item.assetId === activeAssetId ? "border-accent bg-accent-soft" : "border-border",
+              )}
               onClick={() => restore(item)}
             >
               <div className="flex items-center justify-between gap-2">
