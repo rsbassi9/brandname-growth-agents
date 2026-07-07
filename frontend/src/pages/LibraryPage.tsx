@@ -373,12 +373,12 @@ function AssetDrawer({
       <button
         type="button"
         aria-label="Close asset detail"
-        className={cn("absolute inset-0 bg-zinc-950/50 transition-opacity", open ? "opacity-100" : "opacity-0")}
+        className={cn("absolute inset-0 bg-ink/50 transition-opacity duration-ui ease-ui", open ? "opacity-100" : "opacity-0")}
         onClick={onClose}
       />
       <aside
         className={cn(
-          "absolute right-0 top-0 flex h-full w-full max-w-4xl flex-col border-l border-border bg-background shadow-xl transition-transform duration-200",
+          "absolute right-0 top-0 flex h-full w-full max-w-4xl flex-col border-l border-border bg-background shadow-xl transition-transform duration-ui ease-ui",
           open ? "translate-x-0" : "translate-x-full",
         )}
         aria-label="Asset detail"
@@ -459,7 +459,7 @@ function VersionPanel({
   onSelect: () => void;
 }) {
   return (
-    <Panel className={cn("space-y-3", selected && "border-emerald-300 bg-emerald-50/60")}>
+    <Panel className={cn("space-y-3", selected && "border-success/40 bg-success-soft")}>
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div>
           <div className="flex flex-wrap items-center gap-2">

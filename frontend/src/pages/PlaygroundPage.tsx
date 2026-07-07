@@ -264,17 +264,17 @@ export function PlaygroundPage() {
         <Panel>
           <form id="playground-form" className="space-y-4" onSubmit={submit}>
             {campaignId ? (
-              <div className="rounded-md border border-amber-200 bg-amber-50 p-3">
+              <div className="rounded-md border border-warning/30 bg-warning-soft p-3">
                 <div className="flex items-start justify-between gap-3">
                   <div>
-                    <p className="text-xs font-semibold uppercase text-amber-900">Campaign</p>
-                    <p className="mt-1 text-sm font-medium text-amber-950">{campaignName || `Campaign ${campaignId}`}</p>
+                    <p className="text-xs font-semibold uppercase text-warning">Campaign</p>
+                    <p className="mt-1 text-sm font-medium text-foreground">{campaignName || `Campaign ${campaignId}`}</p>
                   </div>
                   <Button
                     type="button"
                     variant="ghost"
                     size="sm"
-                    className="text-amber-950 hover:bg-amber-100"
+                    className="text-foreground hover:bg-warning-soft"
                     onClick={() => {
                       setCampaignId(null);
                       setCampaignName("");
@@ -384,7 +384,7 @@ export function PlaygroundPage() {
               <label className="flex min-h-11 items-center gap-2 rounded-md border border-border px-3 text-sm font-medium">
                 <input
                   type="checkbox"
-                  className="h-4 w-4 accent-zinc-950"
+                  className="h-4 w-4 accent-ink"
                   checked={defaults.premium}
                   onChange={(event) => updateDefaults({ premium: event.target.checked })}
                 />
@@ -412,7 +412,7 @@ export function PlaygroundPage() {
             </div>
 
             {generate.error || jobError ? (
-              <div role="alert" className="rounded-md border border-red-200 bg-red-50 p-3 text-sm text-red-800">
+              <div role="alert" className="rounded-md border border-danger/30 bg-danger-soft p-3 text-sm text-danger">
                 {generate.error instanceof Error ? generate.error.message : jobError}
               </div>
             ) : null}

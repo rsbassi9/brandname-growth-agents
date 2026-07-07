@@ -4,10 +4,10 @@ type BadgeTone = "neutral" | "success" | "warning" | "danger" | "ink";
 
 const tones: Record<BadgeTone, string> = {
   neutral: "border-border bg-muted text-muted-foreground",
-  success: "border-emerald-200 bg-emerald-50 text-emerald-800",
-  warning: "border-amber-200 bg-amber-50 text-amber-900",
-  danger: "border-red-200 bg-red-50 text-red-800",
-  ink: "border-zinc-800 bg-zinc-950 text-white",
+  success: "border-success/30 bg-success-soft text-success",
+  warning: "border-warning/30 bg-warning-soft text-warning",
+  danger: "border-danger/30 bg-danger-soft text-danger",
+  ink: "border-ink bg-ink text-ink-foreground",
 };
 
 export function Badge({

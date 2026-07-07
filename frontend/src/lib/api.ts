@@ -97,6 +97,21 @@ export interface CalendarItemOut {
   data: Record<string, unknown>;
 }
 
+export interface CalendarItemIn {
+  id?: string | null;
+  date: string;
+  status?: string;
+  asset_id?: number | null;
+  data?: Record<string, unknown>;
+}
+
+export interface CalendarItemPatch {
+  date?: string | null;
+  status?: string | null;
+  asset_id?: number | null;
+  data?: Record<string, unknown> | null;
+}
+
 export interface StrategyDocOut {
   name: string;
   content: string;
@@ -176,6 +191,15 @@ export const api = {
   campaignAssets: (campaignId: number) => request<AssetOut[]>(`/campaigns/${campaignId}/assets`),
   calendar: (params: { month?: string; date?: string; status?: string } = {}) =>
     request<CalendarItemOut[]>(`/calendar${toQuery(params)}`),
+  createCalendarItem: (payload: CalendarItemIn) =>
+    request<CalendarItemOut>("/calendar", { method: "POST", body: JSON.stringify(payload) }),
+  updateCalendarItem: (itemId: string, payload: CalendarItemPatch) =>
+    request<CalendarItemOut>(`/calendar/${encodeURIComponent(itemId)}`, {
+      method: "PATCH",
+      body: JSON.stringify(payload),
+    }),
+  deleteCalendarItem: (itemId: string) =>
+    request<void>(`/calendar/${encodeURIComponent(itemId)}`, { method: "DELETE" }),
   feed: () => request<CalendarItemOut[]>("/feed"),
   setFeedOrder: (item_ids: string[]) =>
     request<{ ok: boolean; count: number }>("/feed/order", {

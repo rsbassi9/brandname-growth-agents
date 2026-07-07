@@ -26,6 +26,8 @@ export default {
         accent: {
           DEFAULT: "hsl(var(--accent))",
           foreground: "hsl(var(--accent-foreground))",
+          soft: "hsl(var(--accent-soft))",
+          "soft-foreground": "hsl(var(--accent-soft-foreground))",
         },
         destructive: {
           DEFAULT: "hsl(var(--destructive))",
@@ -35,10 +37,26 @@ export default {
           DEFAULT: "hsl(var(--surface))",
           raised: "hsl(var(--surface-raised))",
         },
+        success: {
+          DEFAULT: "hsl(var(--success))",
+          soft: "hsl(var(--success-soft))",
+        },
+        warning: {
+          DEFAULT: "hsl(var(--warning))",
+          soft: "hsl(var(--warning-soft))",
+        },
+        danger: {
+          DEFAULT: "hsl(var(--danger))",
+          soft: "hsl(var(--danger-soft))",
+        },
+        ink: {
+          DEFAULT: "hsl(var(--ink))",
+          foreground: "hsl(var(--ink-foreground))",
+        },
       },
       borderRadius: {
-        lg: "0.5rem",
-        md: "0.375rem",
+        lg: "var(--radius-panel)",
+        md: "var(--radius-control)",
         sm: "0.25rem",
       },
       fontFamily: {
@@ -47,6 +65,12 @@ export default {
       },
       boxShadow: {
         focus: "0 0 0 3px hsl(var(--ring) / 0.24)",
+      },
+      transitionDuration: {
+        ui: "var(--duration-ui)",
+      },
+      transitionTimingFunction: {
+        ui: "var(--ease-ui)",
       },
     },
   },

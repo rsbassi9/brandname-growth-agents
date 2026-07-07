@@ -19,14 +19,14 @@ export function JobDrawer({ open, onClose }: { open: boolean; onClose: () => voi
       <button
         aria-label="Close job drawer"
         className={cn(
-          "absolute inset-0 bg-zinc-950/50 transition-opacity",
+          "absolute inset-0 bg-ink/50 transition-opacity duration-ui ease-ui",
           open ? "opacity-100" : "opacity-0",
         )}
         onClick={onClose}
       />
       <aside
         className={cn(
-          "absolute right-0 top-0 h-full w-full max-w-md border-l border-border bg-background shadow-xl transition-transform duration-200",
+          "absolute right-0 top-0 h-full w-full max-w-md border-l border-border bg-background shadow-xl transition-transform duration-ui ease-ui",
           open ? "translate-x-0" : "translate-x-full",
         )}
         aria-label="Job drawer"

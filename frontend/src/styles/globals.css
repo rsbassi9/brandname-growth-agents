@@ -1,26 +1,8 @@
+@import "./tokens.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-:root {
-  --background: 42 22% 96%;
-  --foreground: 240 7% 9%;
-  --surface: 0 0% 100%;
-  --surface-raised: 45 17% 98%;
-  --primary: 240 7% 9%;
-  --primary-foreground: 0 0% 100%;
-  --secondary: 80 9% 28%;
-  --secondary-foreground: 0 0% 100%;
-  --muted: 42 17% 91%;
-  --muted-foreground: 240 4% 34%;
-  --accent: 43 85% 57%;
-  --accent-foreground: 240 7% 9%;
-  --destructive: 0 76% 48%;
-  --destructive-foreground: 0 0% 100%;
-  --border: 42 12% 82%;
-  --input: 42 12% 78%;
-  --ring: 43 85% 45%;
-}
 
 * {
   box-sizing: border-box;
@@ -52,8 +34,8 @@ select {
 }
 
 ::selection {
-  background: hsl(var(--accent));
-  color: hsl(var(--accent-foreground));
+  background: hsl(var(--accent-soft));
+  color: hsl(var(--accent-soft-foreground));
 }
 
 .line-clamp-2 {

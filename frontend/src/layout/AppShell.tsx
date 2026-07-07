@@ -39,7 +39,7 @@ export function AppShell() {
     <div className="min-h-dvh bg-background text-foreground">
       <aside
         className={cn(
-          "fixed inset-y-0 left-0 z-40 w-72 border-r border-border bg-surface-raised transition-transform duration-200 lg:translate-x-0",
+          "fixed inset-y-0 left-0 z-40 w-72 border-r border-border bg-surface-raised transition-transform duration-ui ease-ui lg:translate-x-0",
           sidebarOpen ? "translate-x-0" : "-translate-x-full",
         )}
       >
@@ -70,7 +70,7 @@ export function AppShell() {
                 onClick={() => setSidebarOpen(false)}
                 className={({ isActive }) =>
                   cn(
-                    "flex min-h-11 items-center gap-3 rounded-md px-3 text-sm font-medium text-muted-foreground transition-colors hover:bg-muted hover:text-foreground",
+                    "flex min-h-11 items-center gap-3 rounded-md px-3 text-sm font-medium text-muted-foreground transition-colors duration-ui ease-ui hover:bg-muted hover:text-foreground",
                     isActive && "bg-primary text-primary-foreground hover:bg-primary hover:text-primary-foreground",
                   )
                 }
@@ -86,7 +86,7 @@ export function AppShell() {
       {sidebarOpen ? (
         <button
           aria-label="Close navigation overlay"
-          className="fixed inset-0 z-30 bg-zinc-950/50 lg:hidden"
+          className="fixed inset-0 z-30 bg-ink/50 lg:hidden"
           onClick={() => setSidebarOpen(false)}
         />
       ) : null}

@@ -125,7 +125,7 @@ export function CampaignsPage() {
                 Create Campaign
               </Button>
               {createCampaign.error ? (
-                <p role="alert" className="text-sm text-red-700">
+                <p role="alert" className="text-sm text-danger">
                   {createCampaign.error instanceof Error ? createCampaign.error.message : "Campaign could not be created."}
                 </p>
               ) : null}
