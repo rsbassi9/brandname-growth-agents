@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { act } from "react";
 import { render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
+import { MemoryRouter } from "react-router-dom";
 
 import { PlaygroundPage } from "@/pages/PlaygroundPage";
 
@@ -36,7 +37,9 @@ function renderPage() {
 
   return render(
     <QueryClientProvider client={queryClient}>
-      <PlaygroundPage />
+      <MemoryRouter>
+        <PlaygroundPage />
+      </MemoryRouter>
     </QueryClientProvider>,
   );
 }

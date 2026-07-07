@@ -2,6 +2,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { CheckCircle2, Clock3, Copy, Image, Loader2, PanelsTopLeft, RotateCcw, Video, Wand2 } from "lucide-react";
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import type { ComponentType } from "react";
+import { useLocation } from "react-router-dom";
 
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -44,6 +45,13 @@ interface HistoryItem extends PlaygroundDefaults {
   createdAt: string;
 }
 
+interface PlaygroundRouteState {
+  campaignId?: number;
+  campaignName?: string;
+  assetType?: AssetType;
+  brief?: string;
+}
+
 const initialDefaults: PlaygroundDefaults = {
   type: "copy",
   model: "",
@@ -67,10 +75,14 @@ function selectedVersion(asset?: AssetDetailOut | null) {
 
 export function PlaygroundPage() {
   const queryClient = useQueryClient();
+  const location = useLocation();
+  const routeState = (location.state || {}) as PlaygroundRouteState;
   const mode = useQuery({ queryKey: ["system", "mode"], queryFn: api.mode });
   const [defaults, setDefaults] = useState<PlaygroundDefaults>(() => readJson(DEFAULTS_KEY, initialDefaults));
   const [brief, setBrief] = useState("");
   const [title, setTitle] = useState("");
+  const [campaignId, setCampaignId] = useState<number | null>(routeState.campaignId || null);
+  const [campaignName, setCampaignName] = useState(routeState.campaignName || "");
   const [history, setHistory] = useState<HistoryItem[]>(() => readJson<HistoryItem[]>(HISTORY_KEY, []));
   const [activeAssetId, setActiveAssetId] = useState<number | null>(null);
   const [activeJob, setActiveJob] = useState<JobOut | null>(null);
@@ -105,6 +117,18 @@ export function PlaygroundPage() {
   useEffect(() => {
     localStorage.setItem(DEFAULTS_KEY, JSON.stringify(defaults));
   }, [defaults]);
+
+  useEffect(() => {
+    if (routeState.campaignId) {
+      setCampaignId(routeState.campaignId);
+      setCampaignName(routeState.campaignName || "");
+      setBrief((current) => current || routeState.brief || "");
+      setTitle((current) => current || routeState.campaignName || "");
+      if (routeState.assetType) {
+        setDefaults((current) => ({ ...current, type: routeState.assetType! }));
+      }
+    }
+  }, [routeState.assetType, routeState.brief, routeState.campaignId, routeState.campaignName]);
 
   useEffect(() => {
     localStorage.setItem(HISTORY_KEY, JSON.stringify(history.slice(0, 12)));
@@ -163,6 +187,7 @@ export function PlaygroundPage() {
     }
     return {
       type: defaults.type,
+      campaign_id: campaignId,
       brief,
       title,
       params,
@@ -238,6 +263,29 @@ export function PlaygroundPage() {
       <div className="grid gap-4 p-4 lg:grid-cols-[minmax(320px,440px)_1fr]">
         <Panel>
           <form id="playground-form" className="space-y-4" onSubmit={submit}>
+            {campaignId ? (
+              <div className="rounded-md border border-amber-200 bg-amber-50 p-3">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <p className="text-xs font-semibold uppercase text-amber-900">Campaign</p>
+                    <p className="mt-1 text-sm font-medium text-amber-950">{campaignName || `Campaign ${campaignId}`}</p>
+                  </div>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="text-amber-950 hover:bg-amber-100"
+                    onClick={() => {
+                      setCampaignId(null);
+                      setCampaignName("");
+                    }}
+                  >
+                    Clear
+                  </Button>
+                </div>
+              </div>
+            ) : null}
+
             <fieldset className="space-y-2">
               <legend className="text-sm font-medium">Asset type</legend>
               <div className="grid grid-cols-2 gap-2">
