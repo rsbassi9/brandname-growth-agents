@@ -13,3 +13,4 @@ local-dashboard.log
 dashboard-server.err.log
 dashboard-server.out.log
 dashboard/*.log
+data/
