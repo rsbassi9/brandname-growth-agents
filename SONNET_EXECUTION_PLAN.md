@@ -7,8 +7,8 @@
 
 - ✅ **P0 COMPLETE** — commits `2f106e4` (P0-1 key rotation doc), `ad9b15e` (P0-2 dotenv fix), `61539ba` (P0-3 log cleanup), `afe75a1` (checkpoint), `146747f` (P0-5 tooling). GATE P0 passed.
 - ✅ **P1 COMPLETE** — commit `e497450`: full `app/` backend (models, versioned `/api/v1` API, async job queue, legacy migration, ported services with defect fixes, two-tier model config incl. `BRAND_OPENAI_BASE_URL` for NVIDIA NIM/Ollama, nightly backup). **GATE P1 verified:** 47/47 tests pass; `uvicorn app.main:app` boots with no env vars, `/api/v1/system/health` → 200; migration idempotent (17 calendar items / 43 feedback events / 271 assets / 271 versions on both runs).
-- ▶️ **P2 IN PROGRESS** — commit `c9b9511` completes P2-1: React/Vite/Tailwind studio shell, fixed navigation, typed API client, React Query setup, job drawer, placeholder route surfaces, and shell test. **Verified:** `npm test` (1/1), `npm run build`, and backend `.venv\Scripts\python.exe -m pytest -q` (47/47) pass.
-- **NEXT: P2-2** Playground generate flow. Then P2-3 → P6 in order.
+- ▶️ **P2 IN PROGRESS** — commits `c9b9511` (P2-1 React/Vite/Tailwind studio shell, fixed navigation, typed API client, React Query setup, job drawer, placeholder route surfaces, shell test) and `073808d` (P2-2 Playground generate flow: typed form, persisted defaults, `/api/v1/generate`, SSE progress, result preview, session history, mocked flow test). **Verified after P2-2:** `npm test` (2/2), `npm run build`, backend `.venv\Scripts\python.exe -m pytest -q` (47/47), and local-only API smoke (`POST /api/v1/generate` → succeeded job → asset version 1) pass.
+- **NEXT: P2-3** Library filters, infinite scroll, asset detail drawer with versions/select/regenerate. Then P2-4 → P6 in order.
 
 ---
 
