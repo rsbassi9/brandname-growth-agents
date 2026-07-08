@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, ArrowRight, ExternalLink, Plus, Trash2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, ExternalLink, Plus, Trash2, Video } from "lucide-react";
 import { FormEvent, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -96,6 +96,14 @@ export function CalendarPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["calendar"] });
       queryClient.invalidateQueries({ queryKey: ["feed"] });
+    },
+  });
+
+  const createVideoPack = useMutation({
+    mutationFn: (itemId: string) => api.createCalendarVideoPromptPack(itemId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["assets"] });
+      queryClient.invalidateQueries({ queryKey: ["library"] });
     },
   });
 
@@ -229,8 +237,10 @@ export function CalendarPage() {
                       key={item.id}
                       item={item}
                       updating={updateItem.isPending || deleteItem.isPending}
+                      creatingVideoPack={createVideoPack.isPending}
                       onStatus={(nextStatus) => updateItem.mutate({ itemId: item.id, nextStatus })}
                       onDelete={() => deleteItem.mutate(item.id)}
+                      onVideoPack={() => createVideoPack.mutate(item.id)}
                     />
                   ))}
                 </div>
@@ -251,13 +261,17 @@ export function CalendarPage() {
 function CalendarItemCard({
   item,
   updating,
+  creatingVideoPack,
   onStatus,
   onDelete,
+  onVideoPack,
 }: {
   item: CalendarItemOut;
   updating: boolean;
+  creatingVideoPack: boolean;
   onStatus: (status: string) => void;
   onDelete: () => void;
+  onVideoPack: () => void;
 }) {
   return (
     <div className="rounded-md border border-border bg-background p-2">
@@ -288,6 +302,16 @@ function CalendarItemCard({
         </select>
         <Button type="button" variant="ghost" size="icon" aria-label={`Delete ${itemTitle(item)}`} disabled={updating} onClick={onDelete}>
           <Trash2 className="h-4 w-4" />
+        </Button>
+        <Button
+          type="button"
+          variant="ghost"
+          size="icon"
+          aria-label={`Create video pack for ${itemTitle(item)}`}
+          disabled={creatingVideoPack}
+          onClick={onVideoPack}
+        >
+          <Video className="h-4 w-4" />
         </Button>
       </div>
     </div>

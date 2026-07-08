@@ -76,6 +76,9 @@ describe("P2-5 Calendar and Feed Grid", () => {
         if (url.pathname === "/api/v1/calendar/post-1" && init?.method === "DELETE") {
           return response(null, 204);
         }
+        if (url.pathname === "/api/v1/calendar/post-1/video-prompt-pack" && init?.method === "POST") {
+          return response({ job_id: "job-video", asset_id: 88 });
+        }
         if (url.pathname === "/api/v1/feed/order" && init?.method === "POST") {
           return response({ ok: true, count: 2 });
         }
@@ -121,6 +124,14 @@ describe("P2-5 Calendar and Feed Grid", () => {
       expect(fetch).toHaveBeenCalledWith(
         "/api/v1/calendar/post-1",
         expect.objectContaining({ method: "DELETE" }),
+      ),
+    );
+
+    await userEvent.click(screen.getByRole("button", { name: /create video pack for launch teaser/i }));
+    await waitFor(() =>
+      expect(fetch).toHaveBeenCalledWith(
+        "/api/v1/calendar/post-1/video-prompt-pack",
+        expect.objectContaining({ method: "POST" }),
       ),
     );
   });

@@ -99,6 +99,8 @@ def _generate_local(asset_type: str, brief: str, params: dict[str, Any], prompt:
         return {"prompt": prompt, "content_text": content, "file_path": None, "model_used": LOCAL_MODEL_LABEL}
 
     if asset_type == "video_script":
+        content = json.dumps(_video_prompt_pack(headline, brief, params), ensure_ascii=False, indent=2)
+        return {"prompt": prompt, "content_text": content, "file_path": None, "model_used": LOCAL_MODEL_LABEL}
         content = "\n".join(
             [
                 f"# Video script draft — {headline}",
@@ -142,6 +144,91 @@ def _generate_local(asset_type: str, brief: str, params: dict[str, Any], prompt:
         ]
     )
     return {"prompt": prompt, "content_text": content, "file_path": None, "model_used": LOCAL_MODEL_LABEL}
+
+
+def _video_prompt_pack(headline: str, brief: str, params: dict[str, Any]) -> dict[str, Any]:
+    source_note = str(params.get("source_note", "Use approved campaign/product source assets only."))
+    hook = f"{headline}. Open with the garment or source fragment already in motion."
+    shot_list = [
+        {
+            "time": "0-2s",
+            "shot": "Strongest campaign frame, close crop, no setup.",
+            "motion": "Slow push-in with minimal handheld drift.",
+        },
+        {
+            "time": "2-6s",
+            "shot": "Source painting or process evidence, texture visible.",
+            "motion": "Macro pass across canvas, scan, or reconstruction detail.",
+        },
+        {
+            "time": "6-10s",
+            "shot": "Garment detail, print fragment, cotton weight, fold, or silhouette.",
+            "motion": "Controlled lateral move, premium product proof.",
+        },
+        {
+            "time": "10-14s",
+            "shot": "On-body or product silhouette, fragment in real context.",
+            "motion": "Quiet turn or step, no exaggerated posing.",
+        },
+        {
+            "time": "14-16s",
+            "shot": "Clean end frame with restrained CTA.",
+            "motion": "Hold steady, let the object carry the close.",
+        },
+    ]
+    on_screen_text = ["SOURCE", "SYSTEM", "FRAGMENT", "WEAR"]
+    base_prompt = (
+        f"{hook}\n"
+        f"Brief: {brief.strip() or headline}\n"
+        f"{source_note}\n"
+        "Premium minimal streetwear reel, grounded in raw photoshoot/product imagery, "
+        "near-black ink, bone surface, muted grey-brown neutrals, restrained oxidized red accent, "
+        "no invented garments, no readable fake text, no glossy fashion-ad exaggeration."
+    )
+    return {
+        "kind": "video_prompt_pack",
+        "version": 1,
+        "title": headline,
+        "hook": hook,
+        "shot_list": shot_list,
+        "on_screen_text": on_screen_text,
+        "providers": {
+            "muapi.ai": {
+                "role": "primary",
+                "prompt": (
+                    f"{base_prompt}\n"
+                    "Format for muapi.ai image-to-video or text-to-video: vertical 9:16, 16 seconds, "
+                    "cinematic product motion, slow controlled camera, realistic cloth texture."
+                ),
+                "settings": {"aspect_ratio": "9:16", "duration_seconds": 16, "motion": "low to medium"},
+            },
+            "fal.ai": {
+                "role": "secondary",
+                "prompt": (
+                    f"{base_prompt}\n"
+                    "Format for fal.ai video model: vertical social reel, subtle camera motion, realistic product detail."
+                ),
+                "settings": {"aspect_ratio": "9:16", "duration_seconds": 8},
+            },
+            "Runway": {
+                "role": "secondary",
+                "prompt": (
+                    f"{base_prompt}\n"
+                    "Format for Runway: use reference image when available, low motion brush, product-first framing."
+                ),
+                "settings": {"ratio": "9:16", "camera_motion": "slow push and lateral drift"},
+            },
+            "Kling": {
+                "role": "secondary",
+                "prompt": (
+                    f"{base_prompt}\n"
+                    "Format for Kling: keep garment geometry stable, realistic fabric, restrained movement."
+                ),
+                "settings": {"mode": "standard", "aspect_ratio": "9:16"},
+            },
+        },
+        "manual_use": "Paste one provider prompt into the external generator. Review output before publishing.",
+    }
 
 
 # ---------------------------------------------------------------------------

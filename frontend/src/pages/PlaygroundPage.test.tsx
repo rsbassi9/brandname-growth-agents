@@ -6,6 +6,20 @@ import { MemoryRouter } from "react-router-dom";
 
 import { PlaygroundPage } from "@/pages/PlaygroundPage";
 
+const videoPack = {
+  kind: "video_prompt_pack",
+  title: "Reconstructed reel",
+  hook: "Open with the garment already in motion.",
+  shot_list: [{ time: "0-2s", shot: "Campaign frame", motion: "Slow push-in" }],
+  on_screen_text: ["SOURCE", "SYSTEM"],
+  providers: {
+    "muapi.ai": { role: "primary", prompt: "muapi prompt", settings: { aspect_ratio: "9:16" } },
+    "fal.ai": { role: "secondary", prompt: "fal prompt", settings: { duration_seconds: 8 } },
+    Runway: { role: "secondary", prompt: "runway prompt" },
+    Kling: { role: "secondary", prompt: "kling prompt" },
+  },
+};
+
 class MockEventSource {
   static instances: MockEventSource[] = [];
   listeners: Record<string, Array<(event: MessageEvent<string>) => void>> = {};
@@ -64,7 +78,33 @@ describe("PlaygroundPage", () => {
           });
         }
         if (url.endsWith("/api/v1/generate") && init?.method === "POST") {
-          return response({ job_id: "job-1", asset_id: 42 });
+          const body = JSON.parse(String(init.body || "{}")) as { type?: string };
+          return response({ job_id: "job-1", asset_id: body.type === "video_script" ? 77 : 42 });
+        }
+        if (url.endsWith("/api/v1/assets/77")) {
+          return response({
+            id: 77,
+            campaign_id: null,
+            type: "video_script",
+            title: "Reconstructed reel",
+            status: "draft",
+            source_path: null,
+            created_at: "2026-07-07T12:00:00",
+            versions: [
+              {
+                id: 7,
+                asset_id: 77,
+                version_no: 1,
+                prompt_snapshot: "Prompt",
+                params_json: "{}",
+                content_text: JSON.stringify(videoPack),
+                file_path: null,
+                model_used: "local-deterministic",
+                created_at: "2026-07-07T12:00:01",
+                is_selected: true,
+              },
+            ],
+          });
         }
         if (url.endsWith("/api/v1/assets/42")) {
           return response({
@@ -123,6 +163,33 @@ describe("PlaygroundPage", () => {
     expect(await screen.findByText(/caption draft/i)).toBeInTheDocument();
     expect(screen.getByText(/version 1/i)).toBeInTheDocument();
     expect(screen.getAllByText(/drop caption for the source-painting tee/i).length).toBeGreaterThanOrEqual(2);
+  });
+
+  it("renders video prompt packs with provider tabs", async () => {
+    renderPage();
+    await userEvent.click(screen.getByRole("button", { name: /video script/i }));
+    await userEvent.type(screen.getByLabelText(/brief/i), "Build a reel from campaign frames");
+    await userEvent.click(screen.getByRole("button", { name: /generate/i }));
+
+    await waitFor(() => expect(MockEventSource.instances).toHaveLength(1));
+    act(() => {
+      MockEventSource.instances[0].emit("completion", {
+        id: "job-1",
+        kind: "generate_asset",
+        status: "succeeded",
+        progress_pct: 100,
+        message: "done",
+        payload_json: "{}",
+        result_json: JSON.stringify({ asset_id: 77, version_no: 1 }),
+        created_at: "2026-07-07T12:00:00",
+        finished_at: "2026-07-07T12:00:02",
+      });
+    });
+
+    expect(await screen.findByText("Reconstructed reel")).toBeInTheDocument();
+    expect(screen.getByRole("tab", { name: /muapi.ai/i })).toHaveAttribute("aria-selected", "true");
+    await userEvent.click(screen.getByRole("tab", { name: /runway/i }));
+    expect(screen.getByText("runway prompt")).toBeInTheDocument();
   });
 });
 

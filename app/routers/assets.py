@@ -103,3 +103,39 @@ def regenerate(asset_id: int, session: Session = Depends(get_session)) -> Genera
         {"asset_id": asset_id, "type": asset.type, "brief": brief, "params": stored},
     )
     return GenerateResponse(job_id=job_id, asset_id=asset_id)
+
+
+@router.post("/{asset_id}/video-prompt-pack", response_model=GenerateResponse)
+def create_video_prompt_pack(asset_id: int, session: Session = Depends(get_session)) -> GenerateResponse:
+    source = session.get(Asset, asset_id)
+    if source is None:
+        raise HTTPException(status_code=404, detail="Asset not found")
+    latest = session.execute(
+        select(AssetVersion)
+        .where(AssetVersion.asset_id == asset_id)
+        .order_by(AssetVersion.is_selected.desc(), AssetVersion.version_no.desc())
+        .limit(1)
+    ).scalar_one_or_none()
+    source_text = latest.content_text if latest and latest.content_text else source.title
+    video_asset = Asset(
+        campaign_id=source.campaign_id,
+        type="video_script",
+        title=f"Video prompt pack: {source.title[:180]}",
+        status="draft",
+    )
+    session.add(video_asset)
+    session.commit()
+    job_id = job_queue.enqueue(
+        "generate_asset",
+        {
+            "asset_id": video_asset.id,
+            "type": "video_script",
+            "brief": f"Create an external video prompt pack from this asset:\n\n{source_text}",
+            "params": {
+                "template": "video prompt pack",
+                "source_asset_id": source.id,
+                "source_note": f"Ground this pack in Library asset {source.id}: {source.title}",
+            },
+        },
+    )
+    return GenerateResponse(job_id=job_id, asset_id=video_asset.id)

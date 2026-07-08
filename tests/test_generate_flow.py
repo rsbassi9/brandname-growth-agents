@@ -101,6 +101,53 @@ def test_generate_carousel_renders_files(client, app_env) -> None:
     assert Path(file_path).exists()
 
 
+def test_generate_video_script_creates_structured_prompt_pack(client) -> None:
+    import json
+
+    response = client.post(
+        "/api/v1/generate",
+        json={"type": "video_script", "brief": "Reel for the reconstructed fragment", "params": {}},
+    )
+    assert response.status_code == 200
+    job = wait_for_job(client, response.json()["job_id"])
+    assert job["status"] == "succeeded", job["message"]
+    detail = client.get(f"/api/v1/assets/{response.json()['asset_id']}").json()
+    pack = json.loads(detail["versions"][0]["content_text"])
+    assert pack["kind"] == "video_prompt_pack"
+    assert list(pack["providers"]) == ["muapi.ai", "fal.ai", "Runway", "Kling"]
+    assert pack["providers"]["muapi.ai"]["role"] == "primary"
+    assert "Higgsfield" not in json.dumps(pack)
+
+
+def test_create_video_prompt_pack_from_asset(client) -> None:
+    source = _generate_copy(client, "Caption source for a reel")
+    wait_for_job(client, source["job_id"])
+
+    response = client.post(f"/api/v1/assets/{source['asset_id']}/video-prompt-pack")
+    assert response.status_code == 200, response.text
+    job = wait_for_job(client, response.json()["job_id"])
+    assert job["status"] == "succeeded", job["message"]
+    detail = client.get(f"/api/v1/assets/{response.json()['asset_id']}").json()
+    assert detail["type"] == "video_script"
+    assert "muapi.ai" in detail["versions"][0]["content_text"]
+
+
+def test_create_video_prompt_pack_from_calendar_item(client) -> None:
+    create = client.post(
+        "/api/v1/calendar",
+        json={"date": "2026-07-20", "status": "planned", "data": {"title": "Calendar reel"}},
+    )
+    assert create.status_code == 201, create.text
+
+    response = client.post(f"/api/v1/calendar/{create.json()['id']}/video-prompt-pack")
+    assert response.status_code == 200, response.text
+    job = wait_for_job(client, response.json()["job_id"])
+    assert job["status"] == "succeeded", job["message"]
+    detail = client.get(f"/api/v1/assets/{response.json()['asset_id']}").json()
+    assert detail["title"].startswith("Video prompt pack")
+    assert "Calendar reel" in detail["versions"][0]["content_text"]
+
+
 def test_generate_unknown_campaign_404(client) -> None:
     response = client.post(
         "/api/v1/generate",

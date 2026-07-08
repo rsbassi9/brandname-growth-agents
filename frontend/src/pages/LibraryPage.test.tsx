@@ -5,6 +5,16 @@ import { MemoryRouter } from "react-router-dom";
 
 import { LibraryPage } from "@/pages/LibraryPage";
 
+class MockEventSource {
+  constructor(public url: string) {}
+  addEventListener() {
+    return undefined;
+  }
+  close() {
+    return undefined;
+  }
+}
+
 const asset = {
   id: 42,
   campaign_id: null,
@@ -40,6 +50,7 @@ function renderPage() {
 
 describe("LibraryPage", () => {
   beforeEach(() => {
+    vi.stubGlobal("EventSource", MockEventSource);
     vi.stubGlobal(
       "fetch",
       vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
@@ -112,6 +123,18 @@ describe("LibraryPage", () => {
             ],
           });
         }
+        if (url.pathname === "/api/v1/assets/42/video-prompt-pack" && init?.method === "POST") {
+          return response({ job_id: "job-video", asset_id: 77 });
+        }
+        if (url.pathname === "/api/v1/assets/77" && init?.method !== "POST") {
+          return response({
+            ...asset,
+            id: 77,
+            type: "video_script",
+            title: "Video prompt pack: Drop caption",
+            versions: [],
+          });
+        }
         return response({}, 404);
       }),
     );
@@ -140,6 +163,14 @@ describe("LibraryPage", () => {
     await waitFor(() =>
       expect(fetch).toHaveBeenCalledWith(
         "/api/v1/assets/42/versions/2/select",
+        expect.objectContaining({ method: "POST" }),
+      ),
+    );
+
+    await userEvent.click(screen.getByRole("button", { name: /video pack/i }));
+    await waitFor(() =>
+      expect(fetch).toHaveBeenCalledWith(
+        "/api/v1/assets/42/video-prompt-pack",
         expect.objectContaining({ method: "POST" }),
       ),
     );

@@ -6,6 +6,7 @@ import { useLocation } from "react-router-dom";
 
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
+import { VideoPromptPackView, parseVideoPromptPack } from "@/components/VideoPromptPackView";
 import { PREMIUM_MODEL_EVENT, PREMIUM_MODEL_KEY } from "@/layout/AppShell";
 import { PageHeader, Panel } from "@/components/ui/Panel";
 import {
@@ -184,6 +185,7 @@ export function PlaygroundPage() {
   const currentVersion = selectedVersion(activeAsset.data);
   const isBusy = generate.isPending || ["queued", "running"].includes(activeJob?.status || "");
   const previewText = currentVersion?.content_text || "";
+  const videoPack = parseVideoPromptPack(previewText);
   const activeType = assetTypes.find((item) => item.value === defaults.type) || assetTypes[0];
   const ActiveTypeIcon = activeType.icon;
 
@@ -468,9 +470,13 @@ export function PlaygroundPage() {
                   {currentVersion.file_path ? <Badge tone="neutral">File attached</Badge> : null}
                 </div>
                 <article className="max-h-[560px] overflow-auto rounded-md border border-border bg-background p-4">
-                  <pre className="whitespace-pre-wrap break-words font-sans text-sm leading-6 text-foreground">
-                    {previewText || currentVersion.file_path || "Version persisted without text content."}
-                  </pre>
+                  {videoPack ? (
+                    <VideoPromptPackView content={previewText} />
+                  ) : (
+                    <pre className="whitespace-pre-wrap break-words font-sans text-sm leading-6 text-foreground">
+                      {previewText || currentVersion.file_path || "Version persisted without text content."}
+                    </pre>
+                  )}
                 </article>
               </div>
             ) : !isBusy ? (

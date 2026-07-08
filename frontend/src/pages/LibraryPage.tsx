@@ -17,6 +17,7 @@ import { useSearchParams } from "react-router-dom";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { PageHeader, Panel } from "@/components/ui/Panel";
+import { VideoPromptPackView, parseVideoPromptPack } from "@/components/VideoPromptPackView";
 import {
   api,
   createJobEventSource,
@@ -139,6 +140,24 @@ export function LibraryPage() {
   const regenerate = useMutation({
     mutationFn: (assetId: number) => api.regenerate(assetId),
     onSuccess: (response) => {
+      setRegenJob({
+        id: response.job_id,
+        kind: "generate_asset",
+        status: "queued",
+        progress_pct: 0,
+        message: "queued",
+        payload_json: "{}",
+        result_json: null,
+        created_at: new Date().toISOString(),
+        finished_at: null,
+      });
+    },
+  });
+
+  const createVideoPack = useMutation({
+    mutationFn: (assetId: number) => api.createAssetVideoPromptPack(assetId),
+    onSuccess: (response) => {
+      setSelectedAssetId(response.asset_id);
       setRegenJob({
         id: response.job_id,
         kind: "generate_asset",
@@ -320,7 +339,9 @@ export function LibraryPage() {
         onSelect={(assetId, versionNo) => selectVersion.mutate({ assetId, versionNo })}
         selectingVersion={selectVersion.variables?.versionNo}
         onRegenerate={(assetId) => regenerate.mutate(assetId)}
+        onCreateVideoPack={(assetId) => createVideoPack.mutate(assetId)}
         regenerating={regenerate.isPending || ["queued", "running"].includes(regenJob?.status || "")}
+        creatingVideoPack={createVideoPack.isPending}
         regenJob={regenJob}
       />
     </div>
@@ -371,7 +392,9 @@ function AssetDrawer({
   onSelect,
   selectingVersion,
   onRegenerate,
+  onCreateVideoPack,
   regenerating,
+  creatingVideoPack,
   regenJob,
 }: {
   asset: AssetDetailOut | null;
@@ -381,7 +404,9 @@ function AssetDrawer({
   onSelect: (assetId: number, versionNo: number) => void;
   selectingVersion?: number;
   onRegenerate: (assetId: number) => void;
+  onCreateVideoPack: (assetId: number) => void;
   regenerating: boolean;
+  creatingVideoPack: boolean;
   regenJob: JobOut | null;
 }) {
   const chosen = selectedVersion(asset);
@@ -426,6 +451,15 @@ function AssetDrawer({
                 <Button type="button" variant="outline" disabled={regenerating} onClick={() => onRegenerate(asset.id)}>
                   {regenerating ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />}
                   Regenerate
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  disabled={creatingVideoPack || regenerating}
+                  onClick={() => onCreateVideoPack(asset.id)}
+                >
+                  {creatingVideoPack ? <Loader2 className="h-4 w-4 animate-spin" /> : <Video className="h-4 w-4" />}
+                  Video pack
                 </Button>
               </Panel>
 
@@ -498,9 +532,13 @@ function VersionPanel({
         </Button>
       </div>
       <div className="max-h-80 overflow-auto rounded-md border border-border bg-background p-3">
-        <pre className="whitespace-pre-wrap break-words font-sans text-sm leading-6">
-          {version.content_text || version.file_path || "No text content for this version."}
-        </pre>
+        {version.content_text && parseVideoPromptPack(version.content_text) ? (
+          <VideoPromptPackView content={version.content_text} compact />
+        ) : (
+          <pre className="whitespace-pre-wrap break-words font-sans text-sm leading-6">
+            {version.content_text || version.file_path || "No text content for this version."}
+          </pre>
+        )}
       </div>
     </Panel>
   );

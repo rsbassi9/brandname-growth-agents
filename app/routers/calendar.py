@@ -14,8 +14,9 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from ..db import get_session
-from ..models import CalendarItem
-from ..schemas import CalendarItemIn, CalendarItemOut, CalendarItemPatch
+from ..models import Asset, CalendarItem
+from ..schemas import CalendarItemIn, CalendarItemOut, CalendarItemPatch, GenerateResponse
+from ..services.jobs import job_queue
 
 router = APIRouter(prefix="/calendar", tags=["calendar"])
 
@@ -101,3 +102,47 @@ def delete_item(item_id: str, session: Session = Depends(get_session)) -> None:
         raise HTTPException(status_code=404, detail="Calendar item not found")
     session.delete(item)
     session.commit()
+
+
+@router.post("/{item_id}/video-prompt-pack", response_model=GenerateResponse)
+def create_video_prompt_pack(item_id: str, session: Session = Depends(get_session)) -> GenerateResponse:
+    item = session.get(CalendarItem, item_id)
+    if item is None:
+        raise HTTPException(status_code=404, detail="Calendar item not found")
+    data = json.loads(item.data_json or "{}")
+    linked_asset = session.get(Asset, item.asset_id) if item.asset_id is not None else None
+    fallback_title = linked_asset.title if linked_asset else item_id
+    title = str(data.get("title") or data.get("hook") or fallback_title)
+    brief = "\n".join(
+        [
+            f"Create an external video prompt pack for calendar item {item.id}.",
+            f"Date: {item.date}",
+            f"Status: {item.status}",
+            f"Title: {title}",
+            f"Linked asset: {linked_asset.title if linked_asset else 'none'}",
+            f"Calendar data: {json.dumps(data, ensure_ascii=False)}",
+        ]
+    )
+    video_asset = Asset(
+        campaign_id=linked_asset.campaign_id if linked_asset else None,
+        type="video_script",
+        title=f"Video prompt pack: {title[:180]}",
+        status="draft",
+    )
+    session.add(video_asset)
+    session.commit()
+    job_id = job_queue.enqueue(
+        "generate_asset",
+        {
+            "asset_id": video_asset.id,
+            "type": "video_script",
+            "brief": brief,
+            "params": {
+                "template": "video prompt pack",
+                "source_calendar_item_id": item.id,
+                "source_asset_id": linked_asset.id if linked_asset else None,
+                "source_note": f"Ground this pack in calendar item {item.id} and its linked asset/source notes.",
+            },
+        },
+    )
+    return GenerateResponse(job_id=job_id, asset_id=video_asset.id)

@@ -226,6 +226,10 @@ export const api = {
   runDailyWorkflow: () =>
     request<DailyWorkflowRunOut>("/system/daily-workflow/run", { method: "POST" }),
   dailyWorkflowRuns: () => request<WorkflowRunReportOut[]>("/system/daily-workflow/runs"),
+  createAssetVideoPromptPack: (assetId: number) =>
+    request<GenerateResponse>(`/assets/${assetId}/video-prompt-pack`, { method: "POST" }),
+  createCalendarVideoPromptPack: (itemId: string) =>
+    request<GenerateResponse>(`/calendar/${encodeURIComponent(itemId)}/video-prompt-pack`, { method: "POST" }),
   generate: (payload: GenerateRequest) =>
     request<GenerateResponse>("/generate", { method: "POST", body: JSON.stringify(payload) }),
   job: (jobId: string) => request<JobOut>(`/jobs/${jobId}`),
