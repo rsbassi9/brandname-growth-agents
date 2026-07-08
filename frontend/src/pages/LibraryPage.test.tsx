@@ -35,6 +35,15 @@ const imageAsset = {
   created_at: "2026-07-07T12:05:00",
 };
 
+const sourcePhoto = {
+  id: 9,
+  origin: "local",
+  path: "C:\\shoots\\drop-one\\front.jpg",
+  tags_json: JSON.stringify(["drop-one", "front-design"]),
+  product_handle: null,
+  created_at: "2026-07-07T12:10:00",
+};
+
 function renderPage() {
   const queryClient = new QueryClient({
     defaultOptions: { queries: { retry: false }, mutations: { retry: false } },
@@ -59,6 +68,12 @@ describe("LibraryPage", () => {
           const q = url.searchParams.get("q") || "";
           const items = q.toLowerCase().includes("source") ? [imageAsset] : [asset, imageAsset];
           return response({ items, total: items.length, limit: 24, offset: 0 });
+        }
+        if (url.pathname === "/api/v1/source-assets" && init?.method !== "POST") {
+          return response({ items: [sourcePhoto], total: 1 });
+        }
+        if (url.pathname === "/api/v1/source-assets/index" && init?.method === "POST") {
+          return response({ items: [sourcePhoto], total: 1 });
         }
         if (url.pathname === "/api/v1/assets/42" && init?.method !== "POST") {
           return response({
@@ -203,6 +218,31 @@ describe("LibraryPage", () => {
       expect(fetch).toHaveBeenCalledWith(
         "/api/v1/assets/42/versions/1/iterate",
         expect.objectContaining({ method: "POST" }),
+      ),
+    );
+  });
+
+  it("indexes and lists source photos", async () => {
+    renderPage();
+
+    await userEvent.click(await screen.findByRole("button", { name: /source photos/i }));
+    expect(await screen.findByText("front.jpg")).toBeInTheDocument();
+
+    await userEvent.type(screen.getByPlaceholderText(/local photoshoot folder path/i), "C:\\shoots\\drop-one");
+    await userEvent.type(screen.getByPlaceholderText(/tags, comma separated/i), "drop-one, front-design");
+    await userEvent.click(screen.getByRole("button", { name: /index local/i }));
+
+    await waitFor(() =>
+      expect(fetch).toHaveBeenCalledWith(
+        "/api/v1/source-assets/index",
+        expect.objectContaining({
+          method: "POST",
+          body: JSON.stringify({
+            origin: "local",
+            path: "C:\\shoots\\drop-one",
+            tags: ["drop-one", "front-design"],
+          }),
+        }),
       ),
     );
   });

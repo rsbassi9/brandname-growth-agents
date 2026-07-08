@@ -68,6 +68,30 @@ export interface CritiqueOut {
   critique: string;
 }
 
+export type SourceAssetOrigin = "drive" | "local" | "shopify";
+
+export interface SourceAssetOut {
+  id: number;
+  origin: SourceAssetOrigin;
+  path: string;
+  tags_json: string;
+  product_handle: string | null;
+  created_at: string;
+}
+
+export interface SourceAssetListOut {
+  items: SourceAssetOut[];
+  total: number;
+}
+
+export interface SourceAssetIndexRequest {
+  origin: SourceAssetOrigin;
+  path?: string;
+  tags?: string[];
+  product_handle?: string | null;
+  limit?: number;
+}
+
 export interface JobOut {
   id: string;
   kind: string;
@@ -250,6 +274,10 @@ export const api = {
     offset?: number;
   } = {}) => request<AssetListOut>(`/assets${toQuery(params)}`),
   asset: (assetId: number) => request<AssetDetailOut>(`/assets/${assetId}`),
+  sourceAssets: (params: { origin?: string; q?: string } = {}) =>
+    request<SourceAssetListOut>(`/source-assets${toQuery(params)}`),
+  indexSourceAssets: (payload: SourceAssetIndexRequest) =>
+    request<SourceAssetListOut>("/source-assets/index", { method: "POST", body: JSON.stringify(payload) }),
   selectVersion: (assetId: number, versionNo: number) =>
     request<AssetDetailOut>(`/assets/${assetId}/versions/${versionNo}/select`, { method: "POST" }),
   critiqueVersion: (assetId: number, versionNo: number) =>

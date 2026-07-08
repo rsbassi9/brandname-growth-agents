@@ -86,6 +86,39 @@ class ShopifyService:
             )
         return {"status": self.status(), "products": products}
 
+    def product_image_sources(self, limit: int = 100) -> list[dict]:
+        if not self.enabled:
+            return []
+        url = f"https://{self.store_domain}/admin/api/{self.api_version}/products.json"
+        try:
+            response = requests.get(
+                url,
+                headers={"X-Shopify-Access-Token": self.token},
+                params={"limit": min(limit, 250), "fields": "id,title,handle,product_type,tags,images"},
+                timeout=6,
+            )
+            response.raise_for_status()
+        except requests.RequestException as exc:
+            logger.warning("Shopify product image source indexing failed: %s", exc)
+            return []
+
+        sources: list[dict] = []
+        for product in response.json().get("products", []):
+            for image in product.get("images", []):
+                if len(sources) >= limit:
+                    return sources
+                sources.append(
+                    {
+                        "src": image.get("src", ""),
+                        "alt": image.get("alt", "") or "",
+                        "product_title": product.get("title", ""),
+                        "product_handle": product.get("handle", ""),
+                        "product_type": product.get("product_type", ""),
+                        "tags": product.get("tags", ""),
+                    }
+                )
+        return sources
+
     def preview_for_items(self, items: list[dict]) -> dict:
         preview = self.product_preview(limit=80) if self.enabled else {"status": self.status(), "products": []}
         products = preview.get("products", [])

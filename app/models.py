@@ -24,6 +24,7 @@ from .db import Base
 ASSET_TYPES = ("copy", "image_concept", "carousel", "video_script", "voiceover")
 ASSET_STATUSES = ("draft", "selected", "archived")
 JOB_STATUSES = ("queued", "running", "succeeded", "failed")
+SOURCE_ASSET_ORIGINS = ("drive", "local", "shopify")
 
 
 class Campaign(Base):
@@ -73,6 +74,18 @@ class AssetVersion(Base):
     is_selected: Mapped[bool] = mapped_column(Boolean, default=False, nullable=False)
 
     asset: Mapped[Asset] = relationship(back_populates="versions")
+
+
+class SourceAsset(Base):
+    __tablename__ = "source_assets"
+    __table_args__ = (UniqueConstraint("origin", "path", name="uq_source_asset_origin_path"),)
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    origin: Mapped[str] = mapped_column(String(32), nullable=False)
+    path: Mapped[str] = mapped_column(String(1000), nullable=False)
+    tags_json: Mapped[str] = mapped_column(Text, default="[]", nullable=False)
+    product_handle: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
 
 
 class CalendarItem(Base):

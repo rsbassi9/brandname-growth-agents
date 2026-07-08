@@ -46,6 +46,18 @@ def build_prompt(asset_type: str, brief: str, params: dict[str, Any]) -> str:
         f"Template: {template}",
         "Ground every claim in the approved raw photoshoot/product assets; never invent garments.",
     ]
+    references = params.get("source_asset_context") or []
+    if references:
+        lines.extend(["", "Reference source assets:"])
+        for item in references[:4]:
+            if not isinstance(item, dict):
+                continue
+            tags = ", ".join(str(tag) for tag in item.get("tags", [])[:4])
+            handle = f" product={item.get('product_handle')}" if item.get("product_handle") else ""
+            lines.append(
+                f"- #{item.get('id')} {item.get('origin')}: {item.get('path')}{handle}"
+                + (f" tags={tags}" if tags else "")
+            )
     if params.get("critique"):
         lines.extend(["", "Critique to address:", str(params["critique"]).strip()])
     lines.extend(["", "Brief:", brief.strip()])

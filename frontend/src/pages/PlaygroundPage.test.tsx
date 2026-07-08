@@ -77,6 +77,21 @@ describe("PlaygroundPage", () => {
             openai_base_url: "",
           });
         }
+        if (url.endsWith("/api/v1/source-assets")) {
+          return response({
+            total: 1,
+            items: [
+              {
+                id: 9,
+                origin: "local",
+                path: "C:\\shoots\\drop-one\\front.jpg",
+                tags_json: JSON.stringify(["front-design"]),
+                product_handle: null,
+                created_at: "2026-07-07T12:00:00",
+              },
+            ],
+          });
+        }
         if (url.endsWith("/api/v1/generate") && init?.method === "POST") {
           const body = JSON.parse(String(init.body || "{}")) as { type?: string };
           const assetId = body.type === "video_script" ? 77 : body.type === "voiceover" ? 78 : 42;
@@ -168,8 +183,16 @@ describe("PlaygroundPage", () => {
 
   it("submits a generate request and renders the completed version", async () => {
     renderPage();
+    await userEvent.click(await screen.findByRole("button", { name: /front\.jpg/i }));
     await userEvent.type(screen.getByLabelText(/brief/i), "Drop caption for the source-painting tee");
     await userEvent.click(screen.getByRole("button", { name: /generate/i }));
+
+    await waitFor(() => {
+      const generateCall = vi.mocked(fetch).mock.calls.find(([input]) => String(input).endsWith("/api/v1/generate"));
+      expect(generateCall).toBeTruthy();
+      const body = JSON.parse(String(generateCall?.[1]?.body || "{}"));
+      expect(body.params.source_asset_ids).toEqual([9]);
+    });
 
     await waitFor(() => expect(MockEventSource.instances).toHaveLength(1));
     act(() => {

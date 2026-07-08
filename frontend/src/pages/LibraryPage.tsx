@@ -2,8 +2,10 @@ import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tansta
 import {
   CheckCircle2,
   ChevronRight,
+  FolderDown,
   FileText,
   Image,
+  ImagePlus,
   Loader2,
   PanelsTopLeft,
   RefreshCw,
@@ -27,6 +29,8 @@ import {
   type AssetType,
   type AssetVersionOut,
   type JobOut,
+  type SourceAssetOrigin,
+  type SourceAssetOut,
 } from "@/lib/api";
 import { cn } from "@/lib/utils";
 
@@ -46,6 +50,13 @@ const statuses: Array<{ value: "" | AssetStatus; label: string }> = [
   { value: "draft", label: "Draft" },
   { value: "selected", label: "Selected" },
   { value: "archived", label: "Archived" },
+];
+
+const sourceOrigins: Array<{ value: "" | SourceAssetOrigin; label: string }> = [
+  { value: "", label: "All origins" },
+  { value: "local", label: "Local" },
+  { value: "drive", label: "Drive" },
+  { value: "shopify", label: "Shopify" },
 ];
 
 function assetIcon(type: string) {
@@ -69,6 +80,27 @@ function selectedVersion(asset?: AssetDetailOut | null) {
   return asset?.versions.find((version) => version.is_selected) || asset?.versions[asset.versions.length - 1] || null;
 }
 
+function sourceName(source: SourceAssetOut) {
+  if (/^[a-z][a-z0-9+.-]*:\/\//i.test(source.path)) {
+    try {
+      const url = new URL(source.path);
+      return url.pathname.split("/").filter(Boolean).pop() || source.path;
+    } catch {
+      return source.path;
+    }
+  }
+  return source.path.split(/[\\/]/).filter(Boolean).pop() || source.path;
+}
+
+function sourceTags(source: SourceAssetOut) {
+  try {
+    const tags = JSON.parse(source.tags_json || "[]");
+    return Array.isArray(tags) ? tags.map(String).filter(Boolean) : [];
+  } catch {
+    return [];
+  }
+}
+
 export function LibraryPage() {
   const queryClient = useQueryClient();
   const [searchParams] = useSearchParams();
@@ -77,6 +109,11 @@ export function LibraryPage() {
   const [search, setSearch] = useState("");
   const [dateFrom, setDateFrom] = useState("");
   const [dateTo, setDateTo] = useState("");
+  const [view, setView] = useState<"assets" | "sources">("assets");
+  const [sourceOrigin, setSourceOrigin] = useState<"" | SourceAssetOrigin>("");
+  const [sourceSearch, setSourceSearch] = useState("");
+  const [sourcePath, setSourcePath] = useState("");
+  const [sourceTags, setSourceTags] = useState("");
   const [selectedAssetId, setSelectedAssetId] = useState<number | null>(null);
   const [regenJob, setRegenJob] = useState<JobOut | null>(null);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
@@ -113,6 +150,26 @@ export function LibraryPage() {
 
   const items = assets.data?.pages.flatMap((page) => page.items) || [];
   const total = assets.data?.pages[0]?.total ?? 0;
+  const sourceAssets = useQuery({
+    queryKey: ["source-assets", sourceOrigin, sourceSearch.trim()],
+    queryFn: () => api.sourceAssets({ origin: sourceOrigin, q: sourceSearch.trim() }),
+  });
+
+  const indexSources = useMutation({
+    mutationFn: () =>
+      api.indexSourceAssets({
+        origin: "local",
+        path: sourcePath,
+        tags: sourceTags
+          .split(",")
+          .map((tag) => tag.trim())
+          .filter(Boolean),
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["source-assets"] });
+      setSourcePath("");
+    },
+  });
 
   useEffect(() => {
     const assetId = Number(searchParams.get("asset"));
@@ -243,8 +300,48 @@ export function LibraryPage() {
       <PageHeader
         eyebrow="Assets"
         title="Library"
-        actions={<Badge tone="ink">{total} assets</Badge>}
+        actions={<Badge tone="ink">{view === "assets" ? `${total} assets` : `${sourceAssets.data?.total || 0} sources`}</Badge>}
       />
+
+      <div className="border-b border-border bg-background px-4 py-3">
+        <div className="inline-flex rounded-md border border-border bg-surface p-1">
+          {[
+            { value: "assets", label: "Generated assets" },
+            { value: "sources", label: "Source photos" },
+          ].map((item) => (
+            <button
+              key={item.value}
+              type="button"
+              className={cn(
+                "min-h-9 rounded px-3 text-sm font-medium transition-colors duration-ui ease-ui",
+                view === item.value ? "bg-accent text-accent-foreground" : "text-muted-foreground hover:bg-muted",
+              )}
+              aria-pressed={view === item.value}
+              onClick={() => setView(item.value as "assets" | "sources")}
+            >
+              {item.label}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {view === "sources" ? (
+        <SourcePhotosView
+          sources={sourceAssets.data?.items || []}
+          loading={sourceAssets.isLoading}
+          origin={sourceOrigin}
+          search={sourceSearch}
+          sourcePath={sourcePath}
+          sourceTags={sourceTags}
+          indexing={indexSources.isPending}
+          onOriginChange={setSourceOrigin}
+          onSearchChange={setSourceSearch}
+          onPathChange={setSourcePath}
+          onTagsChange={setSourceTags}
+          onIndex={() => indexSources.mutate()}
+        />
+      ) : (
+        <>
 
       <section className="border-b border-border bg-surface px-4 py-4">
         <div className="grid gap-3 lg:grid-cols-[minmax(220px,1fr)_160px_160px_150px_150px_auto]">
@@ -374,7 +471,145 @@ export function LibraryPage() {
         iteratingVersion={iterate.variables?.versionNo}
         regenJob={regenJob}
       />
+        </>
+      )}
     </div>
+  );
+}
+
+function SourcePhotosView({
+  sources,
+  loading,
+  origin,
+  search,
+  sourcePath,
+  sourceTags,
+  indexing,
+  onOriginChange,
+  onSearchChange,
+  onPathChange,
+  onTagsChange,
+  onIndex,
+}: {
+  sources: SourceAssetOut[];
+  loading: boolean;
+  origin: "" | SourceAssetOrigin;
+  search: string;
+  sourcePath: string;
+  sourceTags: string;
+  indexing: boolean;
+  onOriginChange: (value: "" | SourceAssetOrigin) => void;
+  onSearchChange: (value: string) => void;
+  onPathChange: (value: string) => void;
+  onTagsChange: (value: string) => void;
+  onIndex: () => void;
+}) {
+  return (
+    <div>
+      <section className="border-b border-border bg-surface px-4 py-4">
+        <div className="grid gap-3 lg:grid-cols-[minmax(220px,1fr)_180px]">
+          <label className="relative text-sm font-medium" htmlFor="source-search">
+            <span className="sr-only">Search source photos</span>
+            <Search className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+            <input
+              id="source-search"
+              className="h-11 w-full rounded-md border border-input bg-background pl-9 pr-3 text-sm outline-none transition focus:ring-2 focus:ring-ring"
+              placeholder="Search source photos"
+              value={search}
+              onChange={(event) => onSearchChange(event.target.value)}
+            />
+          </label>
+          <label className="text-sm font-medium" htmlFor="source-origin">
+            <span className="sr-only">Source origin</span>
+            <select
+              id="source-origin"
+              className="h-11 w-full rounded-md border border-input bg-background px-3 text-sm"
+              value={origin}
+              onChange={(event) => onOriginChange(event.target.value as "" | SourceAssetOrigin)}
+            >
+              {sourceOrigins.map((item) => (
+                <option key={item.value || "all"} value={item.value}>
+                  {item.label}
+                </option>
+              ))}
+            </select>
+          </label>
+        </div>
+        <div className="mt-3 grid gap-3 lg:grid-cols-[minmax(260px,1fr)_220px_auto]">
+          <label className="text-sm font-medium" htmlFor="source-path">
+            <span className="sr-only">Local source folder</span>
+            <input
+              id="source-path"
+              className="h-11 w-full rounded-md border border-input bg-background px-3 text-sm outline-none transition focus:ring-2 focus:ring-ring"
+              placeholder="Local photoshoot folder path"
+              value={sourcePath}
+              onChange={(event) => onPathChange(event.target.value)}
+            />
+          </label>
+          <label className="text-sm font-medium" htmlFor="source-tags">
+            <span className="sr-only">Source tags</span>
+            <input
+              id="source-tags"
+              className="h-11 w-full rounded-md border border-input bg-background px-3 text-sm outline-none transition focus:ring-2 focus:ring-ring"
+              placeholder="tags, comma separated"
+              value={sourceTags}
+              onChange={(event) => onTagsChange(event.target.value)}
+            />
+          </label>
+          <Button type="button" disabled={indexing || !sourcePath.trim()} onClick={onIndex}>
+            {indexing ? <Loader2 className="h-4 w-4 animate-spin" /> : <FolderDown className="h-4 w-4" />}
+            Index local
+          </Button>
+        </div>
+      </section>
+
+      <div className="grid gap-4 p-4 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4">
+        {sources.map((source) => (
+          <SourceCard key={source.id} source={source} />
+        ))}
+        {loading ? (
+          Array.from({ length: 8 }, (_, index) => (
+            <Panel key={index} className="h-44 animate-pulse bg-muted">
+              <span className="sr-only">Loading source photo</span>
+            </Panel>
+          ))
+        ) : null}
+        {!loading && !sources.length ? (
+          <Panel className="md:col-span-2 xl:col-span-3 2xl:col-span-4">
+            <p className="text-sm font-medium">No source photos indexed.</p>
+            <p className="mt-2 text-sm text-muted-foreground">Index a local photoshoot folder or use the API for Drive and Shopify sources.</p>
+          </Panel>
+        ) : null}
+      </div>
+    </div>
+  );
+}
+
+function SourceCard({ source }: { source: SourceAssetOut }) {
+  const tags = sourceTags(source);
+  return (
+    <Panel className="space-y-3">
+      <div className="flex aspect-[4/5] flex-col justify-between rounded-md border border-border bg-muted p-3">
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md bg-primary text-primary-foreground">
+          <ImagePlus className="h-5 w-5" />
+        </span>
+        <div>
+          <h2 className="line-clamp-3 break-words text-base font-semibold">{sourceName(source)}</h2>
+          <div className="mt-3 flex flex-wrap gap-2">
+            <Badge tone="ink">{source.origin}</Badge>
+            {source.product_handle ? <Badge>{source.product_handle}</Badge> : null}
+          </div>
+        </div>
+      </div>
+      <p className="line-clamp-2 break-all text-xs text-muted-foreground">{source.path}</p>
+      {tags.length ? (
+        <div className="flex flex-wrap gap-2">
+          {tags.slice(0, 4).map((tag) => (
+            <Badge key={tag}>{tag}</Badge>
+          ))}
+        </div>
+      ) : null}
+    </Panel>
   );
 }
 

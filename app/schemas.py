@@ -10,6 +10,7 @@ from pydantic import BaseModel, ConfigDict, Field
 AssetType = Literal["copy", "image_concept", "carousel", "video_script", "voiceover"]
 AssetStatus = Literal["draft", "selected", "archived"]
 JobStatus = Literal["queued", "running", "succeeded", "failed"]
+SourceAssetOrigin = Literal["drive", "local", "shopify"]
 
 
 class GenerateRequest(BaseModel):
@@ -29,6 +30,30 @@ class CritiqueOut(BaseModel):
     asset_id: int
     version_no: int
     critique: str
+
+
+class SourceAssetOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    origin: SourceAssetOrigin
+    path: str
+    tags_json: str
+    product_handle: str | None
+    created_at: datetime
+
+
+class SourceAssetListOut(BaseModel):
+    items: list[SourceAssetOut]
+    total: int
+
+
+class SourceAssetIndexRequest(BaseModel):
+    origin: SourceAssetOrigin = "local"
+    path: str = ""
+    tags: list[str] = Field(default_factory=list)
+    product_handle: str | None = None
+    limit: int = Field(default=100, ge=1, le=500)
 
 
 class JobOut(BaseModel):

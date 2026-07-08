@@ -1,5 +1,18 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { CheckCircle2, Clock3, Copy, Image, Loader2, Mic2, PanelsTopLeft, RotateCcw, Video, Wand2 } from "lucide-react";
+import {
+  CheckCircle2,
+  Clock3,
+  Copy,
+  Image,
+  ImagePlus,
+  Loader2,
+  Mic2,
+  PanelsTopLeft,
+  RotateCcw,
+  Video,
+  Wand2,
+  X,
+} from "lucide-react";
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import type { ComponentType } from "react";
 import { useLocation } from "react-router-dom";
@@ -17,6 +30,7 @@ import {
   type GenerateRequest,
   type GenerateResponse,
   type JobOut,
+  type SourceAssetOut,
 } from "@/lib/api";
 import { cn } from "@/lib/utils";
 
@@ -76,6 +90,18 @@ function selectedVersion(asset?: AssetDetailOut | null) {
   return asset?.versions.find((version) => version.is_selected) || asset?.versions[asset.versions.length - 1] || null;
 }
 
+function sourceTitle(source: SourceAssetOut) {
+  if (/^[a-z][a-z0-9+.-]*:\/\//i.test(source.path)) {
+    try {
+      const url = new URL(source.path);
+      return url.pathname.split("/").filter(Boolean).pop() || source.path;
+    } catch {
+      return source.path;
+    }
+  }
+  return source.path.split(/[\\/]/).filter(Boolean).pop() || source.path;
+}
+
 export function PlaygroundPage() {
   const queryClient = useQueryClient();
   const location = useLocation();
@@ -90,12 +116,14 @@ export function PlaygroundPage() {
   const [activeAssetId, setActiveAssetId] = useState<number | null>(null);
   const [activeJob, setActiveJob] = useState<JobOut | null>(null);
   const [jobError, setJobError] = useState("");
+  const [selectedSourceIds, setSelectedSourceIds] = useState<number[]>([]);
 
   const activeAsset = useQuery({
     queryKey: ["assets", activeAssetId],
     queryFn: () => api.asset(activeAssetId!),
     enabled: activeAssetId !== null && activeJob?.status === "succeeded",
   });
+  const sourceAssets = useQuery({ queryKey: ["source-assets"], queryFn: () => api.sourceAssets() });
 
   const generate = useMutation({
     mutationFn: (payload: GenerateRequest) => api.generate(payload),
@@ -203,6 +231,9 @@ export function PlaygroundPage() {
     if (defaults.model.trim()) {
       params.model = defaults.model.trim();
     }
+    if (selectedSourceIds.length) {
+      params.source_asset_ids = selectedSourceIds;
+    }
     return {
       type: defaults.type,
       campaign_id: campaignId,
@@ -231,6 +262,15 @@ export function PlaygroundPage() {
       return;
     }
     generate.mutate(buildPayload());
+  }
+
+  function toggleSource(sourceId: number) {
+    setSelectedSourceIds((current) => {
+      if (current.includes(sourceId)) {
+        return current.filter((id) => id !== sourceId);
+      }
+      return current.length < 4 ? [...current, sourceId] : current;
+    });
   }
 
   function restore(item: HistoryItem) {
@@ -410,14 +450,59 @@ export function PlaygroundPage() {
               </label>
             </div>
 
-            <div className="grid grid-cols-4 gap-2" aria-label="Reference photos">
-              {Array.from({ length: 4 }, (_, index) => (
-                <div
-                  key={index}
-                  className="aspect-[4/5] rounded-md border border-dashed border-border bg-muted/40"
-                  aria-label={`Reference slot ${index + 1}`}
-                />
-              ))}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between gap-3">
+                <span className="text-sm font-medium">Reference photos</span>
+                <Badge>{selectedSourceIds.length}/4</Badge>
+              </div>
+              <div className="grid grid-cols-4 gap-2" aria-label="Selected reference photos">
+                {Array.from({ length: 4 }, (_, index) => {
+                  const source = sourceAssets.data?.items.find((item) => item.id === selectedSourceIds[index]);
+                  return (
+                    <ReferenceSlot
+                      key={index}
+                      index={index}
+                      source={source}
+                      onClear={source ? () => toggleSource(source.id) : undefined}
+                    />
+                  );
+                })}
+              </div>
+              <div className="grid max-h-56 gap-2 overflow-auto rounded-md border border-border bg-surface p-2">
+                {sourceAssets.data?.items.slice(0, 12).map((source) => {
+                  const selected = selectedSourceIds.includes(source.id);
+                  const disabled = !selected && selectedSourceIds.length >= 4;
+                  return (
+                    <button
+                      key={source.id}
+                      type="button"
+                      className={cn(
+                        "flex min-h-12 items-center gap-3 rounded-md border px-3 py-2 text-left text-sm transition-colors duration-ui ease-ui",
+                        selected ? "border-accent bg-accent-soft" : "border-border bg-background hover:bg-muted",
+                        disabled && "cursor-not-allowed opacity-60",
+                      )}
+                      aria-pressed={selected}
+                      disabled={disabled}
+                      onClick={() => toggleSource(source.id)}
+                    >
+                      <ImagePlus className="h-4 w-4 shrink-0 text-muted-foreground" />
+                      <span className="min-w-0 flex-1">
+                        <span className="block truncate font-medium">{sourceTitle(source)}</span>
+                        <span className="block truncate text-xs text-muted-foreground">
+                          {source.origin}
+                          {source.product_handle ? ` · ${source.product_handle}` : ""}
+                        </span>
+                      </span>
+                      {selected ? <CheckCircle2 className="h-4 w-4 shrink-0 text-accent" /> : null}
+                    </button>
+                  );
+                })}
+                {!sourceAssets.isLoading && !sourceAssets.data?.items.length ? (
+                  <div className="rounded-md border border-dashed border-border p-3 text-sm text-muted-foreground">
+                    Index source photos in Library to attach references.
+                  </div>
+                ) : null}
+              </div>
             </div>
           </form>
         </Panel>
@@ -528,6 +613,47 @@ export function PlaygroundPage() {
           ) : null}
         </div>
       </section>
+    </div>
+  );
+}
+
+function ReferenceSlot({
+  index,
+  source,
+  onClear,
+}: {
+  index: number;
+  source?: SourceAssetOut;
+  onClear?: () => void;
+}) {
+  return (
+    <div
+      className={cn(
+        "relative aspect-[4/5] rounded-md border p-2",
+        source ? "border-accent bg-accent-soft" : "border-dashed border-border bg-muted/40",
+      )}
+      aria-label={`Reference slot ${index + 1}`}
+    >
+      {source ? (
+        <div className="flex h-full flex-col justify-between">
+          <Image className="h-5 w-5 text-accent" />
+          <p className="line-clamp-3 break-words text-xs font-medium">{sourceTitle(source)}</p>
+          {onClear ? (
+            <button
+              type="button"
+              className="absolute right-1 top-1 flex h-7 w-7 items-center justify-center rounded-md border border-border bg-background text-muted-foreground transition-colors hover:bg-muted"
+              aria-label={`Remove reference ${index + 1}`}
+              onClick={onClear}
+            >
+              <X className="h-3.5 w-3.5" />
+            </button>
+          ) : null}
+        </div>
+      ) : (
+        <div className="flex h-full items-center justify-center">
+          <ImagePlus className="h-5 w-5 text-muted-foreground" />
+        </div>
+      )}
     </div>
   );
 }

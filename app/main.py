@@ -14,7 +14,7 @@ from contextlib import asynccontextmanager, suppress
 from fastapi import FastAPI
 
 from .db import init_db
-from .routers import assets, calendar, campaigns, feed, jobs, library, playground, strategy, system
+from .routers import assets, calendar, campaigns, feed, jobs, library, playground, source_assets, strategy, system
 from .services.backup import backup_loop
 from .services.jobs import job_queue
 from .services.scheduler import daily_workflow_scheduler
@@ -56,6 +56,7 @@ def create_app() -> FastAPI:
         campaigns.router,
         calendar.router,
         feed.router,
+        source_assets.router,
         strategy.router,
     ):
         app.include_router(router, prefix=api_prefix)
