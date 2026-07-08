@@ -9,7 +9,7 @@ jobs:
   daily-growth:
     runs-on: ubuntu-latest
     permissions:
-      contents: write
+      contents: read
     steps:
       - uses: actions/checkout@v4
 
@@ -24,7 +24,9 @@ jobs:
         env:
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           OPENAI_MODEL: ${{ vars.OPENAI_MODEL || 'gpt-5.4-mini' }}
+          LOCAL_ONLY_AGENT_RUNS: ${{ vars.LOCAL_ONLY_AGENT_RUNS || 'false' }}
           BRAND_WEBSITE_URL: https://www.brandnamedesign.co/
+          BRAND_DATA_DIR: data
           GOOGLE_DRIVE_ENABLED: ${{ vars.GOOGLE_DRIVE_ENABLED || 'false' }}
           GOOGLE_DRIVE_ROOT_FOLDER_ID: ${{ secrets.GOOGLE_DRIVE_ROOT_FOLDER_ID }}
           GOOGLE_AUTH_MODE: ${{ vars.GOOGLE_AUTH_MODE || 'oauth' }}
@@ -40,12 +42,13 @@ jobs:
           if [ -n "${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_JSON }}" ]; then
             printf '%s' '${{ secrets.GOOGLE_APPLICATION_CREDENTIALS_JSON }}' > credentials.json
           fi
-          python -m src.orchestrator
+          python -m app.services.jobs run_daily_workflow
 
-      - name: Commit generated outputs
-        run: |
-          git config user.name "brandname-growth-agents"
-          git config user.email "actions@github.com"
-          git add outputs
-          git diff --cached --quiet || git commit -m "chore: add daily growth outputs"
-          git push
+      - name: Upload generated outputs
+        uses: actions/upload-artifact@v4
+        with:
+          name: daily-growth-outputs
+          path: |
+            outputs/**
+            data/app.db
+          if-no-files-found: warn

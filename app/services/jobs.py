@@ -15,6 +15,7 @@ import asyncio
 import contextlib
 import json
 import logging
+import sys
 import uuid
 from datetime import datetime
 from pathlib import Path
@@ -23,6 +24,7 @@ from typing import Any
 from sqlalchemy import func, select
 
 from ..db import session_scope
+from ..db import init_db
 from ..models import Asset, AssetVersion, Job
 from ..settings import get_settings
 
@@ -130,6 +132,32 @@ class JobQueue:
             result_json=json.dumps(result, ensure_ascii=False),
             finished_at=datetime.utcnow(),
         )
+
+
+async def run_one_shot(kind: str, payload: dict[str, Any] | None = None) -> dict[str, Any]:
+    """Run one queued job to completion for CI/cron entry points."""
+    init_db()
+    await job_queue.start()
+    try:
+        job_id = job_queue.enqueue(kind, payload or {"source": "cli"})
+        while True:
+            with session_scope() as session:
+                job = session.get(Job, job_id)
+                if job is None:
+                    raise RuntimeError(f"Job {job_id} vanished")
+                snapshot = {
+                    "id": job.id,
+                    "kind": job.kind,
+                    "status": job.status,
+                    "progress_pct": job.progress_pct,
+                    "message": job.message,
+                    "result_json": job.result_json,
+                }
+            if snapshot["status"] in ("succeeded", "failed"):
+                return snapshot
+            await asyncio.sleep(0.2)
+    finally:
+        await job_queue.stop()
 
 
 def _update_job(job_id: str, **fields: Any) -> None:
@@ -311,3 +339,17 @@ _HANDLERS = {
 
 # Application-wide queue instance (started/stopped by the FastAPI lifespan).
 job_queue = JobQueue()
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = list(argv if argv is not None else sys.argv[1:])
+    if len(args) != 1 or args[0] not in JOB_KINDS:
+        print(f"Usage: python -m app.services.jobs <{'|'.join(JOB_KINDS)}>", file=sys.stderr)
+        return 2
+    snapshot = asyncio.run(run_one_shot(args[0]))
+    print(json.dumps(snapshot, ensure_ascii=False))
+    return 0 if snapshot["status"] == "succeeded" else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

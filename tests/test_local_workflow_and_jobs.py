@@ -80,6 +80,27 @@ def test_manual_daily_workflow_endpoint_enqueues_job(client) -> None:
     assert response.json()["job_id"]
 
 
+def test_one_shot_daily_workflow_cli_path(app_env) -> None:
+    import asyncio
+    import json
+
+    from app.services.jobs import run_one_shot
+
+    snapshot = asyncio.run(run_one_shot("run_daily_workflow"))
+    assert snapshot["status"] == "succeeded", snapshot["message"]
+    result = json.loads(snapshot["result_json"])
+    assert result["mode"] == "local_only"
+    assert len(result["assets"]) == 8
+
+
+def test_daily_growth_workflow_uses_job_service_and_artifacts() -> None:
+    workflow = Path(".github/workflows/daily-growth.yml").read_text(encoding="utf-8")
+    assert "python -m app.services.jobs run_daily_workflow" in workflow
+    assert "python -m src.orchestrator" not in workflow
+    assert "git push" not in workflow
+    assert "actions/upload-artifact@v4" in workflow
+
+
 def test_unknown_job_kind_rejected(client) -> None:
     import pytest
 
