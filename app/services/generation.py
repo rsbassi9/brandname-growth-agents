@@ -12,8 +12,12 @@ from __future__ import annotations
 
 import json
 import logging
+import uuid
 from typing import Any
 
+import requests
+
+from ..paths import outputs_dir
 from ..settings import get_settings
 from .openai_client import resolve_model
 from .rendering import render_text_carousel
@@ -100,23 +104,6 @@ def _generate_local(asset_type: str, brief: str, params: dict[str, Any], prompt:
 
     if asset_type == "video_script":
         content = json.dumps(_video_prompt_pack(headline, brief, params), ensure_ascii=False, indent=2)
-        return {"prompt": prompt, "content_text": content, "file_path": None, "model_used": LOCAL_MODEL_LABEL}
-        content = "\n".join(
-            [
-                f"# Video script draft — {headline}",
-                "",
-                "Hook (0-2s): open on the strongest campaign frame; no explanation.",
-                "Beat 1 (2-6s): source painting / process evidence.",
-                "Beat 2 (6-10s): reconstruction detail, slow controlled motion.",
-                "Beat 3 (10-14s): garment on body, fragment in motion.",
-                "Close (14-16s): quiet CTA card. Review-ready draft only; no auto-publishing.",
-                "",
-                "On-screen text: SOURCE / SYSTEM / FRAGMENT / WEAR",
-                "",
-                "Brief:",
-                brief.strip(),
-            ]
-        )
         return {"prompt": prompt, "content_text": content, "file_path": None, "model_used": LOCAL_MODEL_LABEL}
 
     if asset_type == "voiceover":
@@ -252,4 +239,45 @@ async def _generate_live(asset_type: str, brief: str, params: dict[str, Any], pr
 
     agent = get_agent(agent_key, premium=premium)
     text = await run_agent(agent, prompt)
+    if asset_type == "voiceover":
+        return _voiceover_result(prompt, text, model)
     return {"prompt": prompt, "content_text": text, "file_path": None, "model_used": model}
+
+
+def _voiceover_result(prompt: str, script: str, model: str) -> dict[str, Any]:
+    settings = get_settings()
+    if settings.tts_provider.lower() != "elevenlabs" or not settings.elevenlabs_api_key:
+        content = "\n".join(
+            [
+                "# Voiceover script draft",
+                "",
+                "Status note: TTS not configured.",
+                "",
+                script.strip(),
+            ]
+        )
+        return {"prompt": prompt, "content_text": content, "file_path": None, "model_used": model}
+
+    voice_id = settings.elevenlabs_voice_id or "21m00Tcm4TlvDq8ikWAM"
+    url = f"https://api.elevenlabs.io/v1/text-to-speech/{voice_id}"
+    response = requests.post(
+        url,
+        headers={
+            "xi-api-key": settings.elevenlabs_api_key,
+            "accept": "audio/mpeg",
+            "content-type": "application/json",
+        },
+        json={"text": script.strip(), "model_id": settings.elevenlabs_model_id},
+        timeout=60,
+    )
+    response.raise_for_status()
+    output_dir = outputs_dir() / "voiceovers"
+    output_dir.mkdir(parents=True, exist_ok=True)
+    path = output_dir / f"voiceover-{uuid.uuid4().hex}.mp3"
+    path.write_bytes(response.content)
+    return {
+        "prompt": prompt,
+        "content_text": script.strip(),
+        "file_path": str(path),
+        "model_used": f"{model}+elevenlabs",
+    }

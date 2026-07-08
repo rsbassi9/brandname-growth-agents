@@ -86,6 +86,24 @@ class Settings(BaseSettings):
         validation_alias=AliasChoices("BRAND_AI_IMAGE_GENERATION_ENABLED", "AI_IMAGE_GENERATION_ENABLED"),
     )
 
+    # Optional TTS. Defaults keep P4-2 stub-first and test-safe.
+    tts_provider: str = Field(
+        default="",
+        validation_alias=AliasChoices("BRAND_TTS_PROVIDER", "TTS_PROVIDER"),
+    )
+    elevenlabs_api_key: str = Field(
+        default="",
+        validation_alias=AliasChoices("BRAND_ELEVENLABS_API_KEY", "ELEVENLABS_API_KEY"),
+    )
+    elevenlabs_voice_id: str = Field(
+        default="",
+        validation_alias=AliasChoices("BRAND_ELEVENLABS_VOICE_ID", "ELEVENLABS_VOICE_ID"),
+    )
+    elevenlabs_model_id: str = Field(
+        default="eleven_multilingual_v2",
+        validation_alias=AliasChoices("BRAND_ELEVENLABS_MODEL_ID", "ELEVENLABS_MODEL_ID"),
+    )
+
     # Shopify Admin API (legacy env names accepted). The public store URL is
     # `shopify_url` above.
     shopify_store_domain: str = Field(

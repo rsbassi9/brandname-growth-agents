@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { CheckCircle2, Clock3, Copy, Image, Loader2, PanelsTopLeft, RotateCcw, Video, Wand2 } from "lucide-react";
+import { CheckCircle2, Clock3, Copy, Image, Loader2, Mic2, PanelsTopLeft, RotateCcw, Video, Wand2 } from "lucide-react";
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import type { ComponentType } from "react";
 import { useLocation } from "react-router-dom";
@@ -28,6 +28,7 @@ const assetTypes: Array<{ value: AssetType; label: string; icon: ComponentType<{
   { value: "image_concept", label: "Image Concept", icon: Image },
   { value: "carousel", label: "Carousel", icon: PanelsTopLeft },
   { value: "video_script", label: "Video Script", icon: Video },
+  { value: "voiceover", label: "Voiceover", icon: Mic2 },
 ];
 
 interface PlaygroundDefaults {

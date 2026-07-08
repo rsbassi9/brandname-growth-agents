@@ -119,6 +119,53 @@ def test_generate_video_script_creates_structured_prompt_pack(client) -> None:
     assert "Higgsfield" not in json.dumps(pack)
 
 
+def test_generate_voiceover_script_only_in_local_mode(client) -> None:
+    response = client.post(
+        "/api/v1/generate",
+        json={"type": "voiceover", "brief": "Voice line for the source painting reel", "params": {}},
+    )
+    assert response.status_code == 200
+    job = wait_for_job(client, response.json()["job_id"])
+    assert job["status"] == "succeeded", job["message"]
+    detail = client.get(f"/api/v1/assets/{response.json()['asset_id']}").json()
+    version = detail["versions"][0]
+    assert detail["type"] == "voiceover"
+    assert version["file_path"] is None
+    assert "TTS not configured" in version["content_text"]
+
+
+def test_voiceover_elevenlabs_helper_writes_mp3(app_env, monkeypatch) -> None:
+    from app.services.generation import _voiceover_result
+    from app.settings import reset_settings_cache
+
+    class Response:
+        content = b"mp3-bytes"
+
+        def raise_for_status(self) -> None:
+            return None
+
+    calls = []
+
+    def fake_post(url, headers, json, timeout):
+        calls.append({"url": url, "headers": headers, "json": json, "timeout": timeout})
+        return Response()
+
+    monkeypatch.setenv("BRAND_TTS_PROVIDER", "elevenlabs")
+    monkeypatch.setenv("BRAND_ELEVENLABS_API_KEY", "test-key")
+    monkeypatch.setenv("BRAND_ELEVENLABS_VOICE_ID", "voice-123")
+    reset_settings_cache()
+    monkeypatch.setattr("app.services.generation.requests.post", fake_post)
+
+    result = _voiceover_result("prompt", "A short voiceover.", "text-model")
+    assert calls[0]["url"].endswith("/v1/text-to-speech/voice-123")
+    assert calls[0]["headers"]["xi-api-key"] == "test-key"
+    assert calls[0]["json"]["text"] == "A short voiceover."
+    assert result["file_path"].endswith(".mp3")
+    from pathlib import Path
+
+    assert Path(result["file_path"]).read_bytes() == b"mp3-bytes"
+
+
 def test_create_video_prompt_pack_from_asset(client) -> None:
     source = _generate_copy(client, "Caption source for a reel")
     wait_for_job(client, source["job_id"])

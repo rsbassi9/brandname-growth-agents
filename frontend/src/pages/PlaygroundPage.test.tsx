@@ -79,7 +79,33 @@ describe("PlaygroundPage", () => {
         }
         if (url.endsWith("/api/v1/generate") && init?.method === "POST") {
           const body = JSON.parse(String(init.body || "{}")) as { type?: string };
-          return response({ job_id: "job-1", asset_id: body.type === "video_script" ? 77 : 42 });
+          const assetId = body.type === "video_script" ? 77 : body.type === "voiceover" ? 78 : 42;
+          return response({ job_id: "job-1", asset_id: assetId });
+        }
+        if (url.endsWith("/api/v1/assets/78")) {
+          return response({
+            id: 78,
+            campaign_id: null,
+            type: "voiceover",
+            title: "Voiceover",
+            status: "draft",
+            source_path: null,
+            created_at: "2026-07-07T12:00:00",
+            versions: [
+              {
+                id: 8,
+                asset_id: 78,
+                version_no: 1,
+                prompt_snapshot: "Prompt",
+                params_json: "{}",
+                content_text: "# Voiceover script draft\n\nTTS not configured (local-only mode): script-only version.",
+                file_path: null,
+                model_used: "local-deterministic",
+                created_at: "2026-07-07T12:00:01",
+                is_selected: true,
+              },
+            ],
+          });
         }
         if (url.endsWith("/api/v1/assets/77")) {
           return response({
@@ -190,6 +216,31 @@ describe("PlaygroundPage", () => {
     expect(screen.getByRole("tab", { name: /muapi.ai/i })).toHaveAttribute("aria-selected", "true");
     await userEvent.click(screen.getByRole("tab", { name: /runway/i }));
     expect(screen.getByText("runway prompt")).toBeInTheDocument();
+  });
+
+  it("creates a script-only voiceover from the UI", async () => {
+    renderPage();
+    await userEvent.click(screen.getByRole("button", { name: /voiceover/i }));
+    await userEvent.type(screen.getByLabelText(/brief/i), "Narrate the source painting drop");
+    await userEvent.click(screen.getByRole("button", { name: /generate/i }));
+
+    await waitFor(() => expect(MockEventSource.instances).toHaveLength(1));
+    act(() => {
+      MockEventSource.instances[0].emit("completion", {
+        id: "job-1",
+        kind: "generate_asset",
+        status: "succeeded",
+        progress_pct: 100,
+        message: "done",
+        payload_json: "{}",
+        result_json: JSON.stringify({ asset_id: 78, version_no: 1 }),
+        created_at: "2026-07-07T12:00:00",
+        finished_at: "2026-07-07T12:00:02",
+      });
+    });
+
+    expect(await screen.findByText(/tts not configured/i)).toBeInTheDocument();
+    expect(screen.getByText(/version 1/i)).toBeInTheDocument();
   });
 });
 
