@@ -187,7 +187,7 @@ This phase makes the platform LEARN: everything digested (photos, products, feed
 Engagement data enters ONLY via file import (manual CSV export or paste). Meta/TikTok/Instagram APIs are explicitly OUT of scope in this phase.
 
 **P8-1. Tables:** `published_posts` (id, calendar_item_id FK nullable, asset_id FK nullable, channel enum: instagram|tiktok|facebook|other, external_ref nullable, permalink nullable, published_at, created_at); `post_metrics` (id, published_post_id FK, captured_at, impressions/reach/likes/comments/shares/saves/clicks — all nullable INT, engagement_rate REAL computed at insert as (likes+comments+shares+saves)/reach, NULL when reach is 0/NULL). Dedupe key (published_post_id, captured_at).
-**P8-2. Import:** `POST /api/v1/performance/import` (multipart CSV + channel): auto-detect Instagram and TikTok export header formats per the pinned import spec below (unknown headers → response lists detected columns for the UI's manual-mapping step). Rows upsert `published_posts` by (channel, permalink or external_ref) and append `post_metrics`. UI: import wizard in a new "Performance" tab of the Learn lane (upload → mapping preview table → confirm), plus a paste-a-table fallback; visual target for the whole tab: `docs/design-targets/performance-tab.html` (P2-0 token variables).
+**P8-2. Import:** `POST /api/v1/performance/import` (multipart CSV + channel): auto-detect Instagram and TikTok export header formats per the pinned import spec below (unknown headers → response lists detected columns for the UI's manual-mapping step). Rows upsert `published_posts` by (channel, permalink or external_ref) and append `post_metrics`. UI: import wizard in a new "Performance" tab of the Learn lane (upload → mapping preview table → confirm), plus a paste-a-table fallback.
 
 > **P8-2 pinned import spec (researched 2026-07; binding):**
 >
@@ -211,7 +211,7 @@ Engagement data enters ONLY via file import (manual CSV export or paste). Meta/T
 
 **Rule 8 amendment (owner-approved 2026-07-07): `@dnd-kit/core` + `@dnd-kit/sortable` are the ONLY new frontend dependencies permitted for this phase.**
 
-**P9-1. Views + drag:** Calendar gains a week view alongside month (visual target: `docs/design-targets/calendar-dnd.html` — match its layout, drag/ghost/drop states, and component composition, implemented with the P2-0 token variables). Every item draggable to another day/slot via dnd-kit → optimistic update + `PATCH /api/v1/calendar/{id}` {date, slot}; roll back with an error toast on failure. Keep dnd-kit default keyboard sensors (accessibility).
+**P9-1. Views + drag:** Calendar gains a week view alongside month. Every item draggable to another day/slot via dnd-kit → optimistic update + `PATCH /api/v1/calendar/{id}` {date, slot}; roll back with an error toast on failure. Keep dnd-kit default keyboard sensors (accessibility).
 **P9-2. Unscheduled tray:** right rail listing draft assets that have no calendar item (existing assets API filter), searchable by type. Dragging one onto a day creates a calendar_item linked to that asset (POST, optimistic).
 **P9-3. Channel color coding:** extend `tokens.css` with muted channel hues derived from the P2-0 neutral palette — coral remains selection/primary-action ONLY. Channel chip on every calendar item.
 **P9-4. Suggested slots:** ghost chips (dashed hairline outline, "Suggested · Thu 18:00") rendered from P8-4 best-times for the item's channel; dropping on a ghost (or clicking it) schedules that slot. Hidden entirely when P8 has no qualifying cells.
