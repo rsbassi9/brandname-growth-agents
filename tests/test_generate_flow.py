@@ -159,6 +159,45 @@ def test_generate_voiceover_script_only_in_local_mode(client) -> None:
     assert "TTS not configured" in version["content_text"]
 
 
+def test_create_ad_brief_from_ads_router(client, app_env) -> None:
+    import json
+
+    source_dir = app_env / "shoot"
+    source_dir.mkdir()
+    (source_dir / "front.jpg").write_bytes(b"jpg")
+    source = client.post(
+        "/api/v1/source-assets/index",
+        json={"origin": "local", "path": str(source_dir), "tags": ["front-design"]},
+    ).json()["items"][0]
+    creative = _generate_copy(client, "Creative source caption")
+    wait_for_job(client, creative["job_id"])
+
+    response = client.post(
+        "/api/v1/ads/briefs",
+        json={
+            "objective": "Sales",
+            "audience": "Warm drop audience",
+            "placement": "Instagram Feed + Reels",
+            "hook": "Source work, now worn",
+            "asset_id": creative["asset_id"],
+            "source_asset_id": source["id"],
+        },
+    )
+    assert response.status_code == 200, response.text
+    job = wait_for_job(client, response.json()["job_id"])
+    assert job["status"] == "succeeded", job["message"]
+    detail = client.get(f"/api/v1/assets/{response.json()['asset_id']}").json()
+    assert detail["type"] == "ad_brief"
+    pack = json.loads(detail["versions"][0]["content_text"])
+    assert pack["kind"] == "ad_brief"
+    assert len(pack["primary_text"]) == 3
+    assert len(pack["headlines"]) == 3
+    assert "Meta" not in pack["manual_use"] or "No Meta API integration" in pack["manual_use"]
+    params = json.loads(detail["versions"][0]["params_json"])
+    assert params["linked_asset_id"] == creative["asset_id"]
+    assert params["source_asset_id"] == source["id"]
+
+
 def test_voiceover_elevenlabs_helper_writes_mp3(app_env, monkeypatch) -> None:
     from app.services.generation import _voiceover_result
     from app.settings import reset_settings_cache

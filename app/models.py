@@ -21,7 +21,7 @@ from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from .db import Base
 
-ASSET_TYPES = ("copy", "image_concept", "carousel", "video_script", "voiceover")
+ASSET_TYPES = ("copy", "image_concept", "carousel", "video_script", "voiceover", "ad_brief")
 ASSET_STATUSES = ("draft", "selected", "archived")
 JOB_STATUSES = ("queued", "running", "succeeded", "failed")
 SOURCE_ASSET_ORIGINS = ("drive", "local", "shopify")

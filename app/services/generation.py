@@ -30,6 +30,7 @@ AGENT_FOR_TYPE = {
     "carousel": "creative_composer",
     "video_script": "content_creator",
     "voiceover": "content_creator",
+    "ad_brief": "ad_strategist",
 }
 
 LOCAL_MODEL_LABEL = "local-deterministic"
@@ -130,6 +131,10 @@ def _generate_local(asset_type: str, brief: str, params: dict[str, Any], prompt:
         )
         return {"prompt": prompt, "content_text": content, "file_path": None, "model_used": LOCAL_MODEL_LABEL}
 
+    if asset_type == "ad_brief":
+        content = json.dumps(_ad_brief_pack(headline, brief, params), ensure_ascii=False, indent=2)
+        return {"prompt": prompt, "content_text": content, "file_path": None, "model_used": LOCAL_MODEL_LABEL}
+
     # Default: copy.
     content = "\n".join(
         [
@@ -226,6 +231,44 @@ def _video_prompt_pack(headline: str, brief: str, params: dict[str, Any]) -> dic
             },
         },
         "manual_use": "Paste one provider prompt into the external generator. Review output before publishing.",
+    }
+
+
+def _ad_brief_pack(headline: str, brief: str, params: dict[str, Any]) -> dict[str, Any]:
+    objective = str(params.get("objective") or "Sales")
+    audience = str(params.get("audience") or "Warm streetwear audience")
+    placement = str(params.get("placement") or "Instagram Feed + Reels")
+    hook = str(params.get("hook") or headline)
+    creative = str(params.get("recommended_creative") or "Use the strongest linked Library asset or source photo.")
+    primary_text = [
+        f"{hook}. Built from source work, cut for the body. {brief.strip() or headline}",
+        f"A quiet drop signal: {hook}. Product proof first, story second.",
+        f"From canvas to garment without inventing the middle. {hook}.",
+    ]
+    headlines = [
+        headline[:60],
+        "Source work, now worn",
+        "Reconstructed for the drop",
+    ]
+    cta = str(params.get("cta") or "Shop now")
+    blocks = [
+        "\n".join(["Primary text 1:", primary_text[0], "", "Headline 1:", headlines[0], "", "CTA:", cta]),
+        "\n".join(["Primary text 2:", primary_text[1], "", "Headline 2:", headlines[1], "", "CTA:", cta]),
+        "\n".join(["Primary text 3:", primary_text[2], "", "Headline 3:", headlines[2], "", "CTA:", cta]),
+    ]
+    return {
+        "kind": "ad_brief",
+        "version": 1,
+        "objective": objective,
+        "audience": audience,
+        "placement": placement,
+        "hook": hook,
+        "primary_text": primary_text,
+        "headlines": headlines,
+        "cta": cta,
+        "recommended_creative": creative,
+        "manual_export_blocks": blocks,
+        "manual_use": "Copy these blocks into Meta Ads Manager manually. No Meta API integration is used.",
     }
 
 

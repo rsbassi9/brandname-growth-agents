@@ -1,4 +1,4 @@
-export type AssetType = "copy" | "image_concept" | "carousel" | "video_script" | "voiceover";
+export type AssetType = "copy" | "image_concept" | "carousel" | "video_script" | "voiceover" | "ad_brief";
 export type AssetStatus = "draft" | "selected" | "archived";
 export type JobStatus = "queued" | "running" | "succeeded" | "failed";
 
@@ -90,6 +90,18 @@ export interface SourceAssetIndexRequest {
   tags?: string[];
   product_handle?: string | null;
   limit?: number;
+}
+
+export interface AdBriefRequest {
+  objective: string;
+  audience: string;
+  placement: string;
+  hook: string;
+  brief?: string;
+  campaign_id?: number | null;
+  asset_id?: number | null;
+  source_asset_id?: number | null;
+  premium?: boolean;
 }
 
 export interface JobOut {
@@ -262,6 +274,8 @@ export const api = {
     request<GenerateResponse>(`/calendar/${encodeURIComponent(itemId)}/video-prompt-pack`, { method: "POST" }),
   generate: (payload: GenerateRequest) =>
     request<GenerateResponse>("/generate", { method: "POST", body: JSON.stringify(payload) }),
+  createAdBrief: (payload: AdBriefRequest) =>
+    request<GenerateResponse>("/ads/briefs", { method: "POST", body: JSON.stringify(payload) }),
   job: (jobId: string) => request<JobOut>(`/jobs/${jobId}`),
   assets: (params: {
     type?: string;

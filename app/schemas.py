@@ -7,7 +7,7 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
-AssetType = Literal["copy", "image_concept", "carousel", "video_script", "voiceover"]
+AssetType = Literal["copy", "image_concept", "carousel", "video_script", "voiceover", "ad_brief"]
 AssetStatus = Literal["draft", "selected", "archived"]
 JobStatus = Literal["queued", "running", "succeeded", "failed"]
 SourceAssetOrigin = Literal["drive", "local", "shopify"]
@@ -54,6 +54,30 @@ class SourceAssetIndexRequest(BaseModel):
     tags: list[str] = Field(default_factory=list)
     product_handle: str | None = None
     limit: int = Field(default=100, ge=1, le=500)
+
+
+class AdBriefRequest(BaseModel):
+    objective: str = Field(min_length=1)
+    audience: str = Field(min_length=1)
+    placement: str = "Instagram Feed + Reels"
+    hook: str = Field(min_length=1)
+    brief: str = ""
+    campaign_id: int | None = None
+    asset_id: int | None = None
+    source_asset_id: int | None = None
+    premium: bool = False
+
+
+class AdBriefContent(BaseModel):
+    objective: str
+    audience: str
+    placement: str
+    hook: str
+    primary_text: list[str] = Field(min_length=3, max_length=3)
+    headlines: list[str] = Field(min_length=3, max_length=3)
+    cta: str
+    recommended_creative: str
+    manual_export_blocks: list[str]
 
 
 class JobOut(BaseModel):

@@ -43,6 +43,7 @@ const assetTypes: Array<{ value: "" | AssetType; label: string }> = [
   { value: "carousel", label: "Carousel" },
   { value: "video_script", label: "Video Script" },
   { value: "voiceover", label: "Voiceover" },
+  { value: "ad_brief", label: "Ad Brief" },
 ];
 
 const statuses: Array<{ value: "" | AssetStatus; label: string }> = [
