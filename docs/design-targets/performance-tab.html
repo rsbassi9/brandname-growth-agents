@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Design target — Performance tab (P8)</title>
+<!-- BINDING VISUAL TARGET for P8 (Learn lane > Performance). Static reference only, never shipped.
+     Values below mirror frontend/src/styles/tokens.css (gallery palette, HSL).
+     App code must use var(- -token) exclusively (Rule 10 scan). -->
+<style>
+  :root{
+    --base:hsl(42 22% 96%); --surface:hsl(0 0% 100%); --raised:hsl(45 17% 98%);
+    --neutral:hsl(48 14% 93%); --neutral-strong:hsl(50 11% 82%);
+    --ink:hsl(60 2% 17%); --ink-muted:hsl(60 2% 34%);
+    --coral:hsl(15 67% 52%); --coral-soft:hsl(14 57% 94%);
+    --success:hsl(149 43% 31%); --success-soft:hsl(146 45% 94%);
+    --danger:hsl(0 71% 42%); --danger-soft:hsl(0 86% 96%);
+  }
+  *{box-sizing:border-box; margin:0}
+  body{background:var(--base); color:var(--ink); font:14px/1.5 Inter,system-ui,sans-serif; padding:24px}
+  h1{font-size:20px; font-weight:800}
+  .sub{color:var(--ink-muted); font-size:13px; margin:2px 0 16px}
+  .steps{display:flex; gap:8px; margin-bottom:16px; font-size:12px; font-weight:700}
+  .step{padding:6px 14px; border-radius:999px; border:1px solid var(--neutral-strong); color:var(--ink-muted); background:var(--surface)}
+  .step.done{color:var(--success); border-color:var(--success)}
+  .step.now{color:var(--surface); background:var(--coral); border-color:var(--coral)}
+  .grid{display:grid; grid-template-columns:2fr 1fr; gap:14px}
+  .card{background:var(--surface); border:1px solid var(--neutral-strong); border-radius:12px; padding:16px}
+  .card h2{font-size:12px; text-transform:uppercase; letter-spacing:.06em; color:var(--ink-muted); margin-bottom:10px}
+  table{width:100%; border-collapse:collapse; font-size:13px}
+  th{text-align:left; color:var(--ink-muted); font-size:11px; text-transform:uppercase; letter-spacing:.05em; padding:6px 8px; border-bottom:1px solid var(--neutral-strong)}
+  td{padding:8px; border-bottom:1px solid var(--neutral)}
+  .map{font-size:11px; font-weight:700; color:var(--success)}
+  .map.miss{color:var(--danger)}
+  .kpis{display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:14px}
+  .kpi{background:var(--surface); border:1px solid var(--neutral-strong); border-radius:12px; padding:12px 14px}
+  .kpi b{display:block; font-size:20px; font-variant-numeric:tabular-nums}
+  .kpi span{font-size:11px; color:var(--ink-muted)}
+  .heat{display:grid; grid-template-columns:38px repeat(7,1fr); gap:3px; font-size:10px; color:var(--ink-muted)}
+  .heat .h{display:grid; place-items:center; padding:2px 0}
+  .cell{height:22px; border-radius:5px; background:var(--neutral)}
+  .c1{background:var(--coral-soft)} .c2{background:hsl(14 57% 84%)} .c3{background:var(--coral)}
+  .insight{border-left:3px solid var(--success); background:var(--success-soft); border-radius:0 10px 10px 0; padding:8px 12px; font-size:13px; margin-bottom:8px}
+  .insight.bad{border-color:var(--danger); background:var(--danger-soft)}
+  .note{font-size:11px; color:var(--ink-muted); margin-top:8px}
+</style>
+</head>
+<body>
+<h1>Performance</h1>
+<div class="sub">Learn lane · manual CSV import — Meta Business Suite (90-day windows) &amp; TikTok Studio (60-day)</div>
+
+<div class="steps">
+  <span class="step done">1 · Upload</span>
+  <span class="step now">2 · Mapping preview</span>
+  <span class="step">3 · Confirm</span>
+</div>
+
+<div class="grid">
+  <div>
+    <div class="card" style="margin-bottom:14px">
+      <h2>Detected columns — instagram_content_jul.csv</h2>
+      <table>
+        <thead><tr><th>File header</th><th>Maps to</th><th>Sample</th></tr></thead>
+        <tbody>
+          <tr><td>Publish time</td><td class="map">posted_at</td><td>2026-07-02 18:04</td></tr>
+          <tr><td>Permalink</td><td class="map">external_ref</td><td>instagram.com/p/DK…</td></tr>
+          <tr><td>Post type</td><td class="map">post_type</td><td>Reel</td></tr>
+          <tr><td>Views</td><td class="map">views</td><td>12,408</td></tr>
+          <tr><td>Likes</td><td class="map">likes</td><td>931</td></tr>
+          <tr><td>Saved</td><td class="map">saves</td><td>88</td></tr>
+          <tr><td>SomeNewMetric</td><td class="map miss">unmapped → meta_json</td><td>0.42</td></tr>
+        </tbody>
+      </table>
+      <div class="note">Unmapped columns are kept in meta_json. Fix a mapping manually if auto-detect got it wrong.</div>
+    </div>
+
+    <div class="kpis">
+      <div class="kpi"><b>34</b><span>posts imported</span></div>
+      <div class="kpi"><b>4.8%</b><span>median engagement</span></div>
+      <div class="kpi"><b>Reels</b><span>best format</span></div>
+      <div class="kpi"><b>Thu 18:00</b><span>best slot (n=5)</span></div>
+    </div>
+
+    <div class="card">
+      <h2>Best times — engagement rate by weekday × hour (cells with n ≥ 3)</h2>
+      <div class="heat">
+        <span></span><span class="h">Mon</span><span class="h">Tue</span><span class="h">Wed</span><span class="h">Thu</span><span class="h">Fri</span><span class="h">Sat</span><span class="h">Sun</span>
+        <span class="h">09</span><i class="cell c1"></i><i class="cell"></i><i class="cell c1"></i><i class="cell c1"></i><i class="cell"></i><i class="cell"></i><i class="cell c2"></i>
+        <span class="h">12</span><i class="cell c2"></i><i class="cell c1"></i><i class="cell"></i><i class="cell c2"></i><i class="cell c1"></i><i class="cell c2"></i><i class="cell c3"></i>
+        <span class="h">18</span><i class="cell c2"></i><i class="cell c2"></i><i class="cell c1"></i><i class="cell c3"></i><i class="cell c2"></i><i class="cell c1"></i><i class="cell"></i>
+        <span class="h">21</span><i class="cell"></i><i class="cell c1"></i><i class="cell c2"></i><i class="cell c2"></i><i class="cell c1"></i><i class="cell"></i><i class="cell"></i>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Brand Brain insights from this import</h2>
+    <div class="insight">Reel with hook "POV: your hoodie actually fits" hit 9.1% ER on Instagram — top quartile.</div>
+    <div class="insight">Carousel "Fabric weights explained" drove 3× median saves.</div>
+    <div class="insight bad">Static product flat-lays sit in the bottom quartile across both channels.</div>
+    <div class="note">Written as metric_insight docs → retrieved by future generations (P7).</div>
+  </div>
+</div>
+</body>
+</html>
