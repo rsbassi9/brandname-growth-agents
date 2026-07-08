@@ -177,7 +177,7 @@ This phase makes the platform LEARN: everything digested (photos, products, feed
 **P7-2. Embedding service** `app/services/brain.py`: `embed_texts(list[str])` through the existing OpenAI client wrapper (`BRAND_EMBED_MODEL` setting, honors `BRAND_OPENAI_BASE_URL` so NIM/Ollama endpoints work). When `LOCAL_ONLY_AGENT_RUNS=true`: deterministic hashing vectorizer (feature-hash tokens → 256-dim float32, L2-normalized; identical input → identical vector) — tests use ONLY this path. `search(query, k=5, kinds=None)` = cosine similarity in numpy over vectors loaded from SQLite. No vector DB (corpus is thousands of docs); tag `TODO(fable-review)` if it ever exceeds ~50k.
 **P7-3. Ingestion:** (a) hooks — on `asset_versions` insert and `feedback_events` insert, enqueue a new job kind `brain_index`; (b) backfill CLI `python -m app.services.brain backfill` — idempotent via the UNIQUE constraint — covering existing versions, feedback, Shopify products (ported `shopify.py`, read-only), and `brand_context/*.md` (ingest as data; never modify — Rule 6).
 **P7-4. Retrieval-grounded generation:** `services/generation.py` prepends a "BRAND MEMORY" block to every generation prompt: latest `brand_profile_versions` profile + top-5 similar docs, ranking winners first (is_selected versions and positive feedback). Injected document ids MUST be recorded in `prompt_snapshot`/params so every generation is auditable. Playground shows a read-only "memory used" disclosure row under results.
-**P7-5. Profile distillation:** weekly scheduled job on the P3-1 scheduler (cadence in `settings_kv`, off by default) `distill_brand_profile`: agent reads recent feedback_events + selected-vs-unselected version pairs → writes a NEW `brand_profile_versions` row (sections: voice rules, banned phrases, visual codes, proven hooks, audience notes). Strategy Hub "Know" lane renders the current profile + version history with a diff view. Old versions are never deleted.
+**P7-5. Profile distillation:** weekly scheduled job on the P3-1 scheduler (cadence in `settings_kv`, off by default) `distill_brand_profile`: agent reads recent feedback_events + selected-vs-unselected version pairs → writes a NEW `brand_profile_versions` row. Prompt (binding): use APPENDIX A verbatim — do not paraphrase or extend it. Strategy Hub "Know" lane renders the current profile + version history with a diff view. Old versions are never deleted.
 **P7-6. Tests** (min 15): hashing vectorizer determinism; cosine ranking golden fixture; both ingestion hooks fire; backfill idempotent; injected memory ids recorded in prompt_snapshot; distillation with mocked agent creates an immutable new version; local-only mode makes zero network calls (assert at the wrapper).
 
 **GATE P7:** `pytest -q` green; local-only smoke: backfill → generate a Copy asset → its prompt_snapshot lists injected memory ids; Know lane shows profile v1.
@@ -227,3 +227,33 @@ Engagement data enters ONLY via file import (manual CSV export or paste). Meta/T
 **P11-5. Tests** (min 12): fan-out orchestration incl. partial failure + retry; recycle window + quartile selection math; standup assembly with mocked agent; add-to-calendar action.
 
 **GATE P11 (FINAL):** full P5-gate fresh-clone simulation PLUS, in local-only mode with zero network calls: brain backfill, fixture metrics import, `repurpose_shoot` on fixture source assets, and a generated standup report visible in the UI.
+---
+
+## APPENDIX A — Brand profile distillation prompt (binding; P7-5 uses this VERBATIM)
+
+Store as a module-level constant in the distillation job module. `{placeholders}` are filled by code; nothing else may be altered.
+
+**SYSTEM:**
+
+> You are the brand strategist for BRAND NAME, a streetwear label. You distill observed evidence into an operating brand profile that other agents follow when generating content. You work ONLY from the evidence provided — no generic marketing advice, no invented rules.
+>
+> OUTPUT CONTRACT: respond with ONLY markdown containing exactly these five H2 sections, in this order: `## Voice rules`, `## Banned phrases`, `## Visual codes`, `## Proven hooks`, `## Audience notes`.
+>
+> HARD CONSTRAINTS:
+> 1. Every bullet must cite the evidence ids it derives from, in parentheses at the end (e.g. `(fb_123, pair_45)`). A bullet with no citation is invalid.
+> 2. Prefer patterns from SELECTED versions and positive feedback; a pattern appearing only in unselected/negative material may ONLY appear under Banned phrases or as a "avoid" rule.
+> 3. Carry forward rules from the current profile unless newer evidence contradicts them; when reversing or removing a rule, add a bullet noting the reversal with the contradicting ids.
+> 4. Banned phrases must actually appear in rejected or negatively-received material — never ban speculatively.
+> 5. Maximum 40 bullets total across all sections; each bullet at most 2 sentences, written as an imperative instruction.
+> 6. If a section has insufficient evidence this period, write exactly: `Insufficient evidence this period.` — never pad with plausible-sounding filler.
+
+**USER (template):**
+
+> CURRENT PROFILE (v{version_no}): {current_profile_md}
+> FEEDBACK EVENTS since {since_date} (id, target, sentiment, text): {feedback_events}
+> SELECTED vs UNSELECTED version pairs (pair id, selected text/params, unselected text/params): {version_pairs}
+> METRIC INSIGHTS (if any): {metric_insights}
+>
+> Write the new profile markdown now.
+
+**Wiring (binding):** the job records every evidence id passed into the prompt in `distilled_from_json`, so each profile version is auditable against exactly what it saw. Responses missing any of the five H2 sections are logged and dropped — the job does NOT write a profile version that period. The P7-6 distillation test asserts the constant matches this appendix text and that a mocked five-section response creates an immutable new version.
