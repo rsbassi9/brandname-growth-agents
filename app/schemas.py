@@ -167,6 +167,24 @@ class DailyWorkflowRunOut(BaseModel):
     job_id: str
 
 
+class WorkflowRunStepOut(BaseModel):
+    name: str
+    status: str
+    asset_id: int | None = None
+    source_path: str = ""
+
+
+class WorkflowRunReportOut(BaseModel):
+    id: str
+    status: JobStatus
+    progress_pct: int
+    message: str
+    mode: str = ""
+    created_at: datetime
+    finished_at: datetime | None
+    steps: list[WorkflowRunStepOut] = Field(default_factory=list)
+
+
 class StrategyDocOut(BaseModel):
     name: str
     content: str

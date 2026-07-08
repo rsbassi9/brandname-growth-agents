@@ -12,6 +12,7 @@ import {
   X,
 } from "lucide-react";
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
@@ -69,6 +70,7 @@ function selectedVersion(asset?: AssetDetailOut | null) {
 
 export function LibraryPage() {
   const queryClient = useQueryClient();
+  const [searchParams] = useSearchParams();
   const [type, setType] = useState<"" | AssetType>("");
   const [status, setStatus] = useState<"" | AssetStatus>("");
   const [search, setSearch] = useState("");
@@ -110,6 +112,13 @@ export function LibraryPage() {
 
   const items = assets.data?.pages.flatMap((page) => page.items) || [];
   const total = assets.data?.pages[0]?.total ?? 0;
+
+  useEffect(() => {
+    const assetId = Number(searchParams.get("asset"));
+    if (Number.isInteger(assetId) && assetId > 0) {
+      setSelectedAssetId(assetId);
+    }
+  }, [searchParams]);
 
   const detail = useQuery({
     queryKey: ["assets", selectedAssetId],

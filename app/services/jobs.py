@@ -17,7 +17,7 @@ import json
 import logging
 import sys
 import uuid
-from datetime import datetime
+from datetime import date, datetime, timedelta
 from pathlib import Path
 from typing import Any
 
@@ -25,7 +25,7 @@ from sqlalchemy import func, select
 
 from ..db import session_scope
 from ..db import init_db
-from ..models import Asset, AssetVersion, Job
+from ..models import Asset, AssetVersion, CalendarItem, Job
 from ..settings import get_settings
 
 logger = logging.getLogger(__name__)
@@ -227,7 +227,8 @@ async def _handle_run_daily_workflow(job_id: str, payload: dict[str, Any]) -> di
         paths = await asyncio.to_thread(run_local_daily_workflow)
         _update_job(job_id, progress_pct=75, message="persisting workflow assets")
         assets = _persist_daily_output_assets(paths, mode="local_only", source=str(payload.get("source", "manual")))
-        return {"mode": "local_only", "paths": paths, "assets": assets}
+        calendar_items = _persist_daily_calendar_items(assets, job_id=job_id)
+        return {"mode": "local_only", "paths": paths, "assets": assets, "calendar_items": calendar_items}
 
     # TODO(fable-review): the full in-app agent pipeline lands in P3; until
     # then the live path reuses the legacy orchestrator entry point.
@@ -270,6 +271,35 @@ def _persist_daily_output_assets(paths: dict[str, str], mode: str, source: str) 
                     )
                 )
             persisted.append({"output_key": name, "asset_id": asset.id, "source_path": str(path)})
+    return persisted
+
+
+def _persist_daily_calendar_items(assets: list[dict[str, Any]], job_id: str) -> list[dict[str, Any]]:
+    persisted: list[dict[str, Any]] = []
+    start_date = date.today()
+    with session_scope() as session:
+        for index, item in enumerate(assets):
+            output_key = str(item.get("output_key", "output"))
+            calendar_id = f"daily-workflow-{start_date.isoformat()}-{output_key}"
+            row = session.get(CalendarItem, calendar_id)
+            if row is None:
+                row = CalendarItem(
+                    id=calendar_id,
+                    date=(start_date + timedelta(days=index)).isoformat(),
+                    status="draft",
+                    asset_id=int(item["asset_id"]) if item.get("asset_id") is not None else None,
+                    data_json=json.dumps(
+                        {
+                            "title": f"Daily workflow: {output_key.replace('_', ' ').title()}",
+                            "workflow_job_id": job_id,
+                            "output_key": output_key,
+                            "source_path": item.get("source_path", ""),
+                        },
+                        ensure_ascii=False,
+                    ),
+                )
+                session.add(row)
+            persisted.append({"id": row.id, "date": row.date, "asset_id": row.asset_id, "status": row.status})
     return persisted
 
 

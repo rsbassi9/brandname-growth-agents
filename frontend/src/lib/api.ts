@@ -31,6 +31,24 @@ export interface DailyWorkflowRunOut {
   job_id: string;
 }
 
+export interface WorkflowRunStepOut {
+  name: string;
+  status: string;
+  asset_id: number | null;
+  source_path: string;
+}
+
+export interface WorkflowRunReportOut {
+  id: string;
+  status: JobStatus;
+  progress_pct: number;
+  message: string;
+  mode: string;
+  created_at: string;
+  finished_at: string | null;
+  steps: WorkflowRunStepOut[];
+}
+
 export interface GenerateRequest {
   type: AssetType;
   campaign_id?: number | null;
@@ -207,6 +225,7 @@ export const api = {
     }),
   runDailyWorkflow: () =>
     request<DailyWorkflowRunOut>("/system/daily-workflow/run", { method: "POST" }),
+  dailyWorkflowRuns: () => request<WorkflowRunReportOut[]>("/system/daily-workflow/runs"),
   generate: (payload: GenerateRequest) =>
     request<GenerateResponse>("/generate", { method: "POST", body: JSON.stringify(payload) }),
   job: (jobId: string) => request<JobOut>(`/jobs/${jobId}`),

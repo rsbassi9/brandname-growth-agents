@@ -43,7 +43,16 @@ def test_daily_workflow_job_local_only_uses_fallback(client) -> None:
     assert result["mode"] == "local_only"
     assert Path(result["paths"]["report"]).exists()
     assert len(result["assets"]) == 8
+    assert len(result["calendar_items"]) == 8
     assert client.get(f"/api/v1/assets/{result['assets'][0]['asset_id']}").status_code == 200
+    assert client.get("/api/v1/calendar").json()
+
+    runs = client.get("/api/v1/system/daily-workflow/runs").json()
+    assert runs[0]["id"] == job_id
+    assert runs[0]["status"] == "succeeded"
+    assert runs[0]["mode"] == "local_only"
+    assert runs[0]["steps"][0]["asset_id"] == result["assets"][0]["asset_id"]
+    assert runs[0]["steps"][0]["status"] == "asset_created"
 
 
 def test_daily_workflow_schedule_defaults_off(client) -> None:
@@ -91,6 +100,7 @@ def test_one_shot_daily_workflow_cli_path(app_env) -> None:
     result = json.loads(snapshot["result_json"])
     assert result["mode"] == "local_only"
     assert len(result["assets"]) == 8
+    assert len(result["calendar_items"]) == 8
 
 
 def test_daily_growth_workflow_uses_job_service_and_artifacts() -> None:

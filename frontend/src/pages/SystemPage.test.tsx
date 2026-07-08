@@ -40,6 +40,27 @@ describe("P3-1 System daily workflow controls", () => {
         if (url.pathname === "/api/v1/system/daily-workflow/run" && init?.method === "POST") {
           return response({ job_id: "job-123" });
         }
+        if (url.pathname === "/api/v1/system/daily-workflow/runs") {
+          return response([
+            {
+              id: "job-abc-123",
+              status: "succeeded",
+              progress_pct: 100,
+              message: "done",
+              mode: "local_only",
+              created_at: "2026-07-08T12:00:00",
+              finished_at: "2026-07-08T12:01:00",
+              steps: [
+                {
+                  name: "content_candidates",
+                  status: "asset_created",
+                  asset_id: 42,
+                  source_path: "outputs/content_candidates/demo.md",
+                },
+              ],
+            },
+          ]);
+        }
         if (url.pathname === "/api/v1/system/daily-workflow") {
           return response({ enabled: false, time_local: "09:00", last_enqueued_date: "" });
         }
@@ -73,6 +94,11 @@ describe("P3-1 System daily workflow controls", () => {
 
     await userEvent.click(screen.getByRole("button", { name: /run now/i }));
     expect(await screen.findByText(/started job job-123/i)).toBeInTheDocument();
+    expect(await screen.findByText(/workflow runs/i)).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: /open content candidates asset in library/i })).toHaveAttribute(
+      "href",
+      "/library?asset=42",
+    );
   });
 });
 

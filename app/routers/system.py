@@ -2,9 +2,23 @@
 
 from __future__ import annotations
 
-from fastapi import APIRouter, HTTPException
+import json
 
-from ..schemas import DailyWorkflowRunOut, DailyWorkflowScheduleIn, DailyWorkflowScheduleOut, HealthOut, ModeOut
+from fastapi import APIRouter, Depends, HTTPException, Query
+from sqlalchemy import select
+from sqlalchemy.orm import Session
+
+from ..db import get_session
+from ..models import Job
+from ..schemas import (
+    DailyWorkflowRunOut,
+    DailyWorkflowScheduleIn,
+    DailyWorkflowScheduleOut,
+    HealthOut,
+    ModeOut,
+    WorkflowRunReportOut,
+    WorkflowRunStepOut,
+)
 from ..services.scheduler import enqueue_daily_workflow, get_daily_workflow_schedule, set_daily_workflow_schedule
 from ..settings import get_settings
 
@@ -55,3 +69,62 @@ def update_daily_workflow_schedule(payload: DailyWorkflowScheduleIn) -> DailyWor
 @router.post("/daily-workflow/run", response_model=DailyWorkflowRunOut)
 def run_daily_workflow_now() -> DailyWorkflowRunOut:
     return DailyWorkflowRunOut(job_id=enqueue_daily_workflow("manual"))
+
+
+@router.get("/daily-workflow/runs", response_model=list[WorkflowRunReportOut])
+def daily_workflow_runs(
+    session: Session = Depends(get_session),
+    limit: int = Query(default=20, ge=1, le=100),
+) -> list[WorkflowRunReportOut]:
+    rows = session.execute(
+        select(Job)
+        .where(Job.kind == "run_daily_workflow")
+        .order_by(Job.created_at.desc())
+        .limit(limit)
+    ).scalars().all()
+    return [_workflow_run_out(row) for row in rows]
+
+
+def _workflow_run_out(job: Job) -> WorkflowRunReportOut:
+    result = _load_result(job.result_json)
+    steps: list[WorkflowRunStepOut] = []
+    for item in result.get("assets") or []:
+        name = str(item.get("output_key", "output"))
+        asset_id = item.get("asset_id")
+        steps.append(
+            WorkflowRunStepOut(
+                name=name,
+                status="asset_created" if asset_id else "output_written",
+                asset_id=int(asset_id) if asset_id is not None else None,
+                source_path=str(item.get("source_path", "")),
+            )
+        )
+    if not steps:
+        for name, source_path in (result.get("paths") or {}).items():
+            steps.append(
+                WorkflowRunStepOut(
+                    name=str(name),
+                    status="output_written" if job.status == "succeeded" else job.status,
+                    source_path=str(source_path),
+                )
+            )
+    return WorkflowRunReportOut(
+        id=job.id,
+        status=job.status,
+        progress_pct=job.progress_pct,
+        message=job.message,
+        mode=str(result.get("mode", "")),
+        created_at=job.created_at,
+        finished_at=job.finished_at,
+        steps=steps,
+    )
+
+
+def _load_result(result_json: str | None) -> dict:
+    if not result_json:
+        return {}
+    try:
+        result = json.loads(result_json)
+    except json.JSONDecodeError:
+        return {}
+    return result if isinstance(result, dict) else {}
