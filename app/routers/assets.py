@@ -10,7 +10,7 @@ from sqlalchemy.orm import Session
 
 from ..db import get_session
 from ..models import Asset, AssetVersion
-from ..schemas import AssetDetailOut, AssetListOut, AssetOut, GenerateResponse
+from ..schemas import AssetDetailOut, AssetListOut, AssetOut, CritiqueOut, GenerateResponse
 from ..services.jobs import job_queue
 
 router = APIRouter(prefix="/assets", tags=["assets"])
@@ -81,6 +81,36 @@ def select_version(asset_id: int, version_no: int, session: Session = Depends(ge
     return asset
 
 
+@router.post("/{asset_id}/versions/{version_no}/critique", response_model=CritiqueOut)
+def critique_version(asset_id: int, version_no: int, session: Session = Depends(get_session)) -> CritiqueOut:
+    asset, version = _asset_and_version(session, asset_id, version_no)
+    stored = json.loads(version.params_json or "{}")
+    critique = stored.get("critique") or _build_critique(asset, version)
+    stored["critique"] = critique
+    version.params_json = json.dumps(stored, ensure_ascii=False)
+    session.commit()
+    return CritiqueOut(asset_id=asset.id, version_no=version.version_no, critique=critique)
+
+
+@router.post("/{asset_id}/versions/{version_no}/iterate", response_model=GenerateResponse)
+def iterate_version(asset_id: int, version_no: int, session: Session = Depends(get_session)) -> GenerateResponse:
+    asset, version = _asset_and_version(session, asset_id, version_no)
+    stored = json.loads(version.params_json or "{}")
+    critique = stored.get("critique") or _build_critique(asset, version)
+    stored["critique"] = critique
+    version.params_json = json.dumps(stored, ensure_ascii=False)
+    brief = str(stored.get("brief") or version.content_text or asset.title)
+    params = {k: v for k, v in stored.items() if k not in {"type"}}
+    params["iteration_of"] = version.version_no
+    params["critique"] = critique
+    session.commit()
+    job_id = job_queue.enqueue(
+        "generate_asset",
+        {"asset_id": asset.id, "type": asset.type, "brief": brief, "params": params},
+    )
+    return GenerateResponse(job_id=job_id, asset_id=asset.id)
+
+
 @router.post("/{asset_id}/regenerate", response_model=GenerateResponse)
 def regenerate(asset_id: int, session: Session = Depends(get_session)) -> GenerateResponse:
     asset = session.get(Asset, asset_id)
@@ -139,3 +169,33 @@ def create_video_prompt_pack(asset_id: int, session: Session = Depends(get_sessi
         },
     )
     return GenerateResponse(job_id=job_id, asset_id=video_asset.id)
+
+
+def _asset_and_version(session: Session, asset_id: int, version_no: int) -> tuple[Asset, AssetVersion]:
+    asset = session.get(Asset, asset_id)
+    if asset is None:
+        raise HTTPException(status_code=404, detail="Asset not found")
+    version = session.execute(
+        select(AssetVersion)
+        .where(AssetVersion.asset_id == asset_id, AssetVersion.version_no == version_no)
+        .limit(1)
+    ).scalar_one_or_none()
+    if version is None:
+        raise HTTPException(status_code=404, detail="Version not found")
+    return asset, version
+
+
+def _build_critique(asset: Asset, version: AssetVersion) -> str:
+    content = (version.content_text or version.file_path or asset.title or "").strip()
+    sample = content[:280] if content else asset.title
+    return "\n".join(
+        [
+            f"QA critique for {asset.type} v{version.version_no}:",
+            "- Keep the concept grounded in the approved source imagery and product truth.",
+            "- Make the first line or frame more specific to the garment, source painting, or reconstruction detail.",
+            "- Remove any generic fashion phrasing; preserve the quiet, premium system language.",
+            "- Next iteration should sharpen one concrete visual detail and one manual publishing cue.",
+            "",
+            f"Version evidence: {sample}",
+        ]
+    )

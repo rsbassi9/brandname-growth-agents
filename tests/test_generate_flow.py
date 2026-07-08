@@ -71,6 +71,31 @@ def test_select_missing_version_404(client) -> None:
     assert response.status_code == 404
 
 
+def test_critique_and_iterate_version(client) -> None:
+    import json
+
+    payload = _generate_copy(client)
+    wait_for_job(client, payload["job_id"])
+
+    critique_response = client.post(f"/api/v1/assets/{payload['asset_id']}/versions/1/critique")
+    assert critique_response.status_code == 200, critique_response.text
+    critique = critique_response.json()["critique"]
+    assert "QA critique" in critique
+
+    detail = client.get(f"/api/v1/assets/{payload['asset_id']}").json()
+    stored = json.loads(detail["versions"][0]["params_json"])
+    assert stored["critique"] == critique
+
+    iterate_response = client.post(f"/api/v1/assets/{payload['asset_id']}/versions/1/iterate")
+    assert iterate_response.status_code == 200, iterate_response.text
+    job = wait_for_job(client, iterate_response.json()["job_id"])
+    assert job["status"] == "succeeded", job["message"]
+    detail = client.get(f"/api/v1/assets/{payload['asset_id']}").json()
+    assert [version["version_no"] for version in detail["versions"]] == [1, 2]
+    assert "Critique to address" in detail["versions"][1]["prompt_snapshot"]
+    assert json.loads(detail["versions"][1]["params_json"])["iteration_of"] == 1
+
+
 def test_sse_emits_completion(client) -> None:
     payload = _generate_copy(client)
     events = []

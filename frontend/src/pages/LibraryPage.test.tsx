@@ -123,6 +123,12 @@ describe("LibraryPage", () => {
             ],
           });
         }
+        if (url.pathname === "/api/v1/assets/42/versions/1/critique" && init?.method === "POST") {
+          return response({ asset_id: 42, version_no: 1, critique: "QA critique: sharpen source proof." });
+        }
+        if (url.pathname === "/api/v1/assets/42/versions/1/iterate" && init?.method === "POST") {
+          return response({ job_id: "job-iterate", asset_id: 42 });
+        }
         if (url.pathname === "/api/v1/assets/42/video-prompt-pack" && init?.method === "POST") {
           return response({ job_id: "job-video", asset_id: 77 });
         }
@@ -171,6 +177,31 @@ describe("LibraryPage", () => {
     await waitFor(() =>
       expect(fetch).toHaveBeenCalledWith(
         "/api/v1/assets/42/video-prompt-pack",
+        expect.objectContaining({ method: "POST" }),
+      ),
+    );
+  });
+
+  it("critiques and iterates an asset version", async () => {
+    renderPage();
+
+    await userEvent.click(await screen.findByText("Drop caption"));
+    const firstVersion = await screen.findByText("First caption take");
+    const firstVersionPanel = firstVersion.closest("section");
+    expect(firstVersionPanel).not.toBeNull();
+
+    await userEvent.click(within(firstVersionPanel as HTMLElement).getByRole("button", { name: /^critique$/i }));
+    await waitFor(() =>
+      expect(fetch).toHaveBeenCalledWith(
+        "/api/v1/assets/42/versions/1/critique",
+        expect.objectContaining({ method: "POST" }),
+      ),
+    );
+
+    await userEvent.click(within(firstVersionPanel as HTMLElement).getByRole("button", { name: /^iterate$/i }));
+    await waitFor(() =>
+      expect(fetch).toHaveBeenCalledWith(
+        "/api/v1/assets/42/versions/1/iterate",
         expect.objectContaining({ method: "POST" }),
       ),
     );

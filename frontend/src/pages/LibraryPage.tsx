@@ -154,6 +154,32 @@ export function LibraryPage() {
     },
   });
 
+  const critique = useMutation({
+    mutationFn: ({ assetId, versionNo }: { assetId: number; versionNo: number }) =>
+      api.critiqueVersion(assetId, versionNo),
+    onSuccess: (_response, variables) => {
+      queryClient.invalidateQueries({ queryKey: ["assets", variables.assetId] });
+    },
+  });
+
+  const iterate = useMutation({
+    mutationFn: ({ assetId, versionNo }: { assetId: number; versionNo: number }) =>
+      api.iterateVersion(assetId, versionNo),
+    onSuccess: (response) => {
+      setRegenJob({
+        id: response.job_id,
+        kind: "generate_asset",
+        status: "queued",
+        progress_pct: 0,
+        message: "queued",
+        payload_json: "{}",
+        result_json: null,
+        created_at: new Date().toISOString(),
+        finished_at: null,
+      });
+    },
+  });
+
   const createVideoPack = useMutation({
     mutationFn: (assetId: number) => api.createAssetVideoPromptPack(assetId),
     onSuccess: (response) => {
@@ -340,8 +366,12 @@ export function LibraryPage() {
         selectingVersion={selectVersion.variables?.versionNo}
         onRegenerate={(assetId) => regenerate.mutate(assetId)}
         onCreateVideoPack={(assetId) => createVideoPack.mutate(assetId)}
+        onCritique={(assetId, versionNo) => critique.mutate({ assetId, versionNo })}
+        onIterate={(assetId, versionNo) => iterate.mutate({ assetId, versionNo })}
         regenerating={regenerate.isPending || ["queued", "running"].includes(regenJob?.status || "")}
         creatingVideoPack={createVideoPack.isPending}
+        critiquingVersion={critique.variables?.versionNo}
+        iteratingVersion={iterate.variables?.versionNo}
         regenJob={regenJob}
       />
     </div>
@@ -393,8 +423,12 @@ function AssetDrawer({
   selectingVersion,
   onRegenerate,
   onCreateVideoPack,
+  onCritique,
+  onIterate,
   regenerating,
   creatingVideoPack,
+  critiquingVersion,
+  iteratingVersion,
   regenJob,
 }: {
   asset: AssetDetailOut | null;
@@ -405,8 +439,12 @@ function AssetDrawer({
   selectingVersion?: number;
   onRegenerate: (assetId: number) => void;
   onCreateVideoPack: (assetId: number) => void;
+  onCritique: (assetId: number, versionNo: number) => void;
+  onIterate: (assetId: number, versionNo: number) => void;
   regenerating: boolean;
   creatingVideoPack: boolean;
+  critiquingVersion?: number;
+  iteratingVersion?: number;
   regenJob: JobOut | null;
 }) {
   const chosen = selectedVersion(asset);
@@ -482,7 +520,11 @@ function AssetDrawer({
                     version={version}
                     selected={version.is_selected}
                     selecting={selectingVersion === version.version_no}
+                    critiquing={critiquingVersion === version.version_no}
+                    iterating={iteratingVersion === version.version_no}
                     onSelect={() => onSelect(asset.id, version.version_no)}
+                    onCritique={() => onCritique(asset.id, version.version_no)}
+                    onIterate={() => onIterate(asset.id, version.version_no)}
                   />
                 ))}
               </div>
@@ -502,13 +544,22 @@ function VersionPanel({
   version,
   selected,
   selecting,
+  critiquing,
+  iterating,
   onSelect,
+  onCritique,
+  onIterate,
 }: {
   version: AssetVersionOut;
   selected: boolean;
   selecting: boolean;
+  critiquing: boolean;
+  iterating: boolean;
   onSelect: () => void;
+  onCritique: () => void;
+  onIterate: () => void;
 }) {
+  const critique = versionCritique(version);
   return (
     <Panel className={cn("space-y-3", selected && "border-accent bg-accent-soft")}>
       <div className="flex flex-wrap items-start justify-between gap-3">
@@ -531,6 +582,22 @@ function VersionPanel({
           {selected ? "Selected" : "Select this take"}
         </Button>
       </div>
+      <div className="flex flex-wrap gap-2">
+        <Button type="button" size="sm" variant="outline" disabled={critiquing} onClick={onCritique}>
+          {critiquing ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
+          Critique
+        </Button>
+        <Button type="button" size="sm" variant="outline" disabled={iterating} onClick={onIterate}>
+          {iterating ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
+          Iterate
+        </Button>
+      </div>
+      {critique ? (
+        <div className="rounded-md border border-border bg-surface p-3">
+          <p className="text-xs font-semibold uppercase text-muted-foreground">QA critique</p>
+          <pre className="mt-2 whitespace-pre-wrap break-words font-sans text-sm leading-6">{critique}</pre>
+        </div>
+      ) : null}
       <div className="max-h-80 overflow-auto rounded-md border border-border bg-background p-3">
         {version.content_text && parseVideoPromptPack(version.content_text) ? (
           <VideoPromptPackView content={version.content_text} compact />
@@ -542,4 +609,13 @@ function VersionPanel({
       </div>
     </Panel>
   );
+}
+
+function versionCritique(version: AssetVersionOut) {
+  try {
+    const params = JSON.parse(version.params_json || "{}") as { critique?: unknown };
+    return typeof params.critique === "string" ? params.critique : "";
+  } catch {
+    return "";
+  }
 }

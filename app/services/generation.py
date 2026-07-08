@@ -39,18 +39,17 @@ def build_prompt(asset_type: str, brief: str, params: dict[str, Any]) -> str:
     settings = get_settings()
     tone = str(params.get("tone", "premium, minimal, mysterious"))
     template = str(params.get("template", "default"))
-    return "\n".join(
-        [
-            f"Brand: {settings.brand_name} (streetwear, {settings.shopify_url})",
-            f"Asset type: {asset_type}",
-            f"Tone: {tone}",
-            f"Template: {template}",
-            "Ground every claim in the approved raw photoshoot/product assets; never invent garments.",
-            "",
-            "Brief:",
-            brief.strip(),
-        ]
-    )
+    lines = [
+        f"Brand: {settings.brand_name} (streetwear, {settings.shopify_url})",
+        f"Asset type: {asset_type}",
+        f"Tone: {tone}",
+        f"Template: {template}",
+        "Ground every claim in the approved raw photoshoot/product assets; never invent garments.",
+    ]
+    if params.get("critique"):
+        lines.extend(["", "Critique to address:", str(params["critique"]).strip()])
+    lines.extend(["", "Brief:", brief.strip()])
+    return "\n".join(lines)
 
 
 async def generate_content(asset_type: str, brief: str, params: dict[str, Any]) -> dict[str, Any]:

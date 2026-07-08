@@ -25,6 +25,12 @@ class GenerateResponse(BaseModel):
     asset_id: int
 
 
+class CritiqueOut(BaseModel):
+    asset_id: int
+    version_no: int
+    critique: str
+
+
 class JobOut(BaseModel):
     model_config = ConfigDict(from_attributes=True)
 

@@ -62,6 +62,12 @@ export interface GenerateResponse {
   asset_id: number;
 }
 
+export interface CritiqueOut {
+  asset_id: number;
+  version_no: number;
+  critique: string;
+}
+
 export interface JobOut {
   id: string;
   kind: string;
@@ -246,6 +252,10 @@ export const api = {
   asset: (assetId: number) => request<AssetDetailOut>(`/assets/${assetId}`),
   selectVersion: (assetId: number, versionNo: number) =>
     request<AssetDetailOut>(`/assets/${assetId}/versions/${versionNo}/select`, { method: "POST" }),
+  critiqueVersion: (assetId: number, versionNo: number) =>
+    request<CritiqueOut>(`/assets/${assetId}/versions/${versionNo}/critique`, { method: "POST" }),
+  iterateVersion: (assetId: number, versionNo: number) =>
+    request<GenerateResponse>(`/assets/${assetId}/versions/${versionNo}/iterate`, { method: "POST" }),
   regenerate: (assetId: number) =>
     request<GenerateResponse>(`/assets/${assetId}/regenerate`, { method: "POST" }),
   librarySummary: () => request<LibrarySummaryOut>("/library/summary"),
