@@ -117,6 +117,24 @@ export interface StrategyDocOut {
   content: string;
 }
 
+export interface FeedbackIn {
+  output_path?: string;
+  rating?: number;
+  comment?: string;
+  improvement_request?: string;
+  category?: string;
+}
+
+export interface FeedbackOut {
+  id: string;
+  created_at: string;
+  output_path: string;
+  rating: number | null;
+  comment: string;
+  improvement_request: string;
+  category: string;
+}
+
 export interface LibrarySummaryOut {
   total: number;
   by_type: Record<string, number>;
@@ -208,6 +226,8 @@ export const api = {
     }),
   strategyDocs: () => request<StrategyDocOut[]>("/strategy/context"),
   learnSummary: () => request<{ summary: string }>("/strategy/learn/summary"),
+  postFeedback: (payload: FeedbackIn) =>
+    request<FeedbackOut>("/strategy/learn/feedback", { method: "POST", body: JSON.stringify(payload) }),
 };
 
 export function createJobEventSource(jobId: string) {

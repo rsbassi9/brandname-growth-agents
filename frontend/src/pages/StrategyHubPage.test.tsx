@@ -1,0 +1,157 @@
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { render, screen, waitFor } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { MemoryRouter } from "react-router-dom";
+
+import { StrategyHubPage } from "@/pages/StrategyHubPage";
+
+function renderPage() {
+  const queryClient = new QueryClient({
+    defaultOptions: { queries: { retry: false }, mutations: { retry: false } },
+  });
+  return render(
+    <QueryClientProvider client={queryClient}>
+      <MemoryRouter>
+        <StrategyHubPage />
+      </MemoryRouter>
+    </QueryClientProvider>,
+  );
+}
+
+describe("StrategyHubPage", () => {
+  beforeEach(() => {
+    Object.assign(navigator, {
+      clipboard: { writeText: vi.fn(async () => undefined) },
+    });
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
+        const url = new URL(String(input), "http://localhost");
+        if (url.pathname === "/api/v1/strategy/context") {
+          return response([
+            { name: "brand_brief", content: "BRAND NAME is built around source-painting truth." },
+            { name: "growth_strategy", content: "Use launches, proof, and manual publishing." },
+          ]);
+        }
+        if (url.pathname === "/api/v1/calendar") {
+          return response([
+            {
+              id: "post-1",
+              date: "2026-07-08",
+              status: "draft",
+              asset_id: 42,
+              data: { title: "Launch teaser" },
+            },
+          ]);
+        }
+        if (url.pathname === "/api/v1/assets") {
+          return response({
+            items: [
+              {
+                id: 42,
+                campaign_id: null,
+                type: "copy",
+                title: "Drop caption",
+                status: "draft",
+                source_path: null,
+                created_at: "2026-07-07T12:00:00",
+              },
+            ],
+            total: 1,
+            limit: 60,
+            offset: 0,
+          });
+        }
+        if (url.pathname === "/api/v1/assets/42") {
+          return response({
+            id: 42,
+            campaign_id: null,
+            type: "copy",
+            title: "Drop caption",
+            status: "draft",
+            source_path: null,
+            created_at: "2026-07-07T12:00:00",
+            versions: [
+              {
+                id: 1,
+                asset_id: 42,
+                version_no: 1,
+                prompt_snapshot: "Prompt",
+                params_json: "{}",
+                content_text: "Caption draft: Same system, now worn.",
+                file_path: null,
+                model_used: "local-deterministic",
+                created_at: "2026-07-07T12:00:01",
+                is_selected: true,
+              },
+            ],
+          });
+        }
+        if (url.pathname === "/api/v1/strategy/learn/summary") {
+          return response({ summary: "Recent feedback prefers product-truth captions." });
+        }
+        if (url.pathname === "/api/v1/strategy/learn/feedback" && init?.method === "POST") {
+          return response(
+            {
+              id: "fb-1",
+              created_at: "2026-07-07T12:00:00",
+              output_path: "asset:42",
+              rating: 5,
+              comment: "Sharper.",
+              improvement_request: "More proof.",
+              category: "strategy_hub",
+            },
+            201,
+          );
+        }
+        return response({}, 404);
+      }),
+    );
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it("renders strategy lanes and posts learning feedback", async () => {
+    renderPage();
+
+    expect(await screen.findByText(/source-painting truth/i)).toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole("button", { name: /plan/i }));
+    expect(await screen.findByText("Launch teaser")).toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole("button", { name: /^build$/i }));
+    expect(await screen.findByText("Drop caption")).toBeInTheDocument();
+
+    await userEvent.click(screen.getByRole("button", { name: /ship manually/i }));
+    await userEvent.selectOptions(screen.getByLabelText(/^asset$/i), "42");
+    expect(await screen.findByText(/caption draft/i)).toBeInTheDocument();
+    await userEvent.click(screen.getByRole("button", { name: /^copy$/i }));
+    expect(navigator.clipboard.writeText).toHaveBeenCalledWith("Caption draft: Same system, now worn.");
+
+    await userEvent.click(screen.getByRole("button", { name: /^learn$/i }));
+    expect(await screen.findByText(/product-truth captions/i)).toBeInTheDocument();
+    await userEvent.type(screen.getByLabelText(/output path/i), "asset:42");
+    await userEvent.selectOptions(screen.getByLabelText(/rating/i), "5");
+    await userEvent.type(screen.getByLabelText(/comment/i), "Sharper.");
+    await userEvent.type(screen.getByLabelText(/improvement request/i), "More proof.");
+    await userEvent.click(screen.getByRole("button", { name: /save feedback/i }));
+
+    await waitFor(() =>
+      expect(fetch).toHaveBeenCalledWith(
+        "/api/v1/strategy/learn/feedback",
+        expect.objectContaining({ method: "POST" }),
+      ),
+    );
+  });
+});
+
+function response(body: unknown, status = 200) {
+  return Promise.resolve({
+    ok: status >= 200 && status < 300,
+    status,
+    statusText: status === 404 ? "Not Found" : "OK",
+    json: async () => body,
+  } as Response);
+}
