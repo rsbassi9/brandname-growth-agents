@@ -154,6 +154,19 @@ class ModeOut(BaseModel):
     openai_base_url: str = ""
 
 
+class DailyWorkflowScheduleIn(BaseModel):
+    enabled: bool = False
+    time_local: str = Field(default="09:00", pattern=r"^\d{2}:\d{2}$")
+
+
+class DailyWorkflowScheduleOut(DailyWorkflowScheduleIn):
+    last_enqueued_date: str = ""
+
+
+class DailyWorkflowRunOut(BaseModel):
+    job_id: str
+
+
 class StrategyDocOut(BaseModel):
     name: str
     content: str

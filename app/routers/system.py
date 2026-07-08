@@ -2,9 +2,10 @@
 
 from __future__ import annotations
 
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 
-from ..schemas import HealthOut, ModeOut
+from ..schemas import DailyWorkflowRunOut, DailyWorkflowScheduleIn, DailyWorkflowScheduleOut, HealthOut, ModeOut
+from ..services.scheduler import enqueue_daily_workflow, get_daily_workflow_schedule, set_daily_workflow_schedule
 from ..settings import get_settings
 
 router = APIRouter(prefix="/system", tags=["system"])
@@ -26,3 +27,31 @@ def mode() -> ModeOut:
         model_premium=settings.model_premium,
         openai_base_url=settings.openai_base_url,
     )
+
+
+@router.get("/daily-workflow", response_model=DailyWorkflowScheduleOut)
+def daily_workflow_schedule() -> DailyWorkflowScheduleOut:
+    schedule = get_daily_workflow_schedule()
+    return DailyWorkflowScheduleOut(
+        enabled=schedule.enabled,
+        time_local=schedule.time_local,
+        last_enqueued_date=schedule.last_enqueued_date,
+    )
+
+
+@router.put("/daily-workflow", response_model=DailyWorkflowScheduleOut)
+def update_daily_workflow_schedule(payload: DailyWorkflowScheduleIn) -> DailyWorkflowScheduleOut:
+    try:
+        schedule = set_daily_workflow_schedule(payload.enabled, payload.time_local)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    return DailyWorkflowScheduleOut(
+        enabled=schedule.enabled,
+        time_local=schedule.time_local,
+        last_enqueued_date=schedule.last_enqueued_date,
+    )
+
+
+@router.post("/daily-workflow/run", response_model=DailyWorkflowRunOut)
+def run_daily_workflow_now() -> DailyWorkflowRunOut:
+    return DailyWorkflowRunOut(job_id=enqueue_daily_workflow("manual"))

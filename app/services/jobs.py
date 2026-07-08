@@ -197,7 +197,9 @@ async def _handle_run_daily_workflow(job_id: str, payload: dict[str, Any]) -> di
 
         _update_job(job_id, progress_pct=20, message="running deterministic local workflow")
         paths = await asyncio.to_thread(run_local_daily_workflow)
-        return {"mode": "local_only", "paths": paths}
+        _update_job(job_id, progress_pct=75, message="persisting workflow assets")
+        assets = _persist_daily_output_assets(paths, mode="local_only", source=str(payload.get("source", "manual")))
+        return {"mode": "local_only", "paths": paths, "assets": assets}
 
     # TODO(fable-review): the full in-app agent pipeline lands in P3; until
     # then the live path reuses the legacy orchestrator entry point.
@@ -206,6 +208,41 @@ async def _handle_run_daily_workflow(job_id: str, payload: dict[str, Any]) -> di
 
     result = await asyncio.to_thread(asyncio.run, run_daily_workflow())
     return {"mode": "live", "result": str(result)}
+
+
+def _persist_daily_output_assets(paths: dict[str, str], mode: str, source: str) -> list[dict[str, Any]]:
+    persisted: list[dict[str, Any]] = []
+    with session_scope() as session:
+        for name, raw_path in paths.items():
+            path = Path(raw_path)
+            content_text = path.read_text(encoding="utf-8") if path.exists() else ""
+            asset = session.execute(select(Asset).where(Asset.source_path == str(path))).scalar_one_or_none()
+            if asset is None:
+                asset = Asset(
+                    type="copy",
+                    title=f"Daily workflow: {name.replace('_', ' ').title()}",
+                    status="draft",
+                    source_path=str(path),
+                )
+                session.add(asset)
+                session.flush()
+                session.add(
+                    AssetVersion(
+                        asset_id=asset.id,
+                        version_no=1,
+                        prompt_snapshot=f"run_daily_workflow:{name}",
+                        params_json=json.dumps(
+                            {"workflow": "run_daily_workflow", "mode": mode, "source": source, "output_key": name},
+                            ensure_ascii=False,
+                        ),
+                        content_text=content_text,
+                        file_path=str(path),
+                        model_used=f"{mode}-daily-workflow",
+                        is_selected=True,
+                    )
+                )
+            persisted.append({"output_key": name, "asset_id": asset.id, "source_path": str(path)})
+    return persisted
 
 
 async def _handle_render_carousel(job_id: str, payload: dict[str, Any]) -> dict[str, Any]:

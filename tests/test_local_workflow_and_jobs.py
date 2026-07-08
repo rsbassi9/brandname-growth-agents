@@ -42,6 +42,42 @@ def test_daily_workflow_job_local_only_uses_fallback(client) -> None:
     result = json.loads(job["result_json"])
     assert result["mode"] == "local_only"
     assert Path(result["paths"]["report"]).exists()
+    assert len(result["assets"]) == 8
+    assert client.get(f"/api/v1/assets/{result['assets'][0]['asset_id']}").status_code == 200
+
+
+def test_daily_workflow_schedule_defaults_off(client) -> None:
+    payload = client.get("/api/v1/system/daily-workflow").json()
+    assert payload == {"enabled": False, "time_local": "09:00", "last_enqueued_date": ""}
+
+
+def test_daily_workflow_schedule_can_be_updated(client) -> None:
+    response = client.put("/api/v1/system/daily-workflow", json={"enabled": True, "time_local": "07:30"})
+    assert response.status_code == 200, response.text
+    assert response.json()["enabled"] is True
+    assert response.json()["time_local"] == "07:30"
+
+    fetched = client.get("/api/v1/system/daily-workflow").json()
+    assert fetched["enabled"] is True
+    assert fetched["time_local"] == "07:30"
+
+
+def test_due_scheduler_enqueues_once_per_day(client) -> None:
+    from datetime import datetime
+
+    from app.services.scheduler import enqueue_due_daily_workflow
+
+    client.put("/api/v1/system/daily-workflow", json={"enabled": True, "time_local": "07:30"})
+    first = enqueue_due_daily_workflow(datetime(2026, 7, 8, 7, 31))
+    second = enqueue_due_daily_workflow(datetime(2026, 7, 8, 12, 0))
+    assert first
+    assert second is None
+
+
+def test_manual_daily_workflow_endpoint_enqueues_job(client) -> None:
+    response = client.post("/api/v1/system/daily-workflow/run")
+    assert response.status_code == 200, response.text
+    assert response.json()["job_id"]
 
 
 def test_unknown_job_kind_rejected(client) -> None:

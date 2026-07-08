@@ -17,6 +17,7 @@ from .db import init_db
 from .routers import assets, calendar, campaigns, feed, jobs, library, playground, strategy, system
 from .services.backup import backup_loop
 from .services.jobs import job_queue
+from .services.scheduler import daily_workflow_scheduler
 from .settings import ROOT_DIR, get_settings
 
 logger = logging.getLogger(__name__)
@@ -26,6 +27,7 @@ logger = logging.getLogger(__name__)
 async def lifespan(app: FastAPI):
     init_db()
     await job_queue.start()
+    await daily_workflow_scheduler.start()
     backup_task: asyncio.Task | None = None
     if get_settings().backup_enabled:
         backup_task = asyncio.create_task(backup_loop(), name="nightly-backup")
@@ -36,6 +38,7 @@ async def lifespan(app: FastAPI):
             backup_task.cancel()
             with suppress(asyncio.CancelledError):
                 await backup_task
+        await daily_workflow_scheduler.stop()
         await job_queue.stop()
 
 

@@ -16,6 +16,21 @@ export interface HealthOut {
   brand: string;
 }
 
+export interface DailyWorkflowScheduleOut {
+  enabled: boolean;
+  time_local: string;
+  last_enqueued_date: string;
+}
+
+export interface DailyWorkflowScheduleIn {
+  enabled: boolean;
+  time_local: string;
+}
+
+export interface DailyWorkflowRunOut {
+  job_id: string;
+}
+
 export interface GenerateRequest {
   type: AssetType;
   campaign_id?: number | null;
@@ -184,6 +199,14 @@ function toQuery(params: Record<string, string | number | null | undefined>) {
 export const api = {
   mode: () => request<ModeOut>("/system/mode"),
   health: () => request<HealthOut>("/system/health"),
+  dailyWorkflowSchedule: () => request<DailyWorkflowScheduleOut>("/system/daily-workflow"),
+  updateDailyWorkflowSchedule: (payload: DailyWorkflowScheduleIn) =>
+    request<DailyWorkflowScheduleOut>("/system/daily-workflow", {
+      method: "PUT",
+      body: JSON.stringify(payload),
+    }),
+  runDailyWorkflow: () =>
+    request<DailyWorkflowRunOut>("/system/daily-workflow/run", { method: "POST" }),
   generate: (payload: GenerateRequest) =>
     request<GenerateResponse>("/generate", { method: "POST", body: JSON.stringify(payload) }),
   job: (jobId: string) => request<JobOut>(`/jobs/${jobId}`),
