@@ -87,9 +87,12 @@ def patch_item(item_id: str, payload: CalendarItemPatch, session: Session = Depe
         item.status = payload.status
     if payload.asset_id is not None:
         item.asset_id = payload.asset_id
-    if payload.data is not None:
+    if payload.data is not None or payload.slot is not None:
         merged = json.loads(item.data_json or "{}")
-        merged.update(payload.data)
+        if payload.data is not None:
+            merged.update(payload.data)
+        if payload.slot is not None:
+            merged["slot"] = payload.slot
         item.data_json = json.dumps(merged, ensure_ascii=False)
     session.commit()
     return _to_out(item)

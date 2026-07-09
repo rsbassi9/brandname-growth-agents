@@ -30,11 +30,12 @@ def test_calendar_crud_roundtrip(client) -> None:
 
     patched = client.patch(
         f"/api/v1/calendar/{item_id}",
-        json={"status": "approved", "data": {"caption": "New caption"}},
+        json={"status": "approved", "slot": "day", "data": {"caption": "New caption"}},
     ).json()
     assert patched["status"] == "approved"
     assert patched["data"]["hook"] == "A system begins."
     assert patched["data"]["caption"] == "New caption"
+    assert patched["data"]["slot"] == "day"
 
     listed = client.get("/api/v1/calendar", params={"month": "2026-07"}).json()
     assert [entry["id"] for entry in listed] == [item_id]

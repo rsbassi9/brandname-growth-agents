@@ -182,6 +182,7 @@ export interface CalendarItemIn {
 
 export interface CalendarItemPatch {
   date?: string | null;
+  slot?: string | null;
   status?: string | null;
   asset_id?: number | null;
   data?: Record<string, unknown> | null;

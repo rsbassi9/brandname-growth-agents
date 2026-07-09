@@ -281,6 +281,7 @@ class CalendarItemIn(BaseModel):
 
 class CalendarItemPatch(BaseModel):
     date: str | None = None
+    slot: str | None = None
     status: str | None = None
     asset_id: int | None = None
     data: dict[str, Any] | None = None

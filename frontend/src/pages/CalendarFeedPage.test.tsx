@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { render, screen, waitFor } from "@testing-library/react";
+import { fireEvent, render, screen, waitFor } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 
@@ -71,7 +71,13 @@ describe("P2-5 Calendar and Feed Grid", () => {
           return response(calendarItems);
         }
         if (url.pathname === "/api/v1/calendar/post-1" && init?.method === "PATCH") {
-          return response({ ...calendarItems[0], status: "scheduled" });
+          const patch = JSON.parse(String(init.body || "{}"));
+          return response({
+            ...calendarItems[0],
+            ...("date" in patch ? { date: patch.date } : {}),
+            ...("status" in patch ? { status: patch.status } : {}),
+            data: { ...calendarItems[0].data, ...("slot" in patch ? { slot: patch.slot } : {}) },
+          });
         }
         if (url.pathname === "/api/v1/calendar/post-1" && init?.method === "DELETE") {
           return response(null, 204);
@@ -118,6 +124,13 @@ describe("P2-5 Calendar and Feed Grid", () => {
         expect.objectContaining({ method: "PATCH" }),
       ),
     );
+
+    await userEvent.click(screen.getByRole("button", { name: /^week$/i }));
+    fireEvent.change(screen.getByLabelText(/move date/i), { target: { value: "2026-07-09" } });
+    await waitFor(() => {
+      const patchCalls = vi.mocked(fetch).mock.calls.filter(([input, init]) => String(input) === "/api/v1/calendar/post-1" && init?.method === "PATCH");
+      expect(patchCalls.some(([, init]) => init?.body === JSON.stringify({ date: "2026-07-09", slot: "day" }))).toBe(true);
+    });
 
     await userEvent.click(screen.getByRole("button", { name: /delete launch teaser/i }));
     await waitFor(() =>
