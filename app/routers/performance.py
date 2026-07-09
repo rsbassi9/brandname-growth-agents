@@ -8,9 +8,17 @@ from sqlalchemy.orm import Session
 
 from ..db import get_session
 from ..models import PublishedPost
-from ..schemas import PerformanceImportOut, PostMetricOut, PublishedPostLinkIn, PublishedPostListOut, PublishedPostOut
+from ..schemas import (
+    BestTimeSlotOut,
+    PerformanceImportOut,
+    PostMetricOut,
+    PublishedPostLinkIn,
+    PublishedPostListOut,
+    PublishedPostOut,
+)
 from ..services.performance import (
     PerformanceImportError,
+    best_times,
     import_performance_csv,
     link_published_post,
     parse_import_request_body,
@@ -18,6 +26,14 @@ from ..services.performance import (
 )
 
 router = APIRouter(prefix="/performance", tags=["performance"])
+
+
+@router.get("/best-times", response_model=list[BestTimeSlotOut])
+def performance_best_times(
+    session: Session = Depends(get_session),
+    channel: str | None = None,
+) -> list[BestTimeSlotOut]:
+    return [BestTimeSlotOut(**slot.__dict__) for slot in best_times(session, channel=channel)]
 
 
 @router.get("/posts", response_model=PublishedPostListOut)

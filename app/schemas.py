@@ -135,6 +135,14 @@ class PublishedPostLinkIn(BaseModel):
     asset_id: int | None = None
 
 
+class BestTimeSlotOut(BaseModel):
+    channel: PublishedPostChannel
+    weekday: int
+    hour: int
+    sample_size: int
+    mean_engagement_rate: float
+
+
 class SourceAssetIndexRequest(BaseModel):
     origin: SourceAssetOrigin = "local"
     path: str = ""

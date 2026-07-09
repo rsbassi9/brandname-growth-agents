@@ -50,6 +50,15 @@ class ImportResult:
     metrics: list[PostMetric] = field(default_factory=list)
 
 
+@dataclass(frozen=True)
+class BestTimeSlot:
+    channel: str
+    weekday: int
+    hour: int
+    sample_size: int
+    mean_engagement_rate: float
+
+
 class PerformanceImportError(ValueError):
     def __init__(self, message: str, detected_columns: list[str]) -> None:
         super().__init__(message)
@@ -91,6 +100,36 @@ def import_performance_csv(session: Session, channel: str, csv_text: str) -> Imp
     _auto_link_imported_posts(session, result.posts)
     _write_metric_insights(session, result.posts)
     return result
+
+
+def best_times(session: Session, channel: str | None = None) -> list[BestTimeSlot]:
+    query = select(PublishedPost)
+    if channel:
+        query = query.where(PublishedPost.channel == channel)
+    posts = session.execute(query.order_by(PublishedPost.id)).scalars().unique().all()
+    buckets: dict[tuple[str, int, int], list[float]] = {}
+    for post in posts:
+        if post.published_at is None:
+            continue
+        metric = _latest_metric(post)
+        if metric is None or metric.engagement_rate is None:
+            continue
+        key = (post.channel, post.published_at.weekday(), post.published_at.hour)
+        buckets.setdefault(key, []).append(metric.engagement_rate)
+
+    slots = [
+        BestTimeSlot(
+            channel=key[0],
+            weekday=key[1],
+            hour=key[2],
+            sample_size=len(values),
+            mean_engagement_rate=sum(values) / len(values),
+        )
+        for key, values in buckets.items()
+        if len(values) >= 3
+    ]
+    slots.sort(key=lambda slot: (-slot.mean_engagement_rate, slot.channel, slot.weekday, slot.hour))
+    return slots
 
 
 def _import_row(
