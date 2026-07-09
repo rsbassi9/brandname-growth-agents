@@ -23,7 +23,8 @@
 - ✅ **P5-3 COMPLETE** — `ruff check app --fix` is clean with the project FastAPI `Depends(...)` default rule exception recorded as `B008`; exact `except Exception: pass` scan in `app/` returns zero; untagged TODO scan returns zero outside this plan. Headless browser gate found and fixed a Playground saved-history crash (`D.map is not a function`) with a regression test. **Verified:** backend pytest 63/63; `npm test` 14/14.
 - ✅ **GATE P5 COMPLETE** — dependency install, idempotent legacy migration, backend pytest, `npm ci`, `npm run build`, `npm test`, UI token scan, server boot/health, headless Edge built-studio render, and live local-only generate flow all pass. Browser recheck confirms Playground renders instead of the saved-history crash page.
 - ✅ **P6 COMPLETE** — `docs/EXECUTION_REPORT.md` now records every P0-1 through P5-3 task with commit hashes and gate results, lists all `TODO(fable-review)` items, and notes no incomplete P0-P5 work.
-- **NEXT: P7-1** Brand Brain tables.
+- ✅ **P7-1 COMPLETE** — added Brand Brain ORM models and schemas for `brain_documents`, `brain_embeddings`, and immutable `brand_profile_versions`; verified table creation, uniqueness, nullable-ref append semantics, one-embedding-per-document, and profile version uniqueness. **Verified:** backend pytest 68/68.
+- **NEXT: P7-2** embedding service with local deterministic hashing vectorizer and cosine search.
 - ℹ️ **P7–P11 registered** — appended 2026-07-07 by Fable: P7 Brand Brain (retrieval memory + compounding brand profile), P8 performance ingestion & best-time model, P9 drag-and-drop calendar planner, P10 SEO team, P11 repurposing pipelines + weekly standup (new FINAL gate). Execute after P6, in order.
 
 ---

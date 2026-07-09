@@ -13,6 +13,7 @@ from sqlalchemy import (
     DateTime,
     ForeignKey,
     Integer,
+    LargeBinary,
     String,
     Text,
     UniqueConstraint,
@@ -25,6 +26,7 @@ ASSET_TYPES = ("copy", "image_concept", "carousel", "video_script", "voiceover",
 ASSET_STATUSES = ("draft", "selected", "archived")
 JOB_STATUSES = ("queued", "running", "succeeded", "failed")
 SOURCE_ASSET_ORIGINS = ("drive", "local", "shopify")
+BRAIN_DOCUMENT_KINDS = ("asset_version", "feedback", "product", "context_file", "metric_insight")
 
 
 class Campaign(Base):
@@ -85,6 +87,46 @@ class SourceAsset(Base):
     path: Mapped[str] = mapped_column(String(1000), nullable=False)
     tags_json: Mapped[str] = mapped_column(Text, default="[]", nullable=False)
     product_handle: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
+
+
+class BrainDocument(Base):
+    __tablename__ = "brain_documents"
+    __table_args__ = (UniqueConstraint("kind", "ref_id", name="uq_brain_document_kind_ref"),)
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    kind: Mapped[str] = mapped_column(String(64), nullable=False)
+    ref_id: Mapped[str | None] = mapped_column(String(255), nullable=True)
+    text: Mapped[str] = mapped_column(Text, nullable=False)
+    meta_json: Mapped[str] = mapped_column(Text, default="{}", nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
+
+    embedding: Mapped["BrainEmbedding | None"] = relationship(
+        back_populates="document", cascade="all, delete-orphan"
+    )
+
+
+class BrainEmbedding(Base):
+    __tablename__ = "brain_embeddings"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    document_id: Mapped[int] = mapped_column(ForeignKey("brain_documents.id"), unique=True, nullable=False)
+    model: Mapped[str] = mapped_column(String(120), nullable=False)
+    dim: Mapped[int] = mapped_column(Integer, nullable=False)
+    vector: Mapped[bytes] = mapped_column(LargeBinary, nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
+
+    document: Mapped[BrainDocument] = relationship(back_populates="embedding")
+
+
+class BrandProfileVersion(Base):
+    __tablename__ = "brand_profile_versions"
+    __table_args__ = (UniqueConstraint("version_no", name="uq_brand_profile_version_no"),)
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    version_no: Mapped[int] = mapped_column(Integer, nullable=False)
+    profile_md: Mapped[str] = mapped_column(Text, nullable=False)
+    distilled_from_json: Mapped[str] = mapped_column(Text, default="{}", nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
 
 

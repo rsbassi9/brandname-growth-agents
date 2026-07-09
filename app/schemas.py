@@ -11,6 +11,7 @@ AssetType = Literal["copy", "image_concept", "carousel", "video_script", "voiceo
 AssetStatus = Literal["draft", "selected", "archived"]
 JobStatus = Literal["queued", "running", "succeeded", "failed"]
 SourceAssetOrigin = Literal["drive", "local", "shopify"]
+BrainDocumentKind = Literal["asset_version", "feedback", "product", "context_file", "metric_insight"]
 
 
 class GenerateRequest(BaseModel):
@@ -46,6 +47,37 @@ class SourceAssetOut(BaseModel):
 class SourceAssetListOut(BaseModel):
     items: list[SourceAssetOut]
     total: int
+
+
+class BrainDocumentOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    kind: BrainDocumentKind
+    ref_id: str | None
+    text: str
+    meta_json: str
+    created_at: datetime
+
+
+class BrainEmbeddingOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    document_id: int
+    model: str
+    dim: int
+    created_at: datetime
+
+
+class BrandProfileVersionOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    version_no: int
+    profile_md: str
+    distilled_from_json: str
+    created_at: datetime
 
 
 class SourceAssetIndexRequest(BaseModel):
