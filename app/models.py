@@ -184,6 +184,16 @@ class PostMetric(Base):
         self.engagement_rate = total / self.reach
 
 
+class SeoAudit(Base):
+    __tablename__ = "seo_audits"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    product_handle: Mapped[str] = mapped_column(String(255), nullable=False, index=True)
+    score: Mapped[int] = mapped_column(Integer, nullable=False)
+    issues_json: Mapped[str] = mapped_column(Text, default="[]", nullable=False)
+    audited_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
+
+
 class CalendarItem(Base):
     __tablename__ = "calendar_items"
 

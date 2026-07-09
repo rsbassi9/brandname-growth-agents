@@ -4,6 +4,7 @@ Single asyncio worker started in the FastAPI lifespan. Jobs are persisted in
 the `jobs` table; results in `result_json`. Job kinds: generate_asset,
 run_daily_workflow, render_carousel, image_iterate, brain_index,
 distill_brand_profile.
+seo_audit.
 
 The run_daily_workflow handler checks LOCAL_ONLY_AGENT_RUNS and uses the
 deterministic port of src/local_workflow.py when true — this closes the legacy
@@ -37,6 +38,7 @@ JOB_KINDS = (
     "image_iterate",
     "brain_index",
     "distill_brand_profile",
+    "seo_audit",
 )
 
 
@@ -388,6 +390,19 @@ async def _handle_distill_brand_profile(job_id: str, payload: dict[str, Any]) ->
     return await distill_brand_profile()
 
 
+async def _handle_seo_audit(job_id: str, payload: dict[str, Any]) -> dict[str, Any]:
+    from .seo_audit import audit_products, persist_audits
+    from .shopify import ShopifyService
+
+    _update_job(job_id, progress_pct=30, message="auditing Shopify catalog")
+    preview = await asyncio.to_thread(ShopifyService().product_preview, int(payload.get("limit") or 80))
+    products = [product for product in preview.get("products", []) if isinstance(product, dict)]
+    with session_scope() as session:
+        rows = persist_audits(session, audit_products(products))
+        count = len(rows)
+    return {"audits": count}
+
+
 def _enqueue_brain_index(**payload: Any) -> None:
     if not any(value is not None for value in payload.values()):
         return
@@ -404,6 +419,7 @@ _HANDLERS = {
     "image_iterate": _handle_image_iterate,
     "brain_index": _handle_brain_index,
     "distill_brand_profile": _handle_distill_brand_profile,
+    "seo_audit": _handle_seo_audit,
 }
 
 # Application-wide queue instance (started/stopped by the FastAPI lifespan).

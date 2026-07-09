@@ -171,6 +171,20 @@ class PerformanceDashboardOut(BaseModel):
     by_asset_type: list[PerformanceAssetTypeOut] = Field(default_factory=list)
 
 
+class SeoAuditOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    product_handle: str
+    score: int
+    issues_json: str
+    audited_at: datetime
+
+
+class SeoAuditRunOut(BaseModel):
+    job_id: str
+
+
 class SourceAssetIndexRequest(BaseModel):
     origin: SourceAssetOrigin = "local"
     path: str = ""
