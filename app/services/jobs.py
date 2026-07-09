@@ -23,8 +23,7 @@ from typing import Any
 
 from sqlalchemy import func, select
 
-from ..db import session_scope
-from ..db import init_db
+from ..db import init_db, session_scope
 from ..models import Asset, AssetVersion, CalendarItem, Job
 from ..settings import get_settings
 

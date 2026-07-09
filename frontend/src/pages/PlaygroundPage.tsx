@@ -77,12 +77,23 @@ const initialDefaults: PlaygroundDefaults = {
   premium: localStorage.getItem(PREMIUM_MODEL_KEY) === "true",
 };
 
-function readJson<T>(key: string, fallback: T): T {
+function readObject<T extends object>(key: string, fallback: T): T {
   try {
     const raw = localStorage.getItem(key);
-    return raw ? ({ ...fallback, ...JSON.parse(raw) } as T) : fallback;
+    const parsed = raw ? JSON.parse(raw) : null;
+    return parsed && typeof parsed === "object" && !Array.isArray(parsed) ? ({ ...fallback, ...parsed } as T) : fallback;
   } catch {
     return fallback;
+  }
+}
+
+function readArray<T>(key: string): T[] {
+  try {
+    const raw = localStorage.getItem(key);
+    const parsed = raw ? JSON.parse(raw) : null;
+    return Array.isArray(parsed) ? parsed : [];
+  } catch {
+    return [];
   }
 }
 
@@ -107,12 +118,12 @@ export function PlaygroundPage() {
   const location = useLocation();
   const routeState = (location.state || {}) as PlaygroundRouteState;
   const mode = useQuery({ queryKey: ["system", "mode"], queryFn: api.mode });
-  const [defaults, setDefaults] = useState<PlaygroundDefaults>(() => readJson(DEFAULTS_KEY, initialDefaults));
+  const [defaults, setDefaults] = useState<PlaygroundDefaults>(() => readObject(DEFAULTS_KEY, initialDefaults));
   const [brief, setBrief] = useState("");
   const [title, setTitle] = useState("");
   const [campaignId, setCampaignId] = useState<number | null>(routeState.campaignId || null);
   const [campaignName, setCampaignName] = useState(routeState.campaignName || "");
-  const [history, setHistory] = useState<HistoryItem[]>(() => readJson<HistoryItem[]>(HISTORY_KEY, []));
+  const [history, setHistory] = useState<HistoryItem[]>(() => readArray<HistoryItem>(HISTORY_KEY));
   const [activeAssetId, setActiveAssetId] = useState<number | null>(null);
   const [activeJob, setActiveJob] = useState<JobOut | null>(null);
   const [jobError, setJobError] = useState("");

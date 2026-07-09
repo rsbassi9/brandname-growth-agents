@@ -11,7 +11,7 @@ extend-exclude = [".venv", "outputs", "memory", "dashboard", "pages", "site", "B
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "B", "UP"]
-ignore = ["E501"]
+ignore = ["E501", "B008"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

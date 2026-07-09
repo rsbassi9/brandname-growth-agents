@@ -181,6 +181,14 @@ describe("PlaygroundPage", () => {
     vi.unstubAllGlobals();
   });
 
+  it("ignores non-array saved history", async () => {
+    localStorage.setItem("brandname.playground.history", JSON.stringify({ stale: true }));
+
+    renderPage();
+
+    expect(await screen.findByText(/generated takes will appear/i)).toBeInTheDocument();
+  });
+
   it("submits a generate request and renders the completed version", async () => {
     renderPage();
     await userEvent.click(await screen.findByRole("button", { name: /front\.jpg/i }));
