@@ -33,6 +33,16 @@
   --color-gallery-warning-soft: 38 92% 94%;
   --color-gallery-danger: 0 71% 42%;
   --color-gallery-danger-soft: 0 86% 96%;
+  --channel-instagram: 284 10% 43%;
+  --channel-instagram-soft: 286 18% 93%;
+  --channel-tiktok: 198 13% 41%;
+  --channel-tiktok-soft: 200 21% 93%;
+  --channel-email: 88 11% 38%;
+  --channel-email-soft: 88 19% 92%;
+  --channel-facebook: 220 11% 42%;
+  --channel-facebook-soft: 220 19% 93%;
+  --channel-manual: var(--color-gallery-ink-muted);
+  --channel-manual-soft: var(--color-gallery-neutral);
 
   --background: var(--color-gallery-base);
   --foreground: var(--color-gallery-ink);

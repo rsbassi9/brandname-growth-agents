@@ -12,7 +12,7 @@ const calendarItems = [
     date: "2026-07-08",
     status: "draft",
     asset_id: 42,
-    data: { title: "Launch teaser" },
+    data: { title: "Launch teaser", channel: "Instagram" },
   },
 ];
 
@@ -22,7 +22,7 @@ const feedItems = [
     date: "2026-07-08",
     status: "draft",
     asset_id: 42,
-    data: { title: "Launch teaser" },
+    data: { title: "Launch teaser", channel: "Instagram" },
   },
   {
     id: "post-2",
@@ -129,6 +129,7 @@ describe("P2-5 Calendar and Feed Grid", () => {
     renderRoute("/calendar");
 
     expect(await screen.findByText("Launch teaser")).toBeInTheDocument();
+    expect(screen.getByText("Instagram")).toBeInTheDocument();
     await userEvent.type(screen.getByLabelText(/item title/i), "New drop post");
     await userEvent.clear(screen.getByLabelText(/^date$/i));
     await userEvent.type(screen.getByLabelText(/^date$/i), "2026-07-10");

@@ -109,6 +109,15 @@ function itemSlot(item: CalendarItemOut) {
   return String(item.data.slot || "day");
 }
 
+function channelKey(channel: string) {
+  const normalized = channel.toLowerCase().replace(/[^a-z]/g, "");
+  if (normalized.includes("instagram") || normalized === "ig") return "instagram";
+  if (normalized.includes("tiktok") || normalized === "tt") return "tiktok";
+  if (normalized.includes("email") || normalized.includes("newsletter")) return "email";
+  if (normalized.includes("facebook") || normalized === "fb") return "facebook";
+  return "manual";
+}
+
 function assetTypeLabel(type: string) {
   return type.replace("_", " ");
 }
@@ -758,6 +767,22 @@ function TrayAssetCard({
   );
 }
 
+function ChannelChip({ channel }: { channel: string }) {
+  const key = channelKey(channel);
+  const tones: Record<string, string> = {
+    instagram: "border-[hsl(var(--channel-instagram))] bg-[hsl(var(--channel-instagram-soft))] text-[hsl(var(--channel-instagram))]",
+    tiktok: "border-[hsl(var(--channel-tiktok))] bg-[hsl(var(--channel-tiktok-soft))] text-[hsl(var(--channel-tiktok))]",
+    email: "border-[hsl(var(--channel-email))] bg-[hsl(var(--channel-email-soft))] text-[hsl(var(--channel-email))]",
+    facebook: "border-[hsl(var(--channel-facebook))] bg-[hsl(var(--channel-facebook-soft))] text-[hsl(var(--channel-facebook))]",
+    manual: "border-[hsl(var(--channel-manual))] bg-[hsl(var(--channel-manual-soft))] text-[hsl(var(--channel-manual))]",
+  };
+  return (
+    <span className={cn("inline-flex min-h-6 items-center rounded-full border px-2.5 text-xs font-medium", tones[key])}>
+      {channel}
+    </span>
+  );
+}
+
 function CalendarItemCard({
   item,
   updating,
@@ -803,7 +828,7 @@ function CalendarItemCard({
         <div className="min-w-0">
           <p className="line-clamp-2 text-sm font-medium">{title}</p>
           <div className="mt-2 flex flex-wrap items-center gap-2">
-            <Badge>{itemChannel(item)}</Badge>
+            <ChannelChip channel={itemChannel(item)} />
             <Badge tone={statusTone(item.status)}>{item.status}</Badge>
             {draggableCard ? <span className="text-xs text-muted-foreground">{itemSlot(item)}</span> : null}
           </div>
