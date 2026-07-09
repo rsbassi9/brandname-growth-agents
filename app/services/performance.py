@@ -59,6 +59,38 @@ class BestTimeSlot:
     mean_engagement_rate: float
 
 
+@dataclass(frozen=True)
+class PerformanceTopPost:
+    post_id: int
+    channel: str
+    title_or_caption: str
+    published_at: datetime | None
+    engagement_rate: float
+    calendar_item_id: str | None
+    asset_id: int | None
+
+
+@dataclass(frozen=True)
+class PerformanceTrend:
+    week: str
+    mean_engagement_rate: float
+    sample_size: int
+
+
+@dataclass(frozen=True)
+class PerformanceAssetType:
+    asset_type: str
+    mean_engagement_rate: float
+    sample_size: int
+
+
+@dataclass(frozen=True)
+class PerformanceDashboard:
+    top_posts: list[PerformanceTopPost]
+    weekly_trend: list[PerformanceTrend]
+    by_asset_type: list[PerformanceAssetType]
+
+
 class PerformanceImportError(ValueError):
     def __init__(self, message: str, detected_columns: list[str]) -> None:
         super().__init__(message)
@@ -130,6 +162,54 @@ def best_times(session: Session, channel: str | None = None) -> list[BestTimeSlo
     ]
     slots.sort(key=lambda slot: (-slot.mean_engagement_rate, slot.channel, slot.weekday, slot.hour))
     return slots
+
+
+def performance_dashboard(session: Session) -> PerformanceDashboard:
+    from ..models import Asset
+
+    posts = session.execute(select(PublishedPost).order_by(PublishedPost.id)).scalars().unique().all()
+    scored: list[tuple[PublishedPost, PostMetric]] = []
+    for post in posts:
+        metric = _latest_metric(post)
+        if metric is not None and metric.engagement_rate is not None:
+            scored.append((post, metric))
+
+    top_posts = [
+        PerformanceTopPost(
+            post_id=post.id,
+            channel=post.channel,
+            title_or_caption=post.title_or_caption or post.external_ref or f"Post {post.id}",
+            published_at=post.published_at,
+            engagement_rate=metric.engagement_rate or 0,
+            calendar_item_id=post.calendar_item_id,
+            asset_id=post.asset_id,
+        )
+        for post, metric in sorted(scored, key=lambda item: (-(item[1].engagement_rate or 0), item[0].id))[:10]
+    ]
+
+    weekly: dict[str, list[float]] = {}
+    by_type: dict[str, list[float]] = {}
+    for post, metric in scored:
+        if post.published_at is not None:
+            year, week, _ = post.published_at.isocalendar()
+            weekly.setdefault(f"{year}-W{week:02d}", []).append(metric.engagement_rate or 0)
+        asset_type = "unlinked"
+        if post.asset_id is not None:
+            asset = session.get(Asset, post.asset_id)
+            if asset is not None:
+                asset_type = asset.type
+        by_type.setdefault(asset_type, []).append(metric.engagement_rate or 0)
+
+    trend = [
+        PerformanceTrend(week=week, mean_engagement_rate=sum(values) / len(values), sample_size=len(values))
+        for week, values in sorted(weekly.items())
+    ]
+    asset_types = [
+        PerformanceAssetType(asset_type=asset_type, mean_engagement_rate=sum(values) / len(values), sample_size=len(values))
+        for asset_type, values in by_type.items()
+    ]
+    asset_types.sort(key=lambda item: (-item.mean_engagement_rate, item.asset_type))
+    return PerformanceDashboard(top_posts=top_posts, weekly_trend=trend, by_asset_type=asset_types)
 
 
 def _import_row(

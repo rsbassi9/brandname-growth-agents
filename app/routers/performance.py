@@ -10,7 +10,11 @@ from ..db import get_session
 from ..models import PublishedPost
 from ..schemas import (
     BestTimeSlotOut,
+    PerformanceAssetTypeOut,
+    PerformanceDashboardOut,
     PerformanceImportOut,
+    PerformanceTopPostOut,
+    PerformanceTrendOut,
     PostMetricOut,
     PublishedPostLinkIn,
     PublishedPostListOut,
@@ -22,6 +26,7 @@ from ..services.performance import (
     import_performance_csv,
     link_published_post,
     parse_import_request_body,
+    performance_dashboard,
     unlink_published_post,
 )
 
@@ -34,6 +39,16 @@ def performance_best_times(
     channel: str | None = None,
 ) -> list[BestTimeSlotOut]:
     return [BestTimeSlotOut(**slot.__dict__) for slot in best_times(session, channel=channel)]
+
+
+@router.get("/dashboard", response_model=PerformanceDashboardOut)
+def performance_dashboard_summary(session: Session = Depends(get_session)) -> PerformanceDashboardOut:
+    dashboard = performance_dashboard(session)
+    return PerformanceDashboardOut(
+        top_posts=[PerformanceTopPostOut(**item.__dict__) for item in dashboard.top_posts],
+        weekly_trend=[PerformanceTrendOut(**item.__dict__) for item in dashboard.weekly_trend],
+        by_asset_type=[PerformanceAssetTypeOut(**item.__dict__) for item in dashboard.by_asset_type],
+    )
 
 
 @router.get("/posts", response_model=PublishedPostListOut)

@@ -17,7 +17,14 @@ import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { PageHeader, Panel } from "@/components/ui/Panel";
-import { api, type AssetOut, type BrandProfileHistoryOut, type PerformanceChannel, type PublishedPostOut } from "@/lib/api";
+import {
+  api,
+  type AssetOut,
+  type BrandProfileHistoryOut,
+  type PerformanceChannel,
+  type PerformanceDashboardOut,
+  type PublishedPostOut,
+} from "@/lib/api";
 import { cn } from "@/lib/utils";
 
 const lanes = [
@@ -74,6 +81,7 @@ export function StrategyHubPage() {
     queryKey: ["performance", "posts", performanceChannel],
     queryFn: () => api.performancePosts({ channel: performanceChannel, limit: 20 }),
   });
+  const performanceDashboard = useQuery({ queryKey: ["performance", "dashboard"], queryFn: api.performanceDashboard });
 
   const feedback = useMutation({
     mutationFn: () =>
@@ -97,7 +105,10 @@ export function StrategyHubPage() {
         file: performanceFile,
         csv_text: performancePaste,
       }),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["performance", "posts"] }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["performance", "posts"] });
+      queryClient.invalidateQueries({ queryKey: ["performance", "dashboard"] });
+    },
   });
   const linkPerformance = useMutation({
     mutationFn: () => api.linkPerformancePost(Number(performancePostId), { calendar_item_id: performanceCalendarId }),
@@ -199,6 +210,7 @@ export function StrategyHubPage() {
           performancePending={performanceImport.isPending}
           performanceResult={performanceImport.data}
           performanceError={performanceImport.error}
+          performanceDashboard={performanceDashboard.data}
           performancePosts={performancePosts.data?.items || []}
           performancePostId={performancePostId}
           performanceCalendarId={performanceCalendarId}
@@ -221,6 +233,38 @@ export function StrategyHubPage() {
       ) : null}
     </div>
   );
+}
+
+function BarRows({ title, rows }: { title: string; rows: Array<{ label: string; value: number; meta: string }> }) {
+  const maxValue = Math.max(...rows.map((row) => row.value), 0.01);
+  return (
+    <div>
+      <h4 className="text-xs font-semibold uppercase text-muted-foreground">{title}</h4>
+      <div className="mt-2 space-y-2">
+        {rows.length ? (
+          rows.map((row) => (
+            <div key={row.label} className="space-y-1">
+              <div className="flex items-center justify-between gap-3 text-xs">
+                <span className="font-medium">{row.label}</span>
+                <span className="text-muted-foreground">
+                  {formatPercent(row.value)} - {row.meta}
+                </span>
+              </div>
+              <div className="h-2 overflow-hidden rounded-full bg-muted">
+                <div className="h-full rounded-full bg-accent" style={{ width: `${Math.max(4, (row.value / maxValue) * 100)}%` }} />
+              </div>
+            </div>
+          ))
+        ) : (
+          <p className="text-xs text-muted-foreground">No data yet.</p>
+        )}
+      </div>
+    </div>
+  );
+}
+
+function formatPercent(value: number) {
+  return `${(value * 100).toFixed(1)}%`;
 }
 
 function KnowLane({
@@ -487,6 +531,7 @@ function LearnLane({
   performancePending,
   performanceResult,
   performanceError,
+  performanceDashboard,
   performancePosts,
   performancePostId,
   performanceCalendarId,
@@ -524,6 +569,7 @@ function LearnLane({
     warnings: string[];
   };
   performanceError: unknown;
+  performanceDashboard?: PerformanceDashboardOut;
   performancePosts: PublishedPostOut[];
   performancePostId: string;
   performanceCalendarId: string;
@@ -612,6 +658,55 @@ function LearnLane({
             </p>
           ) : null}
         </form>
+        <div className="mt-4 space-y-4 border-t border-border pt-4">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <h3 className="text-sm font-semibold">Dashboard</h3>
+            <Badge>{performanceDashboard?.top_posts.length || 0} top posts</Badge>
+          </div>
+          <div className="overflow-hidden rounded-md border border-border bg-background">
+            <table className="w-full text-left text-xs">
+              <thead className="border-b border-border bg-muted text-muted-foreground">
+                <tr>
+                  <th className="px-3 py-2 font-medium">Post</th>
+                  <th className="px-3 py-2 font-medium">Channel</th>
+                  <th className="px-3 py-2 text-right font-medium">ER</th>
+                </tr>
+              </thead>
+              <tbody>
+                {(performanceDashboard?.top_posts || []).slice(0, 5).map((post) => (
+                  <tr key={post.post_id} className="border-b border-border last:border-0">
+                    <td className="px-3 py-2">{post.title_or_caption}</td>
+                    <td className="px-3 py-2 capitalize">{post.channel}</td>
+                    <td className="px-3 py-2 text-right tabular-nums">{formatPercent(post.engagement_rate)}</td>
+                  </tr>
+                ))}
+                {!performanceDashboard?.top_posts.length ? (
+                  <tr>
+                    <td className="px-3 py-3 text-muted-foreground" colSpan={3}>
+                      Import metrics to populate top posts.
+                    </td>
+                  </tr>
+                ) : null}
+              </tbody>
+            </table>
+          </div>
+          <BarRows
+            title="Weekly ER"
+            rows={(performanceDashboard?.weekly_trend || []).map((item) => ({
+              label: item.week,
+              value: item.mean_engagement_rate,
+              meta: `${item.sample_size} posts`,
+            }))}
+          />
+          <BarRows
+            title="By Asset Type"
+            rows={(performanceDashboard?.by_asset_type || []).map((item) => ({
+              label: assetTypeLabel(item.asset_type),
+              value: item.mean_engagement_rate,
+              meta: `${item.sample_size} posts`,
+            }))}
+          />
+        </div>
         <form className="mt-4 space-y-3 border-t border-border pt-4" onSubmit={onPerformanceLinkSubmit}>
           <h3 className="text-sm font-semibold">Manual links</h3>
           <label className="text-sm font-medium" htmlFor="performance-post">

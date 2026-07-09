@@ -143,6 +143,34 @@ class BestTimeSlotOut(BaseModel):
     mean_engagement_rate: float
 
 
+class PerformanceTopPostOut(BaseModel):
+    post_id: int
+    channel: PublishedPostChannel
+    title_or_caption: str
+    published_at: datetime | None
+    engagement_rate: float
+    calendar_item_id: str | None = None
+    asset_id: int | None = None
+
+
+class PerformanceTrendOut(BaseModel):
+    week: str
+    mean_engagement_rate: float
+    sample_size: int
+
+
+class PerformanceAssetTypeOut(BaseModel):
+    asset_type: str
+    mean_engagement_rate: float
+    sample_size: int
+
+
+class PerformanceDashboardOut(BaseModel):
+    top_posts: list[PerformanceTopPostOut] = Field(default_factory=list)
+    weekly_trend: list[PerformanceTrendOut] = Field(default_factory=list)
+    by_asset_type: list[PerformanceAssetTypeOut] = Field(default_factory=list)
+
+
 class SourceAssetIndexRequest(BaseModel):
     origin: SourceAssetOrigin = "local"
     path: str = ""

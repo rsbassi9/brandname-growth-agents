@@ -253,6 +253,34 @@ export interface PublishedPostListOut {
   total: number;
 }
 
+export interface PerformanceTopPostOut {
+  post_id: number;
+  channel: PerformanceChannel;
+  title_or_caption: string;
+  published_at: string | null;
+  engagement_rate: number;
+  calendar_item_id: string | null;
+  asset_id: number | null;
+}
+
+export interface PerformanceTrendOut {
+  week: string;
+  mean_engagement_rate: number;
+  sample_size: number;
+}
+
+export interface PerformanceAssetTypeOut {
+  asset_type: string;
+  mean_engagement_rate: number;
+  sample_size: number;
+}
+
+export interface PerformanceDashboardOut {
+  top_posts: PerformanceTopPostOut[];
+  weekly_trend: PerformanceTrendOut[];
+  by_asset_type: PerformanceAssetTypeOut[];
+}
+
 export interface LibrarySummaryOut {
   total: number;
   by_type: Record<string, number>;
@@ -394,6 +422,7 @@ export const api = {
   },
   performancePosts: (params: { channel?: string; limit?: number; offset?: number } = {}) =>
     request<PublishedPostListOut>(`/performance/posts${toQuery(params)}`),
+  performanceDashboard: () => request<PerformanceDashboardOut>("/performance/dashboard"),
   linkPerformancePost: (postId: number, payload: { calendar_item_id?: string | null; asset_id?: number | null }) =>
     request<PublishedPostOut>(`/performance/posts/${postId}/link`, { method: "PATCH", body: JSON.stringify(payload) }),
   unlinkPerformancePost: (postId: number) =>

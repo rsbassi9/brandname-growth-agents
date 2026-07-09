@@ -137,6 +137,23 @@ describe("StrategyHubPage", () => {
             total: 1,
           });
         }
+        if (url.pathname === "/api/v1/performance/dashboard") {
+          return response({
+            top_posts: [
+              {
+                post_id: 5,
+                channel: "instagram",
+                title_or_caption: "Source proof first",
+                published_at: "2026-07-01T10:00:00",
+                engagement_rate: 0.2125,
+                calendar_item_id: null,
+                asset_id: null,
+              },
+            ],
+            weekly_trend: [{ week: "2026-W27", mean_engagement_rate: 0.2125, sample_size: 1 }],
+            by_asset_type: [{ asset_type: "copy", mean_engagement_rate: 0.2125, sample_size: 1 }],
+          });
+        }
         if (url.pathname === "/api/v1/strategy/learn/feedback" && init?.method === "POST") {
           return response(
             {
@@ -207,6 +224,9 @@ describe("StrategyHubPage", () => {
 
     await userEvent.click(screen.getByRole("button", { name: /^learn$/i }));
     expect(await screen.findByText(/product-truth captions/i)).toBeInTheDocument();
+    expect(await screen.findAllByText(/source proof first/i)).not.toHaveLength(0);
+    expect(screen.getByText(/weekly er/i)).toBeInTheDocument();
+    expect(screen.getByText(/by asset type/i)).toBeInTheDocument();
     await userEvent.type(screen.getByLabelText(/paste table/i), "Post date,Permalink,Views\n2026-07-01,x,100");
     await userEvent.click(screen.getByRole("button", { name: /import csv/i }));
     await waitFor(() =>
