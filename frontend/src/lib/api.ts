@@ -282,6 +282,14 @@ export interface PerformanceDashboardOut {
   by_asset_type: PerformanceAssetTypeOut[];
 }
 
+export interface BestTimeSlotOut {
+  channel: PerformanceChannel;
+  weekday: number;
+  hour: number;
+  sample_size: number;
+  mean_engagement_rate: number;
+}
+
 export interface LibrarySummaryOut {
   total: number;
   by_type: Record<string, number>;
@@ -424,6 +432,7 @@ export const api = {
   performancePosts: (params: { channel?: string; limit?: number; offset?: number } = {}) =>
     request<PublishedPostListOut>(`/performance/posts${toQuery(params)}`),
   performanceDashboard: () => request<PerformanceDashboardOut>("/performance/dashboard"),
+  performanceBestTimes: (params: { channel?: string } = {}) => request<BestTimeSlotOut[]>(`/performance/best-times${toQuery(params)}`),
   linkPerformancePost: (postId: number, payload: { calendar_item_id?: string | null; asset_id?: number | null }) =>
     request<PublishedPostOut>(`/performance/posts/${postId}/link`, { method: "PATCH", body: JSON.stringify(payload) }),
   unlinkPerformancePost: (postId: number) =>

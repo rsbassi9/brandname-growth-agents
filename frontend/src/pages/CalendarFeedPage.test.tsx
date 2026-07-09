@@ -92,6 +92,9 @@ describe("P2-5 Calendar and Feed Grid", () => {
         if (url.pathname === "/api/v1/assets") {
           return response({ items: draftAssets, total: draftAssets.length, limit: 60, offset: 0 });
         }
+        if (url.pathname === "/api/v1/performance/best-times") {
+          return response([{ channel: "instagram", weekday: 2, hour: 18, sample_size: 3, mean_engagement_rate: 0.2 }]);
+        }
         if (url.pathname === "/api/v1/calendar") {
           return response(calendarItems);
         }
@@ -152,6 +155,12 @@ describe("P2-5 Calendar and Feed Grid", () => {
     );
 
     await userEvent.click(screen.getByRole("button", { name: /^week$/i }));
+    expect(await screen.findByText(/suggested - 18:00/i)).toBeInTheDocument();
+    await userEvent.click(screen.getByRole("button", { name: /suggested - 18:00/i }));
+    await waitFor(() => {
+      const patchCalls = vi.mocked(fetch).mock.calls.filter(([input, init]) => String(input) === "/api/v1/calendar/post-1" && init?.method === "PATCH");
+      expect(patchCalls.some(([, init]) => init?.body === JSON.stringify({ date: "2026-07-08", slot: "18:00" }))).toBe(true);
+    });
     fireEvent.change(screen.getByLabelText(/move date/i), { target: { value: "2026-07-09" } });
     await waitFor(() => {
       const patchCalls = vi.mocked(fetch).mock.calls.filter(([input, init]) => String(input) === "/api/v1/calendar/post-1" && init?.method === "PATCH");

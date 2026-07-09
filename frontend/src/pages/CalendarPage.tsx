@@ -19,7 +19,7 @@ import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { PageHeader, Panel } from "@/components/ui/Panel";
-import { api, type AssetOut, type AssetType, type CalendarItemOut, type CalendarItemPatch } from "@/lib/api";
+import { api, type AssetOut, type AssetType, type BestTimeSlotOut, type CalendarItemOut, type CalendarItemPatch } from "@/lib/api";
 import { cn } from "@/lib/utils";
 
 const statuses = ["draft", "planned", "scheduled", "published", "selected", "archived"];
@@ -69,7 +69,7 @@ function weekDays(key: string) {
   return Array.from({ length: 7 }, (_, index) => {
     const next = new Date(start);
     next.setDate(start.getDate() + index);
-    return { date: dateKey(next), label: weekdayLabels[index], day: next.getDate() };
+    return { date: dateKey(next), label: weekdayLabels[index], day: next.getDate(), weekday: index };
   });
 }
 
@@ -109,6 +109,10 @@ function itemSlot(item: CalendarItemOut) {
   return String(item.data.slot || "day");
 }
 
+function slotLabel(slot: string) {
+  return slot === "day" ? "day" : slot;
+}
+
 function channelKey(channel: string) {
   const normalized = channel.toLowerCase().replace(/[^a-z]/g, "");
   if (normalized.includes("instagram") || normalized === "ig") return "instagram";
@@ -120,6 +124,10 @@ function channelKey(channel: string) {
 
 function assetTypeLabel(type: string) {
   return type.replace("_", " ");
+}
+
+function slotTime(hour: number) {
+  return `${String(hour).padStart(2, "0")}:00`;
 }
 
 function statusTone(status: string) {
@@ -159,6 +167,10 @@ export function CalendarPage() {
   const draftAssets = useQuery({
     queryKey: ["assets", "calendar-tray", traySearch, trayType],
     queryFn: () => api.assets({ status: "draft", q: traySearch, type: trayType || undefined, limit: 60, offset: 0 }),
+  });
+  const bestTimes = useQuery({
+    queryKey: ["performance", "best-times", "calendar"],
+    queryFn: () => api.performanceBestTimes(),
   });
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
@@ -291,6 +303,10 @@ export function CalendarPage() {
     updateItem.mutate({ itemId, patch: { date: nextDate, slot: "day" } });
   }
 
+  function scheduleItemSlot(itemId: string, nextDate: string, hour: number) {
+    updateItem.mutate({ itemId, patch: { date: nextDate, slot: slotTime(hour) } });
+  }
+
   function onDragStart(event: DragStartEvent) {
     setActiveId(String(event.active.id));
     setMoveError("");
@@ -300,6 +316,13 @@ export function CalendarPage() {
     const overId = event.over?.id ? String(event.over.id) : "";
     const draggableId = String(event.active.id);
     setActiveId(null);
+    if (overId.startsWith("slot:")) {
+      const [, targetItemId, nextDate, hour] = overId.split(":");
+      if (targetItemId === draggableId) {
+        scheduleItemSlot(targetItemId, nextDate, Number(hour));
+      }
+      return;
+    }
     if (!overId.startsWith("day:")) return;
     const nextDate = overId.replace("day:", "");
     if (draggableId.startsWith("asset:")) {
@@ -466,7 +489,9 @@ export function CalendarPage() {
                 activeId={activeId}
                 updating={updateItem.isPending || deleteItem.isPending}
                 creatingVideoPack={createVideoPack.isPending}
+                bestTimes={bestTimes.data || []}
                 onMove={moveItemToDate}
+                onSuggestedSlot={scheduleItemSlot}
                 onStatus={(itemId, nextStatus) => updateItem.mutate({ itemId, patch: { status: nextStatus } })}
                 onDelete={(itemId) => deleteItem.mutate(itemId)}
                 onVideoPack={(itemId) => createVideoPack.mutate(itemId)}
@@ -558,17 +583,21 @@ function WeekCalendar({
   activeId,
   updating,
   creatingVideoPack,
+  bestTimes,
   onMove,
+  onSuggestedSlot,
   onStatus,
   onDelete,
   onVideoPack,
 }: {
-  days: { date: string; label: string; day: number }[];
+  days: { date: string; label: string; day: number; weekday: number }[];
   byDate: Record<string, CalendarItemOut[]>;
   activeId: string | null;
   updating: boolean;
   creatingVideoPack: boolean;
+  bestTimes: BestTimeSlotOut[];
   onMove: (itemId: string, date: string) => void;
+  onSuggestedSlot: (itemId: string, date: string, hour: number) => void;
   onStatus: (itemId: string, status: string) => void;
   onDelete: (itemId: string) => void;
   onVideoPack: (itemId: string) => void;
@@ -585,7 +614,9 @@ function WeekCalendar({
               active={activeId === item.id}
               updating={updating}
               creatingVideoPack={creatingVideoPack}
+              suggestedSlots={bestTimes.filter((slot) => slot.weekday === day.weekday && channelKey(slot.channel) === channelKey(itemChannel(item)))}
               onMove={(nextDate) => onMove(item.id, nextDate)}
+              onSuggestedSlot={(hour) => onSuggestedSlot(item.id, day.date, hour)}
               onStatus={(nextStatus) => onStatus(item.id, nextStatus)}
               onDelete={() => onDelete(item.id)}
               onVideoPack={() => onVideoPack(item.id)}
@@ -602,7 +633,7 @@ function WeekDayColumn({
   itemCount,
   children,
 }: {
-  day: { date: string; label: string; day: number };
+  day: { date: string; label: string; day: number; weekday: number };
   itemCount: number;
   children: React.ReactNode;
 }) {
@@ -783,13 +814,44 @@ function ChannelChip({ channel }: { channel: string }) {
   );
 }
 
+function SuggestedSlotChip({
+  item,
+  slot,
+  disabled,
+  onClick,
+}: {
+  item: CalendarItemOut;
+  slot: BestTimeSlotOut;
+  disabled: boolean;
+  onClick: () => void;
+}) {
+  const { isOver, setNodeRef } = useDroppable({ id: `slot:${item.id}:${item.date}:${slot.hour}` });
+  return (
+    <button
+      ref={setNodeRef}
+      type="button"
+      className={cn(
+        "min-h-11 w-full rounded-md border border-dashed border-border bg-transparent px-3 py-2 text-left text-xs text-muted-foreground transition-colors duration-ui ease-ui hover:border-accent hover:bg-accent-soft focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-45",
+        isOver ? "border-accent bg-accent-soft text-accent-soft-foreground" : "",
+      )}
+      disabled={disabled}
+      onClick={onClick}
+    >
+      Suggested - {slotTime(slot.hour)}
+      <span className="ml-2 text-muted-foreground">n={slot.sample_size}</span>
+    </button>
+  );
+}
+
 function CalendarItemCard({
   item,
   updating,
   creatingVideoPack,
   draggableCard,
   active = false,
+  suggestedSlots = [],
   onMove,
+  onSuggestedSlot,
   onStatus,
   onDelete,
   onVideoPack,
@@ -799,7 +861,9 @@ function CalendarItemCard({
   creatingVideoPack: boolean;
   draggableCard: boolean;
   active?: boolean;
+  suggestedSlots?: BestTimeSlotOut[];
   onMove?: (date: string) => void;
+  onSuggestedSlot?: (hour: number) => void;
   onStatus: (status: string) => void;
   onDelete: () => void;
   onVideoPack: () => void;
@@ -830,7 +894,7 @@ function CalendarItemCard({
           <div className="mt-2 flex flex-wrap items-center gap-2">
             <ChannelChip channel={itemChannel(item)} />
             <Badge tone={statusTone(item.status)}>{item.status}</Badge>
-            {draggableCard ? <span className="text-xs text-muted-foreground">{itemSlot(item)}</span> : null}
+            {draggableCard ? <span className="text-xs text-muted-foreground">{slotLabel(itemSlot(item))}</span> : null}
           </div>
         </div>
         <div className="flex shrink-0 gap-1">
@@ -868,6 +932,13 @@ function CalendarItemCard({
             disabled={updating}
             onChange={(event) => onMove(event.target.value)}
           />
+        </div>
+      ) : null}
+      {draggableCard && suggestedSlots.length > 0 && onSuggestedSlot ? (
+        <div className="mt-2 space-y-1">
+          {suggestedSlots.slice(0, 2).map((slot) => (
+            <SuggestedSlotChip key={`${slot.channel}-${slot.weekday}-${slot.hour}`} item={item} slot={slot} disabled={updating} onClick={() => onSuggestedSlot(slot.hour)} />
+          ))}
         </div>
       ) : null}
       <div className="mt-2 flex items-center gap-2">
