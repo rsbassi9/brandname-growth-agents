@@ -30,6 +30,59 @@ def test_generate_job_version_happy_path(client) -> None:
     assert "Drop teaser" in version["prompt_snapshot"]
 
 
+def test_generate_injects_auditable_brand_memory(client) -> None:
+    import json
+
+    from app.db import session_scope
+    from app.models import BrainDocument, BrainEmbedding, BrandProfileVersion
+    from app.services.brain import embed_texts, vector_to_blob
+
+    with session_scope() as session:
+        profile = BrandProfileVersion(
+            version_no=1,
+            profile_md="Use source-proof language and avoid invented garments.",
+            distilled_from_json="{}",
+        )
+        selected = BrainDocument(
+            kind="asset_version",
+            ref_id="seed:1",
+            text="Selected caption about canvas fragment reconstruction.",
+            meta_json=json.dumps({"is_selected": True}),
+        )
+        feedback = BrainDocument(
+            kind="feedback",
+            ref_id="fb_1",
+            text="Positive feedback: stronger when the hook mentions source proof.",
+            meta_json=json.dumps({"rating": 5}),
+        )
+        session.add_all([profile, selected, feedback])
+        session.flush()
+        for document in [selected, feedback]:
+            vector = embed_texts([document.text])[0]
+            session.add(
+                BrainEmbedding(
+                    document_id=document.id,
+                    model="local-hash-256",
+                    dim=vector.size,
+                    vector=vector_to_blob(vector),
+                )
+            )
+
+    payload = _generate_copy(client, "Canvas fragment caption with source proof")
+    job = wait_for_job(client, payload["job_id"])
+    assert job["status"] == "succeeded", job["message"]
+
+    detail = client.get(f"/api/v1/assets/{payload['asset_id']}").json()
+    version = detail["versions"][0]
+    params = json.loads(version["params_json"])
+    assert params["brand_profile_version_no"] == 1
+    assert set(params["memory_document_ids"]) == {1, 2}
+    assert "BRAND MEMORY" in version["prompt_snapshot"]
+    assert "Current brand profile v1" in version["prompt_snapshot"]
+    assert "doc#1" in version["prompt_snapshot"]
+    assert "doc#2" in version["prompt_snapshot"]
+
+
 def test_regenerate_creates_v2_and_v1_unchanged(client) -> None:
     payload = _generate_copy(client)
     wait_for_job(client, payload["job_id"])

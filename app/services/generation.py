@@ -19,6 +19,7 @@ import requests
 
 from ..paths import outputs_dir
 from ..settings import get_settings
+from .brain import build_memory_context
 from .openai_client import resolve_model
 from .rendering import render_text_carousel
 
@@ -36,7 +37,7 @@ AGENT_FOR_TYPE = {
 LOCAL_MODEL_LABEL = "local-deterministic"
 
 
-def build_prompt(asset_type: str, brief: str, params: dict[str, Any]) -> str:
+def build_prompt(asset_type: str, brief: str, params: dict[str, Any], memory_block: str = "") -> str:
     settings = get_settings()
     tone = str(params.get("tone", "premium, minimal, mysterious"))
     template = str(params.get("template", "default"))
@@ -47,6 +48,8 @@ def build_prompt(asset_type: str, brief: str, params: dict[str, Any]) -> str:
         f"Template: {template}",
         "Ground every claim in the approved raw photoshoot/product assets; never invent garments.",
     ]
+    if memory_block:
+        lines.extend(["", memory_block])
     references = params.get("source_asset_context") or []
     if references:
         lines.extend(["", "Reference source assets:"])
@@ -68,7 +71,12 @@ def build_prompt(asset_type: str, brief: str, params: dict[str, Any]) -> str:
 async def generate_content(asset_type: str, brief: str, params: dict[str, Any]) -> dict[str, Any]:
     """Generate one take for an asset. Returns the version payload."""
     settings = get_settings()
-    prompt = build_prompt(asset_type, brief, params)
+    memory = build_memory_context(f"{asset_type}\n{brief}", k=5)
+    if memory.document_ids:
+        params["memory_document_ids"] = memory.document_ids
+    if memory.profile_version_no is not None:
+        params["brand_profile_version_no"] = memory.profile_version_no
+    prompt = build_prompt(asset_type, brief, params, memory.block)
     if settings.local_only_agent_runs:
         return _generate_local(asset_type, brief, params, prompt)
     return await _generate_live(asset_type, brief, params, prompt)

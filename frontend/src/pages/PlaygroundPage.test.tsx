@@ -162,7 +162,7 @@ describe("PlaygroundPage", () => {
                 asset_id: 42,
                 version_no: 1,
                 prompt_snapshot: "Prompt",
-                params_json: "{}",
+                params_json: JSON.stringify({ memory_document_ids: [1, 2], brand_profile_version_no: 1 }),
                 content_text: "Hook: Archive fragment\n\nCaption draft: Same system, now worn.",
                 file_path: null,
                 model_used: "local-deterministic",
@@ -219,6 +219,9 @@ describe("PlaygroundPage", () => {
 
     expect(await screen.findByText(/caption draft/i)).toBeInTheDocument();
     expect(screen.getByText(/version 1/i)).toBeInTheDocument();
+    expect(screen.getByText(/memory used/i)).toBeInTheDocument();
+    expect(screen.getByText(/profile v1/i)).toBeInTheDocument();
+    expect(screen.getByText(/doc #1/i)).toBeInTheDocument();
     expect(screen.getAllByText(/drop caption for the source-painting tee/i).length).toBeGreaterThanOrEqual(2);
   });
 

@@ -14,7 +14,7 @@ import numpy as np
 from sqlalchemy import select
 
 from ..db import init_db, session_scope
-from ..models import Asset, AssetVersion, BrainDocument, BrainEmbedding, FeedbackEvent
+from ..models import Asset, AssetVersion, BrainDocument, BrainEmbedding, BrandProfileVersion, FeedbackEvent
 from ..paths import brand_context_dir
 from ..settings import get_settings
 from .openai_client import get_openai_client
@@ -28,6 +28,13 @@ _TOKEN_RE = re.compile(r"[a-z0-9']+")
 class BrainSearchResult:
     document: BrainDocument
     score: float
+
+
+@dataclass(frozen=True)
+class MemoryContext:
+    block: str
+    document_ids: list[int]
+    profile_version_no: int | None
 
 
 def embed_texts(texts: list[str]) -> list[np.ndarray]:
@@ -76,6 +83,42 @@ def search(query: str, k: int = 5, kinds: list[str] | None = None) -> list[Brain
         for item in scored[:k]:
             session.expunge(item.document)
         return scored[:k]
+
+
+def build_memory_context(query: str, k: int = 5) -> MemoryContext:
+    """Build the auditable BRAND MEMORY prompt block for generation."""
+    with session_scope() as session:
+        profile = session.execute(
+            select(BrandProfileVersion).order_by(BrandProfileVersion.version_no.desc())
+        ).scalars().first()
+        profile_text = profile.profile_md if profile else ""
+        profile_version_no = profile.version_no if profile else None
+
+    results = search(query, k=max(k * 3, k)) if query.strip() else []
+    ranked = sorted(results, key=lambda item: (-_memory_rank_score(item), item.document.id))[:k]
+    if not profile_text and not ranked:
+        return MemoryContext(block="", document_ids=[], profile_version_no=None)
+
+    lines = ["BRAND MEMORY"]
+    if profile_text and profile_version_no is not None:
+        lines.extend([f"Current brand profile v{profile_version_no}:", profile_text.strip()])
+    if ranked:
+        lines.append("Similar evidence:")
+        for item in ranked:
+            meta = _read_meta(item.document)
+            lines.append(
+                "- "
+                + f"doc#{item.document.id} kind={item.document.kind}"
+                + (f" ref={item.document.ref_id}" if item.document.ref_id else "")
+                + f" score={item.score:.3f}"
+                + _winner_label(meta)
+                + f": {_snippet(item.document.text)}"
+            )
+    return MemoryContext(
+        block="\n".join(lines).strip(),
+        document_ids=[item.document.id for item in ranked],
+        profile_version_no=profile_version_no,
+    )
 
 
 def index_asset_version(asset_version_id: int) -> dict[str, int]:
@@ -256,6 +299,49 @@ def _asset_version_text(asset: Asset | None, version: AssetVersion) -> str:
             version.content_text or version.file_path or "",
         ]
     ).strip()
+
+
+def _memory_rank_score(item: BrainSearchResult) -> float:
+    meta = _read_meta(item.document)
+    boost = 0.0
+    if item.document.kind == "asset_version" and bool(meta.get("is_selected")):
+        boost += 0.2
+    if item.document.kind == "feedback":
+        try:
+            rating = float(meta.get("rating"))
+        except (TypeError, ValueError):
+            rating = 0.0
+        if rating >= 4:
+            boost += 0.2
+    return item.score + boost
+
+
+def _winner_label(meta: dict[str, Any]) -> str:
+    labels = []
+    if bool(meta.get("is_selected")):
+        labels.append("selected")
+    try:
+        rating = float(meta.get("rating"))
+    except (TypeError, ValueError):
+        rating = 0.0
+    if rating >= 4:
+        labels.append(f"positive_feedback={rating:g}")
+    return f" ({', '.join(labels)})" if labels else ""
+
+
+def _read_meta(document: BrainDocument) -> dict[str, Any]:
+    try:
+        parsed = json.loads(document.meta_json or "{}")
+    except json.JSONDecodeError:
+        return {}
+    return parsed if isinstance(parsed, dict) else {}
+
+
+def _snippet(text: str, limit: int = 220) -> str:
+    compact = " ".join(text.split())
+    if len(compact) <= limit:
+        return compact
+    return compact[: limit - 1].rstrip() + "..."
 
 
 def _hash_vector(text: str) -> np.ndarray:

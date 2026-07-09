@@ -3,6 +3,7 @@ import {
   CheckCircle2,
   Clock3,
   Copy,
+  BookOpen,
   Image,
   ImagePlus,
   Loader2,
@@ -27,6 +28,7 @@ import {
   createJobEventSource,
   type AssetDetailOut,
   type AssetType,
+  type AssetVersionOut,
   type GenerateRequest,
   type GenerateResponse,
   type JobOut,
@@ -99,6 +101,24 @@ function readArray<T>(key: string): T[] {
 
 function selectedVersion(asset?: AssetDetailOut | null) {
   return asset?.versions.find((version) => version.is_selected) || asset?.versions[asset.versions.length - 1] || null;
+}
+
+function parseMemoryUsed(version?: AssetVersionOut | null) {
+  if (!version) {
+    return { documentIds: [] as number[], profileVersionNo: null as number | null };
+  }
+  try {
+    const parsed = JSON.parse(version.params_json || "{}") as Record<string, unknown>;
+    const documentIds = Array.isArray(parsed.memory_document_ids)
+      ? parsed.memory_document_ids.filter((item): item is number => Number.isInteger(item))
+      : [];
+    const profileVersionNo = Number.isInteger(parsed.brand_profile_version_no)
+      ? (parsed.brand_profile_version_no as number)
+      : null;
+    return { documentIds, profileVersionNo };
+  } catch {
+    return { documentIds: [] as number[], profileVersionNo: null as number | null };
+  }
 }
 
 function sourceTitle(source: SourceAssetOut) {
@@ -226,6 +246,7 @@ export function PlaygroundPage() {
   const isBusy = generate.isPending || ["queued", "running"].includes(activeJob?.status || "");
   const previewText = currentVersion?.content_text || "";
   const videoPack = parseVideoPromptPack(previewText);
+  const memoryUsed = parseMemoryUsed(currentVersion);
   const activeType = assetTypes.find((item) => item.value === defaults.type) || assetTypes[0];
   const ActiveTypeIcon = activeType.icon;
 
@@ -575,6 +596,10 @@ export function PlaygroundPage() {
                     </pre>
                   )}
                 </article>
+                <MemoryDisclosure
+                  documentIds={memoryUsed.documentIds}
+                  profileVersionNo={memoryUsed.profileVersionNo}
+                />
               </div>
             ) : !isBusy ? (
               <div className="flex min-h-[360px] items-center justify-center rounded-md border border-dashed border-border bg-muted/40 p-8 text-center">
@@ -624,6 +649,31 @@ export function PlaygroundPage() {
           ) : null}
         </div>
       </section>
+    </div>
+  );
+}
+
+function MemoryDisclosure({
+  documentIds,
+  profileVersionNo,
+}: {
+  documentIds: number[];
+  profileVersionNo: number | null;
+}) {
+  const hasMemory = documentIds.length > 0 || profileVersionNo !== null;
+  if (!hasMemory) {
+    return null;
+  }
+  return (
+    <div className="flex flex-wrap items-center gap-2 rounded-md border border-border bg-surface px-3 py-2 text-sm">
+      <BookOpen className="h-4 w-4 text-muted-foreground" aria-hidden="true" />
+      <span className="font-medium text-foreground">Memory used</span>
+      {profileVersionNo !== null ? <Badge tone="neutral">Profile v{profileVersionNo}</Badge> : null}
+      {documentIds.map((id) => (
+        <Badge key={id} tone="neutral">
+          doc #{id}
+        </Badge>
+      ))}
     </div>
   );
 }
