@@ -2,7 +2,8 @@
 
 Single asyncio worker started in the FastAPI lifespan. Jobs are persisted in
 the `jobs` table; results in `result_json`. Job kinds: generate_asset,
-run_daily_workflow, render_carousel, image_iterate, brain_index.
+run_daily_workflow, render_carousel, image_iterate, brain_index,
+distill_brand_profile.
 
 The run_daily_workflow handler checks LOCAL_ONLY_AGENT_RUNS and uses the
 deterministic port of src/local_workflow.py when true — this closes the legacy
@@ -29,7 +30,14 @@ from ..settings import get_settings
 
 logger = logging.getLogger(__name__)
 
-JOB_KINDS = ("generate_asset", "run_daily_workflow", "render_carousel", "image_iterate", "brain_index")
+JOB_KINDS = (
+    "generate_asset",
+    "run_daily_workflow",
+    "render_carousel",
+    "image_iterate",
+    "brain_index",
+    "distill_brand_profile",
+)
 
 
 class JobQueue:
@@ -373,6 +381,13 @@ async def _handle_brain_index(job_id: str, payload: dict[str, Any]) -> dict[str,
     return await handle_brain_index(payload)
 
 
+async def _handle_distill_brand_profile(job_id: str, payload: dict[str, Any]) -> dict[str, Any]:
+    from .brand_profile import distill_brand_profile
+
+    _update_job(job_id, progress_pct=30, message="distilling brand profile")
+    return await distill_brand_profile()
+
+
 def _enqueue_brain_index(**payload: Any) -> None:
     if not any(value is not None for value in payload.values()):
         return
@@ -388,6 +403,7 @@ _HANDLERS = {
     "render_carousel": _handle_render_carousel,
     "image_iterate": _handle_image_iterate,
     "brain_index": _handle_brain_index,
+    "distill_brand_profile": _handle_distill_brand_profile,
 }
 
 # Application-wide queue instance (started/stopped by the FastAPI lifespan).

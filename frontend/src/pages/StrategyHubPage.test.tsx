@@ -33,6 +33,33 @@ describe("StrategyHubPage", () => {
             { name: "growth_strategy", content: "Use launches, proof, and manual publishing." },
           ]);
         }
+        if (url.pathname === "/api/v1/strategy/brand-profile") {
+          return response({
+            current: {
+              id: 2,
+              version_no: 2,
+              profile_md: "## Voice rules\n- Use source proof in the hook. (fb_1)\n## Banned phrases\nInsufficient evidence this period.\n## Visual codes\nInsufficient evidence this period.\n## Proven hooks\n- Open with canvas-to-garment proof. (pair_42)\n## Audience notes\nInsufficient evidence this period.",
+              distilled_from_json: JSON.stringify({ evidence_ids: ["fb_1", "pair_42"] }),
+              created_at: "2026-07-08T12:00:00",
+            },
+            versions: [
+              {
+                id: 2,
+                version_no: 2,
+                profile_md: "## Voice rules\n- Use source proof in the hook. (fb_1)\n## Banned phrases\nInsufficient evidence this period.\n## Visual codes\nInsufficient evidence this period.\n## Proven hooks\n- Open with canvas-to-garment proof. (pair_42)\n## Audience notes\nInsufficient evidence this period.",
+                distilled_from_json: "{}",
+                created_at: "2026-07-08T12:00:00",
+              },
+              {
+                id: 1,
+                version_no: 1,
+                profile_md: "## Voice rules\nInsufficient evidence this period.\n## Banned phrases\nInsufficient evidence this period.\n## Visual codes\nInsufficient evidence this period.\n## Proven hooks\nInsufficient evidence this period.\n## Audience notes\nInsufficient evidence this period.",
+                distilled_from_json: "{}",
+                created_at: "2026-07-07T12:00:00",
+              },
+            ],
+          });
+        }
         if (url.pathname === "/api/v1/calendar") {
           return response([
             {
@@ -117,6 +144,9 @@ describe("StrategyHubPage", () => {
     renderPage();
 
     expect(await screen.findByText(/source-painting truth/i)).toBeInTheDocument();
+    expect(screen.getByText(/profile v2/i)).toBeInTheDocument();
+    expect(screen.getByText(/use source proof in the hook/i)).toBeInTheDocument();
+    expect(screen.getByText(/version history/i)).toBeInTheDocument();
 
     await userEvent.click(screen.getByRole("button", { name: /plan/i }));
     expect(await screen.findByText("Launch teaser")).toBeInTheDocument();

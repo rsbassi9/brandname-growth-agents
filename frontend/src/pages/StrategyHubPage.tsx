@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { PageHeader, Panel } from "@/components/ui/Panel";
-import { api, type AssetOut } from "@/lib/api";
+import { api, type AssetOut, type BrandProfileHistoryOut } from "@/lib/api";
 import { cn } from "@/lib/utils";
 
 const lanes = [
@@ -42,6 +42,7 @@ export function StrategyHubPage() {
   const [copied, setCopied] = useState(false);
 
   const docs = useQuery({ queryKey: ["strategy", "docs"], queryFn: api.strategyDocs });
+  const brandProfile = useQuery({ queryKey: ["strategy", "brand-profile"], queryFn: api.brandProfile });
   const calendar = useQuery({ queryKey: ["calendar", "strategy"], queryFn: () => api.calendar() });
   const draftAssets = useQuery({
     queryKey: ["assets", "strategy", "drafts"],
@@ -116,7 +117,13 @@ export function StrategyHubPage() {
         </div>
       </div>
 
-      {lane === "know" ? <KnowLane docs={docs.data || []} loading={docs.isLoading} /> : null}
+      {lane === "know" ? (
+        <KnowLane
+          docs={docs.data || []}
+          profile={brandProfile.data}
+          loading={docs.isLoading || brandProfile.isLoading}
+        />
+      ) : null}
       {lane === "plan" ? <PlanLane items={calendar.data || []} loading={calendar.isLoading} /> : null}
       {lane === "build" ? <BuildLane assets={drafts} loading={draftAssets.isLoading} onSelect={setSelectedAssetId} /> : null}
       {lane === "ship" ? (
@@ -150,9 +157,60 @@ export function StrategyHubPage() {
   );
 }
 
-function KnowLane({ docs, loading }: { docs: Array<{ name: string; content: string }>; loading: boolean }) {
+function KnowLane({
+  docs,
+  profile,
+  loading,
+}: {
+  docs: Array<{ name: string; content: string }>;
+  profile?: BrandProfileHistoryOut;
+  loading: boolean;
+}) {
   return (
-    <div className="grid gap-4 p-4 xl:grid-cols-2">
+    <div className="space-y-4 p-4">
+      <div className="grid gap-4 xl:grid-cols-[1fr_420px]">
+        <Panel>
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <h2 className="font-display text-xl font-normal">Brand Profile</h2>
+            {profile?.current ? <Badge tone="ink">Profile v{profile.current.version_no}</Badge> : <Badge>Not distilled</Badge>}
+          </div>
+          <article className="mt-4 max-h-[480px] overflow-auto rounded-md border border-border bg-background p-4">
+            <pre className="whitespace-pre-wrap break-words font-sans text-sm leading-6 text-foreground">
+              {profile?.current?.profile_md || "No distilled profile yet."}
+            </pre>
+          </article>
+        </Panel>
+        <Panel>
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <h2 className="font-display text-xl font-normal">Version History</h2>
+            <Badge>{profile?.versions.length || 0} versions</Badge>
+          </div>
+          <div className="mt-4 space-y-2">
+            {profile?.versions.map((version, index) => {
+              const previous = profile.versions[index + 1];
+              const diff = profileDiff(version.profile_md, previous?.profile_md || "");
+              return (
+                <div key={version.id} className="rounded-md border border-border bg-background p-3">
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <span className="text-sm font-semibold">v{version.version_no}</span>
+                    <div className="flex gap-2">
+                      <Badge tone="success">+{diff.added}</Badge>
+                      <Badge tone="danger">-{diff.removed}</Badge>
+                    </div>
+                  </div>
+                  <p className="mt-2 text-xs text-muted-foreground">{new Date(version.created_at).toLocaleString()}</p>
+                </div>
+              );
+            })}
+            {!profile?.versions.length ? (
+              <div className="rounded-md border border-dashed border-border p-3 text-sm text-muted-foreground">
+                Distilled profiles will appear here after the scheduled job runs.
+              </div>
+            ) : null}
+          </div>
+        </Panel>
+      </div>
+      <div className="grid gap-4 xl:grid-cols-2">
       {docs.map((doc) => (
         <Panel key={doc.name}>
           <div className="flex items-center justify-between gap-3">
@@ -169,8 +227,27 @@ function KnowLane({ docs, loading }: { docs: Array<{ name: string; content: stri
             </Panel>
           ))
         : null}
+      </div>
     </div>
   );
+}
+
+function profileDiff(current: string, previous: string) {
+  const currentLines = new Set(current.split("\n").map((line) => line.trim()).filter(Boolean));
+  const previousLines = new Set(previous.split("\n").map((line) => line.trim()).filter(Boolean));
+  let added = 0;
+  let removed = 0;
+  currentLines.forEach((line) => {
+    if (!previousLines.has(line)) {
+      added += 1;
+    }
+  });
+  previousLines.forEach((line) => {
+    if (!currentLines.has(line)) {
+      removed += 1;
+    }
+  });
+  return { added, removed };
 }
 
 function PlanLane({

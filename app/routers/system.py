@@ -11,6 +11,8 @@ from sqlalchemy.orm import Session
 from ..db import get_session
 from ..models import Job
 from ..schemas import (
+    BrandProfileDistillationScheduleIn,
+    BrandProfileDistillationScheduleOut,
     DailyWorkflowRunOut,
     DailyWorkflowScheduleIn,
     DailyWorkflowScheduleOut,
@@ -19,7 +21,14 @@ from ..schemas import (
     WorkflowRunReportOut,
     WorkflowRunStepOut,
 )
-from ..services.scheduler import enqueue_daily_workflow, get_daily_workflow_schedule, set_daily_workflow_schedule
+from ..services.scheduler import (
+    enqueue_brand_profile_distillation,
+    enqueue_daily_workflow,
+    get_brand_profile_distillation_schedule,
+    get_daily_workflow_schedule,
+    set_brand_profile_distillation_schedule,
+    set_daily_workflow_schedule,
+)
 from ..settings import get_settings
 
 router = APIRouter(prefix="/system", tags=["system"])
@@ -69,6 +78,38 @@ def update_daily_workflow_schedule(payload: DailyWorkflowScheduleIn) -> DailyWor
 @router.post("/daily-workflow/run", response_model=DailyWorkflowRunOut)
 def run_daily_workflow_now() -> DailyWorkflowRunOut:
     return DailyWorkflowRunOut(job_id=enqueue_daily_workflow("manual"))
+
+
+@router.get("/brand-profile-distillation", response_model=BrandProfileDistillationScheduleOut)
+def brand_profile_distillation_schedule() -> BrandProfileDistillationScheduleOut:
+    schedule = get_brand_profile_distillation_schedule()
+    return BrandProfileDistillationScheduleOut(
+        enabled=schedule.enabled,
+        time_local=schedule.time_local,
+        weekday=schedule.weekday,
+        last_enqueued_date=schedule.last_enqueued_date,
+    )
+
+
+@router.put("/brand-profile-distillation", response_model=BrandProfileDistillationScheduleOut)
+def update_brand_profile_distillation_schedule(
+    payload: BrandProfileDistillationScheduleIn,
+) -> BrandProfileDistillationScheduleOut:
+    try:
+        schedule = set_brand_profile_distillation_schedule(payload.enabled, payload.time_local, payload.weekday)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    return BrandProfileDistillationScheduleOut(
+        enabled=schedule.enabled,
+        time_local=schedule.time_local,
+        weekday=schedule.weekday,
+        last_enqueued_date=schedule.last_enqueued_date,
+    )
+
+
+@router.post("/brand-profile-distillation/run", response_model=DailyWorkflowRunOut)
+def run_brand_profile_distillation_now() -> DailyWorkflowRunOut:
+    return DailyWorkflowRunOut(job_id=enqueue_brand_profile_distillation("manual"))
 
 
 @router.get("/daily-workflow/runs", response_model=list[WorkflowRunReportOut])

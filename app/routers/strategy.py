@@ -6,12 +6,13 @@ brand_context/*.md is prompt/context IP: rendered read-only, never rewritten.
 from __future__ import annotations
 
 from fastapi import APIRouter, Depends, HTTPException
+from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from ..db import get_session
-from ..models import FeedbackEvent
+from ..models import BrandProfileVersion, FeedbackEvent
 from ..paths import brand_context_dir
-from ..schemas import FeedbackIn, FeedbackOut, StrategyDocOut
+from ..schemas import BrandProfileHistoryOut, FeedbackIn, FeedbackOut, StrategyDocOut
 from ..services.jobs import job_queue
 from ..services.learning import FeedbackEntry, append_feedback, feedback_summary
 
@@ -36,6 +37,14 @@ def get_context_doc(name: str) -> StrategyDocOut:
     if safe != name or not path.exists():
         raise HTTPException(status_code=404, detail="Context document not found")
     return StrategyDocOut(name=safe, content=path.read_text(encoding="utf-8"))
+
+
+@router.get("/brand-profile", response_model=BrandProfileHistoryOut)
+def brand_profile_history(session: Session = Depends(get_session)) -> BrandProfileHistoryOut:
+    versions = session.execute(
+        select(BrandProfileVersion).order_by(BrandProfileVersion.version_no.desc()).limit(20)
+    ).scalars().all()
+    return BrandProfileHistoryOut(current=versions[0] if versions else None, versions=versions)
 
 
 @router.get("/learn/summary")

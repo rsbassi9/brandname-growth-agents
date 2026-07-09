@@ -210,6 +210,19 @@ export interface FeedbackOut {
   category: string;
 }
 
+export interface BrandProfileVersionOut {
+  id: number;
+  version_no: number;
+  profile_md: string;
+  distilled_from_json: string;
+  created_at: string;
+}
+
+export interface BrandProfileHistoryOut {
+  current: BrandProfileVersionOut | null;
+  versions: BrandProfileVersionOut[];
+}
+
 export interface LibrarySummaryOut {
   total: number;
   by_type: Record<string, number>;
@@ -323,6 +336,7 @@ export const api = {
       body: JSON.stringify({ item_ids }),
     }),
   strategyDocs: () => request<StrategyDocOut[]>("/strategy/context"),
+  brandProfile: () => request<BrandProfileHistoryOut>("/strategy/brand-profile"),
   learnSummary: () => request<{ summary: string }>("/strategy/learn/summary"),
   postFeedback: (payload: FeedbackIn) =>
     request<FeedbackOut>("/strategy/learn/feedback", { method: "POST", body: JSON.stringify(payload) }),

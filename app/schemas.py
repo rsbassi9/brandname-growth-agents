@@ -250,6 +250,16 @@ class DailyWorkflowScheduleOut(DailyWorkflowScheduleIn):
     last_enqueued_date: str = ""
 
 
+class BrandProfileDistillationScheduleIn(BaseModel):
+    enabled: bool = False
+    time_local: str = Field(default="09:00", pattern=r"^\d{2}:\d{2}$")
+    weekday: int = Field(default=0, ge=0, le=6)
+
+
+class BrandProfileDistillationScheduleOut(BrandProfileDistillationScheduleIn):
+    last_enqueued_date: str = ""
+
+
 class DailyWorkflowRunOut(BaseModel):
     job_id: str
 
@@ -275,3 +285,8 @@ class WorkflowRunReportOut(BaseModel):
 class StrategyDocOut(BaseModel):
     name: str
     content: str
+
+
+class BrandProfileHistoryOut(BaseModel):
+    current: BrandProfileVersionOut | None = None
+    versions: list[BrandProfileVersionOut] = Field(default_factory=list)
