@@ -82,6 +82,46 @@ def test_search_filters_by_kind(app_env) -> None:
     assert [item.document.kind for item in results] == ["feedback"]
 
 
+def test_memory_context_boosts_selected_winners(app_env) -> None:
+    import json
+
+    from app.db import init_db, session_scope
+    from app.models import BrainDocument, BrainEmbedding
+    from app.services.brain import build_memory_context, embedding_model_label, embed_texts, vector_to_blob
+
+    init_db()
+    vector = embed_texts(["canvas fragment"])[0]
+    with session_scope() as session:
+        unselected = BrainDocument(
+            kind="asset_version",
+            ref_id="asset:1",
+            text="canvas fragment but unselected",
+            meta_json=json.dumps({"is_selected": False}),
+        )
+        selected = BrainDocument(
+            kind="asset_version",
+            ref_id="asset:2",
+            text="canvas fragment selected winner",
+            meta_json=json.dumps({"is_selected": True}),
+        )
+        session.add_all([unselected, selected])
+        session.flush()
+        for document in [unselected, selected]:
+            session.add(
+                BrainEmbedding(
+                    document_id=document.id,
+                    model=embedding_model_label(),
+                    dim=vector.size,
+                    vector=vector_to_blob(vector),
+                )
+            )
+
+    memory = build_memory_context("canvas fragment", k=2)
+
+    assert memory.document_ids == [2, 1]
+    assert "doc#2" in memory.block.splitlines()[2]
+
+
 def test_local_only_embeddings_make_zero_network_calls(app_env, monkeypatch) -> None:
     from app.services import brain
 

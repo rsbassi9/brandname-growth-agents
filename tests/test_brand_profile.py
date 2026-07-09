@@ -17,6 +17,36 @@ Insufficient evidence this period.
 Insufficient evidence this period."""
 
 
+EXPECTED_DISTILLATION_PROMPT = """SYSTEM:
+
+You are the brand strategist for BRAND NAME, a streetwear label. You distill observed evidence into an operating brand profile that other agents follow when generating content. You work ONLY from the evidence provided — no generic marketing advice, no invented rules.
+
+OUTPUT CONTRACT: respond with ONLY markdown containing exactly these five H2 sections, in this order: `## Voice rules`, `## Banned phrases`, `## Visual codes`, `## Proven hooks`, `## Audience notes`.
+
+HARD CONSTRAINTS:
+1. Every bullet must cite the evidence ids it derives from, in parentheses at the end (e.g. `(fb_123, pair_45)`). A bullet with no citation is invalid.
+2. Prefer patterns from SELECTED versions and positive feedback; a pattern appearing only in unselected/negative material may ONLY appear under Banned phrases or as a "avoid" rule.
+3. Carry forward rules from the current profile unless newer evidence contradicts them; when reversing or removing a rule, add a bullet noting the reversal with the contradicting ids.
+4. Banned phrases must actually appear in rejected or negatively-received material — never ban speculatively.
+5. Maximum 40 bullets total across all sections; each bullet at most 2 sentences, written as an imperative instruction.
+6. If a section has insufficient evidence this period, write exactly: `Insufficient evidence this period.` — never pad with plausible-sounding filler.
+
+USER (template):
+
+CURRENT PROFILE (v{version_no}): {current_profile_md}
+FEEDBACK EVENTS since {since_date} (id, target, sentiment, text): {feedback_events}
+SELECTED vs UNSELECTED version pairs (pair id, selected text/params, unselected text/params): {version_pairs}
+METRIC INSIGHTS (if any): {metric_insights}
+
+Write the new profile markdown now."""
+
+
+def test_distillation_prompt_constant_matches_appendix_a() -> None:
+    from app.services.brand_profile import BRAND_PROFILE_DISTILLATION_PROMPT
+
+    assert BRAND_PROFILE_DISTILLATION_PROMPT == EXPECTED_DISTILLATION_PROMPT
+
+
 def test_distill_brand_profile_job_writes_immutable_version(app_env, monkeypatch) -> None:
     from app.db import init_db, session_scope
     from app.models import Asset, AssetVersion, BrandProfileVersion, FeedbackEvent
@@ -79,6 +109,37 @@ def test_distill_brand_profile_job_writes_immutable_version(app_env, monkeypatch
         assert "## Voice rules" in profile.profile_md
         distilled_from = json.loads(profile.distilled_from_json)
         assert set(distilled_from["evidence_ids"]) == {"fb_1", "pair_1_1_2"}
+
+
+def test_distillation_creates_next_version_without_mutating_current(app_env, monkeypatch) -> None:
+    from app.db import init_db, session_scope
+    from app.models import BrandProfileVersion
+    from app.services.brand_profile import distill_brand_profile
+
+    init_db()
+    with session_scope() as session:
+        session.add(
+            BrandProfileVersion(
+                version_no=1,
+                profile_md="## Voice rules\nInsufficient evidence this period.",
+                distilled_from_json='{"evidence_ids":[]}',
+            )
+        )
+
+    async def fake_agent(prompt: str) -> str:
+        assert "CURRENT PROFILE (v1)" in prompt
+        return PROFILE_RESPONSE
+
+    monkeypatch.setattr("app.services.brand_profile.run_distillation_agent", fake_agent)
+    result = asyncio.run(distill_brand_profile())
+
+    assert result["created"] is True
+    assert result["version_no"] == 2
+    with session_scope() as session:
+        profiles = session.query(BrandProfileVersion).order_by(BrandProfileVersion.version_no).all()
+        assert [profile.version_no for profile in profiles] == [1, 2]
+        assert profiles[0].profile_md == "## Voice rules\nInsufficient evidence this period."
+        assert json.loads(profiles[1].distilled_from_json)["previous_version_no"] == 1
 
 
 def test_invalid_distillation_response_is_dropped(app_env, monkeypatch) -> None:
