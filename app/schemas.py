@@ -90,6 +90,9 @@ class PublishedPostOut(BaseModel):
     channel: PublishedPostChannel
     external_ref: str | None
     permalink: str | None
+    title_or_caption: str | None
+    post_type: str | None
+    meta_json: str
     published_at: datetime | None
     created_at: datetime
 
@@ -107,7 +110,19 @@ class PostMetricOut(BaseModel):
     shares: int | None
     saves: int | None
     clicks: int | None
+    follows_from_post: int | None
+    meta_json: str
     engagement_rate: float | None
+
+
+class PerformanceImportOut(BaseModel):
+    status: str = "imported"
+    detected_columns: list[str] = Field(default_factory=list)
+    posts_upserted: int = 0
+    metrics_inserted: int = 0
+    warnings: list[str] = Field(default_factory=list)
+    posts: list[PublishedPostOut] = Field(default_factory=list)
+    metrics: list[PostMetricOut] = Field(default_factory=list)
 
 
 class SourceAssetIndexRequest(BaseModel):

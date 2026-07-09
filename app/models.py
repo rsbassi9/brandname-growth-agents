@@ -141,6 +141,9 @@ class PublishedPost(Base):
     channel: Mapped[str] = mapped_column(String(32), nullable=False)
     external_ref: Mapped[str | None] = mapped_column(String(500), nullable=True)
     permalink: Mapped[str | None] = mapped_column(String(1000), nullable=True)
+    title_or_caption: Mapped[str | None] = mapped_column(Text, nullable=True)
+    post_type: Mapped[str | None] = mapped_column(String(120), nullable=True)
+    meta_json: Mapped[str] = mapped_column(Text, default="{}", nullable=False)
     published_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
 
@@ -163,6 +166,8 @@ class PostMetric(Base):
     shares: Mapped[int | None] = mapped_column(Integer, nullable=True)
     saves: Mapped[int | None] = mapped_column(Integer, nullable=True)
     clicks: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    follows_from_post: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    meta_json: Mapped[str] = mapped_column(Text, default="{}", nullable=False)
     engagement_rate: Mapped[float | None] = mapped_column(Float, nullable=True)
 
     published_post: Mapped[PublishedPost] = relationship(back_populates="metrics")

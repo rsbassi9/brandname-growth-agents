@@ -1,12 +1,23 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { CalendarDays, CheckCircle2, Clipboard, Download, FileText, GraduationCap, Layers3, Send, Sparkles } from "lucide-react";
+import {
+  CalendarDays,
+  CheckCircle2,
+  Clipboard,
+  Download,
+  FileText,
+  GraduationCap,
+  Layers3,
+  Send,
+  Sparkles,
+  Upload,
+} from "lucide-react";
 import { FormEvent, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { PageHeader, Panel } from "@/components/ui/Panel";
-import { api, type AssetOut, type BrandProfileHistoryOut } from "@/lib/api";
+import { api, type AssetOut, type BrandProfileHistoryOut, type PerformanceChannel } from "@/lib/api";
 import { cn } from "@/lib/utils";
 
 const lanes = [
@@ -40,6 +51,9 @@ export function StrategyHubPage() {
   const [comment, setComment] = useState("");
   const [improvement, setImprovement] = useState("");
   const [copied, setCopied] = useState(false);
+  const [performanceChannel, setPerformanceChannel] = useState<PerformanceChannel>("instagram");
+  const [performanceFile, setPerformanceFile] = useState<File | null>(null);
+  const [performancePaste, setPerformancePaste] = useState("");
 
   const docs = useQuery({ queryKey: ["strategy", "docs"], queryFn: api.strategyDocs });
   const brandProfile = useQuery({ queryKey: ["strategy", "brand-profile"], queryFn: api.brandProfile });
@@ -70,6 +84,14 @@ export function StrategyHubPage() {
       setImprovement("");
     },
   });
+  const performanceImport = useMutation({
+    mutationFn: () =>
+      api.importPerformance({
+        channel: performanceChannel,
+        file: performanceFile,
+        csv_text: performancePaste,
+      }),
+  });
 
   const drafts = draftAssets.data?.items || [];
   const activeAsset = selectedAsset.data;
@@ -81,6 +103,11 @@ export function StrategyHubPage() {
   function submitFeedback(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     feedback.mutate();
+  }
+
+  function submitPerformanceImport(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    performanceImport.mutate();
   }
 
   async function copyCaption() {
@@ -146,11 +173,21 @@ export function StrategyHubPage() {
           improvement={improvement}
           pending={feedback.isPending}
           error={feedback.error}
+          performanceChannel={performanceChannel}
+          performanceFile={performanceFile}
+          performancePaste={performancePaste}
+          performancePending={performanceImport.isPending}
+          performanceResult={performanceImport.data}
+          performanceError={performanceImport.error}
           onTarget={setFeedbackTarget}
           onRating={setRating}
           onComment={setComment}
           onImprovement={setImprovement}
           onSubmit={submitFeedback}
+          onPerformanceChannel={setPerformanceChannel}
+          onPerformanceFile={setPerformanceFile}
+          onPerformancePaste={setPerformancePaste}
+          onPerformanceSubmit={submitPerformanceImport}
         />
       ) : null}
     </div>
@@ -415,11 +452,21 @@ function LearnLane({
   improvement,
   pending,
   error,
+  performanceChannel,
+  performanceFile,
+  performancePaste,
+  performancePending,
+  performanceResult,
+  performanceError,
   onTarget,
   onRating,
   onComment,
   onImprovement,
   onSubmit,
+  onPerformanceChannel,
+  onPerformanceFile,
+  onPerformancePaste,
+  onPerformanceSubmit,
 }: {
   summary: string;
   feedbackTarget: string;
@@ -428,17 +475,96 @@ function LearnLane({
   improvement: string;
   pending: boolean;
   error: unknown;
+  performanceChannel: PerformanceChannel;
+  performanceFile: File | null;
+  performancePaste: string;
+  performancePending: boolean;
+  performanceResult?: {
+    detected_columns: string[];
+    posts_upserted: number;
+    metrics_inserted: number;
+    warnings: string[];
+  };
+  performanceError: unknown;
   onTarget: (value: string) => void;
   onRating: (value: string) => void;
   onComment: (value: string) => void;
   onImprovement: (value: string) => void;
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
+  onPerformanceChannel: (value: PerformanceChannel) => void;
+  onPerformanceFile: (value: File | null) => void;
+  onPerformancePaste: (value: string) => void;
+  onPerformanceSubmit: (event: FormEvent<HTMLFormElement>) => void;
 }) {
   return (
     <div className="grid gap-4 p-4 xl:grid-cols-[1fr_420px]">
       <Panel>
         <h2 className="font-display text-xl font-normal">Learning Loop</h2>
         <p className="mt-4 whitespace-pre-line text-sm leading-6 text-muted-foreground">{summary || "No learning summary yet."}</p>
+        <form className="mt-5 space-y-4 border-t border-border pt-4" onSubmit={onPerformanceSubmit}>
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <h3 className="text-sm font-semibold">Performance</h3>
+            <Badge>{performanceResult ? `${performanceResult.metrics_inserted} metrics` : "CSV import"}</Badge>
+          </div>
+          <p className="text-xs leading-5 text-muted-foreground">
+            CSV sources: Meta Business Suite Insights Content Export; TikTok Studio Analytics Content Download.
+          </p>
+          <label className="text-sm font-medium" htmlFor="performance-channel">
+            Channel
+            <select
+              id="performance-channel"
+              className="mt-2 h-11 w-full rounded-md border border-input bg-background px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+              value={performanceChannel}
+              onChange={(event) => onPerformanceChannel(event.target.value as PerformanceChannel)}
+            >
+              <option value="instagram">Instagram</option>
+              <option value="tiktok">TikTok</option>
+              <option value="facebook">Facebook</option>
+              <option value="other">Other</option>
+            </select>
+          </label>
+          <label className="block text-sm font-medium" htmlFor="performance-file">
+            CSV file
+            <input
+              id="performance-file"
+              type="file"
+              accept=".csv,text/csv"
+              className="mt-2 block w-full rounded-md border border-input bg-background px-3 py-2 text-sm file:mr-3 file:rounded-md file:border-0 file:bg-muted file:px-3 file:py-2 file:text-sm file:font-medium"
+              onChange={(event) => onPerformanceFile(event.target.files?.[0] || null)}
+            />
+          </label>
+          <label className="block text-sm font-medium" htmlFor="performance-paste">
+            Paste table
+            <textarea
+              id="performance-paste"
+              className="mt-2 min-h-28 w-full rounded-md border border-input bg-background px-3 py-3 font-mono text-xs leading-5 outline-none focus:ring-2 focus:ring-ring"
+              value={performancePaste}
+              onChange={(event) => onPerformancePaste(event.target.value)}
+            />
+          </label>
+          <Button type="submit" variant="outline" disabled={performancePending || (!performanceFile && !performancePaste.trim())}>
+            <Upload className="h-4 w-4" />
+            Import CSV
+          </Button>
+          {performanceFile ? <p className="text-xs text-muted-foreground">{performanceFile.name}</p> : null}
+          {performanceResult ? (
+            <div className="rounded-md border border-border bg-background p-3 text-sm">
+              <div className="flex flex-wrap gap-2">
+                <Badge tone="success">{performanceResult.posts_upserted} posts</Badge>
+                <Badge tone="success">{performanceResult.metrics_inserted} metrics</Badge>
+              </div>
+              <p className="mt-3 text-xs text-muted-foreground">Detected: {performanceResult.detected_columns.join(", ")}</p>
+              {performanceResult.warnings.length ? (
+                <p className="mt-2 text-xs text-warning">{performanceResult.warnings.join(" ")}</p>
+              ) : null}
+            </div>
+          ) : null}
+          {performanceError ? (
+            <p role="alert" className="text-sm text-danger">
+              {performanceError instanceof Error ? performanceError.message : "Performance import failed."}
+            </p>
+          ) : null}
+        </form>
       </Panel>
       <Panel>
         <form className="space-y-4" onSubmit={onSubmit}>

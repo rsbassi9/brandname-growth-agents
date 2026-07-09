@@ -131,6 +131,15 @@ describe("StrategyHubPage", () => {
             201,
           );
         }
+        if (url.pathname === "/api/v1/performance/import" && init?.method === "POST") {
+          return response({
+            status: "imported",
+            detected_columns: ["Post date", "Permalink", "Views"],
+            posts_upserted: 1,
+            metrics_inserted: 1,
+            warnings: [],
+          });
+        }
         return response({}, 404);
       }),
     );
@@ -162,6 +171,15 @@ describe("StrategyHubPage", () => {
 
     await userEvent.click(screen.getByRole("button", { name: /^learn$/i }));
     expect(await screen.findByText(/product-truth captions/i)).toBeInTheDocument();
+    await userEvent.type(screen.getByLabelText(/paste table/i), "Post date,Permalink,Views\n2026-07-01,x,100");
+    await userEvent.click(screen.getByRole("button", { name: /import csv/i }));
+    await waitFor(() =>
+      expect(fetch).toHaveBeenCalledWith(
+        "/api/v1/performance/import",
+        expect.objectContaining({ method: "POST", body: expect.any(FormData) }),
+      ),
+    );
+    expect(await screen.findByText(/post date, permalink, views/i)).toBeInTheDocument();
     await userEvent.type(screen.getByLabelText(/output path/i), "asset:42");
     await userEvent.selectOptions(screen.getByLabelText(/rating/i), "5");
     await userEvent.type(screen.getByLabelText(/comment/i), "Sharper.");

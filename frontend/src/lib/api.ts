@@ -223,6 +223,16 @@ export interface BrandProfileHistoryOut {
   versions: BrandProfileVersionOut[];
 }
 
+export type PerformanceChannel = "instagram" | "tiktok" | "facebook" | "other";
+
+export interface PerformanceImportOut {
+  status: string;
+  detected_columns: string[];
+  posts_upserted: number;
+  metrics_inserted: number;
+  warnings: string[];
+}
+
 export interface LibrarySummaryOut {
   total: number;
   by_type: Record<string, number>;
@@ -255,6 +265,21 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     return undefined as T;
   }
 
+  return (await response.json()) as T;
+}
+
+async function requestForm<T>(path: string, body: FormData): Promise<T> {
+  const response = await fetch(`${API_BASE}${path}`, { method: "POST", body });
+  if (!response.ok) {
+    let detail = response.statusText;
+    try {
+      const parsed = (await response.json()) as { detail?: string | { message?: string } };
+      detail = typeof parsed.detail === "string" ? parsed.detail : parsed.detail?.message || detail;
+    } catch {
+      // Keep the HTTP status text when no JSON body is returned.
+    }
+    throw new Error(detail);
+  }
   return (await response.json()) as T;
 }
 
@@ -337,6 +362,16 @@ export const api = {
     }),
   strategyDocs: () => request<StrategyDocOut[]>("/strategy/context"),
   brandProfile: () => request<BrandProfileHistoryOut>("/strategy/brand-profile"),
+  importPerformance: (payload: { channel: PerformanceChannel; file?: File | null; csv_text?: string }) => {
+    const body = new FormData();
+    body.set("channel", payload.channel);
+    if (payload.file) {
+      body.set("file", payload.file);
+    } else {
+      body.set("file", new Blob([payload.csv_text || ""], { type: "text/csv" }), "pasted.csv");
+    }
+    return requestForm<PerformanceImportOut>("/performance/import", body);
+  },
   learnSummary: () => request<{ summary: string }>("/strategy/learn/summary"),
   postFeedback: (payload: FeedbackIn) =>
     request<FeedbackOut>("/strategy/learn/feedback", { method: "POST", body: JSON.stringify(payload) }),
