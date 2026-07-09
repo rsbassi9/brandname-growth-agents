@@ -12,6 +12,7 @@ from ..db import get_session
 from ..models import FeedbackEvent
 from ..paths import brand_context_dir
 from ..schemas import FeedbackIn, FeedbackOut, StrategyDocOut
+from ..services.jobs import job_queue
 from ..services.learning import FeedbackEntry, append_feedback, feedback_summary
 
 router = APIRouter(prefix="/strategy", tags=["strategy"])
@@ -67,4 +68,5 @@ def post_feedback(payload: FeedbackIn, session: Session = Depends(get_session)) 
     )
     session.add(event)
     session.commit()
+    job_queue.enqueue("brain_index", {"feedback_id": event.id})
     return event

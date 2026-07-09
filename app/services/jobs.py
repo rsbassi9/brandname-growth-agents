@@ -2,7 +2,7 @@
 
 Single asyncio worker started in the FastAPI lifespan. Jobs are persisted in
 the `jobs` table; results in `result_json`. Job kinds: generate_asset,
-run_daily_workflow, render_carousel, image_iterate.
+run_daily_workflow, render_carousel, image_iterate, brain_index.
 
 The run_daily_workflow handler checks LOCAL_ONLY_AGENT_RUNS and uses the
 deterministic port of src/local_workflow.py when true — this closes the legacy
@@ -29,7 +29,7 @@ from ..settings import get_settings
 
 logger = logging.getLogger(__name__)
 
-JOB_KINDS = ("generate_asset", "run_daily_workflow", "render_carousel", "image_iterate")
+JOB_KINDS = ("generate_asset", "run_daily_workflow", "render_carousel", "image_iterate", "brain_index")
 
 
 class JobQueue:
@@ -176,23 +176,26 @@ def next_version_no(session, asset_id: int) -> int:
 
 
 def _persist_version(asset_id: int, generated: dict[str, Any], params: dict[str, Any]) -> int:
+    version_id: int | None = None
     with session_scope() as session:
         asset = session.get(Asset, asset_id)
         if asset is None:
             raise ValueError(f"Asset {asset_id} not found")
         version_no = next_version_no(session, asset_id)
-        session.add(
-            AssetVersion(
-                asset_id=asset_id,
-                version_no=version_no,
-                prompt_snapshot=generated.get("prompt", ""),
-                params_json=json.dumps(params, ensure_ascii=False),
-                content_text=generated.get("content_text"),
-                file_path=generated.get("file_path"),
-                model_used=generated.get("model_used", ""),
-                is_selected=version_no == 1,
-            )
+        version = AssetVersion(
+            asset_id=asset_id,
+            version_no=version_no,
+            prompt_snapshot=generated.get("prompt", ""),
+            params_json=json.dumps(params, ensure_ascii=False),
+            content_text=generated.get("content_text"),
+            file_path=generated.get("file_path"),
+            model_used=generated.get("model_used", ""),
+            is_selected=version_no == 1,
         )
+        session.add(version)
+        session.flush()
+        version_id = version.id
+    _enqueue_brain_index(asset_version_id=version_id)
     return version_no
 
 
@@ -240,6 +243,7 @@ async def _handle_run_daily_workflow(job_id: str, payload: dict[str, Any]) -> di
 
 def _persist_daily_output_assets(paths: dict[str, str], mode: str, source: str) -> list[dict[str, Any]]:
     persisted: list[dict[str, Any]] = []
+    version_ids: list[int] = []
     with session_scope() as session:
         for name, raw_path in paths.items():
             path = Path(raw_path)
@@ -254,22 +258,25 @@ def _persist_daily_output_assets(paths: dict[str, str], mode: str, source: str) 
                 )
                 session.add(asset)
                 session.flush()
-                session.add(
-                    AssetVersion(
-                        asset_id=asset.id,
-                        version_no=1,
-                        prompt_snapshot=f"run_daily_workflow:{name}",
-                        params_json=json.dumps(
-                            {"workflow": "run_daily_workflow", "mode": mode, "source": source, "output_key": name},
-                            ensure_ascii=False,
-                        ),
-                        content_text=content_text,
-                        file_path=str(path),
-                        model_used=f"{mode}-daily-workflow",
-                        is_selected=True,
-                    )
+                version = AssetVersion(
+                    asset_id=asset.id,
+                    version_no=1,
+                    prompt_snapshot=f"run_daily_workflow:{name}",
+                    params_json=json.dumps(
+                        {"workflow": "run_daily_workflow", "mode": mode, "source": source, "output_key": name},
+                        ensure_ascii=False,
+                    ),
+                    content_text=content_text,
+                    file_path=str(path),
+                    model_used=f"{mode}-daily-workflow",
+                    is_selected=True,
                 )
+                session.add(version)
+                session.flush()
+                version_ids.append(version.id)
             persisted.append({"output_key": name, "asset_id": asset.id, "source_path": str(path)})
+    for version_id in version_ids:
+        _enqueue_brain_index(asset_version_id=version_id)
     return persisted
 
 
@@ -359,11 +366,28 @@ async def _handle_image_iterate(job_id: str, payload: dict[str, Any]) -> dict[st
     return {**{k: v for k, v in result.items() if k != "prompt"}, "asset_id": asset_id, "version_no": version_no}
 
 
+async def _handle_brain_index(job_id: str, payload: dict[str, Any]) -> dict[str, Any]:
+    from .brain import handle_brain_index
+
+    _update_job(job_id, progress_pct=30, message="indexing brand brain")
+    return await handle_brain_index(payload)
+
+
+def _enqueue_brain_index(**payload: Any) -> None:
+    if not any(value is not None for value in payload.values()):
+        return
+    try:
+        job_queue.enqueue("brain_index", payload)
+    except Exception:
+        logger.exception("Could not enqueue brain_index job")
+
+
 _HANDLERS = {
     "generate_asset": _handle_generate_asset,
     "run_daily_workflow": _handle_run_daily_workflow,
     "render_carousel": _handle_render_carousel,
     "image_iterate": _handle_image_iterate,
+    "brain_index": _handle_brain_index,
 }
 
 # Application-wide queue instance (started/stopped by the FastAPI lifespan).

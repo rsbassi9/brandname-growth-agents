@@ -3,14 +3,19 @@
 from __future__ import annotations
 
 import hashlib
+import json
 import re
+import sys
 from dataclasses import dataclass
+from pathlib import Path
+from typing import Any
 
 import numpy as np
 from sqlalchemy import select
 
-from ..db import session_scope
-from ..models import BrainDocument, BrainEmbedding
+from ..db import init_db, session_scope
+from ..models import Asset, AssetVersion, BrainDocument, BrainEmbedding, FeedbackEvent
+from ..paths import brand_context_dir
 from ..settings import get_settings
 from .openai_client import get_openai_client
 
@@ -73,6 +78,186 @@ def search(query: str, k: int = 5, kinds: list[str] | None = None) -> list[Brain
         return scored[:k]
 
 
+def index_asset_version(asset_version_id: int) -> dict[str, int]:
+    with session_scope() as session:
+        version = session.get(AssetVersion, asset_version_id)
+        if version is None:
+            return {"documents": 0, "embeddings": 0}
+        asset = session.get(Asset, version.asset_id)
+        text = _asset_version_text(asset, version)
+        meta = {
+            "asset_id": version.asset_id,
+            "version_no": version.version_no,
+            "asset_version_id": version.id,
+            "asset_type": asset.type if asset else "",
+            "is_selected": version.is_selected,
+        }
+        document = _upsert_document(
+            session,
+            kind="asset_version",
+            ref_id=f"{version.asset_id}:{version.version_no}",
+            text=text,
+            meta=meta,
+        )
+        embedding_created = _ensure_embedding(session, document)
+        return {"documents": 1, "embeddings": int(embedding_created)}
+
+
+def index_feedback_event(feedback_id: str) -> dict[str, int]:
+    with session_scope() as session:
+        event = session.get(FeedbackEvent, feedback_id)
+        if event is None:
+            return {"documents": 0, "embeddings": 0}
+        text = "\n".join(
+            [
+                f"Feedback target: {event.output_path}",
+                f"Rating: {event.rating if event.rating is not None else 'unknown'}",
+                f"Comment: {event.comment}",
+                f"Improvement request: {event.improvement_request}",
+                f"Category: {event.category}",
+            ]
+        ).strip()
+        document = _upsert_document(
+            session,
+            kind="feedback",
+            ref_id=event.id,
+            text=text,
+            meta={"feedback_id": event.id, "rating": event.rating, "category": event.category},
+        )
+        embedding_created = _ensure_embedding(session, document)
+        return {"documents": 1, "embeddings": int(embedding_created)}
+
+
+def run_backfill() -> dict[str, int]:
+    init_db()
+    counts = {"documents": 0, "embeddings": 0, "asset_versions": 0, "feedback": 0, "products": 0, "context_files": 0}
+    counts = _backfill_asset_versions(counts)
+    counts = _backfill_feedback(counts)
+    counts = _backfill_products(counts)
+    counts = _backfill_context_files(counts)
+    return counts
+
+
+def _backfill_asset_versions(counts: dict[str, int]) -> dict[str, int]:
+    with session_scope() as session:
+        version_ids = session.scalars(select(AssetVersion.id).order_by(AssetVersion.id)).all()
+    for version_id in version_ids:
+        result = index_asset_version(version_id)
+        counts["documents"] += result["documents"]
+        counts["embeddings"] += result["embeddings"]
+        counts["asset_versions"] += int(result["documents"] > 0)
+    return counts
+
+
+def _backfill_feedback(counts: dict[str, int]) -> dict[str, int]:
+    with session_scope() as session:
+        feedback_ids = session.scalars(select(FeedbackEvent.id).order_by(FeedbackEvent.id)).all()
+    for feedback_id in feedback_ids:
+        result = index_feedback_event(feedback_id)
+        counts["documents"] += result["documents"]
+        counts["embeddings"] += result["embeddings"]
+        counts["feedback"] += int(result["documents"] > 0)
+    return counts
+
+
+def _backfill_products(counts: dict[str, int]) -> dict[str, int]:
+    from .shopify import ShopifyService
+
+    preview = ShopifyService().product_preview(limit=80)
+    products = preview.get("products", [])
+    with session_scope() as session:
+        for product in products:
+            if not isinstance(product, dict):
+                continue
+            ref_id = str(product.get("handle") or product.get("id") or "").strip()
+            if not ref_id:
+                continue
+            text = "\n".join(
+                [
+                    f"Product: {product.get('title', '')}",
+                    f"Handle: {product.get('handle', '')}",
+                    f"Type: {product.get('product_type', '')}",
+                    f"Tags: {product.get('tags', '')}",
+                    f"Description: {product.get('description_excerpt', '')}",
+                ]
+            )
+            document = _upsert_document(session, "product", ref_id, text, product)
+            counts["documents"] += 1
+            counts["embeddings"] += int(_ensure_embedding(session, document))
+            counts["products"] += 1
+    return counts
+
+
+def _backfill_context_files(counts: dict[str, int]) -> dict[str, int]:
+    directory = brand_context_dir()
+    if not directory.exists():
+        return counts
+    with session_scope() as session:
+        for path in sorted(directory.glob("*.md")):
+            document = _upsert_document(
+                session,
+                "context_file",
+                path.name,
+                path.read_text(encoding="utf-8"),
+                {"path": str(path.relative_to(Path.cwd())) if path.is_relative_to(Path.cwd()) else str(path)},
+            )
+            counts["documents"] += 1
+            counts["embeddings"] += int(_ensure_embedding(session, document))
+            counts["context_files"] += 1
+    return counts
+
+
+def _upsert_document(session, kind: str, ref_id: str | None, text: str, meta: dict[str, Any]) -> BrainDocument:
+    document = None
+    if ref_id is not None:
+        document = session.execute(
+            select(BrainDocument).where(BrainDocument.kind == kind, BrainDocument.ref_id == ref_id)
+        ).scalar_one_or_none()
+    if document is None:
+        document = BrainDocument(kind=kind, ref_id=ref_id, text=text, meta_json=json.dumps(meta, ensure_ascii=False))
+        session.add(document)
+        session.flush()
+        return document
+    next_meta = json.dumps(meta, ensure_ascii=False)
+    if document.text != text or document.meta_json != next_meta:
+        document.text = text
+        document.meta_json = next_meta
+        if document.embedding is not None:
+            session.delete(document.embedding)
+            session.flush()
+    return document
+
+
+def _ensure_embedding(session, document: BrainDocument) -> bool:
+    if document.embedding is not None:
+        return False
+    vector = embed_texts([document.text])[0]
+    session.add(
+        BrainEmbedding(
+            document_id=document.id,
+            model=embedding_model_label(),
+            dim=vector.size,
+            vector=vector_to_blob(vector),
+        )
+    )
+    return True
+
+
+def _asset_version_text(asset: Asset | None, version: AssetVersion) -> str:
+    return "\n".join(
+        [
+            f"Asset: {asset.title if asset else version.asset_id}",
+            f"Type: {asset.type if asset else ''}",
+            f"Version: {version.version_no}",
+            f"Selected: {version.is_selected}",
+            "Prompt:",
+            version.prompt_snapshot or "",
+            "Content:",
+            version.content_text or version.file_path or "",
+        ]
+    ).strip()
+
+
 def _hash_vector(text: str) -> np.ndarray:
     vector = np.zeros(LOCAL_EMBED_DIM, dtype="<f4")
     for token in _TOKEN_RE.findall(text.lower()):
@@ -94,3 +279,26 @@ def _cosine(left: np.ndarray, right: np.ndarray) -> float:
     if left.size != right.size:
         return 0.0
     return float(np.dot(_normalize(left), _normalize(right)))
+
+
+async def handle_brain_index(payload: dict[str, Any]) -> dict[str, int]:
+    if payload.get("asset_version_id") is not None:
+        return index_asset_version(int(payload["asset_version_id"]))
+    if payload.get("feedback_id") is not None:
+        return index_feedback_event(str(payload["feedback_id"]))
+    if payload.get("backfill"):
+        return run_backfill()
+    return {"documents": 0, "embeddings": 0}
+
+
+def main(argv: list[str] | None = None) -> int:
+    args = list(argv if argv is not None else sys.argv[1:])
+    if args != ["backfill"]:
+        print("Usage: python -m app.services.brain backfill", file=sys.stderr)
+        return 2
+    print(json.dumps(run_backfill(), ensure_ascii=False))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -25,7 +25,8 @@
 - ✅ **P6 COMPLETE** — `docs/EXECUTION_REPORT.md` now records every P0-1 through P5-3 task with commit hashes and gate results, lists all `TODO(fable-review)` items, and notes no incomplete P0-P5 work.
 - ✅ **P7-1 COMPLETE** — added Brand Brain ORM models and schemas for `brain_documents`, `brain_embeddings`, and immutable `brand_profile_versions`; verified table creation, uniqueness, nullable-ref append semantics, one-embedding-per-document, and profile version uniqueness. **Verified:** backend pytest 68/68.
 - ✅ **P7-2 COMPLETE** — added `app/services/brain.py` with `BRAND_EMBED_MODEL`, OpenAI-compatible live embedding path through the existing wrapper, local-only deterministic 256-dim hashing vectorizer, float32 blob helpers, and numpy cosine search with kind filtering. **Verified:** backend pytest 73/73.
-- **NEXT: P7-3** ingestion hooks and idempotent backfill CLI.
+- ✅ **P7-3 COMPLETE** — added `brain_index` job kind, asset-version and feedback enqueue hooks, idempotent Brain document/embedding indexing, and `python -m app.services.brain backfill` covering asset versions, feedback, read-only Shopify products, and `brand_context/*.md` as data. **Verified:** backend pytest 76/76; real backfill CLI created 322 docs/embeddings with zero tracked data changes.
+- **NEXT: P7-4** retrieval-grounded generation and Playground memory disclosure.
 - ℹ️ **P7–P11 registered** — appended 2026-07-07 by Fable: P7 Brand Brain (retrieval memory + compounding brand profile), P8 performance ingestion & best-time model, P9 drag-and-drop calendar planner, P10 SEO team, P11 repurposing pipelines + weekly standup (new FINAL gate). Execute after P6, in order.
 
 ---
