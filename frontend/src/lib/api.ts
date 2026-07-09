@@ -31,6 +31,14 @@ export interface DailyWorkflowRunOut {
   job_id: string;
 }
 
+export interface CalendarGuardrailsOut {
+  max_items_per_day_channel: number;
+}
+
+export interface CalendarGuardrailsIn {
+  max_items_per_day_channel: number;
+}
+
 export interface WorkflowRunStepOut {
   name: string;
   status: string;
@@ -362,6 +370,12 @@ export const api = {
     }),
   runDailyWorkflow: () =>
     request<DailyWorkflowRunOut>("/system/daily-workflow/run", { method: "POST" }),
+  calendarGuardrails: () => request<CalendarGuardrailsOut>("/system/calendar-guardrails"),
+  updateCalendarGuardrails: (payload: CalendarGuardrailsIn) =>
+    request<CalendarGuardrailsOut>("/system/calendar-guardrails", {
+      method: "PUT",
+      body: JSON.stringify(payload),
+    }),
   dailyWorkflowRuns: () => request<WorkflowRunReportOut[]>("/system/daily-workflow/runs"),
   createAssetVideoPromptPack: (assetId: number) =>
     request<GenerateResponse>(`/assets/${assetId}/video-prompt-pack`, { method: "POST" }),

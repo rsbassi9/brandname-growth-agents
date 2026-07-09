@@ -95,6 +95,9 @@ describe("P2-5 Calendar and Feed Grid", () => {
         if (url.pathname === "/api/v1/performance/best-times") {
           return response([{ channel: "instagram", weekday: 2, hour: 18, sample_size: 3, mean_engagement_rate: 0.2 }]);
         }
+        if (url.pathname === "/api/v1/system/calendar-guardrails") {
+          return response({ max_items_per_day_channel: 3 });
+        }
         if (url.pathname === "/api/v1/calendar") {
           return response(calendarItems);
         }

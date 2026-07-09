@@ -9,10 +9,12 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from ..db import get_session
-from ..models import Job
+from ..models import Job, SettingsKV
 from ..schemas import (
     BrandProfileDistillationScheduleIn,
     BrandProfileDistillationScheduleOut,
+    CalendarGuardrailsIn,
+    CalendarGuardrailsOut,
     DailyWorkflowRunOut,
     DailyWorkflowScheduleIn,
     DailyWorkflowScheduleOut,
@@ -32,6 +34,7 @@ from ..services.scheduler import (
 from ..settings import get_settings
 
 router = APIRouter(prefix="/system", tags=["system"])
+_CALENDAR_GUARDRAILS_KEY = "calendar_guardrails.max_items_per_day_channel"
 
 
 @router.get("/health", response_model=HealthOut)
@@ -107,6 +110,25 @@ def update_brand_profile_distillation_schedule(
     )
 
 
+@router.get("/calendar-guardrails", response_model=CalendarGuardrailsOut)
+def calendar_guardrails(session: Session = Depends(get_session)) -> CalendarGuardrailsOut:
+    return CalendarGuardrailsOut(max_items_per_day_channel=_calendar_guardrail_limit(session))
+
+
+@router.put("/calendar-guardrails", response_model=CalendarGuardrailsOut)
+def update_calendar_guardrails(
+    payload: CalendarGuardrailsIn,
+    session: Session = Depends(get_session),
+) -> CalendarGuardrailsOut:
+    row = session.get(SettingsKV, _CALENDAR_GUARDRAILS_KEY)
+    if row is None:
+        session.add(SettingsKV(key=_CALENDAR_GUARDRAILS_KEY, value=str(payload.max_items_per_day_channel)))
+    else:
+        row.value = str(payload.max_items_per_day_channel)
+    session.commit()
+    return CalendarGuardrailsOut(max_items_per_day_channel=payload.max_items_per_day_channel)
+
+
 @router.post("/brand-profile-distillation/run", response_model=DailyWorkflowRunOut)
 def run_brand_profile_distillation_now() -> DailyWorkflowRunOut:
     return DailyWorkflowRunOut(job_id=enqueue_brand_profile_distillation("manual"))
@@ -169,3 +191,14 @@ def _load_result(result_json: str | None) -> dict:
     except json.JSONDecodeError:
         return {}
     return result if isinstance(result, dict) else {}
+
+
+def _calendar_guardrail_limit(session: Session) -> int:
+    row = session.get(SettingsKV, _CALENDAR_GUARDRAILS_KEY)
+    if row is None:
+        return 3
+    try:
+        value = int(row.value)
+    except ValueError:
+        return 3
+    return min(max(value, 1), 20)

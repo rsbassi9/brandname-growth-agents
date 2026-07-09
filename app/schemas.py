@@ -352,6 +352,14 @@ class BrandProfileDistillationScheduleOut(BrandProfileDistillationScheduleIn):
     last_enqueued_date: str = ""
 
 
+class CalendarGuardrailsIn(BaseModel):
+    max_items_per_day_channel: int = Field(default=3, ge=1, le=20)
+
+
+class CalendarGuardrailsOut(CalendarGuardrailsIn):
+    pass
+
+
 class DailyWorkflowRunOut(BaseModel):
     job_id: str
 

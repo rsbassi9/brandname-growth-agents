@@ -65,6 +65,16 @@ def test_feed_order_persists(client) -> None:
     assert ordered == ["post-2", "post-0", "post-1"]
 
 
+def test_calendar_guardrails_setting_persists(client) -> None:
+    assert client.get("/api/v1/system/calendar-guardrails").json()["max_items_per_day_channel"] == 3
+
+    response = client.put("/api/v1/system/calendar-guardrails", json={"max_items_per_day_channel": 5})
+
+    assert response.status_code == 200, response.text
+    assert response.json()["max_items_per_day_channel"] == 5
+    assert client.get("/api/v1/system/calendar-guardrails").json()["max_items_per_day_channel"] == 5
+
+
 def test_strategy_feedback_posts_event(client, app_env) -> None:
     response = client.post(
         "/api/v1/strategy/learn/feedback",

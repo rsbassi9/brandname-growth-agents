@@ -130,6 +130,38 @@ function slotTime(hour: number) {
   return `${String(hour).padStart(2, "0")}:00`;
 }
 
+function weekGuardrailWarnings(items: CalendarItemOut[], days: ReturnType<typeof weekDays>, maxPerDayChannel: number) {
+  const dates = new Set(days.map((day) => day.date));
+  const labels = new Map(days.map((day) => [day.date, `${day.label} ${day.day}`]));
+  const byDateChannel = new Map<string, { count: number; label: string; channel: string }>();
+  const byAsset = new Map<number, number>();
+
+  items
+    .filter((item) => dates.has(item.date))
+    .forEach((item) => {
+      const channel = itemChannel(item);
+      const key = `${item.date}:${channelKey(channel)}`;
+      const current = byDateChannel.get(key) || { count: 0, label: labels.get(item.date) || item.date, channel };
+      byDateChannel.set(key, { ...current, count: current.count + 1 });
+      if (item.asset_id !== null) {
+        byAsset.set(item.asset_id, (byAsset.get(item.asset_id) || 0) + 1);
+      }
+    });
+
+  const warnings: string[] = [];
+  byDateChannel.forEach((group) => {
+    if (group.count > maxPerDayChannel) {
+      warnings.push(`${group.label} has ${group.count} ${group.channel} items; max is ${maxPerDayChannel}.`);
+    }
+  });
+  byAsset.forEach((count, assetId) => {
+    if (count > 1) {
+      warnings.push(`Asset ${assetId} appears ${count} times this week.`);
+    }
+  });
+  return warnings;
+}
+
 function statusTone(status: string) {
   if (status === "published" || status === "selected") return "success";
   if (status === "scheduled" || status === "planned") return "warning";
@@ -171,6 +203,10 @@ export function CalendarPage() {
   const bestTimes = useQuery({
     queryKey: ["performance", "best-times", "calendar"],
     queryFn: () => api.performanceBestTimes(),
+  });
+  const guardrails = useQuery({
+    queryKey: ["system", "calendar-guardrails"],
+    queryFn: api.calendarGuardrails,
   });
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
@@ -289,6 +325,11 @@ export function CalendarPage() {
   const unscheduledAssets = useMemo(
     () => (draftAssets.data?.items || []).filter((asset) => !linkedAssetIds.has(asset.id)),
     [draftAssets.data?.items, linkedAssetIds],
+  );
+  const currentWeekDays = useMemo(() => weekDays(weekStart), [weekStart]);
+  const guardrailWarnings = useMemo(
+    () => weekGuardrailWarnings(calendar.data || [], currentWeekDays, guardrails.data?.max_items_per_day_channel || 3),
+    [calendar.data, currentWeekDays, guardrails.data?.max_items_per_day_channel],
   );
 
   function submit(event: FormEvent<HTMLFormElement>) {
@@ -484,7 +525,7 @@ export function CalendarPage() {
           <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={onDragStart} onDragEnd={onDragEnd} onDragCancel={() => setActiveId(null)}>
             <section className="min-w-0">
               <WeekCalendar
-                days={weekDays(weekStart)}
+                days={currentWeekDays}
                 byDate={byDate}
                 activeId={activeId}
                 updating={updateItem.isPending || deleteItem.isPending}
@@ -496,6 +537,7 @@ export function CalendarPage() {
                 onDelete={(itemId) => deleteItem.mutate(itemId)}
                 onVideoPack={(itemId) => createVideoPack.mutate(itemId)}
               />
+              {guardrailWarnings.length ? <GuardrailBanner warnings={guardrailWarnings} /> : null}
               {activeItem ? <span className="sr-only">Moving {activeItem.asset_id ? itemTitle(activeItem) : "draft asset"}</span> : null}
               {calendar.isLoading ? (
                 <Panel className="mt-4 h-24 animate-pulse bg-muted">
@@ -624,6 +666,19 @@ function WeekCalendar({
           ))}
         </WeekDayColumn>
       ))}
+    </div>
+  );
+}
+
+function GuardrailBanner({ warnings }: { warnings: string[] }) {
+  return (
+    <div className="mt-3 rounded-lg border border-warning/30 bg-warning-soft px-4 py-3 text-sm text-warning" role="status" aria-live="polite">
+      <p className="font-medium">Calendar guardrails</p>
+      <ul className="mt-1 space-y-1">
+        {warnings.map((warning) => (
+          <li key={warning}>{warning}</li>
+        ))}
+      </ul>
     </div>
   );
 }
