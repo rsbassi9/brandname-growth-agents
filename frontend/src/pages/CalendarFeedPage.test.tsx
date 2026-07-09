@@ -217,6 +217,75 @@ describe("P2-5 Calendar and Feed Grid", () => {
       ),
     );
   });
+
+  it("shows calendar guardrail warnings without blocking the week view", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
+        const url = new URL(String(input), "http://localhost");
+        if (url.pathname === "/api/v1/calendar") {
+          return response([
+            ...calendarItems,
+            {
+              id: "post-dup",
+              date: "2026-07-08",
+              status: "draft",
+              asset_id: 42,
+              data: { title: "Duplicate launch", channel: "Instagram" },
+            },
+          ]);
+        }
+        if (url.pathname === "/api/v1/assets") {
+          return response({ items: [], total: 0, limit: 60, offset: 0 });
+        }
+        if (url.pathname === "/api/v1/performance/best-times") {
+          return response([]);
+        }
+        if (url.pathname === "/api/v1/system/calendar-guardrails") {
+          return response({ max_items_per_day_channel: 1 });
+        }
+        return response({}, 404);
+      }),
+    );
+
+    renderRoute("/calendar");
+
+    await userEvent.click(await screen.findByRole("button", { name: /^week$/i }));
+    expect(await screen.findByText(/calendar guardrails/i)).toBeInTheDocument();
+    expect(screen.getByText(/has 2 instagram items/i)).toBeInTheDocument();
+    expect(screen.getByText(/asset 42 appears 2 times/i)).toBeInTheDocument();
+  });
+
+  it("rolls back a failed week reschedule with a visible error", async () => {
+    vi.stubGlobal(
+      "fetch",
+      vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
+        const url = new URL(String(input), "http://localhost");
+        if (url.pathname === "/api/v1/calendar/post-1" && init?.method === "PATCH") {
+          return response({ detail: "Calendar item could not be moved." }, 500);
+        }
+        if (url.pathname === "/api/v1/calendar") {
+          return response(calendarItems);
+        }
+        if (url.pathname === "/api/v1/assets") {
+          return response({ items: [], total: 0, limit: 60, offset: 0 });
+        }
+        if (url.pathname === "/api/v1/performance/best-times") {
+          return response([]);
+        }
+        if (url.pathname === "/api/v1/system/calendar-guardrails") {
+          return response({ max_items_per_day_channel: 3 });
+        }
+        return response({}, 404);
+      }),
+    );
+
+    renderRoute("/calendar");
+
+    await userEvent.click(await screen.findByRole("button", { name: /^week$/i }));
+    fireEvent.change(await screen.findByLabelText(/move date/i), { target: { value: "2026-07-09" } });
+    expect(await screen.findByRole("alert")).toHaveTextContent(/calendar item could not be moved/i);
+  });
 });
 
 function response(body: unknown, status = 200) {
