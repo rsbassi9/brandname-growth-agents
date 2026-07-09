@@ -12,18 +12,19 @@ import {
 } from "@dnd-kit/core";
 import { sortableKeyboardCoordinates } from "@dnd-kit/sortable";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { ArrowLeft, ArrowRight, CalendarRange, ExternalLink, GripVertical, Plus, Trash2, Video } from "lucide-react";
+import { ArrowLeft, ArrowRight, CalendarRange, ExternalLink, GripVertical, Plus, Search, Trash2, Video } from "lucide-react";
 import { FormEvent, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { PageHeader, Panel } from "@/components/ui/Panel";
-import { api, type CalendarItemOut, type CalendarItemPatch } from "@/lib/api";
+import { api, type AssetOut, type AssetType, type CalendarItemOut, type CalendarItemPatch } from "@/lib/api";
 import { cn } from "@/lib/utils";
 
 const statuses = ["draft", "planned", "scheduled", "published", "selected", "archived"];
 const weekdayLabels = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+const assetTypes: Array<"" | AssetType> = ["", "copy", "image_concept", "carousel", "video_script", "voiceover", "ad_brief"];
 type CalendarView = "month" | "week";
 
 function monthKey(date: Date) {
@@ -108,6 +109,10 @@ function itemSlot(item: CalendarItemOut) {
   return String(item.data.slot || "day");
 }
 
+function assetTypeLabel(type: string) {
+  return type.replace("_", " ");
+}
+
 function statusTone(status: string) {
   if (status === "published" || status === "selected") return "success";
   if (status === "scheduled" || status === "planned") return "warning";
@@ -134,11 +139,17 @@ export function CalendarPage() {
   const [assetId, setAssetId] = useState("");
   const [activeId, setActiveId] = useState<string | null>(null);
   const [moveError, setMoveError] = useState("");
+  const [traySearch, setTraySearch] = useState("");
+  const [trayType, setTrayType] = useState<"" | AssetType>("");
 
   const calendarQueryKey = ["calendar", view, view === "month" ? month : weekStart] as const;
   const calendar = useQuery({
     queryKey: calendarQueryKey,
     queryFn: () => (view === "month" ? api.calendar({ month }) : api.calendar()),
+  });
+  const draftAssets = useQuery({
+    queryKey: ["assets", "calendar-tray", traySearch, trayType],
+    queryFn: () => api.assets({ status: "draft", q: traySearch, type: trayType || undefined, limit: 60, offset: 0 }),
   });
   const sensors = useSensors(
     useSensor(PointerSensor, { activationConstraint: { distance: 6 } }),
@@ -158,6 +169,47 @@ export function CalendarPage() {
       queryClient.invalidateQueries({ queryKey: ["feed"] });
       setTitle("");
       setAssetId("");
+    },
+  });
+
+  const scheduleAsset = useMutation({
+    mutationFn: ({ asset, nextDate }: { asset: AssetOut; nextDate: string }) =>
+      api.createCalendarItem({
+        date: nextDate,
+        status: "draft",
+        asset_id: asset.id,
+        data: {
+          title: asset.title,
+          asset_type: asset.type,
+          slot: "day",
+        },
+      }),
+    onMutate: async ({ asset, nextDate }) => {
+      setMoveError("");
+      await queryClient.cancelQueries({ queryKey: ["calendar"] });
+      const previousItems = queryClient.getQueryData<CalendarItemOut[]>(calendarQueryKey);
+      if (previousItems) {
+        const optimistic: CalendarItemOut = {
+          id: `draft-${asset.id}`,
+          date: nextDate,
+          status: "draft",
+          asset_id: asset.id,
+          data: { title: asset.title, asset_type: asset.type, slot: "day" },
+        };
+        queryClient.setQueryData<CalendarItemOut[]>(calendarQueryKey, [...previousItems, optimistic]);
+      }
+      return { previousItems };
+    },
+    onError: (error, _variables, context) => {
+      if (context?.previousItems) {
+        queryClient.setQueryData(calendarQueryKey, context.previousItems);
+      }
+      setMoveError(error instanceof Error ? error.message : "Draft asset could not be scheduled.");
+    },
+    onSettled: () => {
+      queryClient.invalidateQueries({ queryKey: ["calendar"] });
+      queryClient.invalidateQueries({ queryKey: ["feed"] });
+      queryClient.invalidateQueries({ queryKey: ["assets", "calendar-tray"] });
     },
   });
 
@@ -212,6 +264,11 @@ export function CalendarPage() {
   });
 
   const byDate = useMemo(() => groupByDate(calendar.data || []), [calendar.data]);
+  const linkedAssetIds = useMemo(() => new Set((calendar.data || []).map((item) => item.asset_id).filter((id): id is number => id !== null)), [calendar.data]);
+  const unscheduledAssets = useMemo(
+    () => (draftAssets.data?.items || []).filter((asset) => !linkedAssetIds.has(asset.id)),
+    [draftAssets.data?.items, linkedAssetIds],
+  );
 
   function submit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -232,9 +289,17 @@ export function CalendarPage() {
 
   function onDragEnd(event: DragEndEvent) {
     const overId = event.over?.id ? String(event.over.id) : "";
+    const draggableId = String(event.active.id);
     setActiveId(null);
     if (!overId.startsWith("day:")) return;
-    moveItemToDate(String(event.active.id), overId.replace("day:", ""));
+    const nextDate = overId.replace("day:", "");
+    if (draggableId.startsWith("asset:")) {
+      const assetId = Number(draggableId.replace("asset:", ""));
+      const asset = unscheduledAssets.find((candidate) => candidate.id === assetId);
+      if (asset) scheduleAsset.mutate({ asset, nextDate });
+      return;
+    }
+    moveItemToDate(draggableId, nextDate);
   }
 
   const activeItem = (calendar.data || []).find((item) => item.id === activeId);
@@ -290,7 +355,7 @@ export function CalendarPage() {
         }
       />
 
-      <div className="grid gap-4 p-4 xl:grid-cols-[360px_1fr]">
+      <div className={cn("grid gap-4 p-4", view === "week" ? "xl:grid-cols-[320px_1fr_280px]" : "xl:grid-cols-[360px_1fr]")}>
         <Panel>
           <form className="space-y-4" onSubmit={submit}>
             <div>
@@ -366,8 +431,8 @@ export function CalendarPage() {
           </form>
         </Panel>
 
-        <section className="min-w-0">
-          {view === "month" ? (
+        {view === "month" ? (
+          <section className="min-w-0">
             <MonthCalendar
               days={calendarDays(month)}
               byDate={byDate}
@@ -377,8 +442,15 @@ export function CalendarPage() {
               onDelete={(itemId) => deleteItem.mutate(itemId)}
               onVideoPack={(itemId) => createVideoPack.mutate(itemId)}
             />
-          ) : (
-            <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={onDragStart} onDragEnd={onDragEnd} onDragCancel={() => setActiveId(null)}>
+            {calendar.isLoading ? (
+              <Panel className="mt-4 h-24 animate-pulse bg-muted">
+                <span className="sr-only">Loading calendar</span>
+              </Panel>
+            ) : null}
+          </section>
+        ) : (
+          <DndContext sensors={sensors} collisionDetection={closestCenter} onDragStart={onDragStart} onDragEnd={onDragEnd} onDragCancel={() => setActiveId(null)}>
+            <section className="min-w-0">
               <WeekCalendar
                 days={weekDays(weekStart)}
                 byDate={byDate}
@@ -390,15 +462,25 @@ export function CalendarPage() {
                 onDelete={(itemId) => deleteItem.mutate(itemId)}
                 onVideoPack={(itemId) => createVideoPack.mutate(itemId)}
               />
-            </DndContext>
-          )}
-          {activeItem ? <span className="sr-only">Moving {itemTitle(activeItem)}</span> : null}
-          {calendar.isLoading ? (
-            <Panel className="mt-4 h-24 animate-pulse bg-muted">
-              <span className="sr-only">Loading calendar</span>
-            </Panel>
-          ) : null}
-        </section>
+              {activeItem ? <span className="sr-only">Moving {activeItem.asset_id ? itemTitle(activeItem) : "draft asset"}</span> : null}
+              {calendar.isLoading ? (
+                <Panel className="mt-4 h-24 animate-pulse bg-muted">
+                  <span className="sr-only">Loading calendar</span>
+                </Panel>
+              ) : null}
+            </section>
+            <UnscheduledTray
+              assets={unscheduledAssets}
+              loading={draftAssets.isLoading}
+              search={traySearch}
+              type={trayType}
+              scheduling={scheduleAsset.isPending}
+              onSearch={setTraySearch}
+              onType={setTrayType}
+              onSchedule={(asset, nextDate) => scheduleAsset.mutate({ asset, nextDate })}
+            />
+          </DndContext>
+        )}
       </div>
     </div>
   );
@@ -535,6 +617,144 @@ function WeekDayColumn({
       <div className="space-y-2">{children}</div>
       {!itemCount ? <p className="rounded-md border border-dashed border-border px-3 py-2 text-xs text-muted-foreground">Open slot</p> : null}
     </section>
+  );
+}
+
+function UnscheduledTray({
+  assets,
+  loading,
+  search,
+  type,
+  scheduling,
+  onSearch,
+  onType,
+  onSchedule,
+}: {
+  assets: AssetOut[];
+  loading: boolean;
+  search: string;
+  type: "" | AssetType;
+  scheduling: boolean;
+  onSearch: (value: string) => void;
+  onType: (value: "" | AssetType) => void;
+  onSchedule: (asset: AssetOut, date: string) => void;
+}) {
+  return (
+    <aside className="rounded-lg border border-border bg-surface p-3">
+      <div className="mb-3">
+        <h2 className="text-xs font-semibold uppercase tracking-normal text-muted-foreground">Unscheduled drafts</h2>
+        <p className="mt-1 text-xs text-muted-foreground">{loading ? "Loading drafts" : `${assets.length} available`}</p>
+      </div>
+      <div className="space-y-2">
+        <label className="sr-only" htmlFor="calendar-tray-search">
+          Search drafts
+        </label>
+        <div className="flex min-h-11 items-center gap-2 rounded-md border border-input bg-background px-3">
+          <Search className="h-4 w-4 text-muted-foreground" />
+          <input
+            id="calendar-tray-search"
+            className="min-w-0 flex-1 bg-transparent text-sm outline-none"
+            value={search}
+            onChange={(event) => onSearch(event.target.value)}
+            placeholder="Search drafts"
+          />
+        </div>
+        <label className="sr-only" htmlFor="calendar-tray-type">
+          Draft type
+        </label>
+        <select
+          id="calendar-tray-type"
+          className="h-11 w-full rounded-md border border-input bg-background px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+          value={type}
+          onChange={(event) => onType(event.target.value as "" | AssetType)}
+        >
+          {assetTypes.map((value) => (
+            <option key={value || "all"} value={value}>
+              {value ? assetTypeLabel(value) : "All draft types"}
+            </option>
+          ))}
+        </select>
+      </div>
+      <div className="mt-3 space-y-2">
+        {loading ? (
+          <Panel className="h-24 animate-pulse bg-muted">
+            <span className="sr-only">Loading draft assets</span>
+          </Panel>
+        ) : null}
+        {!loading && !assets.length ? <p className="rounded-md border border-dashed border-border px-3 py-2 text-xs text-muted-foreground">No unscheduled drafts match.</p> : null}
+        {assets.map((asset) => (
+          <TrayAssetCard key={asset.id} asset={asset} scheduling={scheduling} onSchedule={onSchedule} />
+        ))}
+      </div>
+    </aside>
+  );
+}
+
+function TrayAssetCard({
+  asset,
+  scheduling,
+  onSchedule,
+}: {
+  asset: AssetOut;
+  scheduling: boolean;
+  onSchedule: (asset: AssetOut, date: string) => void;
+}) {
+  const [scheduleDate, setScheduleDate] = useState(() => dateKey(new Date()));
+  const { attributes, listeners, setNodeRef, transform, isDragging } = useDraggable({
+    id: `asset:${asset.id}`,
+    disabled: scheduling,
+  });
+  const style = transform
+    ? {
+        transform: `translate3d(${transform.x}px, ${transform.y}px, 0)`,
+      }
+    : undefined;
+
+  return (
+    <article
+      ref={setNodeRef}
+      style={style}
+      className={cn(
+        "rounded-md border border-border bg-background p-2 transition-colors duration-ui ease-ui",
+        isDragging ? "border-accent bg-accent-soft" : "",
+      )}
+    >
+      <div className="flex items-start justify-between gap-2">
+        <div className="min-w-0">
+          <p className="line-clamp-2 text-sm font-medium">{asset.title}</p>
+          <div className="mt-2 flex flex-wrap gap-2">
+            <Badge tone="ink">{assetTypeLabel(asset.type)}</Badge>
+            <Badge>{asset.status}</Badge>
+          </div>
+        </div>
+        <button
+          type="button"
+          className="inline-flex h-11 w-11 items-center justify-center rounded-md text-muted-foreground transition-colors duration-ui ease-ui hover:bg-muted focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-45"
+          aria-label={`Drag ${asset.title}`}
+          disabled={scheduling}
+          {...listeners}
+          {...attributes}
+        >
+          <GripVertical className="h-4 w-4" />
+        </button>
+      </div>
+      <div className="mt-2 grid grid-cols-[1fr_auto] gap-2">
+        <label className="sr-only" htmlFor={`schedule-asset-${asset.id}`}>
+          Schedule {asset.title}
+        </label>
+        <input
+          id={`schedule-asset-${asset.id}`}
+          type="date"
+          className="h-9 rounded-md border border-input bg-surface px-2 text-xs outline-none focus:ring-2 focus:ring-ring"
+          value={scheduleDate}
+          disabled={scheduling}
+          onChange={(event) => setScheduleDate(event.target.value)}
+        />
+        <Button type="button" size="sm" variant="outline" disabled={scheduling || !scheduleDate} onClick={() => onSchedule(asset, scheduleDate)}>
+          Add
+        </Button>
+      </div>
+    </article>
   );
 }
 

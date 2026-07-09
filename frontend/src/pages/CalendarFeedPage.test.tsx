@@ -33,6 +33,27 @@ const feedItems = [
   },
 ];
 
+const draftAssets = [
+  {
+    id: 42,
+    campaign_id: null,
+    type: "copy",
+    title: "Already scheduled draft",
+    status: "draft",
+    source_path: null,
+    created_at: "2026-07-08T10:00:00",
+  },
+  {
+    id: 77,
+    campaign_id: null,
+    type: "image_concept",
+    title: "Fabric macro",
+    status: "draft",
+    source_path: null,
+    created_at: "2026-07-08T11:00:00",
+  },
+];
+
 function renderRoute(route: "/calendar" | "/feed") {
   const queryClient = new QueryClient({
     defaultOptions: { queries: { retry: false }, mutations: { retry: false } },
@@ -56,16 +77,20 @@ describe("P2-5 Calendar and Feed Grid", () => {
       vi.fn(async (input: RequestInfo | URL, init?: RequestInit) => {
         const url = new URL(String(input), "http://localhost");
         if (url.pathname === "/api/v1/calendar" && init?.method === "POST") {
+          const body = JSON.parse(String(init.body || "{}"));
           return response(
             {
-              id: "post-3",
-              date: "2026-07-10",
-              status: "planned",
-              asset_id: null,
-              data: { title: "New drop post" },
+              id: body.asset_id ? "post-asset-77" : "post-3",
+              date: body.date,
+              status: body.status,
+              asset_id: body.asset_id ?? null,
+              data: body.data,
             },
             201,
           );
+        }
+        if (url.pathname === "/api/v1/assets") {
+          return response({ items: draftAssets, total: draftAssets.length, limit: 60, offset: 0 });
         }
         if (url.pathname === "/api/v1/calendar") {
           return response(calendarItems);
@@ -130,6 +155,19 @@ describe("P2-5 Calendar and Feed Grid", () => {
     await waitFor(() => {
       const patchCalls = vi.mocked(fetch).mock.calls.filter(([input, init]) => String(input) === "/api/v1/calendar/post-1" && init?.method === "PATCH");
       expect(patchCalls.some(([, init]) => init?.body === JSON.stringify({ date: "2026-07-09", slot: "day" }))).toBe(true);
+    });
+    expect(await screen.findByText("Fabric macro")).toBeInTheDocument();
+    expect(screen.queryByText("Already scheduled draft")).not.toBeInTheDocument();
+    fireEvent.change(screen.getByLabelText(/schedule fabric macro/i), { target: { value: "2026-07-11" } });
+    await userEvent.click(screen.getByRole("button", { name: /^add$/i }));
+    await waitFor(() => {
+      const createCalls = vi.mocked(fetch).mock.calls.filter(([input, init]) => String(input) === "/api/v1/calendar" && init?.method === "POST");
+      expect(
+        createCalls.some(([, init]) => {
+          const body = JSON.parse(String(init?.body || "{}"));
+          return body.asset_id === 77 && body.date === "2026-07-11" && body.data.title === "Fabric macro";
+        }),
+      ).toBe(true);
     });
 
     await userEvent.click(screen.getByRole("button", { name: /delete launch teaser/i }));
