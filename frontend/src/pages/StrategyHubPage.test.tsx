@@ -117,6 +117,26 @@ describe("StrategyHubPage", () => {
         if (url.pathname === "/api/v1/strategy/learn/summary") {
           return response({ summary: "Recent feedback prefers product-truth captions." });
         }
+        if (url.pathname === "/api/v1/performance/posts") {
+          return response({
+            items: [
+              {
+                id: 5,
+                calendar_item_id: null,
+                asset_id: null,
+                channel: "instagram",
+                external_ref: "https://instagram.com/p/sourceproof",
+                permalink: "https://instagram.com/p/sourceproof",
+                title_or_caption: "Source proof first",
+                post_type: "Reel",
+                meta_json: "{}",
+                published_at: "2026-07-01T10:00:00",
+                created_at: "2026-07-09T10:00:00",
+              },
+            ],
+            total: 1,
+          });
+        }
         if (url.pathname === "/api/v1/strategy/learn/feedback" && init?.method === "POST") {
           return response(
             {
@@ -138,6 +158,22 @@ describe("StrategyHubPage", () => {
             posts_upserted: 1,
             metrics_inserted: 1,
             warnings: [],
+            posts: [],
+          });
+        }
+        if (url.pathname === "/api/v1/performance/posts/5/link" && init?.method === "PATCH") {
+          return response({
+            id: 5,
+            calendar_item_id: "post-1",
+            asset_id: 42,
+            channel: "instagram",
+            external_ref: "https://instagram.com/p/sourceproof",
+            permalink: "https://instagram.com/p/sourceproof",
+            title_or_caption: "Source proof first",
+            post_type: "Reel",
+            meta_json: "{}",
+            published_at: "2026-07-01T10:00:00",
+            created_at: "2026-07-09T10:00:00",
           });
         }
         return response({}, 404);
@@ -180,6 +216,15 @@ describe("StrategyHubPage", () => {
       ),
     );
     expect(await screen.findByText(/post date, permalink, views/i)).toBeInTheDocument();
+    await userEvent.selectOptions(screen.getByLabelText(/published post/i), "5");
+    await userEvent.type(screen.getByLabelText(/calendar item id/i), "post-1");
+    await userEvent.click(screen.getByRole("button", { name: /^link$/i }));
+    await waitFor(() =>
+      expect(fetch).toHaveBeenCalledWith(
+        "/api/v1/performance/posts/5/link",
+        expect.objectContaining({ method: "PATCH" }),
+      ),
+    );
     await userEvent.type(screen.getByLabelText(/output path/i), "asset:42");
     await userEvent.selectOptions(screen.getByLabelText(/rating/i), "5");
     await userEvent.type(screen.getByLabelText(/comment/i), "Sharper.");

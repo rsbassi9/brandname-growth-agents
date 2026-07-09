@@ -8,7 +8,7 @@ import io
 import json
 import re
 from dataclasses import dataclass, field
-from datetime import datetime
+from datetime import datetime, timedelta
 from email.parser import BytesParser
 from email.policy import default
 from typing import Any
@@ -16,7 +16,8 @@ from typing import Any
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
-from ..models import PostMetric, PublishedPost
+from ..models import CalendarItem, PostMetric, PublishedPost
+from .brain import upsert_metric_insight
 
 CHANNELS = {"instagram", "tiktok", "facebook", "other"}
 
@@ -87,6 +88,8 @@ def import_performance_csv(session: Session, channel: str, csv_text: str) -> Imp
         if metric_created:
             result.metrics.append(metric)
             result.metrics_inserted += 1
+    _auto_link_imported_posts(session, result.posts)
+    _write_metric_insights(session, result.posts)
     return result
 
 
@@ -171,6 +174,108 @@ def _upsert_post(
     post.post_type = post_type
     post.meta_json = json.dumps(meta, ensure_ascii=False)
     return post
+
+
+def link_published_post(session: Session, post_id: int, calendar_item_id: str | None, asset_id: int | None) -> PublishedPost:
+    post = session.get(PublishedPost, post_id)
+    if post is None:
+        raise ValueError("Published post not found")
+    if calendar_item_id is not None:
+        item = session.get(CalendarItem, calendar_item_id)
+        if item is None:
+            raise ValueError("Calendar item not found")
+        post.calendar_item_id = item.id
+        post.asset_id = asset_id if asset_id is not None else item.asset_id
+    elif asset_id is not None:
+        post.asset_id = asset_id
+    return post
+
+
+def unlink_published_post(session: Session, post_id: int) -> PublishedPost:
+    post = session.get(PublishedPost, post_id)
+    if post is None:
+        raise ValueError("Published post not found")
+    post.calendar_item_id = None
+    post.asset_id = None
+    return post
+
+
+def _auto_link_imported_posts(session: Session, posts: list[PublishedPost]) -> None:
+    seen: set[int] = set()
+    for post in posts:
+        if post.id in seen or post.calendar_item_id is not None or post.published_at is None:
+            continue
+        seen.add(post.id)
+        candidates = _calendar_candidates(session, post.channel, post.published_at)
+        if len(candidates) == 1:
+            post.calendar_item_id = candidates[0].id
+            post.asset_id = candidates[0].asset_id
+
+
+def _calendar_candidates(session: Session, channel: str, published_at: datetime) -> list[CalendarItem]:
+    target = published_at.date()
+    lower = (target - timedelta(days=1)).isoformat()
+    upper = (target + timedelta(days=1)).isoformat()
+    rows = session.execute(
+        select(CalendarItem).where(CalendarItem.date >= lower, CalendarItem.date <= upper)
+    ).scalars().all()
+    return [row for row in rows if _calendar_channel(row) == channel]
+
+
+def _calendar_channel(item: CalendarItem) -> str:
+    try:
+        data = json.loads(item.data_json or "{}")
+    except json.JSONDecodeError:
+        return ""
+    channel = data.get("channel") or data.get("platform")
+    if isinstance(channel, str):
+        return channel.lower().strip()
+    channels = data.get("channels")
+    if isinstance(channels, list) and len(channels) == 1:
+        return str(channels[0]).lower().strip()
+    return ""
+
+
+def _write_metric_insights(session: Session, posts: list[PublishedPost]) -> None:
+    unique_posts = {post.id: post for post in posts}.values()
+    scored: list[tuple[PublishedPost, PostMetric]] = []
+    for post in unique_posts:
+        latest = _latest_metric(post)
+        if latest is not None and latest.engagement_rate is not None:
+            scored.append((post, latest))
+    if not scored:
+        return
+    scored.sort(key=lambda item: (item[1].engagement_rate or 0, item[0].id))
+    count = max(1, len(scored) // 4)
+    selected = [*scored[:count], *scored[-count:]]
+    for post, metric in selected:
+        percent = (metric.engagement_rate or 0) * 100
+        hook = _first_line(post.title_or_caption or post.external_ref or "untitled")
+        post_type = post.post_type or "post"
+        text = f"{post_type} with hook '{hook}' achieved {percent:.2f}% on {post.channel}"
+        upsert_metric_insight(
+            session,
+            ref_id=f"post_metric:{post.id}:{metric.id}",
+            text=text,
+            meta={
+                "published_post_id": post.id,
+                "post_metric_id": metric.id,
+                "channel": post.channel,
+                "engagement_rate": metric.engagement_rate,
+            },
+        )
+
+
+def _latest_metric(post: PublishedPost) -> PostMetric | None:
+    metrics = list(post.metrics)
+    if not metrics:
+        return None
+    return sorted(metrics, key=lambda metric: metric.captured_at)[-1]
+
+
+def _first_line(value: str) -> str:
+    line = value.strip().splitlines()[0] if value.strip() else "untitled"
+    return line[:120]
 
 
 def _detect_columns(columns: list[str]) -> dict[str, str]:

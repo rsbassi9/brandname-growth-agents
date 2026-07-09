@@ -231,6 +231,26 @@ export interface PerformanceImportOut {
   posts_upserted: number;
   metrics_inserted: number;
   warnings: string[];
+  posts: PublishedPostOut[];
+}
+
+export interface PublishedPostOut {
+  id: number;
+  calendar_item_id: string | null;
+  asset_id: number | null;
+  channel: PerformanceChannel;
+  external_ref: string | null;
+  permalink: string | null;
+  title_or_caption: string | null;
+  post_type: string | null;
+  meta_json: string;
+  published_at: string | null;
+  created_at: string;
+}
+
+export interface PublishedPostListOut {
+  items: PublishedPostOut[];
+  total: number;
 }
 
 export interface LibrarySummaryOut {
@@ -372,6 +392,12 @@ export const api = {
     }
     return requestForm<PerformanceImportOut>("/performance/import", body);
   },
+  performancePosts: (params: { channel?: string; limit?: number; offset?: number } = {}) =>
+    request<PublishedPostListOut>(`/performance/posts${toQuery(params)}`),
+  linkPerformancePost: (postId: number, payload: { calendar_item_id?: string | null; asset_id?: number | null }) =>
+    request<PublishedPostOut>(`/performance/posts/${postId}/link`, { method: "PATCH", body: JSON.stringify(payload) }),
+  unlinkPerformancePost: (postId: number) =>
+    request<PublishedPostOut>(`/performance/posts/${postId}/link`, { method: "DELETE" }),
   learnSummary: () => request<{ summary: string }>("/strategy/learn/summary"),
   postFeedback: (payload: FeedbackIn) =>
     request<FeedbackOut>("/strategy/learn/feedback", { method: "POST", body: JSON.stringify(payload) }),

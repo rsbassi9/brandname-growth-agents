@@ -2,14 +2,41 @@
 
 from __future__ import annotations
 
-from fastapi import APIRouter, Depends, HTTPException, Request
+from fastapi import APIRouter, Depends, HTTPException, Query, Request
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from ..db import get_session
-from ..schemas import PerformanceImportOut, PostMetricOut, PublishedPostOut
-from ..services.performance import PerformanceImportError, import_performance_csv, parse_import_request_body
+from ..models import PublishedPost
+from ..schemas import PerformanceImportOut, PostMetricOut, PublishedPostLinkIn, PublishedPostListOut, PublishedPostOut
+from ..services.performance import (
+    PerformanceImportError,
+    import_performance_csv,
+    link_published_post,
+    parse_import_request_body,
+    unlink_published_post,
+)
 
 router = APIRouter(prefix="/performance", tags=["performance"])
+
+
+@router.get("/posts", response_model=PublishedPostListOut)
+def list_published_posts(
+    session: Session = Depends(get_session),
+    channel: str | None = None,
+    limit: int = Query(default=50, ge=1, le=200),
+    offset: int = Query(default=0, ge=0),
+) -> PublishedPostListOut:
+    query = select(PublishedPost)
+    count_query = select(func.count()).select_from(PublishedPost)
+    if channel:
+        query = query.where(PublishedPost.channel == channel)
+        count_query = count_query.where(PublishedPost.channel == channel)
+    rows = session.execute(
+        query.order_by(PublishedPost.published_at.desc().nullslast(), PublishedPost.id.desc()).limit(limit).offset(offset)
+    ).scalars().all()
+    total = session.execute(count_query).scalar_one()
+    return PublishedPostListOut(items=[PublishedPostOut.model_validate(row) for row in rows], total=total)
 
 
 @router.post("/import", response_model=PerformanceImportOut)
@@ -29,3 +56,23 @@ async def import_performance(request: Request, session: Session = Depends(get_se
         posts=[PublishedPostOut.model_validate(post) for post in result.posts],
         metrics=[PostMetricOut.model_validate(metric) for metric in result.metrics],
     )
+
+
+@router.patch("/posts/{post_id}/link", response_model=PublishedPostOut)
+def link_post(post_id: int, payload: PublishedPostLinkIn, session: Session = Depends(get_session)) -> PublishedPostOut:
+    try:
+        post = link_published_post(session, post_id, payload.calendar_item_id, payload.asset_id)
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    session.commit()
+    return PublishedPostOut.model_validate(post)
+
+
+@router.delete("/posts/{post_id}/link", response_model=PublishedPostOut)
+def unlink_post(post_id: int, session: Session = Depends(get_session)) -> PublishedPostOut:
+    try:
+        post = unlink_published_post(session, post_id)
+    except ValueError as exc:
+        raise HTTPException(status_code=404, detail=str(exc)) from exc
+    session.commit()
+    return PublishedPostOut.model_validate(post)

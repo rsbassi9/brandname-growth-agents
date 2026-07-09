@@ -171,6 +171,12 @@ def index_feedback_event(feedback_id: str) -> dict[str, int]:
         return {"documents": 1, "embeddings": int(embedding_created)}
 
 
+def upsert_metric_insight(session, ref_id: str, text: str, meta: dict[str, Any]) -> BrainDocument:
+    document = _upsert_document(session, "metric_insight", ref_id, text, meta)
+    _ensure_embedding(session, document)
+    return document
+
+
 def run_backfill() -> dict[str, int]:
     init_db()
     counts = {"documents": 0, "embeddings": 0, "asset_versions": 0, "feedback": 0, "products": 0, "context_files": 0}

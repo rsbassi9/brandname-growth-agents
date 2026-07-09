@@ -17,7 +17,7 @@ import { Link } from "react-router-dom";
 import { Badge } from "@/components/ui/Badge";
 import { Button } from "@/components/ui/Button";
 import { PageHeader, Panel } from "@/components/ui/Panel";
-import { api, type AssetOut, type BrandProfileHistoryOut, type PerformanceChannel } from "@/lib/api";
+import { api, type AssetOut, type BrandProfileHistoryOut, type PerformanceChannel, type PublishedPostOut } from "@/lib/api";
 import { cn } from "@/lib/utils";
 
 const lanes = [
@@ -54,6 +54,8 @@ export function StrategyHubPage() {
   const [performanceChannel, setPerformanceChannel] = useState<PerformanceChannel>("instagram");
   const [performanceFile, setPerformanceFile] = useState<File | null>(null);
   const [performancePaste, setPerformancePaste] = useState("");
+  const [performancePostId, setPerformancePostId] = useState("");
+  const [performanceCalendarId, setPerformanceCalendarId] = useState("");
 
   const docs = useQuery({ queryKey: ["strategy", "docs"], queryFn: api.strategyDocs });
   const brandProfile = useQuery({ queryKey: ["strategy", "brand-profile"], queryFn: api.brandProfile });
@@ -68,6 +70,10 @@ export function StrategyHubPage() {
     enabled: selectedAssetId !== null,
   });
   const learning = useQuery({ queryKey: ["strategy", "learn"], queryFn: api.learnSummary });
+  const performancePosts = useQuery({
+    queryKey: ["performance", "posts", performanceChannel],
+    queryFn: () => api.performancePosts({ channel: performanceChannel, limit: 20 }),
+  });
 
   const feedback = useMutation({
     mutationFn: () =>
@@ -91,6 +97,15 @@ export function StrategyHubPage() {
         file: performanceFile,
         csv_text: performancePaste,
       }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["performance", "posts"] }),
+  });
+  const linkPerformance = useMutation({
+    mutationFn: () => api.linkPerformancePost(Number(performancePostId), { calendar_item_id: performanceCalendarId }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["performance", "posts"] }),
+  });
+  const unlinkPerformance = useMutation({
+    mutationFn: () => api.unlinkPerformancePost(Number(performancePostId)),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: ["performance", "posts"] }),
   });
 
   const drafts = draftAssets.data?.items || [];
@@ -108,6 +123,11 @@ export function StrategyHubPage() {
   function submitPerformanceImport(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     performanceImport.mutate();
+  }
+
+  function submitPerformanceLink(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    linkPerformance.mutate();
   }
 
   async function copyCaption() {
@@ -179,6 +199,11 @@ export function StrategyHubPage() {
           performancePending={performanceImport.isPending}
           performanceResult={performanceImport.data}
           performanceError={performanceImport.error}
+          performancePosts={performancePosts.data?.items || []}
+          performancePostId={performancePostId}
+          performanceCalendarId={performanceCalendarId}
+          performanceLinkPending={linkPerformance.isPending || unlinkPerformance.isPending}
+          performanceLinkError={linkPerformance.error || unlinkPerformance.error}
           onTarget={setFeedbackTarget}
           onRating={setRating}
           onComment={setComment}
@@ -188,6 +213,10 @@ export function StrategyHubPage() {
           onPerformanceFile={setPerformanceFile}
           onPerformancePaste={setPerformancePaste}
           onPerformanceSubmit={submitPerformanceImport}
+          onPerformancePostId={setPerformancePostId}
+          onPerformanceCalendarId={setPerformanceCalendarId}
+          onPerformanceLinkSubmit={submitPerformanceLink}
+          onPerformanceUnlink={() => unlinkPerformance.mutate()}
         />
       ) : null}
     </div>
@@ -458,6 +487,11 @@ function LearnLane({
   performancePending,
   performanceResult,
   performanceError,
+  performancePosts,
+  performancePostId,
+  performanceCalendarId,
+  performanceLinkPending,
+  performanceLinkError,
   onTarget,
   onRating,
   onComment,
@@ -467,6 +501,10 @@ function LearnLane({
   onPerformanceFile,
   onPerformancePaste,
   onPerformanceSubmit,
+  onPerformancePostId,
+  onPerformanceCalendarId,
+  onPerformanceLinkSubmit,
+  onPerformanceUnlink,
 }: {
   summary: string;
   feedbackTarget: string;
@@ -486,6 +524,11 @@ function LearnLane({
     warnings: string[];
   };
   performanceError: unknown;
+  performancePosts: PublishedPostOut[];
+  performancePostId: string;
+  performanceCalendarId: string;
+  performanceLinkPending: boolean;
+  performanceLinkError: unknown;
   onTarget: (value: string) => void;
   onRating: (value: string) => void;
   onComment: (value: string) => void;
@@ -495,6 +538,10 @@ function LearnLane({
   onPerformanceFile: (value: File | null) => void;
   onPerformancePaste: (value: string) => void;
   onPerformanceSubmit: (event: FormEvent<HTMLFormElement>) => void;
+  onPerformancePostId: (value: string) => void;
+  onPerformanceCalendarId: (value: string) => void;
+  onPerformanceLinkSubmit: (event: FormEvent<HTMLFormElement>) => void;
+  onPerformanceUnlink: () => void;
 }) {
   return (
     <div className="grid gap-4 p-4 xl:grid-cols-[1fr_420px]">
@@ -562,6 +609,57 @@ function LearnLane({
           {performanceError ? (
             <p role="alert" className="text-sm text-danger">
               {performanceError instanceof Error ? performanceError.message : "Performance import failed."}
+            </p>
+          ) : null}
+        </form>
+        <form className="mt-4 space-y-3 border-t border-border pt-4" onSubmit={onPerformanceLinkSubmit}>
+          <h3 className="text-sm font-semibold">Manual links</h3>
+          <label className="text-sm font-medium" htmlFor="performance-post">
+            Published post
+            <select
+              id="performance-post"
+              className="mt-2 h-11 w-full rounded-md border border-input bg-background px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+              value={performancePostId}
+              onChange={(event) => onPerformancePostId(event.target.value)}
+            >
+              <option value="">Select post</option>
+              {performancePosts.map((post) => (
+                <option key={post.id} value={post.id}>
+                  {(post.title_or_caption || post.external_ref || `Post ${post.id}`).slice(0, 80)}
+                </option>
+              ))}
+            </select>
+          </label>
+          <label className="text-sm font-medium" htmlFor="performance-calendar-id">
+            Calendar item id
+            <input
+              id="performance-calendar-id"
+              className="mt-2 h-11 w-full rounded-md border border-input bg-background px-3 text-sm outline-none focus:ring-2 focus:ring-ring"
+              value={performanceCalendarId}
+              onChange={(event) => onPerformanceCalendarId(event.target.value)}
+            />
+          </label>
+          <div className="flex flex-wrap gap-2">
+            <Button type="submit" variant="outline" disabled={performanceLinkPending || !performancePostId || !performanceCalendarId.trim()}>
+              Link
+            </Button>
+            <Button type="button" variant="ghost" disabled={performanceLinkPending || !performancePostId} onClick={onPerformanceUnlink}>
+              Unlink
+            </Button>
+          </div>
+          <div className="space-y-2">
+            {performancePosts.slice(0, 4).map((post) => (
+              <div key={post.id} className="rounded-md border border-border bg-background p-2 text-xs">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <span className="font-medium">{post.title_or_caption || post.external_ref || `Post ${post.id}`}</span>
+                  <Badge>{post.calendar_item_id || "unlinked"}</Badge>
+                </div>
+              </div>
+            ))}
+          </div>
+          {performanceLinkError ? (
+            <p role="alert" className="text-sm text-danger">
+              {performanceLinkError instanceof Error ? performanceLinkError.message : "Performance link failed."}
             </p>
           ) : null}
         </form>

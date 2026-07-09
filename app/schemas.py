@@ -125,6 +125,16 @@ class PerformanceImportOut(BaseModel):
     metrics: list[PostMetricOut] = Field(default_factory=list)
 
 
+class PublishedPostListOut(BaseModel):
+    items: list[PublishedPostOut]
+    total: int
+
+
+class PublishedPostLinkIn(BaseModel):
+    calendar_item_id: str | None = None
+    asset_id: int | None = None
+
+
 class SourceAssetIndexRequest(BaseModel):
     origin: SourceAssetOrigin = "local"
     path: str = ""
