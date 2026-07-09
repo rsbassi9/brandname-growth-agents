@@ -12,6 +12,7 @@ AssetStatus = Literal["draft", "selected", "archived"]
 JobStatus = Literal["queued", "running", "succeeded", "failed"]
 SourceAssetOrigin = Literal["drive", "local", "shopify"]
 BrainDocumentKind = Literal["asset_version", "feedback", "product", "context_file", "metric_insight"]
+PublishedPostChannel = Literal["instagram", "tiktok", "facebook", "other"]
 
 
 class GenerateRequest(BaseModel):
@@ -78,6 +79,35 @@ class BrandProfileVersionOut(BaseModel):
     profile_md: str
     distilled_from_json: str
     created_at: datetime
+
+
+class PublishedPostOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    calendar_item_id: str | None
+    asset_id: int | None
+    channel: PublishedPostChannel
+    external_ref: str | None
+    permalink: str | None
+    published_at: datetime | None
+    created_at: datetime
+
+
+class PostMetricOut(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+
+    id: int
+    published_post_id: int
+    captured_at: datetime
+    impressions: int | None
+    reach: int | None
+    likes: int | None
+    comments: int | None
+    shares: int | None
+    saves: int | None
+    clicks: int | None
+    engagement_rate: float | None
 
 
 class SourceAssetIndexRequest(BaseModel):

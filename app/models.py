@@ -11,6 +11,7 @@ from datetime import datetime
 from sqlalchemy import (
     Boolean,
     DateTime,
+    Float,
     ForeignKey,
     Integer,
     LargeBinary,
@@ -27,6 +28,7 @@ ASSET_STATUSES = ("draft", "selected", "archived")
 JOB_STATUSES = ("queued", "running", "succeeded", "failed")
 SOURCE_ASSET_ORIGINS = ("drive", "local", "shopify")
 BRAIN_DOCUMENT_KINDS = ("asset_version", "feedback", "product", "context_file", "metric_insight")
+PUBLISHED_POST_CHANNELS = ("instagram", "tiktok", "facebook", "other")
 
 
 class Campaign(Base):
@@ -128,6 +130,53 @@ class BrandProfileVersion(Base):
     profile_md: Mapped[str] = mapped_column(Text, nullable=False)
     distilled_from_json: Mapped[str] = mapped_column(Text, default="{}", nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
+
+
+class PublishedPost(Base):
+    __tablename__ = "published_posts"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    calendar_item_id: Mapped[str | None] = mapped_column(ForeignKey("calendar_items.id"), nullable=True)
+    asset_id: Mapped[int | None] = mapped_column(ForeignKey("assets.id"), nullable=True)
+    channel: Mapped[str] = mapped_column(String(32), nullable=False)
+    external_ref: Mapped[str | None] = mapped_column(String(500), nullable=True)
+    permalink: Mapped[str | None] = mapped_column(String(1000), nullable=True)
+    published_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
+
+    metrics: Mapped[list["PostMetric"]] = relationship(
+        back_populates="published_post", cascade="all, delete-orphan", order_by="PostMetric.captured_at"
+    )
+
+
+class PostMetric(Base):
+    __tablename__ = "post_metrics"
+    __table_args__ = (UniqueConstraint("published_post_id", "captured_at", name="uq_post_metric_capture"),)
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    published_post_id: Mapped[int] = mapped_column(ForeignKey("published_posts.id"), nullable=False)
+    captured_at: Mapped[datetime] = mapped_column(DateTime, nullable=False)
+    impressions: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    reach: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    likes: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    comments: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    shares: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    saves: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    clicks: Mapped[int | None] = mapped_column(Integer, nullable=True)
+    engagement_rate: Mapped[float | None] = mapped_column(Float, nullable=True)
+
+    published_post: Mapped[PublishedPost] = relationship(back_populates="metrics")
+
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.recompute_engagement_rate()
+
+    def recompute_engagement_rate(self) -> None:
+        if self.reach is None or self.reach == 0:
+            self.engagement_rate = None
+            return
+        total = sum(value or 0 for value in (self.likes, self.comments, self.shares, self.saves))
+        self.engagement_rate = total / self.reach
 
 
 class CalendarItem(Base):
