@@ -64,6 +64,10 @@ class Settings(BaseSettings):
         default="",
         validation_alias=AliasChoices("BRAND_MODEL_PREMIUM",),
     )
+    embed_model: str = Field(
+        default="text-embedding-3-small",
+        validation_alias=AliasChoices("BRAND_EMBED_MODEL", "EMBED_MODEL"),
+    )
     # P1-2a: image model comes from settings, never hardcoded.
     image_model: str = Field(
         default="gpt-image-1",
