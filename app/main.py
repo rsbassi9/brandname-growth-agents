@@ -11,6 +11,8 @@ import logging
 from contextlib import asynccontextmanager, suppress
 
 from fastapi import FastAPI
+from starlette.exceptions import HTTPException as StarletteHTTPException
+from starlette.staticfiles import StaticFiles
 
 from .db import init_db
 from .routers import (
@@ -35,6 +37,17 @@ from .services.scheduler import daily_workflow_scheduler
 from .settings import ROOT_DIR, get_settings
 
 logger = logging.getLogger(__name__)
+
+
+class SinglePageAppStaticFiles(StaticFiles):
+    async def get_response(self, path: str, scope):
+        try:
+            return await super().get_response(path, scope)
+        except StarletteHTTPException as exc:
+            request_path = str(scope.get("path", ""))
+            if exc.status_code == 404 and not request_path.startswith("/api/"):
+                return await super().get_response("index.html", scope)
+            raise
 
 
 @asynccontextmanager
@@ -82,9 +95,7 @@ def create_app() -> FastAPI:
     # P2 serves the built frontend from frontend/dist when it exists.
     dist = ROOT_DIR / "frontend" / "dist"
     if dist.exists():
-        from fastapi.staticfiles import StaticFiles
-
-        app.mount("/", StaticFiles(directory=str(dist), html=True), name="frontend")
+        app.mount("/", SinglePageAppStaticFiles(directory=str(dist), html=True), name="frontend")
 
     return app
 

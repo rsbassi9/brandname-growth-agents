@@ -13,6 +13,12 @@ def test_health(client) -> None:
     assert payload["brand"]
 
 
+def test_spa_routes_fall_back_to_index(client) -> None:
+    response = client.get("/feed")
+    assert response.status_code == 200
+    assert "text/html" in response.headers["content-type"]
+
+
 def test_mode_reports_local_only(client) -> None:
     payload = client.get("/api/v1/system/mode").json()
     assert payload["local_only_agent_runs"] is True
