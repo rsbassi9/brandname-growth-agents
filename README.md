@@ -78,6 +78,8 @@ Then open `http://127.0.0.1:8765`.
 - Weekly Standup: an off-by-default weekly job writes `standup_reports`; the Learn lane shows what published, top/bottom performer, next week's plan, and exactly three recommendation actions that create draft tray assets.
 - System: configure and run local daily workflow jobs, brand profile distillation cadence, recycling cadence, weekly standup cadence, and calendar guardrails.
 
+For section-by-section operating instructions, see `docs/USER_GUIDE.md`.
+
 ## Environment Variables
 
 | Variable | Purpose | Default |
