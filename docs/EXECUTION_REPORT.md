@@ -1,10 +1,10 @@
 # Execution Report
 
-Updated: 2026-07-08
+Updated: 2026-07-13
 
 ## Scope
 
-This report covers execution tasks P0-1 through P5-3 for `brandname-growth-agents`, plus the P0-P5 verification gates recorded in `SONNET_EXECUTION_PLAN.md`.
+This report covers execution tasks P0-1 through P11-5 for `brandname-growth-agents`, plus verification gates recorded in `SONNET_EXECUTION_PLAN.md`. P0-P5 are final; P7-P11 are recorded below as the newer roadmap phases continue.
 
 ## Task Ledger
 
@@ -37,6 +37,39 @@ This report covers execution tasks P0-1 through P5-3 for `brandname-growth-agent
 | P5-2 legacy module prune | `25ab49a` | Removed unused legacy-only `src/` modules while retaining the `src.orchestrator` live fallback island. | Compile/import sweep and backend pytest passed. |
 | P5-3 final sweep | `05dd930` | Ran Ruff cleanup, recorded FastAPI `B008` rule exception, fixed Playground saved-history browser crash, and added regression coverage. | GATE P5 passed: dependency install, migration, backend pytest, `npm ci`, `npm run build`, `npm test`, UI scan, server boot/health, headless Edge render, live local-only generate. |
 
+## Post-P6 Task Ledger
+
+| Task | Commit | Result | Gate / verification |
+|---|---:|---|---|
+| P7-1 Brand Brain tables | `a7d9007` | Added `brain_documents`, `brain_embeddings`, and immutable `brand_profile_versions` models/schemas. | Backend pytest 68/68. |
+| P7-2 embedding service | `0259ea2` | Added OpenAI-compatible embedding path plus deterministic local hash vectors and cosine search. | Backend pytest 73/73. |
+| P7-3 Brain ingestion/backfill | `f2aaef0` | Added `brain_index`, asset/feedback hooks, and idempotent backfill across assets, feedback, products, and context files. | Backend pytest 76/76; real backfill created 322 docs/embeddings with no tracked data changes. |
+| P7-4 retrieval-grounded generation | `187c1d9` | Generation now includes auditable Brand Memory and exposes memory-used metadata in the UI. | Backend pytest 77/77; frontend tests 14/14; type-check/build/UI scan passed. |
+| P7-5 profile distillation | `0f47936` | Added Appendix A distillation job, off-by-default weekly schedule, immutable profile writes, and Strategy Hub profile history. | Backend pytest 81/81; frontend tests 14/14; type-check/build/UI scan passed. |
+| P7-6 Brand Brain gate | `8a889d9` | Hardened Brain/Profile coverage and verified local-only smoke. | GATE P7 passed: backend pytest 84/84; frontend checks passed; smoke backfill/generate/profile confirmed. |
+| P8-1 performance tables | `25cdd62` | Added `published_posts` and `post_metrics` with engagement-rate computation and dedupe. | Backend pytest 90/90. |
+| P8-2 performance import | `caa7f73` | Added CSV/paste import for Instagram/TikTok/Meta headers and Learn-lane import UI. | Backend pytest 96/96; frontend checks passed. |
+| P8-3 linking + insights | `dc9f3ce` | Added auto/manual calendar linking and metric insight writes into Brand Brain. | Backend pytest 99/99; frontend checks passed. |
+| P8-4 best-time model | `312f3ce` | Added deterministic best-time aggregation by channel/weekday/hour. | Backend pytest 101/101; compileall passed. |
+| P8-5 performance dashboard | `03559b7` | Added top posts, weekly ER, and asset-type ER summaries in Learn lane. | Backend pytest 102/102; frontend checks passed. |
+| P8-6 performance gate | `a84914e` | Added focused gate coverage for imports, ER math, linking, best-times, dashboard, and Brain insights. | GATE P8 passed: backend pytest 103/103; frontend checks passed. |
+| P9-1 draggable week calendar | `0857752` | Added month/week modes, dnd-kit rescheduling, optimistic updates, and rollback errors. | Backend pytest 103/103; frontend checks passed. |
+| P9-2 unscheduled tray | `aca39e0` | Added searchable draft tray and drag/date-input scheduling from drafts. | Backend pytest 103/103; frontend checks passed. |
+| P9-3 channel chips | `a2e6992` | Added token-only channel hues and calendar chips. | Backend pytest 103/103; frontend checks passed. |
+| P9-4 suggested slots | `47e95c3` | Added best-time ghost slots and click/drop scheduling. | Backend pytest 103/103; frontend checks passed. |
+| P9-5 guardrails | `09e244e` | Added calendar guardrail settings and soft warning banners. | Backend pytest 104/104; frontend checks passed. |
+| P9-6 calendar gate | `63dad1c` | Added focused calendar, feed, guardrail, tray, ghost-slot, and rollback coverage. | GATE P9 passed: backend pytest 104/104; frontend tests 16/16; type-check/build/UI scan passed. |
+| P10-1 SEO audit | `2d58b14` | Added read-only Shopify SEO audit table/service/job/API. | Focused SEO 3/3; backend pytest 107/107; compileall passed. |
+| P10-2 SEO fix generator | `f757708` | Added grounded paste-ready SEO fixes as immutable `seo_fix` assets. | Focused SEO 6/6; backend pytest 110/110; frontend tests/type-check/UI scan passed. |
+| P10-3 SEO keyword plan | `86125c9` | Added `seo_plan` assets and latest-plan keyword reuse in audits. | Focused SEO 11/11; backend pytest 115/115; frontend checks passed. |
+| P10-4 Ads & SEO workspace | `670842c` | Renamed Ads to Ads & SEO and added audit/fix/plan UI. | Focused frontend 3/3; frontend tests 17/17; type-check/build/UI scan passed. |
+| P10-5 SEO gate | `a9a4d2c` | Expanded SEO tests across scoring, fixes, plans, endpoints, and additive enums. | GATE P10 passed: focused SEO 19/19; backend pytest 123/123; compileall passed. |
+| P11-1 repurpose shoot | `6708c88` | Added `repurpose_shoot` fan-out into campaign assets and partial-failure result tracking. | Focused repurpose 4/4; backend pytest 127/127; compileall passed. |
+| P11-2 recycling job | `db9b2f1` | Added off-by-default monthly recycling cadence and idempotent unscheduled remix drafts. | Focused recycling 4/4; backend pytest 131/131; compileall passed. |
+| P11-3 weekly standup | `3097238` | Added `standup_reports`, weekly cadence controls, report job, Learn-lane Standup tab, and recommendation draft action. | Focused standup 4/4; backend pytest 135/135; frontend Vitest 17/17; type-check/build/UI scan passed. |
+| P11-4 docs | Current commit | Extends this report through P11, updates README operator docs, and moves the roadmap pointer. | Documentation-only verification plus final status check. |
+| P11-5 final tests/gate | Pending | Final P11 gate remains next: fresh-clone simulation plus local-only Brain backfill, fixture metrics import, repurpose shoot, and visible standup report. | Not yet run. |
+
 ## Gates
 
 | Gate | Status | Evidence |
@@ -47,6 +80,11 @@ This report covers execution tasks P0-1 through P5-3 for `brandname-growth-agent
 | GATE P3 | Passed | Live local-only workflow created assets/calendar items/run report; backend/frontend checks passed. |
 | GATE P4 | Passed | Mocked-provider P4 flows for video prompt packs, voiceover, ad briefs, critique/iterate, source references. |
 | GATE P5 | Passed | Dependency install, migration, pytest 63/63, `npm ci`, `npm run build`, `npm test` 14/14, UI token scan, boot/health, headless Edge render, live local-only generate. |
+| GATE P7 | Passed | Backend pytest 84/84, frontend checks, local-only Brain backfill/generate/profile smoke. |
+| GATE P8 | Passed | Fixture performance import, visible posts/metrics, expected best-time ranking, metric insight Brain docs, backend/frontend checks. |
+| GATE P9 | Passed | Calendar CRUD/drag/tray/feed/guardrail coverage, backend/frontend checks, build and UI scan. |
+| GATE P10 | Passed | Fixture SEO audit/fix/plan coverage, local-only assets, backend focused/full checks. |
+| GATE P11 | Pending | P11-5 final gate is next. |
 
 ## TODO(fable-review)
 
@@ -58,4 +96,4 @@ This report covers execution tasks P0-1 through P5-3 for `brandname-growth-agent
 
 ## Incomplete Items
 
-None for P0-P5. The P5 gate initially exposed a real browser-only Playground crash from stale non-array `localStorage` history (`D.map is not a function`); P5-3 fixed it and the final headless Edge render confirmed the built studio now loads.
+None for P0-P10 and P11-1 through P11-4. P11-5 remains the next planned final gate. The P5 gate initially exposed a real browser-only Playground crash from stale non-array `localStorage` history (`D.map is not a function`); P5-3 fixed it and the final headless Edge render confirmed the built studio now loads.
