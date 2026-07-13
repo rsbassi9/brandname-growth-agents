@@ -3,7 +3,8 @@
 Single asyncio worker started in the FastAPI lifespan. Jobs are persisted in
 the `jobs` table; results in `result_json`. Job kinds: generate_asset,
 run_daily_workflow, render_carousel, image_iterate, brain_index,
-distill_brand_profile, seo_audit, seo_fix, seo_plan, repurpose_shoot.
+distill_brand_profile, seo_audit, seo_fix, seo_plan, repurpose_shoot,
+recycle_top_posts.
 
 The run_daily_workflow handler checks LOCAL_ONLY_AGENT_RUNS and uses the
 deterministic port of src/local_workflow.py when true — this closes the legacy
@@ -25,7 +26,7 @@ from typing import Any
 from sqlalchemy import func, select
 
 from ..db import init_db, session_scope
-from ..models import Asset, AssetVersion, CalendarItem, Campaign, Job, SourceAsset
+from ..models import Asset, AssetVersion, CalendarItem, Campaign, Job, PostMetric, PublishedPost, SourceAsset
 from ..settings import get_settings
 
 logger = logging.getLogger(__name__)
@@ -41,6 +42,7 @@ JOB_KINDS = (
     "seo_fix",
     "seo_plan",
     "repurpose_shoot",
+    "recycle_top_posts",
 )
 
 
@@ -488,6 +490,49 @@ async def _handle_repurpose_shoot(job_id: str, payload: dict[str, Any]) -> dict[
     return {"campaign_id": campaign_id, "source_asset_ids": source_asset_ids, "steps": steps}
 
 
+async def _handle_recycle_top_posts(job_id: str, payload: dict[str, Any]) -> dict[str, Any]:
+    cutoff_days = int(payload.get("cutoff_days") or 45)
+    cutoff = datetime.utcnow() - timedelta(days=cutoff_days)
+    _update_job(job_id, progress_pct=30, message="selecting remix candidates")
+    version_ids: list[int] = []
+    with session_scope() as session:
+        candidates = _top_quartile_remix_candidates(session, cutoff)
+        created: list[dict[str, Any]] = []
+        for post, metric in candidates:
+            source_path = f"remix:{post.id}"
+            existing = session.execute(select(Asset).where(Asset.source_path == source_path)).scalar_one_or_none()
+            if existing is not None:
+                continue
+            title = (post.title_or_caption or post.permalink or post.external_ref or f"Post {post.id}")[:120]
+            asset = Asset(type="copy", title=f"Remix: {title}", status="draft", source_path=source_path)
+            session.add(asset)
+            session.flush()
+            version = AssetVersion(
+                asset_id=asset.id,
+                version_no=1,
+                prompt_snapshot=f"recycle_top_posts:{post.id}",
+                params_json=json.dumps(
+                    {
+                        "type": "copy",
+                        "remix_of": post.id,
+                        "source_post_channel": post.channel,
+                        "engagement_rate": metric.engagement_rate,
+                    },
+                    ensure_ascii=False,
+                ),
+                content_text=_remix_content(post, metric),
+                model_used="local-deterministic-recycle",
+                is_selected=True,
+            )
+            session.add(version)
+            session.flush()
+            version_ids.append(version.id)
+            created.append({"post_id": post.id, "asset_id": asset.id, "engagement_rate": metric.engagement_rate})
+    for version_id in version_ids:
+        _enqueue_brain_index(asset_version_id=version_id)
+    return {"cutoff_days": cutoff_days, "candidates": len(candidates), "created": created}
+
+
 def _enqueue_brain_index(**payload: Any) -> None:
     if not any(value is not None for value in payload.values()):
         return
@@ -609,6 +654,47 @@ def _repurpose_seo_fix(spec: dict[str, Any], product_handle: str) -> dict[str, A
     }
 
 
+def _top_quartile_remix_candidates(session, cutoff: datetime) -> list[tuple[PublishedPost, PostMetric]]:
+    posts = session.execute(
+        select(PublishedPost).where(PublishedPost.published_at.is_not(None), PublishedPost.published_at <= cutoff)
+    ).scalars().unique().all()
+    scored: list[tuple[PublishedPost, PostMetric]] = []
+    for post in posts:
+        metric = _latest_metric_for_post(session, post.id)
+        if metric is not None and metric.engagement_rate is not None:
+            scored.append((post, metric))
+    scored.sort(key=lambda item: (-(item[1].engagement_rate or 0), item[0].id))
+    if not scored:
+        return []
+    keep = max(1, (len(scored) + 3) // 4)
+    return scored[:keep]
+
+
+def _latest_metric_for_post(session, post_id: int) -> PostMetric | None:
+    return session.execute(
+        select(PostMetric).where(PostMetric.published_post_id == post_id).order_by(PostMetric.captured_at.desc(), PostMetric.id.desc())
+    ).scalars().first()
+
+
+def _remix_content(post: PublishedPost, metric: PostMetric) -> str:
+    percent = (metric.engagement_rate or 0) * 100
+    title = post.title_or_caption or post.permalink or post.external_ref or f"Post {post.id}"
+    return "\n".join(
+        [
+            f"# Remix Draft: {title}",
+            "",
+            f"Source post: {post.channel} #{post.id}",
+            f"Latest engagement rate: {percent:.2f}%",
+            "",
+            "## Remix angle",
+            "Rework the strongest hook and product proof into a fresh draft. Keep it unscheduled until reviewed.",
+            "",
+            "## Manual use",
+            "Review, edit, and drag from the unscheduled tray when ready. No auto-scheduling was performed.",
+        ]
+    )
+
+
 _HANDLERS = {
     "generate_asset": _handle_generate_asset,
     "run_daily_workflow": _handle_run_daily_workflow,
@@ -620,6 +706,7 @@ _HANDLERS = {
     "seo_fix": _handle_seo_fix,
     "seo_plan": _handle_seo_plan,
     "repurpose_shoot": _handle_repurpose_shoot,
+    "recycle_top_posts": _handle_recycle_top_posts,
 }
 
 # Application-wide queue instance (started/stopped by the FastAPI lifespan).

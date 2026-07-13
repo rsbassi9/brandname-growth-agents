@@ -20,16 +20,21 @@ from ..schemas import (
     DailyWorkflowScheduleOut,
     HealthOut,
     ModeOut,
+    RecyclingScheduleIn,
+    RecyclingScheduleOut,
     WorkflowRunReportOut,
     WorkflowRunStepOut,
 )
 from ..services.scheduler import (
     enqueue_brand_profile_distillation,
     enqueue_daily_workflow,
+    enqueue_recycling,
     get_brand_profile_distillation_schedule,
     get_daily_workflow_schedule,
+    get_recycling_schedule,
     set_brand_profile_distillation_schedule,
     set_daily_workflow_schedule,
+    set_recycling_schedule,
 )
 from ..settings import get_settings
 
@@ -132,6 +137,36 @@ def update_calendar_guardrails(
 @router.post("/brand-profile-distillation/run", response_model=DailyWorkflowRunOut)
 def run_brand_profile_distillation_now() -> DailyWorkflowRunOut:
     return DailyWorkflowRunOut(job_id=enqueue_brand_profile_distillation("manual"))
+
+
+@router.get("/recycling", response_model=RecyclingScheduleOut)
+def recycling_schedule() -> RecyclingScheduleOut:
+    schedule = get_recycling_schedule()
+    return RecyclingScheduleOut(
+        enabled=schedule.enabled,
+        day=schedule.day,
+        time_local=schedule.time_local,
+        last_enqueued_month=schedule.last_enqueued_month,
+    )
+
+
+@router.put("/recycling", response_model=RecyclingScheduleOut)
+def update_recycling_schedule(payload: RecyclingScheduleIn) -> RecyclingScheduleOut:
+    try:
+        schedule = set_recycling_schedule(payload.enabled, payload.day, payload.time_local)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    return RecyclingScheduleOut(
+        enabled=schedule.enabled,
+        day=schedule.day,
+        time_local=schedule.time_local,
+        last_enqueued_month=schedule.last_enqueued_month,
+    )
+
+
+@router.post("/recycling/run", response_model=DailyWorkflowRunOut)
+def run_recycling_now() -> DailyWorkflowRunOut:
+    return DailyWorkflowRunOut(job_id=enqueue_recycling("manual"))
 
 
 @router.get("/daily-workflow/runs", response_model=list[WorkflowRunReportOut])

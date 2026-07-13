@@ -26,6 +26,10 @@ _PROFILE_ENABLED_KEY = "brand_profile_distillation.enabled"
 _PROFILE_TIME_KEY = "brand_profile_distillation.time_local"
 _PROFILE_WEEKDAY_KEY = "brand_profile_distillation.weekday"
 _PROFILE_LAST_DATE_KEY = "brand_profile_distillation.last_enqueued_date"
+_RECYCLE_ENABLED_KEY = "recycling.enabled"
+_RECYCLE_DAY_KEY = "recycling.day"
+_RECYCLE_TIME_KEY = "recycling.time_local"
+_RECYCLE_LAST_MONTH_KEY = "recycling.last_enqueued_month"
 _DEFAULT_TIME = "09:00"
 _POLL_SECONDS = 30
 
@@ -43,6 +47,14 @@ class BrandProfileDistillationSchedule:
     time_local: str
     weekday: int
     last_enqueued_date: str
+
+
+@dataclass(frozen=True)
+class RecyclingSchedule:
+    enabled: bool
+    day: int
+    time_local: str
+    last_enqueued_month: str
 
 
 def get_daily_workflow_schedule() -> DailyWorkflowSchedule:
@@ -86,12 +98,36 @@ def set_brand_profile_distillation_schedule(
     return get_brand_profile_distillation_schedule()
 
 
+def get_recycling_schedule() -> RecyclingSchedule:
+    values = _get_settings(_RECYCLE_ENABLED_KEY, _RECYCLE_DAY_KEY, _RECYCLE_TIME_KEY, _RECYCLE_LAST_MONTH_KEY)
+    return RecyclingSchedule(
+        enabled=values.get(_RECYCLE_ENABLED_KEY, "false").lower() == "true",
+        day=_normalize_month_day(values.get(_RECYCLE_DAY_KEY, "1")),
+        time_local=_normalize_time(values.get(_RECYCLE_TIME_KEY, _DEFAULT_TIME)),
+        last_enqueued_month=values.get(_RECYCLE_LAST_MONTH_KEY, ""),
+    )
+
+
+def set_recycling_schedule(enabled: bool, day: int, time_local: str) -> RecyclingSchedule:
+    normalized = _normalize_time(time_local)
+    normalized_day = _normalize_month_day(str(day))
+    with session_scope() as session:
+        _upsert_setting(session, _RECYCLE_ENABLED_KEY, "true" if enabled else "false")
+        _upsert_setting(session, _RECYCLE_DAY_KEY, str(normalized_day))
+        _upsert_setting(session, _RECYCLE_TIME_KEY, normalized)
+    return get_recycling_schedule()
+
+
 def enqueue_daily_workflow(source: str) -> str:
     return job_queue.enqueue("run_daily_workflow", {"source": source})
 
 
 def enqueue_brand_profile_distillation(source: str) -> str:
     return job_queue.enqueue("distill_brand_profile", {"source": source})
+
+
+def enqueue_recycling(source: str) -> str:
+    return job_queue.enqueue("recycle_top_posts", {"source": source})
 
 
 def enqueue_due_daily_workflow(now: datetime | None = None) -> str | None:
@@ -130,6 +166,25 @@ def enqueue_due_brand_profile_distillation(now: datetime | None = None) -> str |
     return job_id
 
 
+def enqueue_due_recycling(now: datetime | None = None) -> str | None:
+    current = now or datetime.now()
+    schedule = get_recycling_schedule()
+    if not schedule.enabled:
+        return None
+    if current.day != schedule.day:
+        return None
+    if current.strftime("%H:%M") < schedule.time_local:
+        return None
+    month = current.strftime("%Y-%m")
+    if schedule.last_enqueued_month == month:
+        return None
+
+    job_id = enqueue_recycling("scheduler")
+    with session_scope() as session:
+        _upsert_setting(session, _RECYCLE_LAST_MONTH_KEY, month)
+    return job_id
+
+
 class DailyWorkflowScheduler:
     def __init__(self) -> None:
         self._task: asyncio.Task | None = None
@@ -150,6 +205,7 @@ class DailyWorkflowScheduler:
             try:
                 enqueue_due_daily_workflow()
                 enqueue_due_brand_profile_distillation()
+                enqueue_due_recycling()
             except Exception:
                 logger.exception("Daily workflow scheduler tick failed")
             await asyncio.sleep(_POLL_SECONDS)
@@ -185,6 +241,16 @@ def _normalize_weekday(value: str) -> int:
     if weekday < 0 or weekday > 6:
         raise ValueError("weekday must be an integer from 0 (Monday) to 6 (Sunday)")
     return weekday
+
+
+def _normalize_month_day(value: str) -> int:
+    try:
+        day = int(value)
+    except ValueError as exc:
+        raise ValueError("day must be an integer from 1 to 28") from exc
+    if day < 1 or day > 28:
+        raise ValueError("day must be an integer from 1 to 28")
+    return day
 
 
 daily_workflow_scheduler = DailyWorkflowScheduler()

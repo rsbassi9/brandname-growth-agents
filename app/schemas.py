@@ -376,6 +376,16 @@ class BrandProfileDistillationScheduleOut(BrandProfileDistillationScheduleIn):
     last_enqueued_date: str = ""
 
 
+class RecyclingScheduleIn(BaseModel):
+    enabled: bool = False
+    day: int = Field(default=1, ge=1, le=28)
+    time_local: str = Field(default="09:00", pattern=r"^\d{2}:\d{2}$")
+
+
+class RecyclingScheduleOut(RecyclingScheduleIn):
+    last_enqueued_month: str = ""
+
+
 class CalendarGuardrailsIn(BaseModel):
     max_items_per_day_channel: int = Field(default=3, ge=1, le=20)
 
