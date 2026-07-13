@@ -3,8 +3,7 @@
 Single asyncio worker started in the FastAPI lifespan. Jobs are persisted in
 the `jobs` table; results in `result_json`. Job kinds: generate_asset,
 run_daily_workflow, render_carousel, image_iterate, brain_index,
-distill_brand_profile.
-seo_audit.
+distill_brand_profile, seo_audit, seo_fix.
 
 The run_daily_workflow handler checks LOCAL_ONLY_AGENT_RUNS and uses the
 deterministic port of src/local_workflow.py when true — this closes the legacy
@@ -39,6 +38,7 @@ JOB_KINDS = (
     "brain_index",
     "distill_brand_profile",
     "seo_audit",
+    "seo_fix",
 )
 
 
@@ -403,6 +403,20 @@ async def _handle_seo_audit(job_id: str, payload: dict[str, Any]) -> dict[str, A
     return {"audits": count}
 
 
+async def _handle_seo_fix(job_id: str, payload: dict[str, Any]) -> dict[str, Any]:
+    from .seo_fixes import generate_seo_fix
+
+    audit_id = int(payload["audit_id"])
+    asset_id = int(payload["asset_id"])
+    _update_job(job_id, progress_pct=30, message="generating SEO fix")
+    with session_scope() as session:
+        generated = generate_seo_fix(session, audit_id)
+        params = dict(generated.pop("params", {}))
+    _update_job(job_id, progress_pct=80, message="persisting SEO fix")
+    version_no = _persist_version(asset_id, generated, {"type": "seo_fix", **params})
+    return {"asset_id": asset_id, "version_no": version_no}
+
+
 def _enqueue_brain_index(**payload: Any) -> None:
     if not any(value is not None for value in payload.values()):
         return
@@ -420,6 +434,7 @@ _HANDLERS = {
     "brain_index": _handle_brain_index,
     "distill_brand_profile": _handle_distill_brand_profile,
     "seo_audit": _handle_seo_audit,
+    "seo_fix": _handle_seo_fix,
 }
 
 # Application-wide queue instance (started/stopped by the FastAPI lifespan).

@@ -1,4 +1,4 @@
-export type AssetType = "copy" | "image_concept" | "carousel" | "video_script" | "voiceover" | "ad_brief";
+export type AssetType = "copy" | "image_concept" | "carousel" | "video_script" | "voiceover" | "ad_brief" | "seo_fix";
 export type AssetStatus = "draft" | "selected" | "archived";
 export type JobStatus = "queued" | "running" | "succeeded" | "failed";
 
