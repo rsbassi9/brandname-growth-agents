@@ -465,7 +465,13 @@ async def _handle_repurpose_shoot(job_id: str, payload: dict[str, Any]) -> dict[
         product_handle = next((row.product_handle for row in ordered if row.product_handle), "")
         specs = _repurpose_step_specs(campaign.id, brief, source_summary, source_asset_ids, reference_context, product_handle)
         for spec in specs:
-            asset = Asset(campaign_id=campaign.id, type=spec["type"], title=spec["title"], status="draft")
+            asset = Asset(
+                campaign_id=campaign.id,
+                type=spec["type"],
+                title=spec["title"],
+                status="draft",
+                source_path=f"repurpose:{campaign.id}:{spec['name']}",
+            )
             session.add(asset)
             session.flush()
             spec["asset_id"] = asset.id

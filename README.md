@@ -73,7 +73,7 @@ Then open `http://127.0.0.1:8765`.
 - Calendar and Feed Grid: plan and reorder manual publishing work, drag drafts from the unscheduled tray, use suggested best-time slots, and see soft guardrail warnings.
 - Ads & SEO: create structured `ad_brief` assets for manual Meta Ads Manager entry, run read-only Shopify SEO audits, generate paste-ready `seo_fix` assets, and create `seo_plan` keyword/content maps. No Meta API integration or Shopify write path is included.
 - Strategy Hub: read strategy context and brand profile versions, plan work, ship draft copy manually, import performance CSVs, link posts to calendar items, review dashboard insights, submit feedback into the learning loop, and review weekly standups.
-- Repurposing: `repurpose_shoot` turns 1-10 indexed source assets into a campaign with copy, reel script, story copy, ad brief, and product refresh drafts.
+- Repurposing: `repurpose_shoot` turns 1-10 indexed source assets into a campaign with copy, reel script, story copy, ad brief, and product refresh drafts; failed child draft assets can be retried individually.
 - Recycling: an off-by-default monthly job drafts unscheduled remixes from top-quartile older posts. It never auto-schedules.
 - Weekly Standup: an off-by-default weekly job writes `standup_reports`; the Learn lane shows what published, top/bottom performer, next week's plan, and exactly three recommendation actions that create draft tray assets.
 - System: configure and run local daily workflow jobs, brand profile distillation cadence, recycling cadence, weekly standup cadence, and calendar guardrails.

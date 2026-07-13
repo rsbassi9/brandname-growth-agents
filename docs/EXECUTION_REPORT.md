@@ -67,8 +67,8 @@ This report covers execution tasks P0-1 through P11-5 for `brandname-growth-agen
 | P11-1 repurpose shoot | `6708c88` | Added `repurpose_shoot` fan-out into campaign assets and partial-failure result tracking. | Focused repurpose 4/4; backend pytest 127/127; compileall passed. |
 | P11-2 recycling job | `db9b2f1` | Added off-by-default monthly recycling cadence and idempotent unscheduled remix drafts. | Focused recycling 4/4; backend pytest 131/131; compileall passed. |
 | P11-3 weekly standup | `3097238` | Added `standup_reports`, weekly cadence controls, report job, Learn-lane Standup tab, and recommendation draft action. | Focused standup 4/4; backend pytest 135/135; frontend Vitest 17/17; type-check/build/UI scan passed. |
-| P11-4 docs | Current commit | Extends this report through P11, updates README operator docs, and moves the roadmap pointer. | Documentation-only verification plus final status check. |
-| P11-5 final tests/gate | Pending | Final P11 gate remains next: fresh-clone simulation plus local-only Brain backfill, fixture metrics import, repurpose shoot, and visible standup report. | Not yet run. |
+| P11-4 docs | `7b46f64` | Extends this report through P11, updates README operator docs, and moves the roadmap pointer. | Documentation-only verification plus final status check. |
+| P11-5 final tests/gate | Current commit | Added repurpose partial-failure + retry coverage, a retry endpoint for repurpose child assets, and a local-only P11 gate test covering Brain backfill, fixture metrics import, repurpose shoot, standup generation, and Strategy API visibility for the UI. | GATE P11 passed: focused P11 tests 15/15; backend pytest 138/138; compileall passed; frontend Vitest 17/17; type-check/build/UI scan passed. |
 
 ## Gates
 
@@ -84,7 +84,7 @@ This report covers execution tasks P0-1 through P11-5 for `brandname-growth-agen
 | GATE P8 | Passed | Fixture performance import, visible posts/metrics, expected best-time ranking, metric insight Brain docs, backend/frontend checks. |
 | GATE P9 | Passed | Calendar CRUD/drag/tray/feed/guardrail coverage, backend/frontend checks, build and UI scan. |
 | GATE P10 | Passed | Fixture SEO audit/fix/plan coverage, local-only assets, backend focused/full checks. |
-| GATE P11 | Pending | P11-5 final gate is next. |
+| GATE P11 | Passed | Focused P11 tests 15/15, backend pytest 138/138, backend compileall, frontend Vitest 17/17, type-check, build, UI token scan, and local-only Brain/import/repurpose/standup gate test. |
 
 ## TODO(fable-review)
 
@@ -96,4 +96,4 @@ This report covers execution tasks P0-1 through P11-5 for `brandname-growth-agen
 
 ## Incomplete Items
 
-None for P0-P10 and P11-1 through P11-4. P11-5 remains the next planned final gate. The P5 gate initially exposed a real browser-only Playground crash from stale non-array `localStorage` history (`D.map is not a function`); P5-3 fixed it and the final headless Edge render confirmed the built studio now loads.
+None for P0-P11. The P5 gate initially exposed a real browser-only Playground crash from stale non-array `localStorage` history (`D.map is not a function`); P5-3 fixed it and the final headless Edge render confirmed the built studio now loads.
