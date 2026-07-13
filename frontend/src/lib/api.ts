@@ -120,6 +120,18 @@ export interface AdBriefRequest {
   premium?: boolean;
 }
 
+export interface SeoAuditOut {
+  id: number;
+  product_handle: string;
+  score: number;
+  issues_json: string;
+  audited_at: string;
+}
+
+export interface SeoAuditRunOut {
+  job_id: string;
+}
+
 export interface JobOut {
   id: string;
   kind: string;
@@ -393,6 +405,11 @@ export const api = {
     request<GenerateResponse>("/generate", { method: "POST", body: JSON.stringify(payload) }),
   createAdBrief: (payload: AdBriefRequest) =>
     request<GenerateResponse>("/ads/briefs", { method: "POST", body: JSON.stringify(payload) }),
+  runSeoAudit: () => request<SeoAuditRunOut>("/seo/audit", { method: "POST" }),
+  seoAudits: (params: { limit?: number } = {}) => request<SeoAuditOut[]>(`/seo/audits${toQuery(params)}`),
+  generateSeoFix: (auditId: number) =>
+    request<GenerateResponse>(`/seo/audits/${auditId}/fix`, { method: "POST" }),
+  generateSeoPlan: () => request<GenerateResponse>("/seo/plan", { method: "POST" }),
   job: (jobId: string) => request<JobOut>(`/jobs/${jobId}`),
   assets: (params: {
     type?: string;

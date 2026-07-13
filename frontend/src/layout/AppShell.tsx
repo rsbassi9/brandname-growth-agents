@@ -28,7 +28,7 @@ const navItems = [
   { href: "/library", label: "Library", icon: Library },
   { href: "/calendar", label: "Calendar", icon: CalendarDays },
   { href: "/feed", label: "Feed Grid", icon: Grid3X3 },
-  { href: "/ads", label: "Ads", icon: RectangleEllipsis },
+  { href: "/ads", label: "Ads & SEO", icon: RectangleEllipsis },
   { href: "/strategy", label: "Strategy Hub", icon: GalleryVerticalEnd },
   { href: "/system", label: "System", icon: Settings },
 ];
