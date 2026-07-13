@@ -139,6 +139,57 @@ Use source photos when:
 - Starting a repurpose shoot.
 - Keeping product-linked content connected to actual material.
 
+### Google Drive Raw Assets
+
+Use Google Drive as the shared raw-asset library when photoshoots, product images, process clips, design files, and inspiration screenshots should stay outside the repo.
+
+Drive setup is environment-based:
+
+1. Create or choose one Drive folder as the raw content root.
+2. Set `GOOGLE_DRIVE_ENABLED=true`.
+3. Set `GOOGLE_DRIVE_ROOT_FOLDER_ID` to the folder id or folder URL.
+4. For personal OAuth, put the downloaded Google OAuth client JSON at `oauth_client.json`, or set `GOOGLE_OAUTH_CLIENT_FILE` to its path.
+5. Keep `GOOGLE_AUTH_MODE=oauth`, then let the first Drive inventory/indexing call create `token.json`.
+6. For service-account mode, set `GOOGLE_AUTH_MODE=service_account`, set `GOOGLE_APPLICATION_CREDENTIALS`, and share the Drive root folder with the service-account email.
+7. Restart the app after changing Drive environment variables.
+
+The Drive scanner reads the root folder recursively and sorts files into creative buckets by folder/file names:
+
+- `First Post Inspiration`
+- `Store Products`
+- `Shoot Photos`
+- `Photoshoot / Campaign`
+- `Process / Studio`
+- `Design Assets`
+- `Video`
+- `Other`
+
+To index Drive images into Library source photos, use the API until a full Drive setup panel exists in the UI:
+
+```powershell
+Invoke-RestMethod http://127.0.0.1:8765/api/v1/source-assets/index -Method Post -ContentType "application/json" -Body '{"origin":"drive","tags":["drive"],"limit":100}'
+```
+
+Local folders can be indexed from the Source Photos UI or through:
+
+```powershell
+python -m app.services.source_assets local --path "C:\path\to\photoshoot" --tag drop-one
+```
+
+### Inspiration Posts
+
+Use inspiration posts as learning references, not as exact templates.
+
+Best places to add them:
+
+- Put screenshots, exports, or reference files in a Drive folder named `First Post Inspiration` under the configured Drive root.
+- Add or update `brand_context/asset_tags.csv` with columns `filename,bucket,priority,notes,roles`; set `bucket` to `First Post Inspiration` for specific files that need manual classification.
+- Add written inspiration notes, positioning, or creative rules as Markdown files in `brand_context/`, then run `python -m app.services.brain backfill`.
+- Import real post-performance CSVs in Strategy Hub -> Learn -> Performance.
+- Submit explicit feedback in Strategy Hub -> Learn -> Performance when an output should affect future drafts.
+
+Drive inspiration files guide the asset inventory and source-photo context. Performance imports, feedback, and `brand_context` files feed Brand Brain.
+
 ## Calendar
 
 Use Calendar to plan manual publishing work.
@@ -172,6 +223,7 @@ Typical uses:
 - Reorder planned feed items.
 - Preview sequence and rhythm.
 - Keep visual/content order coherent before manual posting.
+- Review linked asset images when the calendar item has image media.
 
 How to use it:
 
@@ -181,6 +233,8 @@ How to use it:
 4. Save/persist the order.
 
 Use Feed Grid after Calendar planning, when the exact sequence matters.
+
+If a tile has a linked `asset_id` whose selected/latest version points to a supported image file (`jpg`, `jpeg`, `png`, `webp`, or `gif`), Feed Grid shows that image behind the tile copy. Text-only assets, missing files, and unsupported media types remain text cards.
 
 ## Ads & SEO
 

@@ -12,6 +12,10 @@ function titleFor(item: CalendarItemOut) {
   return String(item.data.title || item.data.hook || item.data.caption || item.id);
 }
 
+function mediaUrlFor(item: CalendarItemOut) {
+  return item.asset_id ? `/api/v1/assets/${item.asset_id}/media` : "";
+}
+
 function tileTone(status: string) {
   if (status === "published" || status === "selected") return "success";
   if (status === "scheduled" || status === "planned") return "warning";
@@ -112,10 +116,24 @@ export function FeedGridPage() {
                 draggedId === item.id ? "border-accent bg-accent-soft" : "hover:border-accent/60",
               )}
             >
-              <div className="flex h-full flex-col justify-between rounded-md bg-muted p-3">
+              <div className="relative flex h-full flex-col justify-between overflow-hidden rounded-md bg-muted">
+                {mediaUrlFor(item) ? (
+                  <img
+                    src={mediaUrlFor(item)}
+                    alt=""
+                    loading="lazy"
+                    className="absolute inset-0 h-full w-full object-cover"
+                    onError={(event) => {
+                      event.currentTarget.hidden = true;
+                    }}
+                  />
+                ) : null}
+                <div className="absolute inset-0 bg-ink/45" aria-hidden="true" />
                 <div className="flex items-start justify-between gap-2">
-                  <Badge tone={tileTone(item.status)}>{item.status}</Badge>
-                  <div className="flex gap-1">
+                  <Badge tone={tileTone(item.status)} className="relative z-10 m-3">
+                    {item.status}
+                  </Badge>
+                  <div className="relative z-10 m-3 flex gap-1 rounded-md bg-background/80">
                     <Button type="button" variant="ghost" size="icon" aria-label={`Move ${titleFor(item)} earlier`} onClick={() => moveBy(index, -1)}>
                       <ArrowUp className="h-4 w-4" />
                     </Button>
@@ -124,7 +142,7 @@ export function FeedGridPage() {
                     </Button>
                   </div>
                 </div>
-                <div>
+                <div className="relative z-10 m-3 rounded-md bg-background/85 p-3">
                   <div className="mb-3 flex items-center gap-2 text-xs font-semibold uppercase text-muted-foreground">
                     <GripVertical className="h-4 w-4" />
                     Slot {index + 1}

@@ -3,13 +3,16 @@
 from __future__ import annotations
 
 import json
+from pathlib import Path
 
 from fastapi import APIRouter, Depends, HTTPException, Query
+from fastapi.responses import FileResponse
 from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from ..db import get_session
 from ..models import Asset, AssetVersion
+from ..paths import ROOT_DIR, data_root, outputs_dir
 from ..schemas import AssetDetailOut, AssetListOut, AssetOut, CritiqueOut, GenerateResponse
 from ..services.jobs import job_queue
 
@@ -60,6 +63,27 @@ def get_asset(asset_id: int, session: Session = Depends(get_session)) -> Asset:
     if asset is None:
         raise HTTPException(status_code=404, detail="Asset not found")
     return asset
+
+
+@router.get("/{asset_id}/media")
+def get_asset_media(asset_id: int, session: Session = Depends(get_session)) -> FileResponse:
+    asset = session.get(Asset, asset_id)
+    if asset is None:
+        raise HTTPException(status_code=404, detail="Asset not found")
+    version = session.execute(
+        select(AssetVersion)
+        .where(AssetVersion.asset_id == asset_id, AssetVersion.file_path.is_not(None))
+        .order_by(AssetVersion.is_selected.desc(), AssetVersion.version_no.desc())
+        .limit(1)
+    ).scalar_one_or_none()
+    if version is None or not version.file_path:
+        raise HTTPException(status_code=404, detail="Asset has no media file")
+    path = _resolve_media_path(version.file_path)
+    if path is None or not path.exists() or not path.is_file():
+        raise HTTPException(status_code=404, detail="Media file not found")
+    if path.suffix.lower() not in {".jpg", ".jpeg", ".png", ".webp", ".gif"}:
+        raise HTTPException(status_code=415, detail="Asset media is not a supported image")
+    return FileResponse(path)
 
 
 @router.post("/{asset_id}/versions/{version_no}/select", response_model=AssetDetailOut)
@@ -169,6 +193,29 @@ def create_video_prompt_pack(asset_id: int, session: Session = Depends(get_sessi
         },
     )
     return GenerateResponse(job_id=job_id, asset_id=video_asset.id)
+
+
+def _resolve_media_path(raw_path: str) -> Path | None:
+    candidates: list[Path] = []
+    raw = Path(raw_path)
+    if raw.is_absolute():
+        candidates.append(raw)
+    else:
+        candidates.extend([data_root() / raw_path, ROOT_DIR / raw_path])
+        if raw_path.startswith("outputs/"):
+            candidates.append(outputs_dir() / raw_path.removeprefix("outputs/"))
+    allowed_roots = [ROOT_DIR.resolve(), data_root().resolve()]
+    resolved_candidates: list[Path] = []
+    for candidate in candidates:
+        resolved = candidate.resolve()
+        if any(resolved == root or root in resolved.parents for root in allowed_roots):
+            resolved_candidates.append(resolved)
+    for resolved in resolved_candidates:
+        if resolved.exists():
+            return resolved
+    if resolved_candidates:
+        return resolved_candidates[0]
+    return None
 
 
 def _asset_and_version(session: Session, asset_id: int, version_no: int) -> tuple[Asset, AssetVersion]:

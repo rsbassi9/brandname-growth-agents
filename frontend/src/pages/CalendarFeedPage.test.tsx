@@ -213,9 +213,10 @@ describe("P2-5 Calendar and Feed Grid", () => {
   });
 
   it("persists feed grid order changes", async () => {
-    renderRoute("/feed");
+    const rendered = renderRoute("/feed");
 
     expect(await screen.findByText("Launch teaser")).toBeInTheDocument();
+    expect(rendered.container.querySelector('img[src="/api/v1/assets/42/media"]')).toBeInTheDocument();
     await userEvent.click(screen.getByRole("button", { name: /move launch teaser later/i }));
     await userEvent.click(screen.getByRole("button", { name: /save order/i }));
 

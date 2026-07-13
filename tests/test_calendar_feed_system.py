@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import json
+
 
 def test_health(client) -> None:
     response = client.get("/api/v1/system/health")
@@ -63,6 +65,36 @@ def test_feed_order_persists(client) -> None:
     assert response.status_code == 200
     ordered = [item["id"] for item in client.get("/api/v1/feed").json()]
     assert ordered == ["post-2", "post-0", "post-1"]
+
+
+def test_asset_media_serves_latest_image_file(client, app_env) -> None:
+    from app.db import session_scope
+    from app.models import Asset, AssetVersion
+
+    image_path = app_env / "outputs" / "visual_content" / "feed-card.png"
+    image_path.parent.mkdir(parents=True, exist_ok=True)
+    image_path.write_bytes(b"not-a-real-png-but-served")
+    with session_scope() as session:
+        asset = Asset(type="image_concept", title="Feed image", status="draft")
+        session.add(asset)
+        session.flush()
+        session.add(
+            AssetVersion(
+                asset_id=asset.id,
+                version_no=1,
+                prompt_snapshot="image",
+                params_json=json.dumps({"type": "image_concept"}),
+                file_path=str(image_path),
+                model_used="test",
+                is_selected=True,
+            )
+        )
+        asset_id = asset.id
+
+    response = client.get(f"/api/v1/assets/{asset_id}/media")
+
+    assert response.status_code == 200, response.text
+    assert response.content == b"not-a-real-png-but-served"
 
 
 def test_calendar_guardrails_setting_persists(client) -> None:
