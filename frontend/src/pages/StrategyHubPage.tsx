@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   CalendarDays,
+  CalendarPlus,
   CheckCircle2,
   Clipboard,
   Download,
@@ -24,6 +25,7 @@ import {
   type PerformanceChannel,
   type PerformanceDashboardOut,
   type PublishedPostOut,
+  type StandupReportOut,
 } from "@/lib/api";
 import { cn } from "@/lib/utils";
 
@@ -36,6 +38,15 @@ const lanes = [
 ] as const;
 
 type LaneId = (typeof lanes)[number]["id"];
+type LearnTab = "standup" | "performance";
+
+interface StandupRecommendation {
+  title: string;
+  draft_type?: string;
+  rationale: string;
+  brief: string;
+  evidence?: Record<string, unknown>;
+}
 
 function formatName(name: string) {
   return name.split("_").join(" ");
@@ -52,6 +63,7 @@ function itemTitle(data: Record<string, unknown>, fallback: string) {
 export function StrategyHubPage() {
   const queryClient = useQueryClient();
   const [lane, setLane] = useState<LaneId>("know");
+  const [learnTab, setLearnTab] = useState<LearnTab>("standup");
   const [selectedAssetId, setSelectedAssetId] = useState<number | null>(null);
   const [feedbackTarget, setFeedbackTarget] = useState("");
   const [rating, setRating] = useState("4");
@@ -77,6 +89,7 @@ export function StrategyHubPage() {
     enabled: selectedAssetId !== null,
   });
   const learning = useQuery({ queryKey: ["strategy", "learn"], queryFn: api.learnSummary });
+  const standups = useQuery({ queryKey: ["strategy", "standup"], queryFn: () => api.standupReports({ limit: 5 }) });
   const performancePosts = useQuery({
     queryKey: ["performance", "posts", performanceChannel],
     queryFn: () => api.performancePosts({ channel: performanceChannel, limit: 20 }),
@@ -117,6 +130,14 @@ export function StrategyHubPage() {
   const unlinkPerformance = useMutation({
     mutationFn: () => api.unlinkPerformancePost(Number(performancePostId)),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ["performance", "posts"] }),
+  });
+  const createStandupDraft = useMutation({
+    mutationFn: ({ reportId, recommendationIndex }: { reportId: number; recommendationIndex: number }) =>
+      api.createStandupDraft(reportId, recommendationIndex),
+    onSuccess: (created) => {
+      queryClient.invalidateQueries({ queryKey: ["assets", "strategy", "drafts"] });
+      setSelectedAssetId(created.asset_id);
+    },
   });
 
   const drafts = draftAssets.data?.items || [];
@@ -197,7 +218,14 @@ export function StrategyHubPage() {
       ) : null}
       {lane === "learn" ? (
         <LearnLane
+          activeTab={learnTab}
+          onTab={setLearnTab}
           summary={learning.data?.summary || ""}
+          standups={standups.data || []}
+          standupsLoading={standups.isLoading}
+          standupDraftPending={createStandupDraft.isPending}
+          standupDraftError={createStandupDraft.error}
+          onStandupDraft={(reportId, recommendationIndex) => createStandupDraft.mutate({ reportId, recommendationIndex })}
           feedbackTarget={feedbackTarget}
           rating={rating}
           comment={comment}
@@ -265,6 +293,105 @@ function BarRows({ title, rows }: { title: string; rows: Array<{ label: string; 
 
 function formatPercent(value: number) {
   return `${(value * 100).toFixed(1)}%`;
+}
+
+function parseStandupRecommendations(report?: StandupReportOut): StandupRecommendation[] {
+  if (!report) return [];
+  try {
+    const parsed = JSON.parse(report.recommendations_json) as unknown;
+    if (!Array.isArray(parsed)) return [];
+    return parsed
+      .filter((item): item is StandupRecommendation => {
+        return typeof item === "object" && item !== null && "title" in item && "rationale" in item && "brief" in item;
+      })
+      .slice(0, 3);
+  } catch {
+    return [];
+  }
+}
+
+function StandupPanel({
+  reports,
+  loading,
+  draftPending,
+  draftError,
+  onCreateDraft,
+}: {
+  reports: StandupReportOut[];
+  loading: boolean;
+  draftPending: boolean;
+  draftError: unknown;
+  onCreateDraft: (reportId: number, recommendationIndex: number) => void;
+}) {
+  const latest = reports[0];
+  const recommendations = parseStandupRecommendations(latest);
+  return (
+    <div className="grid gap-4 xl:grid-cols-[1fr_420px]">
+      <Panel>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <div>
+            <h2 className="font-display text-xl font-normal">Weekly Standup</h2>
+            <p className="mt-1 text-sm text-muted-foreground">{latest ? `Week of ${latest.week_start}` : "No report generated yet."}</p>
+          </div>
+          <Badge>{reports.length} reports</Badge>
+        </div>
+        {loading ? (
+          <div className="mt-5 rounded-md border border-border bg-background p-4 text-sm text-muted-foreground">
+            <span className="sr-only">Loading weekly standup</span>
+            Loading standup report...
+          </div>
+        ) : latest ? (
+          <div className="mt-5 whitespace-pre-wrap rounded-md border border-border bg-background p-4 text-sm leading-6">
+            {latest.report_md}
+          </div>
+        ) : (
+          <div className="mt-5 rounded-md border border-border bg-background p-4 text-sm text-muted-foreground">
+            Run the weekly standup job to populate published links, performance extremes, next week's plan, and recommendations.
+          </div>
+        )}
+      </Panel>
+      <Panel>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <h3 className="text-sm font-semibold">Agent Recommendations</h3>
+          <Badge>{recommendations.length}/3</Badge>
+        </div>
+        <div className="mt-4 space-y-3">
+          {recommendations.map((recommendation, index) => (
+            <div key={`${latest?.id}-${recommendation.title}`} className="rounded-md border border-border bg-background p-3">
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div className="min-w-0 flex-1">
+                  <p className="text-sm font-semibold">{recommendation.title}</p>
+                  <p className="mt-2 text-xs leading-5 text-muted-foreground">{recommendation.rationale}</p>
+                </div>
+                <Badge>{recommendation.draft_type || "copy"}</Badge>
+              </div>
+              <p className="mt-3 text-xs leading-5">{recommendation.brief}</p>
+              <Button
+                type="button"
+                variant="outline"
+                className="mt-3 w-full"
+                disabled={draftPending || !latest}
+                onClick={() => latest && onCreateDraft(latest.id, index)}
+              >
+                <CalendarPlus className="h-4 w-4" />
+                Add to Calendar as Draft
+              </Button>
+            </div>
+          ))}
+          {!recommendations.length ? (
+            <p className="rounded-md border border-border bg-background p-3 text-sm text-muted-foreground">
+              No recommendations are available yet.
+            </p>
+          ) : null}
+          {draftError ? (
+            <p role="alert" className="text-sm text-danger">
+              {draftError instanceof Error ? draftError.message : "Standup draft could not be created."}
+            </p>
+          ) : null}
+        </div>
+      </Panel>
+    </div>
+  );
 }
 
 function KnowLane({
@@ -518,7 +645,14 @@ function ShipLane({
 }
 
 function LearnLane({
+  activeTab,
+  onTab,
   summary,
+  standups,
+  standupsLoading,
+  standupDraftPending,
+  standupDraftError,
+  onStandupDraft,
   feedbackTarget,
   rating,
   comment,
@@ -551,7 +685,14 @@ function LearnLane({
   onPerformanceLinkSubmit,
   onPerformanceUnlink,
 }: {
+  activeTab: LearnTab;
+  onTab: (value: LearnTab) => void;
   summary: string;
+  standups: StandupReportOut[];
+  standupsLoading: boolean;
+  standupDraftPending: boolean;
+  standupDraftError: unknown;
+  onStandupDraft: (reportId: number, recommendationIndex: number) => void;
   feedbackTarget: string;
   rating: string;
   comment: string;
@@ -590,7 +731,36 @@ function LearnLane({
   onPerformanceUnlink: () => void;
 }) {
   return (
-    <div className="grid gap-4 p-4 xl:grid-cols-[1fr_420px]">
+    <div className="p-4">
+      <div className="mb-4 flex flex-wrap gap-2">
+        {(["standup", "performance"] as const).map((tab) => {
+          const selected = activeTab === tab;
+          return (
+            <button
+              key={tab}
+              type="button"
+              className={cn(
+                "min-h-11 rounded-md border px-3 text-sm font-medium capitalize transition-colors duration-ui ease-ui",
+                selected ? "border-accent bg-accent-soft text-accent-soft-foreground" : "border-border bg-background hover:bg-muted",
+              )}
+              aria-pressed={selected}
+              onClick={() => onTab(tab)}
+            >
+              {tab}
+            </button>
+          );
+        })}
+      </div>
+      {activeTab === "standup" ? (
+        <StandupPanel
+          reports={standups}
+          loading={standupsLoading}
+          draftPending={standupDraftPending}
+          draftError={standupDraftError}
+          onCreateDraft={onStandupDraft}
+        />
+      ) : (
+        <div className="grid gap-4 xl:grid-cols-[1fr_420px]">
       <Panel>
         <h2 className="font-display text-xl font-normal">Learning Loop</h2>
         <p className="mt-4 whitespace-pre-line text-sm leading-6 text-muted-foreground">{summary || "No learning summary yet."}</p>
@@ -822,6 +992,8 @@ function LearnLane({
           ) : null}
         </form>
       </Panel>
+        </div>
+      )}
     </div>
   );
 }

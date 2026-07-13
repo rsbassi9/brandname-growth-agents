@@ -386,6 +386,16 @@ class RecyclingScheduleOut(RecyclingScheduleIn):
     last_enqueued_month: str = ""
 
 
+class WeeklyStandupScheduleIn(BaseModel):
+    enabled: bool = False
+    time_local: str = Field(default="09:00", pattern=r"^\d{2}:\d{2}$")
+    weekday: int = Field(default=0, ge=0, le=6)
+
+
+class WeeklyStandupScheduleOut(WeeklyStandupScheduleIn):
+    last_enqueued_date: str = ""
+
+
 class CalendarGuardrailsIn(BaseModel):
     max_items_per_day_channel: int = Field(default=3, ge=1, le=20)
 
@@ -424,3 +434,17 @@ class StrategyDocOut(BaseModel):
 class BrandProfileHistoryOut(BaseModel):
     current: BrandProfileVersionOut | None = None
     versions: list[BrandProfileVersionOut] = Field(default_factory=list)
+
+
+class StandupReportOut(BaseModel):
+    id: int
+    week_start: str
+    report_md: str
+    recommendations_json: str
+    created_at: datetime
+
+    model_config = ConfigDict(from_attributes=True)
+
+
+class StandupDraftOut(BaseModel):
+    asset_id: int

@@ -22,6 +22,8 @@ from ..schemas import (
     ModeOut,
     RecyclingScheduleIn,
     RecyclingScheduleOut,
+    WeeklyStandupScheduleIn,
+    WeeklyStandupScheduleOut,
     WorkflowRunReportOut,
     WorkflowRunStepOut,
 )
@@ -29,12 +31,15 @@ from ..services.scheduler import (
     enqueue_brand_profile_distillation,
     enqueue_daily_workflow,
     enqueue_recycling,
+    enqueue_weekly_standup,
     get_brand_profile_distillation_schedule,
     get_daily_workflow_schedule,
     get_recycling_schedule,
+    get_weekly_standup_schedule,
     set_brand_profile_distillation_schedule,
     set_daily_workflow_schedule,
     set_recycling_schedule,
+    set_weekly_standup_schedule,
 )
 from ..settings import get_settings
 
@@ -167,6 +172,36 @@ def update_recycling_schedule(payload: RecyclingScheduleIn) -> RecyclingSchedule
 @router.post("/recycling/run", response_model=DailyWorkflowRunOut)
 def run_recycling_now() -> DailyWorkflowRunOut:
     return DailyWorkflowRunOut(job_id=enqueue_recycling("manual"))
+
+
+@router.get("/weekly-standup", response_model=WeeklyStandupScheduleOut)
+def weekly_standup_schedule() -> WeeklyStandupScheduleOut:
+    schedule = get_weekly_standup_schedule()
+    return WeeklyStandupScheduleOut(
+        enabled=schedule.enabled,
+        time_local=schedule.time_local,
+        weekday=schedule.weekday,
+        last_enqueued_date=schedule.last_enqueued_date,
+    )
+
+
+@router.put("/weekly-standup", response_model=WeeklyStandupScheduleOut)
+def update_weekly_standup_schedule(payload: WeeklyStandupScheduleIn) -> WeeklyStandupScheduleOut:
+    try:
+        schedule = set_weekly_standup_schedule(payload.enabled, payload.time_local, payload.weekday)
+    except ValueError as exc:
+        raise HTTPException(status_code=422, detail=str(exc)) from exc
+    return WeeklyStandupScheduleOut(
+        enabled=schedule.enabled,
+        time_local=schedule.time_local,
+        weekday=schedule.weekday,
+        last_enqueued_date=schedule.last_enqueued_date,
+    )
+
+
+@router.post("/weekly-standup/run", response_model=DailyWorkflowRunOut)
+def run_weekly_standup_now() -> DailyWorkflowRunOut:
+    return DailyWorkflowRunOut(job_id=enqueue_weekly_standup("manual"))
 
 
 @router.get("/daily-workflow/runs", response_model=list[WorkflowRunReportOut])

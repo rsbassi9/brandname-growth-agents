@@ -30,6 +30,10 @@ _RECYCLE_ENABLED_KEY = "recycling.enabled"
 _RECYCLE_DAY_KEY = "recycling.day"
 _RECYCLE_TIME_KEY = "recycling.time_local"
 _RECYCLE_LAST_MONTH_KEY = "recycling.last_enqueued_month"
+_STANDUP_ENABLED_KEY = "weekly_standup.enabled"
+_STANDUP_TIME_KEY = "weekly_standup.time_local"
+_STANDUP_WEEKDAY_KEY = "weekly_standup.weekday"
+_STANDUP_LAST_DATE_KEY = "weekly_standup.last_enqueued_date"
 _DEFAULT_TIME = "09:00"
 _POLL_SECONDS = 30
 
@@ -55,6 +59,14 @@ class RecyclingSchedule:
     day: int
     time_local: str
     last_enqueued_month: str
+
+
+@dataclass(frozen=True)
+class WeeklyStandupSchedule:
+    enabled: bool
+    time_local: str
+    weekday: int
+    last_enqueued_date: str
 
 
 def get_daily_workflow_schedule() -> DailyWorkflowSchedule:
@@ -118,6 +130,26 @@ def set_recycling_schedule(enabled: bool, day: int, time_local: str) -> Recyclin
     return get_recycling_schedule()
 
 
+def get_weekly_standup_schedule() -> WeeklyStandupSchedule:
+    values = _get_settings(_STANDUP_ENABLED_KEY, _STANDUP_TIME_KEY, _STANDUP_WEEKDAY_KEY, _STANDUP_LAST_DATE_KEY)
+    return WeeklyStandupSchedule(
+        enabled=values.get(_STANDUP_ENABLED_KEY, "false").lower() == "true",
+        time_local=_normalize_time(values.get(_STANDUP_TIME_KEY, _DEFAULT_TIME)),
+        weekday=_normalize_weekday(values.get(_STANDUP_WEEKDAY_KEY, "0")),
+        last_enqueued_date=values.get(_STANDUP_LAST_DATE_KEY, ""),
+    )
+
+
+def set_weekly_standup_schedule(enabled: bool, time_local: str, weekday: int) -> WeeklyStandupSchedule:
+    normalized = _normalize_time(time_local)
+    normalized_weekday = _normalize_weekday(str(weekday))
+    with session_scope() as session:
+        _upsert_setting(session, _STANDUP_ENABLED_KEY, "true" if enabled else "false")
+        _upsert_setting(session, _STANDUP_TIME_KEY, normalized)
+        _upsert_setting(session, _STANDUP_WEEKDAY_KEY, str(normalized_weekday))
+    return get_weekly_standup_schedule()
+
+
 def enqueue_daily_workflow(source: str) -> str:
     return job_queue.enqueue("run_daily_workflow", {"source": source})
 
@@ -128,6 +160,10 @@ def enqueue_brand_profile_distillation(source: str) -> str:
 
 def enqueue_recycling(source: str) -> str:
     return job_queue.enqueue("recycle_top_posts", {"source": source})
+
+
+def enqueue_weekly_standup(source: str) -> str:
+    return job_queue.enqueue("weekly_standup", {"source": source})
 
 
 def enqueue_due_daily_workflow(now: datetime | None = None) -> str | None:
@@ -185,6 +221,25 @@ def enqueue_due_recycling(now: datetime | None = None) -> str | None:
     return job_id
 
 
+def enqueue_due_weekly_standup(now: datetime | None = None) -> str | None:
+    current = now or datetime.now()
+    schedule = get_weekly_standup_schedule()
+    if not schedule.enabled:
+        return None
+    if current.weekday() != schedule.weekday:
+        return None
+    if current.strftime("%H:%M") < schedule.time_local:
+        return None
+    today = current.date().isoformat()
+    if schedule.last_enqueued_date == today:
+        return None
+
+    job_id = enqueue_weekly_standup("scheduler")
+    with session_scope() as session:
+        _upsert_setting(session, _STANDUP_LAST_DATE_KEY, today)
+    return job_id
+
+
 class DailyWorkflowScheduler:
     def __init__(self) -> None:
         self._task: asyncio.Task | None = None
@@ -206,6 +261,7 @@ class DailyWorkflowScheduler:
                 enqueue_due_daily_workflow()
                 enqueue_due_brand_profile_distillation()
                 enqueue_due_recycling()
+                enqueue_due_weekly_standup()
             except Exception:
                 logger.exception("Daily workflow scheduler tick failed")
             await asyncio.sleep(_POLL_SECONDS)

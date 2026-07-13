@@ -117,6 +117,43 @@ describe("StrategyHubPage", () => {
         if (url.pathname === "/api/v1/strategy/learn/summary") {
           return response({ summary: "Recent feedback prefers product-truth captions." });
         }
+        if (url.pathname === "/api/v1/strategy/standup") {
+          return response([
+            {
+              id: 7,
+              week_start: "2026-07-06",
+              report_md:
+                "# Weekly Standup\n\n## What Published\n- [Source proof first](https://instagram.com/p/sourceproof)\n\n## Next Week Plan\n- Launch teaser",
+              recommendations_json: JSON.stringify([
+                {
+                  title: "Turn the top proof hook into a fresh caption draft",
+                  draft_type: "copy",
+                  rationale: "Top performer: Source proof first.",
+                  brief: "Create one unscheduled caption draft.",
+                  evidence: { top_post_id: 5 },
+                },
+                {
+                  title: "Patch the weakest post with clearer product truth",
+                  draft_type: "copy",
+                  rationale: "Bottom performer needs source proof.",
+                  brief: "Create one unscheduled improvement draft.",
+                  evidence: { bottom_post_id: 6 },
+                },
+                {
+                  title: "Pre-build next week's anchor post",
+                  draft_type: "copy",
+                  rationale: "Next week has one planned item.",
+                  brief: "Create one unscheduled anchor caption.",
+                  evidence: { next_calendar_item_ids: ["post-1"] },
+                },
+              ]),
+              created_at: "2026-07-13T09:00:00",
+            },
+          ]);
+        }
+        if (url.pathname === "/api/v1/strategy/standup/7/recommendations/0/draft" && init?.method === "POST") {
+          return response({ asset_id: 42 });
+        }
         if (url.pathname === "/api/v1/performance/posts") {
           return response({
             items: [
@@ -223,6 +260,16 @@ describe("StrategyHubPage", () => {
     expect(navigator.clipboard.writeText).toHaveBeenCalledWith("Caption draft: Same system, now worn.");
 
     await userEvent.click(screen.getByRole("button", { name: /^learn$/i }));
+    expect(await screen.findByRole("heading", { name: /weekly standup/i })).toBeInTheDocument();
+    expect(screen.getByText(/turn the top proof hook/i)).toBeInTheDocument();
+    await userEvent.click(screen.getAllByRole("button", { name: /add to calendar as draft/i })[0]);
+    await waitFor(() =>
+      expect(fetch).toHaveBeenCalledWith(
+        "/api/v1/strategy/standup/7/recommendations/0/draft",
+        expect.objectContaining({ method: "POST" }),
+      ),
+    );
+    await userEvent.click(screen.getByRole("button", { name: /^performance$/i }));
     expect(await screen.findByText(/product-truth captions/i)).toBeInTheDocument();
     expect(await screen.findAllByText(/source proof first/i)).not.toHaveLength(0);
     expect(screen.getByText(/weekly er/i)).toBeInTheDocument();

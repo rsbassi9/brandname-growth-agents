@@ -194,6 +194,16 @@ class SeoAudit(Base):
     audited_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
 
 
+class StandupReport(Base):
+    __tablename__ = "standup_reports"
+
+    id: Mapped[int] = mapped_column(Integer, primary_key=True, autoincrement=True)
+    week_start: Mapped[str] = mapped_column(String(10), nullable=False, index=True)
+    report_md: Mapped[str] = mapped_column(Text, nullable=False)
+    recommendations_json: Mapped[str] = mapped_column(Text, default="[]", nullable=False)
+    created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
+
+
 class CalendarItem(Base):
     __tablename__ = "calendar_items"
 

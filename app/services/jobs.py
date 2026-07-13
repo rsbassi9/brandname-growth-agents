@@ -4,7 +4,7 @@ Single asyncio worker started in the FastAPI lifespan. Jobs are persisted in
 the `jobs` table; results in `result_json`. Job kinds: generate_asset,
 run_daily_workflow, render_carousel, image_iterate, brain_index,
 distill_brand_profile, seo_audit, seo_fix, seo_plan, repurpose_shoot,
-recycle_top_posts.
+recycle_top_posts, weekly_standup.
 
 The run_daily_workflow handler checks LOCAL_ONLY_AGENT_RUNS and uses the
 deterministic port of src/local_workflow.py when true — this closes the legacy
@@ -26,7 +26,7 @@ from typing import Any
 from sqlalchemy import func, select
 
 from ..db import init_db, session_scope
-from ..models import Asset, AssetVersion, CalendarItem, Campaign, Job, PostMetric, PublishedPost, SourceAsset
+from ..models import Asset, AssetVersion, CalendarItem, Campaign, Job, PostMetric, PublishedPost, SourceAsset, StandupReport
 from ..settings import get_settings
 
 logger = logging.getLogger(__name__)
@@ -43,6 +43,7 @@ JOB_KINDS = (
     "seo_plan",
     "repurpose_shoot",
     "recycle_top_posts",
+    "weekly_standup",
 )
 
 
@@ -533,6 +534,31 @@ async def _handle_recycle_top_posts(job_id: str, payload: dict[str, Any]) -> dic
     return {"cutoff_days": cutoff_days, "candidates": len(candidates), "created": created}
 
 
+async def _handle_weekly_standup(job_id: str, payload: dict[str, Any]) -> dict[str, Any]:
+    _update_job(job_id, progress_pct=25, message="building weekly standup")
+    today = _parse_date(str(payload.get("week_start") or "")) or date.today()
+    week_start = today - timedelta(days=today.weekday())
+    week_end = week_start + timedelta(days=6)
+    next_week_start = week_start + timedelta(days=7)
+    next_week_end = week_start + timedelta(days=13)
+
+    memory = _standup_memory()
+    with session_scope() as session:
+        published = _published_between(session, week_start, week_end)
+        next_plan = _calendar_between(session, next_week_start, next_week_end)
+        top, bottom = _top_bottom_posts(session)
+        recommendations = _standup_recommendations(memory, top, bottom, next_plan)
+        report = StandupReport(
+            week_start=week_start.isoformat(),
+            report_md=_standup_report_md(week_start, week_end, published, top, bottom, next_plan, recommendations),
+            recommendations_json=json.dumps(recommendations, ensure_ascii=False),
+        )
+        session.add(report)
+        session.flush()
+        report_id = report.id
+    return {"standup_report_id": report_id, "week_start": week_start.isoformat(), "recommendations": 3}
+
+
 def _enqueue_brain_index(**payload: Any) -> None:
     if not any(value is not None for value in payload.values()):
         return
@@ -695,6 +721,153 @@ def _remix_content(post: PublishedPost, metric: PostMetric) -> str:
     )
 
 
+def _parse_date(value: str) -> date | None:
+    if not value:
+        return None
+    try:
+        return date.fromisoformat(value)
+    except ValueError:
+        return None
+
+
+def _standup_memory() -> dict[str, Any]:
+    from .brain import build_memory_context
+
+    memory = build_memory_context("weekly standup metrics calendar recommendations product proof", k=5)
+    return {
+        "block": memory.block,
+        "document_ids": memory.document_ids,
+        "profile_version_no": memory.profile_version_no,
+    }
+
+
+def _published_between(session, start: date, end: date) -> list[PublishedPost]:
+    start_dt = datetime.combine(start, datetime.min.time())
+    end_dt = datetime.combine(end + timedelta(days=1), datetime.min.time())
+    return session.execute(
+        select(PublishedPost)
+        .where(PublishedPost.published_at.is_not(None), PublishedPost.published_at >= start_dt, PublishedPost.published_at < end_dt)
+        .order_by(PublishedPost.published_at.asc(), PublishedPost.id.asc())
+    ).scalars().all()
+
+
+def _calendar_between(session, start: date, end: date) -> list[CalendarItem]:
+    return session.execute(
+        select(CalendarItem)
+        .where(CalendarItem.date >= start.isoformat(), CalendarItem.date <= end.isoformat())
+        .order_by(CalendarItem.date.asc(), CalendarItem.id.asc())
+    ).scalars().all()
+
+
+def _top_bottom_posts(session) -> tuple[tuple[PublishedPost, PostMetric] | None, tuple[PublishedPost, PostMetric] | None]:
+    posts = session.execute(select(PublishedPost).order_by(PublishedPost.published_at.desc(), PublishedPost.id.desc()).limit(100)).scalars().all()
+    scored: list[tuple[PublishedPost, PostMetric]] = []
+    for post in posts:
+        metric = _latest_metric_for_post(session, post.id)
+        if metric is not None and metric.engagement_rate is not None:
+            scored.append((post, metric))
+    if not scored:
+        return None, None
+    scored.sort(key=lambda item: (item[1].engagement_rate or 0, item[0].id))
+    return scored[-1], scored[0]
+
+
+def _standup_recommendations(
+    memory: dict[str, Any],
+    top: tuple[PublishedPost, PostMetric] | None,
+    bottom: tuple[PublishedPost, PostMetric] | None,
+    next_plan: list[CalendarItem],
+) -> list[dict[str, Any]]:
+    evidence = {
+        "brand_document_ids": memory["document_ids"],
+        "brand_profile_version_no": memory["profile_version_no"],
+        "top_post_id": top[0].id if top else None,
+        "bottom_post_id": bottom[0].id if bottom else None,
+        "next_calendar_item_ids": [item.id for item in next_plan[:5]],
+    }
+    top_title = _post_title(top[0]) if top else "the strongest recent post"
+    bottom_title = _post_title(bottom[0]) if bottom else "the weakest recent post"
+    return [
+        {
+            "title": "Turn the top proof hook into a fresh caption draft",
+            "draft_type": "copy",
+            "rationale": f"Top performer: {top_title}. Preserve the proof-first angle while changing the opener and CTA.",
+            "brief": "Create one unscheduled caption draft that reuses the strongest proof pattern without copying the original wording.",
+            "evidence": evidence,
+        },
+        {
+            "title": "Patch the weakest post with clearer product truth",
+            "draft_type": "copy",
+            "rationale": f"Bottom performer: {bottom_title}. Add source-to-product specificity before styling language.",
+            "brief": "Create one unscheduled improvement draft that leads with concrete source proof, then adds a direct manual-publishing CTA.",
+            "evidence": evidence,
+        },
+        {
+            "title": "Pre-build next week's anchor post",
+            "draft_type": "copy",
+            "rationale": f"Next week has {len(next_plan)} planned item(s). Draft the anchor early so it can be reviewed before scheduling.",
+            "brief": "Create one unscheduled anchor caption for next week's calendar using Brand Brain evidence and metric-backed hooks.",
+            "evidence": evidence,
+        },
+    ]
+
+
+def _standup_report_md(
+    week_start: date,
+    week_end: date,
+    published: list[PublishedPost],
+    top: tuple[PublishedPost, PostMetric] | None,
+    bottom: tuple[PublishedPost, PostMetric] | None,
+    next_plan: list[CalendarItem],
+    recommendations: list[dict[str, Any]],
+) -> str:
+    lines = [
+        f"# Weekly Standup: {week_start.isoformat()} to {week_end.isoformat()}",
+        "",
+        "## What Published",
+    ]
+    if published:
+        lines.extend([f"- {_post_link(post)}" for post in published])
+    else:
+        lines.append("- No linked published posts recorded for this week.")
+    lines.extend(["", "## Top Performer", _metric_line(top), "", "## Bottom Performer", _metric_line(bottom), "", "## Next Week Plan"])
+    if next_plan:
+        lines.extend([f"- {item.date}: {_calendar_title(item)} ({item.status or 'draft'})" for item in next_plan])
+    else:
+        lines.append("- No calendar items planned for next week.")
+    lines.extend(["", "## Agent Recommendations"])
+    lines.extend([f"{index}. {item['title']} - {item['rationale']}" for index, item in enumerate(recommendations, start=1)])
+    return "\n".join(lines)
+
+
+def _post_link(post: PublishedPost) -> str:
+    label = _post_title(post)
+    if post.permalink:
+        return f"[{label}]({post.permalink})"
+    if post.external_ref:
+        return f"{label} ({post.external_ref})"
+    return f"{label} (post #{post.id})"
+
+
+def _post_title(post: PublishedPost) -> str:
+    return (post.title_or_caption or post.permalink or post.external_ref or f"Post {post.id}")[:120]
+
+
+def _metric_line(pair: tuple[PublishedPost, PostMetric] | None) -> str:
+    if pair is None:
+        return "No metric-backed posts yet."
+    post, metric = pair
+    return f"- {_post_link(post)}: {((metric.engagement_rate or 0) * 100):.2f}% ER"
+
+
+def _calendar_title(item: CalendarItem) -> str:
+    try:
+        data = json.loads(item.data_json or "{}")
+    except json.JSONDecodeError:
+        data = {}
+    return str(data.get("title") or data.get("hook") or data.get("caption") or item.id)
+
+
 _HANDLERS = {
     "generate_asset": _handle_generate_asset,
     "run_daily_workflow": _handle_run_daily_workflow,
@@ -707,6 +880,7 @@ _HANDLERS = {
     "seo_plan": _handle_seo_plan,
     "repurpose_shoot": _handle_repurpose_shoot,
     "recycle_top_posts": _handle_recycle_top_posts,
+    "weekly_standup": _handle_weekly_standup,
 }
 
 # Application-wide queue instance (started/stopped by the FastAPI lifespan).

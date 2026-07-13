@@ -252,6 +252,18 @@ export interface BrandProfileHistoryOut {
   versions: BrandProfileVersionOut[];
 }
 
+export interface StandupReportOut {
+  id: number;
+  week_start: string;
+  report_md: string;
+  recommendations_json: string;
+  created_at: string;
+}
+
+export interface StandupDraftOut {
+  asset_id: number;
+}
+
 export type PerformanceChannel = "instagram" | "tiktok" | "facebook" | "other";
 
 export interface PerformanceImportOut {
@@ -458,6 +470,10 @@ export const api = {
     }),
   strategyDocs: () => request<StrategyDocOut[]>("/strategy/context"),
   brandProfile: () => request<BrandProfileHistoryOut>("/strategy/brand-profile"),
+  standupReports: (params: { limit?: number } = {}) =>
+    request<StandupReportOut[]>(`/strategy/standup${toQuery(params)}`),
+  createStandupDraft: (reportId: number, recommendationIndex: number) =>
+    request<StandupDraftOut>(`/strategy/standup/${reportId}/recommendations/${recommendationIndex}/draft`, { method: "POST" }),
   importPerformance: (payload: { channel: PerformanceChannel; file?: File | null; csv_text?: string }) => {
     const body = new FormData();
     body.set("channel", payload.channel);
