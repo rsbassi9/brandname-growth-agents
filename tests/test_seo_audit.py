@@ -4,6 +4,54 @@ import asyncio
 import json
 from pathlib import Path
 
+import pytest
+
+
+def valid_product(**overrides):
+    product = {
+        "title": "Gallery Streetwear Tee With Source Artwork And Heavy Cotton",
+        "handle": "canvas-tee",
+        "product_type": "T Shirt",
+        "meta_description": "Gallery streetwear tee made from T Shirt source artwork, with heavy cotton construction and quiet reconstruction details for daily streetwear layering now.",
+        "images": [{"alt": "canvas tee front product image"}],
+    }
+    product.update(overrides)
+    return product
+
+
+@pytest.mark.parametrize(
+    ("product", "expected_score", "expected_issue"),
+    [
+        (valid_product(), 100, None),
+        (valid_product(title="Short tee"), 75, "title length should be 50-60 characters"),
+        (valid_product(meta_description=""), 75, "meta description is missing"),
+        (
+            valid_product(meta_description="Too short but still mentions T Shirt."),
+            75,
+            "meta description should be 140-160 characters",
+        ),
+        (valid_product(images=[{"alt": ""}]), 75, "one or more product images are missing alt text"),
+        (
+            valid_product(
+                title="Canvas Product With Source Artwork And Heavy Cotton Garment",
+                meta_description="A quiet product page with enough length for the checked rule while preserving copy clarity and source-led product details for daily streetwear today.",
+            ),
+            85,
+            "target keyword 'gallery streetwear tee' is missing from title/description",
+        ),
+    ],
+)
+def test_seo_audit_rule_weights(product, expected_score, expected_issue) -> None:
+    from app.services.seo_audit import audit_product
+
+    result = audit_product(product, keyword_map={"canvas-tee": "gallery streetwear tee"})
+
+    assert result.score == expected_score
+    if expected_issue is None:
+        assert result.issues == []
+    else:
+        assert expected_issue in result.issues
+
 
 def test_seo_audit_scores_required_checks_and_duplicates() -> None:
     from app.services.seo_audit import audit_products
@@ -220,6 +268,40 @@ def test_generate_seo_plan_builds_keyword_map_and_blog_links(app_env: Path) -> N
     assert generated["params"]["product_count"] == 2
 
 
+def test_generate_seo_plan_records_memory_grounding(app_env: Path) -> None:
+    from app.db import init_db, session_scope
+    from app.models import BrainDocument, BrainEmbedding
+    from app.services.brain import embed_texts, embedding_model_label, vector_to_blob
+    from app.services.seo_plan import generate_seo_plan
+
+    init_db()
+    products = [valid_product()]
+    with session_scope() as session:
+        document = BrainDocument(
+            kind="context_file",
+            ref_id="seo-context.md",
+            text="SEO memory: gallery source artwork and product truth should guide keywords.",
+            meta_json=json.dumps({"path": "brand_context/seo-context.md"}),
+        )
+        session.add(document)
+        session.flush()
+        vector = embed_texts([document.text])[0]
+        session.add(
+            BrainEmbedding(
+                document_id=document.id,
+                model=embedding_model_label(),
+                dim=vector.size,
+                vector=vector_to_blob(vector),
+            )
+        )
+
+    with session_scope() as session:
+        generated = generate_seo_plan(session, products=products)
+
+    assert "BRAND MEMORY" in generated["prompt"]
+    assert generated["params"]["memory_document_ids"]
+
+
 def test_seo_plan_endpoint_enqueues_asset_job(client) -> None:
     from app.db import session_scope
     from app.models import Asset, Job
@@ -299,3 +381,14 @@ def test_latest_keyword_map_reads_selected_seo_plan(app_env: Path) -> None:
 
     with session_scope() as session:
         assert latest_keyword_map(session) == {"canvas-tee": "gallery streetwear tee"}
+
+
+def test_seo_asset_types_are_registered_additively() -> None:
+    from app.models import ASSET_TYPES
+    from app.schemas import AssetType
+
+    assert "seo_fix" in ASSET_TYPES
+    assert "seo_plan" in ASSET_TYPES
+    assert "copy" in ASSET_TYPES
+    assert "seo_fix" in AssetType.__args__
+    assert "seo_plan" in AssetType.__args__
