@@ -38,3 +38,13 @@ def generate_seo_fix(audit_id: int, session: Session = Depends(get_session)) -> 
     session.commit()
     job_id = job_queue.enqueue("seo_fix", {"audit_id": audit.id, "asset_id": asset.id})
     return GenerateResponse(job_id=job_id, asset_id=asset.id)
+
+
+@router.post("/plan", response_model=GenerateResponse)
+def generate_seo_plan(session: Session = Depends(get_session)) -> GenerateResponse:
+    asset = Asset(type="seo_plan", title="SEO keyword and content plan", status="draft")
+    session.add(asset)
+    session.flush()
+    session.commit()
+    job_id = job_queue.enqueue("seo_plan", {"asset_id": asset.id})
+    return GenerateResponse(job_id=job_id, asset_id=asset.id)

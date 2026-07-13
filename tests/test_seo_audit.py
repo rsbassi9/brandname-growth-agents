@@ -35,6 +35,22 @@ def test_seo_audit_scores_required_checks_and_duplicates() -> None:
     assert "duplicate product title in catalog" in audits[1].issues
 
 
+def test_seo_audit_uses_keyword_map_when_available() -> None:
+    from app.services.seo_audit import audit_product
+
+    product = {
+        "title": "Canvas Tee With Quiet Reconstructed Source Artwork",
+        "handle": "canvas-tee",
+        "product_type": "T Shirt",
+        "meta_description": "Canvas tee with quiet source artwork, heavyweight cotton, and daily-wear product proof.",
+        "images": [{"alt": "canvas tee front"}],
+    }
+
+    result = audit_product(product, keyword_map={"canvas-tee": "gallery streetwear tee"})
+
+    assert "target keyword 'gallery streetwear tee' is missing from title/description" in result.issues
+
+
 def test_seo_audit_persists_and_lists_rows(client) -> None:
     from app.db import session_scope
     from app.services.seo_audit import SeoAuditResult, persist_audits
@@ -168,3 +184,118 @@ def test_seo_fix_job_persists_version(app_env: Path) -> None:
         params = json.loads(version.params_json)
         assert params["type"] == "seo_fix"
         assert params["seo_audit_id"] == audit_id
+
+
+def test_generate_seo_plan_builds_keyword_map_and_blog_links(app_env: Path) -> None:
+    from app.db import init_db, session_scope
+    from app.services.seo_plan import generate_seo_plan
+
+    init_db()
+    products = [
+        {
+            "title": "Canvas Tee",
+            "handle": "canvas-tee",
+            "product_type": "T Shirt",
+            "tags": "canvas, reconstruction",
+        },
+        {
+            "title": "Archive Hoodie",
+            "handle": "archive-hoodie",
+            "product_type": "Hoodie",
+            "tags": "archive, heavyweight",
+        },
+    ]
+
+    with session_scope() as session:
+        generated = generate_seo_plan(session, products=products)
+
+    payload = json.loads(generated["content_text"])
+    product_rows = [row for row in payload["keyword_map"] if row["scope"] == "product"]
+    assert payload["kind"] == "seo_plan"
+    assert product_rows[0]["handle"] == "canvas-tee"
+    assert product_rows[0]["primary_keyword"] == "t shirt streetwear"
+    assert product_rows[0]["url"].endswith("/products/canvas-tee")
+    assert payload["blog_plan"][0]["internal_links"][0]["url"].endswith("/products/canvas-tee")
+    assert "Shopify writes remain disabled" in payload["manual_use"]
+    assert generated["params"]["product_count"] == 2
+
+
+def test_seo_plan_endpoint_enqueues_asset_job(client) -> None:
+    from app.db import session_scope
+    from app.models import Asset, Job
+
+    response = client.post("/api/v1/seo/plan")
+
+    assert response.status_code == 200, response.text
+    payload = response.json()
+    with session_scope() as session:
+        asset = session.get(Asset, payload["asset_id"])
+        job = session.get(Job, payload["job_id"])
+        assert asset is not None
+        assert asset.type == "seo_plan"
+        assert asset.title == "SEO keyword and content plan"
+        assert job is not None
+        assert job.kind == "seo_plan"
+
+
+def test_seo_plan_job_persists_version_and_keyword_map(app_env: Path) -> None:
+    from app.db import init_db, session_scope
+    from app.models import Asset, AssetVersion
+    from app.services.jobs import _handle_seo_plan
+    from app.services.seo_plan import latest_keyword_map
+
+    init_db()
+    with session_scope() as session:
+        asset = Asset(type="seo_plan", title="SEO keyword and content plan", status="draft")
+        session.add(asset)
+        session.flush()
+        asset_id = asset.id
+
+    result = asyncio.run(_handle_seo_plan("missing-test-job", {"asset_id": asset_id}))
+
+    assert result == {"asset_id": asset_id, "version_no": 1}
+    with session_scope() as session:
+        version = session.query(AssetVersion).filter_by(asset_id=asset_id, version_no=1).one()
+        params = json.loads(version.params_json)
+        content = json.loads(version.content_text)
+        assert params["type"] == "seo_plan"
+        assert content["kind"] == "seo_plan"
+        assert content["blog_plan"]
+        assert latest_keyword_map(session) == {}
+
+
+def test_latest_keyword_map_reads_selected_seo_plan(app_env: Path) -> None:
+    from app.db import init_db, session_scope
+    from app.models import Asset, AssetVersion
+    from app.services.seo_plan import latest_keyword_map
+
+    init_db()
+    content = {
+        "kind": "seo_plan",
+        "keyword_map": [
+            {
+                "scope": "product",
+                "handle": "canvas-tee",
+                "primary_keyword": "gallery streetwear tee",
+                "secondary_keywords": [],
+            }
+        ],
+    }
+    with session_scope() as session:
+        asset = Asset(type="seo_plan", title="SEO keyword and content plan", status="draft")
+        session.add(asset)
+        session.flush()
+        session.add(
+            AssetVersion(
+                asset_id=asset.id,
+                version_no=1,
+                prompt_snapshot="seo plan",
+                params_json="{}",
+                content_text=json.dumps(content),
+                model_used="test",
+                is_selected=True,
+            )
+        )
+
+    with session_scope() as session:
+        assert latest_keyword_map(session) == {"canvas-tee": "gallery streetwear tee"}

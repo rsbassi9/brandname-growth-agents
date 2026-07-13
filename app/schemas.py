@@ -7,7 +7,7 @@ from typing import Any, Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 
-AssetType = Literal["copy", "image_concept", "carousel", "video_script", "voiceover", "ad_brief", "seo_fix"]
+AssetType = Literal["copy", "image_concept", "carousel", "video_script", "voiceover", "ad_brief", "seo_fix", "seo_plan"]
 AssetStatus = Literal["draft", "selected", "archived"]
 JobStatus = Literal["queued", "running", "succeeded", "failed"]
 SourceAssetOrigin = Literal["drive", "local", "shopify"]

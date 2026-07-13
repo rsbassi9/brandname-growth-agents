@@ -6,10 +6,22 @@ import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { CalendarPage } from "@/pages/CalendarPage";
 import { FeedGridPage } from "@/pages/FeedGridPage";
 
+function weekDate(offset: number) {
+  const today = new Date();
+  const monday = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  monday.setDate(monday.getDate() - ((monday.getDay() + 6) % 7));
+  monday.setDate(monday.getDate() + offset);
+  return `${monday.getFullYear()}-${String(monday.getMonth() + 1).padStart(2, "0")}-${String(monday.getDate()).padStart(2, "0")}`;
+}
+
+const launchDate = weekDate(2);
+const moveDate = weekDate(3);
+const scheduleDate = weekDate(4);
+
 const calendarItems = [
   {
     id: "post-1",
-    date: "2026-07-08",
+    date: launchDate,
     status: "draft",
     asset_id: 42,
     data: { title: "Launch teaser", channel: "Instagram" },
@@ -19,14 +31,14 @@ const calendarItems = [
 const feedItems = [
   {
     id: "post-1",
-    date: "2026-07-08",
+    date: launchDate,
     status: "draft",
     asset_id: 42,
     data: { title: "Launch teaser", channel: "Instagram" },
   },
   {
     id: "post-2",
-    date: "2026-07-09",
+    date: moveDate,
     status: "scheduled",
     asset_id: null,
     data: { title: "Studio grid" },
@@ -41,7 +53,7 @@ const draftAssets = [
     title: "Already scheduled draft",
     status: "draft",
     source_path: null,
-    created_at: "2026-07-08T10:00:00",
+    created_at: `${launchDate}T10:00:00`,
   },
   {
     id: 77,
@@ -50,7 +62,7 @@ const draftAssets = [
     title: "Fabric macro",
     status: "draft",
     source_path: null,
-    created_at: "2026-07-08T11:00:00",
+    created_at: `${launchDate}T11:00:00`,
   },
 ];
 
@@ -138,7 +150,7 @@ describe("P2-5 Calendar and Feed Grid", () => {
     expect(screen.getByText("Instagram")).toBeInTheDocument();
     await userEvent.type(screen.getByLabelText(/item title/i), "New drop post");
     await userEvent.clear(screen.getByLabelText(/^date$/i));
-    await userEvent.type(screen.getByLabelText(/^date$/i), "2026-07-10");
+    await userEvent.type(screen.getByLabelText(/^date$/i), scheduleDate);
     await userEvent.selectOptions(screen.getByLabelText(/^status$/i), "planned");
     await userEvent.click(screen.getByRole("button", { name: /add item/i }));
 
@@ -162,23 +174,23 @@ describe("P2-5 Calendar and Feed Grid", () => {
     await userEvent.click(screen.getByRole("button", { name: /suggested - 18:00/i }));
     await waitFor(() => {
       const patchCalls = vi.mocked(fetch).mock.calls.filter(([input, init]) => String(input) === "/api/v1/calendar/post-1" && init?.method === "PATCH");
-      expect(patchCalls.some(([, init]) => init?.body === JSON.stringify({ date: "2026-07-08", slot: "18:00" }))).toBe(true);
+      expect(patchCalls.some(([, init]) => init?.body === JSON.stringify({ date: launchDate, slot: "18:00" }))).toBe(true);
     });
-    fireEvent.change(screen.getByLabelText(/move date/i), { target: { value: "2026-07-09" } });
+    fireEvent.change(screen.getByLabelText(/move date/i), { target: { value: moveDate } });
     await waitFor(() => {
       const patchCalls = vi.mocked(fetch).mock.calls.filter(([input, init]) => String(input) === "/api/v1/calendar/post-1" && init?.method === "PATCH");
-      expect(patchCalls.some(([, init]) => init?.body === JSON.stringify({ date: "2026-07-09", slot: "day" }))).toBe(true);
+      expect(patchCalls.some(([, init]) => init?.body === JSON.stringify({ date: moveDate, slot: "day" }))).toBe(true);
     });
     expect(await screen.findByText("Fabric macro")).toBeInTheDocument();
     expect(screen.queryByText("Already scheduled draft")).not.toBeInTheDocument();
-    fireEvent.change(screen.getByLabelText(/schedule fabric macro/i), { target: { value: "2026-07-11" } });
+    fireEvent.change(screen.getByLabelText(/schedule fabric macro/i), { target: { value: scheduleDate } });
     await userEvent.click(screen.getByRole("button", { name: /^add$/i }));
     await waitFor(() => {
       const createCalls = vi.mocked(fetch).mock.calls.filter(([input, init]) => String(input) === "/api/v1/calendar" && init?.method === "POST");
       expect(
         createCalls.some(([, init]) => {
           const body = JSON.parse(String(init?.body || "{}"));
-          return body.asset_id === 77 && body.date === "2026-07-11" && body.data.title === "Fabric macro";
+          return body.asset_id === 77 && body.date === scheduleDate && body.data.title === "Fabric macro";
         }),
       ).toBe(true);
     });
@@ -228,7 +240,7 @@ describe("P2-5 Calendar and Feed Grid", () => {
             ...calendarItems,
             {
               id: "post-dup",
-              date: "2026-07-08",
+              date: launchDate,
               status: "draft",
               asset_id: 42,
               data: { title: "Duplicate launch", channel: "Instagram" },
@@ -283,7 +295,7 @@ describe("P2-5 Calendar and Feed Grid", () => {
     renderRoute("/calendar");
 
     await userEvent.click(await screen.findByRole("button", { name: /^week$/i }));
-    fireEvent.change(await screen.findByLabelText(/move date/i), { target: { value: "2026-07-09" } });
+    fireEvent.change(await screen.findByLabelText(/move date/i), { target: { value: moveDate } });
     expect(await screen.findByRole("alert")).toHaveTextContent(/calendar item could not be moved/i);
   });
 });

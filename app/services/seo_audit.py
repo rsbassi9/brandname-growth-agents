@@ -28,22 +28,26 @@ class SeoAuditResult:
     issues: list[str]
 
 
-def audit_products(products: list[dict]) -> list[SeoAuditResult]:
+def audit_products(products: list[dict], keyword_map: dict[str, str] | None = None) -> list[SeoAuditResult]:
     title_counts: dict[str, int] = {}
     for product in products:
         title = str(product.get("title") or "").strip().lower()
         if title:
             title_counts[title] = title_counts.get(title, 0) + 1
-    return [audit_product(product, title_counts) for product in products]
+    return [audit_product(product, title_counts, keyword_map) for product in products]
 
 
-def audit_product(product: dict, title_counts: dict[str, int] | None = None) -> SeoAuditResult:
+def audit_product(
+    product: dict,
+    title_counts: dict[str, int] | None = None,
+    keyword_map: dict[str, str] | None = None,
+) -> SeoAuditResult:
     issues: list[str] = []
     score = 100
     title = str(product.get("title") or "").strip()
     handle = str(product.get("handle") or product.get("id") or title or "unknown").strip()
     description = str(product.get("meta_description") or product.get("description_excerpt") or "").strip()
-    keyword = _target_keyword(product)
+    keyword = _target_keyword(product, keyword_map)
 
     if not 50 <= len(title) <= 60:
         score -= 25
@@ -74,9 +78,11 @@ def audit_product(product: dict, title_counts: dict[str, int] | None = None) -> 
 
 
 def audit_shopify_catalog(session: Session, limit: int = 80) -> list[SeoAudit]:
+    from .seo_plan import latest_keyword_map
+
     preview = ShopifyService().product_preview(limit=limit)
     products = [product for product in preview.get("products", []) if isinstance(product, dict)]
-    return persist_audits(session, audit_products(products))
+    return persist_audits(session, audit_products(products, latest_keyword_map(session)))
 
 
 def persist_audits(session: Session, audits: list[SeoAuditResult]) -> list[SeoAudit]:
@@ -98,7 +104,10 @@ def latest_audits(session: Session, limit: int = 100) -> list[SeoAudit]:
     return session.execute(select(SeoAudit).order_by(SeoAudit.audited_at.desc(), SeoAudit.id.desc()).limit(limit)).scalars().all()
 
 
-def _target_keyword(product: dict) -> str:
+def _target_keyword(product: dict, keyword_map: dict[str, str] | None = None) -> str:
+    handle = str(product.get("handle") or product.get("id") or "").strip()
+    if handle and keyword_map and keyword_map.get(handle):
+        return keyword_map[handle]
     product_type = str(product.get("product_type") or "").strip()
     if product_type:
         return product_type
