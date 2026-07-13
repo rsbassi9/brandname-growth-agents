@@ -185,6 +185,16 @@ class SeoAuditRunOut(BaseModel):
     job_id: str
 
 
+class RepurposeShootRequest(BaseModel):
+    source_asset_ids: list[int] = Field(min_length=1, max_length=10)
+    campaign_name: str = ""
+    brief: str = ""
+
+
+class RepurposeShootRunOut(BaseModel):
+    job_id: str
+
+
 class SourceAssetIndexRequest(BaseModel):
     origin: SourceAssetOrigin = "local"
     path: str = ""

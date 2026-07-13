@@ -3,7 +3,7 @@
 Single asyncio worker started in the FastAPI lifespan. Jobs are persisted in
 the `jobs` table; results in `result_json`. Job kinds: generate_asset,
 run_daily_workflow, render_carousel, image_iterate, brain_index,
-distill_brand_profile, seo_audit, seo_fix, seo_plan.
+distill_brand_profile, seo_audit, seo_fix, seo_plan, repurpose_shoot.
 
 The run_daily_workflow handler checks LOCAL_ONLY_AGENT_RUNS and uses the
 deterministic port of src/local_workflow.py when true — this closes the legacy
@@ -25,7 +25,7 @@ from typing import Any
 from sqlalchemy import func, select
 
 from ..db import init_db, session_scope
-from ..models import Asset, AssetVersion, CalendarItem, Job
+from ..models import Asset, AssetVersion, CalendarItem, Campaign, Job, SourceAsset
 from ..settings import get_settings
 
 logger = logging.getLogger(__name__)
@@ -40,6 +40,7 @@ JOB_KINDS = (
     "seo_audit",
     "seo_fix",
     "seo_plan",
+    "repurpose_shoot",
 )
 
 
@@ -432,6 +433,61 @@ async def _handle_seo_plan(job_id: str, payload: dict[str, Any]) -> dict[str, An
     return {"asset_id": asset_id, "version_no": version_no}
 
 
+async def _handle_repurpose_shoot(job_id: str, payload: dict[str, Any]) -> dict[str, Any]:
+    from .generation import generate_content
+    from .source_assets import resolve_reference_context
+
+    source_asset_ids = [int(value) for value in payload.get("source_asset_ids") or []]
+    if not 1 <= len(source_asset_ids) <= 10:
+        raise ValueError("repurpose_shoot requires 1-10 source assets")
+    brief = str(payload.get("brief") or "").strip()
+    campaign_name = str(payload.get("campaign_name") or "").strip() or f"Repurposed shoot {date.today().isoformat()}"
+
+    _update_job(job_id, progress_pct=10, message="creating repurpose campaign")
+    with session_scope() as session:
+        rows = session.execute(select(SourceAsset).where(SourceAsset.id.in_(source_asset_ids))).scalars().all()
+        by_id = {row.id: row for row in rows}
+        ordered = [by_id[source_id] for source_id in source_asset_ids if source_id in by_id]
+        if len(ordered) != len(source_asset_ids):
+            raise ValueError("One or more source assets were not found")
+        campaign = Campaign(
+            name=campaign_name,
+            goal="Repurpose source shoot into copy, reel, story, ad, and product refresh drafts.",
+            status="active",
+        )
+        session.add(campaign)
+        session.flush()
+        reference_context = resolve_reference_context(session, source_asset_ids[:4])
+        source_summary = _source_summary(ordered)
+        product_handle = next((row.product_handle for row in ordered if row.product_handle), "")
+        specs = _repurpose_step_specs(campaign.id, brief, source_summary, source_asset_ids, reference_context, product_handle)
+        for spec in specs:
+            asset = Asset(campaign_id=campaign.id, type=spec["type"], title=spec["title"], status="draft")
+            session.add(asset)
+            session.flush()
+            spec["asset_id"] = asset.id
+        campaign_id = campaign.id
+
+    steps: list[dict[str, Any]] = []
+    total = len(specs)
+    for index, spec in enumerate(specs, start=1):
+        _update_job(job_id, progress_pct=10 + int((index - 1) / max(total, 1) * 75), message=f"running {spec['name']}")
+        try:
+            if spec["type"] == "seo_fix":
+                generated = _repurpose_seo_fix(spec, product_handle)
+                params = dict(spec["params"])
+            else:
+                params = dict(spec["params"])
+                generated = await generate_content(str(spec["type"]), str(spec["brief"]), params)
+            version_no = _persist_version(int(spec["asset_id"]), generated, {"type": spec["type"], "repurpose_step": spec["name"], **params})
+            steps.append({"name": spec["name"], "status": "succeeded", "asset_id": spec["asset_id"], "version_no": version_no})
+        except Exception as exc:
+            logger.exception("repurpose_shoot step %s failed", spec["name"])
+            steps.append({"name": spec["name"], "status": "failed", "asset_id": spec["asset_id"], "error": f"{type(exc).__name__}: {exc}"})
+    _update_job(job_id, progress_pct=90, message="repurpose shoot complete")
+    return {"campaign_id": campaign_id, "source_asset_ids": source_asset_ids, "steps": steps}
+
+
 def _enqueue_brain_index(**payload: Any) -> None:
     if not any(value is not None for value in payload.values()):
         return
@@ -439,6 +495,118 @@ def _enqueue_brain_index(**payload: Any) -> None:
         job_queue.enqueue("brain_index", payload)
     except Exception:
         logger.exception("Could not enqueue brain_index job")
+
+
+def _source_summary(rows: list[SourceAsset]) -> str:
+    lines = []
+    for row in rows:
+        try:
+            tags = ", ".join(json.loads(row.tags_json or "[]")[:5])
+        except (TypeError, json.JSONDecodeError):
+            tags = ""
+        handle = f" product={row.product_handle}" if row.product_handle else ""
+        lines.append(f"- #{row.id} {row.origin}: {row.path}{handle}" + (f" tags={tags}" if tags else ""))
+    return "\n".join(lines)
+
+
+def _repurpose_step_specs(
+    campaign_id: int,
+    brief: str,
+    source_summary: str,
+    source_asset_ids: list[int],
+    reference_context: dict[str, Any],
+    product_handle: str,
+) -> list[dict[str, Any]]:
+    base_params = {
+        **reference_context,
+        "source_asset_ids_all": source_asset_ids,
+        "repurpose_campaign_id": campaign_id,
+    }
+    base_brief = "\n".join(
+        [
+            brief or "Repurpose this shoot into review-ready growth drafts.",
+            "",
+            "Source assets:",
+            source_summary,
+        ]
+    ).strip()
+    specs: list[dict[str, Any]] = [
+        {
+            "name": "post_copy",
+            "type": "copy",
+            "title": "Repurpose: post copy",
+            "brief": f"{base_brief}\n\nCreate one product-first social caption and CTA.",
+            "params": {**base_params, "template": "repurpose_post_copy"},
+        },
+        {
+            "name": "reel_video_script",
+            "type": "video_script",
+            "title": "Repurpose: reel video script",
+            "brief": f"{base_brief}\n\nCreate a vertical reel prompt pack from the shoot.",
+            "params": {**base_params, "template": "repurpose_reel"},
+        },
+        {
+            "name": "story_set",
+            "type": "copy",
+            "title": "Repurpose: three-frame story set",
+            "brief": f"{base_brief}\n\nCreate a three-frame story sequence: source, product proof, manual CTA.",
+            "params": {**base_params, "template": "repurpose_story_set"},
+        },
+        {
+            "name": "ad_brief",
+            "type": "ad_brief",
+            "title": "Repurpose: Meta ad brief",
+            "brief": f"{base_brief}\n\nCreate a manual Meta ad brief grounded in this shoot.",
+            "params": {
+                **base_params,
+                "objective": "Sales",
+                "audience": "Warm streetwear audience and recent site visitors",
+                "placement": "Instagram Feed + Reels",
+                "hook": "Source work, now worn",
+                "recommended_creative": "Use the strongest source asset from this repurpose shoot.",
+            },
+        },
+    ]
+    if product_handle:
+        specs.append(
+            {
+                "name": "product_page_refresh",
+                "type": "seo_fix",
+                "title": f"Repurpose: SEO refresh for {product_handle}",
+                "brief": base_brief,
+                "params": {**base_params, "product_handle": product_handle},
+            }
+        )
+    return specs
+
+
+def _repurpose_seo_fix(spec: dict[str, Any], product_handle: str) -> dict[str, Any]:
+    content = "\n".join(
+        [
+            f"# SEO Fix: {product_handle}",
+            "",
+            "## Product page refresh angle",
+            "Use the strongest shoot proof as the source-of-truth story for this product page.",
+            "",
+            "## New title",
+            f"{product_handle.replace('-', ' ').title()} - Source-Grounded Streetwear",
+            "",
+            "## Meta description",
+            "Source-grounded streetwear with product proof from the latest shoot. Review details manually before updating Shopify.",
+            "",
+            "## Image alt text",
+            f"{product_handle.replace('-', ' ')} product image grounded in the latest source shoot.",
+            "",
+            "## Manual use",
+            "Copy these fields into Shopify manually after review. Shopify writes remain disabled.",
+        ]
+    )
+    return {
+        "prompt": str(spec.get("brief") or ""),
+        "content_text": content,
+        "file_path": None,
+        "model_used": "local-deterministic",
+    }
 
 
 _HANDLERS = {
@@ -451,6 +619,7 @@ _HANDLERS = {
     "seo_audit": _handle_seo_audit,
     "seo_fix": _handle_seo_fix,
     "seo_plan": _handle_seo_plan,
+    "repurpose_shoot": _handle_repurpose_shoot,
 }
 
 # Application-wide queue instance (started/stopped by the FastAPI lifespan).
