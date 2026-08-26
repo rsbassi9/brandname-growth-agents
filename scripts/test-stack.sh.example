@@ -1,0 +1,102 @@
+#!/usr/bin/env bash
+# test-stack.sh — ephemeral functional cycle for THIS repo.
+#
+# SCAFFOLD: copy to scripts/test-stack.sh, replace every TODO, delete this
+# header block. The verb contract is defined in TESTING.md (installed at
+# provisioning) and enforced by gate.sh's functional-honesty check; the
+# TESTING.md has the full contract this scaffold implements.
+#
+# Contract, verbatim from TESTING.md:
+#   up          boot a fresh throwaway instance (ephemeral state, own port)
+#   apply       install this repo's config/build the SAME WAY prod does
+#   seed        mint prod-shaped test credentials into .test-stack.env
+#   integration pytest tests/integration against the instance's API
+#   e2e         pytest tests/e2e (Playwright + the two error recorders)
+#   smoke       minimal read-mostly prod-safe checks
+#   down        destroy instance, wipe volumes
+#   ci [--no-e2e]  up→apply→seed→integration→e2e→down, teardown guaranteed
+#
+# Invariants (do not weaken):
+#   - NEVER touches prod state, prod ports, or prod credentials.
+#   - `apply` shares the prod deploy script's code path, not a copy of it.
+#   - image/version pins match prod's; bump both in the same PR.
+#   - .test-stack.env is gitignored.
+
+set -euo pipefail
+
+REPO_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+PORT="${TEST_STACK_PORT:-8081}"           # TODO: pick a default that never collides with prod
+BASE_URL="http://127.0.0.1:${PORT}"
+ENV_FILE="$REPO_ROOT/.test-stack.env"
+
+die() { echo "test-stack: ERROR: $*" >&2; exit 1; }
+log() { echo "test-stack: $*"; }
+
+cmd_up() {
+    # TODO: boot the ephemeral instance. For a docker app:
+    #   docker compose -f "$REPO_ROOT/deploy/docker-compose.test.yml" up -d
+    # then poll $BASE_URL until the app answers (bound the wait; dump logs on timeout).
+    die "TODO: implement up"
+}
+
+cmd_apply() {
+    # TODO: install this repo's config/schema/build into the instance using
+    # THE SAME mechanism the prod deploy uses (same script/argv where possible).
+    # Fail loudly — if apply breaks a fresh instance, it would have broken prod.
+    die "TODO: implement apply"
+}
+
+cmd_seed() {
+    # TODO: mint credentials shaped like prod automation's (same auth type,
+    # same scope), write them to "$ENV_FILE" (chmod 600), for the suites to source.
+    die "TODO: implement seed"
+}
+
+_source_env() {
+    [ -f "$ENV_FILE" ] || die "$ENV_FILE missing — run 'seed' first."
+    # shellcheck disable=SC1090
+    set -a; . "$ENV_FILE"; set +a
+}
+
+cmd_integration() { _source_env; python3 -m pytest "$REPO_ROOT/tests/integration" -v --tb=short; }
+cmd_e2e()         { _source_env; python3 -m pytest "$REPO_ROOT/tests/e2e" -v --tb=short; }
+
+cmd_smoke() {
+    # TODO: minimal, read-mostly checks that are SAFE against prod (post-deploy).
+    die "TODO: implement smoke"
+}
+
+cmd_down() {
+    # TODO: destroy the instance and wipe its state, e.g.:
+    #   docker compose -f "$REPO_ROOT/deploy/docker-compose.test.yml" down -v --remove-orphans
+    rm -f "$ENV_FILE"
+    die "TODO: implement down"
+}
+
+cmd_ci() {
+    local no_e2e=0
+    [ "${1:-}" = "--no-e2e" ] && no_e2e=1
+    local rc=0
+    cmd_up && cmd_apply && cmd_seed || rc=$?
+    if [ $rc -eq 0 ]; then cmd_integration || rc=$?; fi
+    if [ $rc -eq 0 ] && [ $no_e2e -eq 0 ]; then cmd_e2e || rc=$?; fi
+    if [ $rc -ne 0 ] && [ "${TEST_STACK_KEEP:-0}" = "1" ]; then
+        log "FAILED (rc=$rc) — keeping stack up for debugging (TEST_STACK_KEEP=1)."
+        exit $rc
+    fi
+    cmd_down
+    if [ $rc -eq 0 ]; then log "CI PASS"; else log "CI FAIL (rc=$rc)"; fi
+    exit $rc
+}
+
+case "${1:-}" in
+    up)          cmd_up ;;
+    apply)       cmd_apply ;;
+    seed)        cmd_seed ;;
+    integration) cmd_integration ;;
+    e2e)         cmd_e2e ;;
+    smoke)       cmd_smoke ;;
+    down)        cmd_down ;;
+    ci)          shift; cmd_ci "${1:-}" ;;
+    *) echo "usage: $0 {up|apply|seed|integration|e2e|smoke|down|ci [--no-e2e]}" >&2; exit 2 ;;
+esac

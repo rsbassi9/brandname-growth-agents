@@ -1,0 +1,66 @@
+{
+  "_comment": [
+    "Stage 2.2 \u2014 repo provisioning. Installed by scripts/provision-repo.sh.",
+    "deny rules stop the Edit/Write tools; the PreToolUse hook stops everything else",
+    "(a worker with Bash can sed a test file). Belt AND braces: measured 43x more",
+    "gate-gaming when the agent can touch its own scorer.",
+    "gate.sh is the Stop hook and is authoritative \u2014 passing it is the only way to finish.",
+    "The Bash matcher is not optional: without it `sed -i .claude/gate.conf` bypasses everything."
+  ],
+  "permissions": {
+    "deny": [
+      "Edit(.claude/settings.json)",
+      "Write(.claude/settings.json)",
+      "Edit(.claude/gate.conf)",
+      "Write(.claude/gate.conf)",
+      "Edit(.claude/hooks/**)",
+      "Write(.claude/hooks/**)",
+      "Edit(scripts/gate.sh)",
+      "Write(scripts/gate.sh)",
+      "Edit(scripts/gate-*.py)",
+      "Write(scripts/gate-*.py)",
+      "Edit(.git/hooks/**)",
+      "Write(.git/hooks/**)",
+      "Bash(git push:*)",
+      "Bash(git commit --no-verify:*)",
+      "Bash(rm -rf:*)",
+      "Edit(scripts/gate-newdeps.py)",
+      "Write(scripts/gate-newdeps.py)"
+    ]
+  },
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write|MultiEdit|NotebookEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/protect-paths.sh",
+            "timeout": 15
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/.claude/hooks/protect-paths.sh",
+            "timeout": 15
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "$CLAUDE_PROJECT_DIR/scripts/gate.sh --stop-hook",
+            "timeout": 900
+          }
+        ]
+      }
+    ]
+  }
+}
