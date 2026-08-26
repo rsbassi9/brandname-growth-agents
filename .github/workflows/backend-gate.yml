@@ -1,0 +1,37 @@
+name: Backend Gate
+
+# Independent verification of scripts/gate.sh -- the same script and the
+# same .claude/gate.conf commands a kanban worker runs locally, run here
+# where a worker cannot influence the result. None of this repo's other
+# workflows (frontend-studio, pages, daily-growth) touch the Python
+# backend, so this is a clean addition, not a modification of anything
+# that already runs. Added by hermes-agent-build's provisioning; see
+# CLAUDE.md / TESTING.md.
+
+on:
+  push:
+    branches: [main, feat/openai-growth-agents]
+  pull_request:
+
+concurrency:
+  group: backend-gate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  gate:
+    name: gate.sh (independent verification)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+        with:
+          fetch-depth: 0  # gate.sh diffs against the base branch; needs real history
+      - uses: astral-sh/setup-uv@20cfd1bf945f4377ade1205e4dbc17946fc9a30d # v10.0.1
+        with:
+          python-version: "3.12"
+      - name: Build the same .venv gate.conf expects
+        run: |
+          uv venv --python 3.12 .venv
+          uv pip install --python .venv -r requirements.txt -r requirements-dev.txt
+          uv pip install --python .venv coverage
+      - name: Run the gate
+        run: bash scripts/gate.sh --base origin/feat/openai-growth-agents
