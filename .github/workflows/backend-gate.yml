@@ -33,5 +33,14 @@ jobs:
           uv venv --python 3.12 .venv
           uv pip install --python .venv -r requirements.txt -r requirements-dev.txt
           uv pip install --python .venv coverage
+      # gate.conf's BASE_REF=feat/openai-growth-agents needs a resolvable
+      # local ref regardless of trigger context -- a PR checkout leaves
+      # HEAD detached with no local branch of that name, only the
+      # origin/ remote-tracking ref.
+      - name: Ensure a local feat/openai-growth-agents ref exists
+        run: git rev-parse --verify --quiet feat/openai-growth-agents >/dev/null || git branch feat/openai-growth-agents origin/feat/openai-growth-agents
+      # Bare invocation, no --base override: gate.sh reads BASE_REF from
+      # .claude/gate.conf on its own. pipeline-control.py's readiness
+      # check requires this exact invocation with no extra args.
       - name: Run the gate
-        run: bash scripts/gate.sh --base origin/feat/openai-growth-agents
+        run: bash scripts/gate.sh
