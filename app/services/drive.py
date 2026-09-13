@@ -149,6 +149,8 @@ class GoogleDriveService:
         return AssetInventory(enabled=True, summary="\n".join(lines), files=files)
 
     def download_image_assets(self, destination: Path, limit: int) -> list[Path]:
+        from .source_policy import is_production_image
+
         if not self.enabled:
             return []
 
@@ -158,8 +160,8 @@ class GoogleDriveService:
         service = self._build_service()
         files = [
             item
-            for item in self._list_files(service, self._folder_id())
-            if item.get("mimeType", "").startswith("image/")
+            for item in self.list_raw_assets()
+            if is_production_image(item)
         ][:limit]
 
         destination.mkdir(parents=True, exist_ok=True)
@@ -252,34 +254,9 @@ class GoogleDriveService:
         )
 
     def _oauth_credentials(self):
-        from google.auth.exceptions import RefreshError
-        from google.auth.transport.requests import Request
-        from google.oauth2.credentials import Credentials
-        from google_auth_oauthlib.flow import InstalledAppFlow
+        from .drive_auth import load_credentials
 
-        token_path = Path(self.settings.google_oauth_token_file)
-        credentials = None
-
-        if token_path.exists():
-            credentials = Credentials.from_authorized_user_file(token_path, DRIVE_READONLY_SCOPES)
-
-        if credentials and credentials.expired and credentials.refresh_token:
-            try:
-                credentials.refresh(Request())
-            except RefreshError:
-                # Explicit fallback: an expired refresh token means a fresh
-                # interactive OAuth flow below; the failure is recorded first.
-                logger.warning("Google OAuth token refresh failed; starting interactive flow")
-                credentials = None
-
-        if not credentials or not credentials.valid:
-            flow = InstalledAppFlow.from_client_secrets_file(
-                self.settings.google_oauth_client_file, DRIVE_READONLY_SCOPES
-            )
-            credentials = flow.run_local_server(port=0)
-            token_path.write_text(credentials.to_json(), encoding="utf-8")
-
-        return credentials
+        return load_credentials(ROOT_DIR / self.settings.google_oauth_token_file, DRIVE_READONLY_SCOPES)
 
     def _list_files(self, service, folder_id: str, folder_path: str = "root") -> list[dict]:
         query = f"'{folder_id}' in parents and trashed = false"

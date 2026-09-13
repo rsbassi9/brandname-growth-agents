@@ -18,7 +18,7 @@ from .settings import (
     OUTPUTS_DIR,
     ROOT_DIR,
 )
-from .visual_renderer import _slug
+from .visual_renderer import _slug, select_asset
 
 POST_VISUAL_REFERENCE_LIMIT = 10
 
@@ -35,11 +35,14 @@ def generate_image_concepts(plan: dict, asset_paths: list[Path]) -> dict[str, st
     output_dir = OUTPUTS_DIR / "image_concepts" / f"{stamp}-{title}"
     output_dir.mkdir(parents=True, exist_ok=True)
 
-    reference_paths = _prepare_references(asset_paths[:3])
+    # Validate all references before the first paid call. A plan must not
+    # silently substitute another product when its requested source is absent.
+    selected = [select_asset(concept.get("source_asset_hint", ""), asset_paths) for concept in concepts]
     generated_paths: list[Path] = []
     briefs: list[dict] = []
 
     for index, concept in enumerate(concepts, start=1):
+        reference_paths = _prepare_references([selected[index - 1]])
         prompt = _build_prompt(concept, plan)
         image_data = _generate_image(prompt, reference_paths)
         image_path = output_dir / f"concept-{index:02}-{_slug(concept.get('name', 'image'))}.png"

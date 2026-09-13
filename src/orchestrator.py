@@ -4,6 +4,10 @@ from datetime import date
 
 from openai import AuthenticationError, OpenAIError, RateLimitError
 
+from app.db import init_db
+from app.services.brain import build_memory_context
+from app.services.brand_foundation import brand_foundation
+
 from .agents import (
     ad_strategist_agent,
     analytics_agent,
@@ -55,6 +59,9 @@ def build_asset_inventory_markdown(asset_inventory_summary: str) -> str:
 
 
 def build_shared_context(asset_inventory_summary: str | None = None) -> str:
+    init_db()
+    foundation = brand_foundation()
+    memory = build_memory_context("Today's own-product social drafts, owner feedback and brand identity", k=5)
     brand_brief = read_text(BRAND_CONTEXT_DIR / "brand_brief.md")
     growth_strategy = read_text(BRAND_CONTEXT_DIR / "growth_strategy.md")
     visual_system = read_text(BRAND_CONTEXT_DIR / "visual_system.md")
@@ -77,6 +84,8 @@ def build_shared_context(asset_inventory_summary: str | None = None) -> str:
     return "\n\n".join(
         [
             f"Date: {date.today().isoformat()}",
+            foundation,
+            memory.block,
             "Brand brief:",
             brand_brief,
             "Growth strategy:",
@@ -169,7 +178,9 @@ async def generate_visual_content(shared_context: str, ideas: str, drafts: str) 
     drive = GoogleDriveService()
     asset_dir = ROOT_DIR / ".cache" / "drive_assets"
     asset_paths = drive.download_image_assets(asset_dir, VISUAL_ASSET_LIMIT)
-    asset_list = "\n".join(f"- {path.name}" for path in asset_paths) or "No image assets downloaded. Render text-first placeholder slides."
+    if not asset_paths:
+        raise ValueError("No production images available; renew Drive access or supply owned product assets")
+    asset_list = "\n".join(f"- {path.name}" for path in asset_paths)
 
     raw_plan = await run_agent(
         visual_designer_agent,
@@ -188,6 +199,7 @@ async def generate_visual_content(shared_context: str, ideas: str, drafts: str) 
     )
 
     plan = extract_json_plan(raw_plan)
+    plan["approval_status"] = "Draft"
     rendered_paths = render_carousel(plan, asset_paths)
     image_concept_paths = generate_image_concepts(plan, asset_paths) if IMAGE_CONCEPTS_ENABLED else {}
     brief = "\n".join(
