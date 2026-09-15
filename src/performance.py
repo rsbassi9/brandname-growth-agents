@@ -1,11 +1,10 @@
 from __future__ import annotations
 
-from datetime import date, datetime
 import json
+from datetime import date, datetime
 from typing import Any
 
 from .settings import MEMORY_DIR
-
 
 PERFORMANCE_PATH = MEMORY_DIR / "performance_records.json"
 

@@ -26,7 +26,17 @@ from typing import Any
 from sqlalchemy import func, select
 
 from ..db import init_db, session_scope
-from ..models import Asset, AssetVersion, CalendarItem, Campaign, Job, PostMetric, PublishedPost, SourceAsset, StandupReport
+from ..models import (
+    Asset,
+    AssetVersion,
+    CalendarItem,
+    Campaign,
+    Job,
+    PostMetric,
+    PublishedPost,
+    SourceAsset,
+    StandupReport,
+)
 from ..settings import get_settings
 
 logger = logging.getLogger(__name__)

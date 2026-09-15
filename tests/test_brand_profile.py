@@ -4,7 +4,6 @@ import asyncio
 import json
 from datetime import datetime
 
-
 PROFILE_RESPONSE = """## Voice rules
 - Use source proof in the hook. (fb_1, pair_1_1_2)
 ## Banned phrases

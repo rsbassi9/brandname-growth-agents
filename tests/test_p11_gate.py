@@ -4,7 +4,6 @@ import asyncio
 import json
 from pathlib import Path
 
-
 FIXTURES = Path(__file__).parent / "fixtures" / "perf_import"
 
 

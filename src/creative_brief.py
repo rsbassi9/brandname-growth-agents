@@ -1,11 +1,10 @@
 from __future__ import annotations
 
-from datetime import datetime
 import json
+from datetime import datetime
 from typing import Any
 
 from .settings import MEMORY_DIR
-
 
 CREATIVE_BRIEF_PATH = MEMORY_DIR / "creative_brief.json"
 

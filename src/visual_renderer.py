@@ -8,7 +8,6 @@ from PIL import Image, ImageDraw, ImageFont, ImageOps
 
 from .settings import MEMORY_DIR, OUTPUTS_DIR, ROOT_DIR
 
-
 CANVAS = (1080, 1350)
 BACKGROUND = (244, 242, 237)
 INK = (22, 22, 20)

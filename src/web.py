@@ -11,7 +11,6 @@ from bs4 import BeautifulSoup
 
 from .settings import BRAND_CONTEXT_DIR
 
-
 PRODUCT_CATALOG_PATH = BRAND_CONTEXT_DIR / "website_product_catalog.json"
 
 

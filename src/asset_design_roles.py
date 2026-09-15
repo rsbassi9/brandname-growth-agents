@@ -2,7 +2,6 @@ from __future__ import annotations
 
 from pathlib import Path
 
-
 TEXT_BACKDROP_TERMS = (
     "fold",
     "folded",

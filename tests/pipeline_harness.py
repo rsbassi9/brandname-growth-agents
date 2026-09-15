@@ -12,8 +12,8 @@ import shutil
 import signal
 import subprocess
 import tempfile
+from collections.abc import Iterator, Sequence
 from pathlib import Path
-from typing import Iterator, Sequence
 
 
 def fixture_copy(source: Path, root: Path, *, mode: int | None = None) -> Path:
@@ -45,7 +45,7 @@ def run_bytes(argv: Sequence[str], payload: bytes = b"", **kwargs) -> subprocess
     if kwargs.get("text") or kwargs.get("encoding"):
         raise ValueError("run_bytes does not accept text/encoding")
     return subprocess.run(
-        list(argv), input=payload, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+        list(argv), input=payload, capture_output=True,
         check=False, **kwargs,
     )
 

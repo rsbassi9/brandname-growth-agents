@@ -11,7 +11,6 @@ from dataclasses import dataclass, field
 from datetime import datetime, timedelta
 from email.parser import BytesParser
 from email.policy import default
-from typing import Any
 
 from sqlalchemy import select
 from sqlalchemy.orm import Session
@@ -457,7 +456,7 @@ def _parse_datetime(value: str) -> datetime | None:
 
 
 def _fallback_ref(channel: str, posted_at: datetime, title_or_caption: str) -> str:
-    digest = hashlib.sha1(f"{channel}|{posted_at.isoformat()}|{title_or_caption}".encode("utf-8")).hexdigest()[:12]
+    digest = hashlib.sha1(f"{channel}|{posted_at.isoformat()}|{title_or_caption}".encode()).hexdigest()[:12]
     return f"{channel}:{posted_at.date().isoformat()}:{digest}"
 
 
@@ -467,7 +466,7 @@ def _normalize_header(value: str) -> str:
 
 def _parse_multipart(content_type: str, body: bytes) -> tuple[str, str]:
     message = BytesParser(policy=default).parsebytes(
-        f"Content-Type: {content_type}\r\nMIME-Version: 1.0\r\n\r\n".encode("utf-8") + body
+        f"Content-Type: {content_type}\r\nMIME-Version: 1.0\r\n\r\n".encode() + body
     )
     channel = "other"
     csv_text = ""
