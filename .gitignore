@@ -1,4 +1,5 @@
 .env
+.test-stack.env
 .venv/
 __pycache__/
 *.pyc
