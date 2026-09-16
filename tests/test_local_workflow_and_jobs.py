@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+import re
 from pathlib import Path
 
 from tests._helpers import wait_for_job
@@ -108,7 +109,10 @@ def test_daily_growth_workflow_uses_job_service_and_artifacts() -> None:
     assert "python -m app.services.jobs run_daily_workflow" in workflow
     assert "python -m src.orchestrator" not in workflow
     assert "git push" not in workflow
-    assert "actions/upload-artifact@v4" in workflow
+    # Production pins Actions to immutable commits, not floating version tags.
+    assert re.search(r"uses:\s*actions/upload-artifact@[0-9a-f]{40}(?:\s|$)", workflow)
+    assert "outputs/**" in workflow
+    assert "data/app.db" in workflow
 
 
 def test_unknown_job_kind_rejected(client) -> None:

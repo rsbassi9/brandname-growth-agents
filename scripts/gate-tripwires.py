@@ -214,7 +214,7 @@ def is_generated(path: str) -> bool:
             or p.endswith("package-lock.json")
             or p.endswith("pubspec.lock")
             or p.endswith("firestore.indexes.json")
-            or p.endswith(".rules")) 
+            or p.endswith(".rules"))
 
 def is_doc(path: str) -> bool:
     """Markdown is prose — including the code it quotes normatively."""

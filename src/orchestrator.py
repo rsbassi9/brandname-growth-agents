@@ -1,6 +1,6 @@
 import asyncio
-from datetime import date
 import json
+from datetime import date
 
 from openai import AuthenticationError, OpenAIError, RateLimitError
 

@@ -5,11 +5,18 @@ import json
 from datetime import datetime
 
 
-def test_recycle_top_posts_creates_idempotent_unscheduled_remixes(app_env) -> None:
+def test_recycle_top_posts_creates_idempotent_unscheduled_remixes(app_env, monkeypatch) -> None:
     from app.db import init_db, session_scope
     from app.models import Asset, AssetVersion, PostMetric, PublishedPost
     from app.services.jobs import _handle_recycle_top_posts
 
+    class FrozenDatetime(datetime):
+        @classmethod
+        def utcnow(cls):
+            return cls(2026, 7, 1, 12)
+
+    # July's "recent" fixture must stay recent when CI runs in a later month.
+    monkeypatch.setattr("app.services.jobs.datetime", FrozenDatetime)
     init_db()
     with session_scope() as session:
         for index, likes in enumerate([40, 30, 20, 10], start=1):

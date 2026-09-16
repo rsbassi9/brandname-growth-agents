@@ -1,13 +1,14 @@
 from __future__ import annotations
 
 import base64
-from datetime import datetime
 import json
+from datetime import datetime
 from pathlib import Path
 
 from openai import OpenAI, OpenAIError
 from PIL import Image, ImageOps
 
+from .product_inventory import product_inventory_summary
 from .settings import (
     AI_IMAGE_GENERATION_ENABLED,
     IMAGE_CONCEPT_COUNT,
@@ -17,9 +18,7 @@ from .settings import (
     OUTPUTS_DIR,
     ROOT_DIR,
 )
-from .product_inventory import product_inventory_summary
 from .visual_renderer import _slug
-
 
 POST_VISUAL_REFERENCE_LIMIT = 10
 

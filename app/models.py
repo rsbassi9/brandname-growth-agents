@@ -103,7 +103,7 @@ class BrainDocument(Base):
     meta_json: Mapped[str] = mapped_column(Text, default="{}", nullable=False)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
 
-    embedding: Mapped["BrainEmbedding | None"] = relationship(
+    embedding: Mapped[BrainEmbedding | None] = relationship(
         back_populates="document", cascade="all, delete-orphan"
     )
 
@@ -147,7 +147,7 @@ class PublishedPost(Base):
     published_at: Mapped[datetime | None] = mapped_column(DateTime, nullable=True)
     created_at: Mapped[datetime] = mapped_column(DateTime, default=datetime.utcnow, nullable=False)
 
-    metrics: Mapped[list["PostMetric"]] = relationship(
+    metrics: Mapped[list[PostMetric]] = relationship(
         back_populates="published_post", cascade="all, delete-orphan", order_by="PostMetric.captured_at"
     )
 

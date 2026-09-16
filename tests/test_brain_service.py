@@ -27,7 +27,7 @@ def test_embedding_blob_round_trip(app_env) -> None:
 def test_search_ranks_matching_documents(app_env) -> None:
     from app.db import init_db, session_scope
     from app.models import BrainDocument, BrainEmbedding
-    from app.services.brain import embedding_model_label, embed_texts, search, vector_to_blob
+    from app.services.brain import embed_texts, embedding_model_label, search, vector_to_blob
 
     init_db()
     docs = [
@@ -59,7 +59,7 @@ def test_search_ranks_matching_documents(app_env) -> None:
 def test_search_filters_by_kind(app_env) -> None:
     from app.db import init_db, session_scope
     from app.models import BrainDocument, BrainEmbedding
-    from app.services.brain import embedding_model_label, embed_texts, search, vector_to_blob
+    from app.services.brain import embed_texts, embedding_model_label, search, vector_to_blob
 
     init_db()
     with session_scope() as session:
@@ -87,7 +87,7 @@ def test_memory_context_boosts_selected_winners(app_env) -> None:
 
     from app.db import init_db, session_scope
     from app.models import BrainDocument, BrainEmbedding
-    from app.services.brain import build_memory_context, embedding_model_label, embed_texts, vector_to_blob
+    from app.services.brain import build_memory_context, embed_texts, embedding_model_label, vector_to_blob
 
     init_db()
     vector = embed_texts(["canvas fragment"])[0]

@@ -8,7 +8,6 @@ from pathlib import Path
 from .settings import DATA_DIR, PRODUCT_INVENTORY_DIR, ROOT_DIR
 from .visual_renderer import _slug
 
-
 MANIFEST_PATH = PRODUCT_INVENTORY_DIR / "manifest.json"
 IMAGE_SUFFIXES = {".png", ".jpg", ".jpeg", ".webp"}
 

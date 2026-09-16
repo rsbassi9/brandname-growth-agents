@@ -4,7 +4,6 @@ import subprocess
 import sys
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[1]
 LOG_DIR = ROOT / "dashboard"
 LOG_DIR.mkdir(exist_ok=True)

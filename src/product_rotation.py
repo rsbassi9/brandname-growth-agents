@@ -2,12 +2,11 @@ from __future__ import annotations
 
 import json
 import re
+from collections.abc import Iterable
 from pathlib import Path
-from typing import Iterable
 
 from .drive_service import GoogleDriveService
-from .settings import OUTPUTS_DIR, ROOT_DIR
-
+from .settings import OUTPUTS_DIR
 
 CONTENT_PLAN_DIR = OUTPUTS_DIR / "content_plan"
 

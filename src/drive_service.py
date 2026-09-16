@@ -1,10 +1,11 @@
-from dataclasses import dataclass
 import csv
+from collections import Counter
+from dataclasses import dataclass
 from io import FileIO
 from pathlib import Path
-from collections import Counter
 from urllib.parse import parse_qs, urlparse
 
+from .asset_design_roles import enrich_asset_design_roles
 from .settings import (
     GOOGLE_APPLICATION_CREDENTIALS,
     GOOGLE_AUTH_MODE,
@@ -14,8 +15,6 @@ from .settings import (
     GOOGLE_OAUTH_TOKEN_FILE,
     ROOT_DIR,
 )
-from .asset_design_roles import enrich_asset_design_roles
-
 
 DRIVE_READONLY_SCOPES = ["https://www.googleapis.com/auth/drive.readonly"]
 CREATIVE_BUCKET_ORDER = [

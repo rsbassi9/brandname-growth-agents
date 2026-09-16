@@ -3,7 +3,6 @@ from pathlib import Path
 
 from .settings import OUTPUTS_DIR
 
-
 OUTPUT_FOLDERS = [
     "asset_inventory",
     "content_ideas",

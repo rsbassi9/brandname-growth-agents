@@ -39,6 +39,16 @@ jobs:
       # origin/ remote-tracking ref.
       - name: Ensure a local feat/openai-growth-agents ref exists
         run: git rev-parse --verify --quiet feat/openai-growth-agents >/dev/null || git branch feat/openai-growth-agents origin/feat/openai-growth-agents
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+        with:
+          node-version: "20"
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      # The real SPA fallback test needs the built application, not a fake index.
+      - name: Build frontend required by backend route tests
+        run: |
+          npm ci --prefix frontend
+          npm run build --prefix frontend
       # Bare invocation, no --base override: gate.sh reads BASE_REF from
       # .claude/gate.conf on its own. pipeline-control.py's readiness
       # check requires this exact invocation with no extra args.
