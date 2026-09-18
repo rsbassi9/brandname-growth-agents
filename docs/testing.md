@@ -27,6 +27,8 @@ then API reads, enum-backed generation/jobs, calendar CRUD and eight browser
 routes run. Browser tests fail on HTTP >=500, pageerror or console.error, and
 exercise campaign creation and asset generation. `ci` always calls `down`;
 teardown checks an ownership marker and PID start time before deleting/signaling.
+The cycle instruments its controller/check subprocesses and combines coverage
+with the unit run, so the unchanged changed-lines floor measures the new harness.
 
 Parity gaps: external Drive/Shopify/paid models are intentionally disabled and
 must be verified separately with approved read-only integration probes before

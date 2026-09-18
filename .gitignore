@@ -1,5 +1,7 @@
 .env
 .test-stack.env
+.coverage*
+coverage.json
 .venv/
 __pycache__/
 *.pyc

@@ -88,7 +88,8 @@ def check(verb: str) -> None:
     data = state()
     if ticks(data["pid"]) != data["ticks"]:
         raise ValueError("Functional instance is no longer running")
-    run(["nsenter", "-t", str(data["pid"]), "-n", PYTHON,
+    run(["nsenter", "-t", str(data["pid"]), "-n", PYTHON, "-m", "coverage", "run", "--append",
+         "--data-file", str(ROOT / ".coverage.functional-checks"),
          str(ROOT / "tests/functional/checks.py"), verb, f"http://127.0.0.1:{PORT}"],
         env=environment(Path(data["root"])), cwd=ROOT)
 
@@ -97,7 +98,9 @@ def start(data: dict) -> None:
     root = Path(data["root"])
     with (root / "server.log").open("ab") as log:
         process = subprocess.Popen(
-            ["unshare", "--net", PYTHON, str(Path(__file__).resolve()), "_serve", str(root)],
+            ["unshare", "--net", PYTHON, "-m", "coverage", "run", "--append",
+             "--data-file", str(ROOT / ".coverage.functional-server"),
+             str(Path(__file__).resolve()), "_serve", str(root)],
             stdin=subprocess.DEVNULL, stdout=log, stderr=log, start_new_session=True,
             env=environment(root), cwd=root,
         )
