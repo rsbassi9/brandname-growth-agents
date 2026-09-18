@@ -49,8 +49,11 @@ jobs:
         run: |
           npm ci --prefix frontend
           npm run build --prefix frontend
+      - name: Install isolated functional browser
+        run: PLAYWRIGHT_BROWSERS_PATH="$PWD/.cache/ms-playwright" .venv/bin/python3 -m playwright install --with-deps chromium
       # Bare invocation, no --base override: gate.sh reads BASE_REF from
       # .claude/gate.conf on its own. pipeline-control.py's readiness
       # check requires this exact invocation with no extra args.
       - name: Run the gate
-        run: bash scripts/gate.sh
+        # root is required only for disposable Linux network namespaces.
+        run: sudo env "PATH=$PATH" bash scripts/gate.sh
