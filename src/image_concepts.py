@@ -1,8 +1,12 @@
 from __future__ import annotations
 
 import base64
+import hashlib
 import json
+import os
+import tempfile
 from datetime import datetime
+from io import BytesIO
 from pathlib import Path
 
 from openai import OpenAI, OpenAIError
@@ -12,9 +16,6 @@ from .product_inventory import product_inventory_summary
 from .settings import (
     AI_IMAGE_GENERATION_ENABLED,
     IMAGE_CONCEPT_COUNT,
-    IMAGE_CONCEPT_MODEL,
-    IMAGE_CONCEPT_QUALITY,
-    IMAGE_CONCEPT_SIZE,
     OUTPUTS_DIR,
     ROOT_DIR,
 )
@@ -38,11 +39,12 @@ def generate_image_concepts(plan: dict, asset_paths: list[Path]) -> dict[str, st
     # Validate all references before the first paid call. A plan must not
     # silently substitute another product when its requested source is absent.
     selected = [select_asset(concept.get("source_asset_hint", ""), asset_paths) for concept in concepts]
+    references = [_prepare_references([source]) for source in selected]
     generated_paths: list[Path] = []
     briefs: list[dict] = []
 
     for index, concept in enumerate(concepts, start=1):
-        reference_paths = _prepare_references([selected[index - 1]])
+        reference_paths = references[index - 1]
         prompt = _build_prompt(concept, plan)
         image_data = _generate_image(prompt, reference_paths)
         image_path = output_dir / f"concept-{index:02}-{_slug(concept.get('name', 'image'))}.png"
@@ -200,57 +202,57 @@ def _build_prompt(concept: dict, plan: dict) -> str:
 
 
 def _generate_image(prompt: str, reference_paths: list[Path]) -> str:
+    if not reference_paths:
+        raise ValueError("Product generation requires a selected reference image")
+    content = [{"type": "input_text", "text": prompt}]
+    for path in reference_paths:
+        content.append({"type": "input_image", "image_url": _data_url(path)})
     client = OpenAI()
-
-    if reference_paths:
-        content = [{"type": "input_text", "text": prompt}]
-        for path in reference_paths:
-            content.append({"type": "input_image", "image_url": _data_url(path)})
-        try:
-            response = client.responses.create(
-                model="gpt-5.4-mini",
-                input=[{"role": "user", "content": content}],
-                tools=[{"type": "image_generation"}],
-            )
-            image_data = [output.result for output in response.output if output.type == "image_generation_call"]
-            if image_data:
-                return image_data[0]
-        except OpenAIError:
-            pass
-
-    response = client.images.generate(
-        model=IMAGE_CONCEPT_MODEL,
-        prompt=prompt,
-        size=IMAGE_CONCEPT_SIZE,
-        quality=IMAGE_CONCEPT_QUALITY,
-        n=1,
-    )
-    return response.data[0].b64_json
+    try:
+        response = client.responses.create(
+            model="gpt-5.4-mini",
+            input=[{"role": "user", "content": content}],
+            tools=[{"type": "image_generation"}],
+        )
+    except OpenAIError:
+        raise RuntimeError("Selected-reference generation failed; no reference-free fallback was attempted") from None
+    image_data = [output.result for output in response.output if output.type == "image_generation_call"]
+    if not image_data or not image_data[0]:
+        raise RuntimeError("Selected-reference generation returned no image; draft requires review")
+    return image_data[0]
 
 
 def _prepare_references(paths: list[Path]) -> list[Path]:
+    if not paths:
+        raise ValueError("At least one selected reference image is required")
     reference_dir = ROOT_DIR / ".cache" / "image_references"
     reference_dir.mkdir(parents=True, exist_ok=True)
     prepared: list[Path] = []
 
-    for index, path in enumerate(paths, start=1):
+    for path in paths:
         try:
             if path.suffix.lower() in {".heic", ".heif"}:
-                try:
-                    import pillow_heif  # type: ignore
+                import pillow_heif  # type: ignore
 
-                    pillow_heif.register_heif_opener()
-                except ImportError:
-                    continue
-            with Image.open(path) as image:
+                pillow_heif.register_heif_opener()
+            raw = path.read_bytes()
+            with Image.open(BytesIO(raw)) as image:
                 converted = image.convert("RGB")
                 converted.thumbnail((1200, 1200), Image.Resampling.LANCZOS)
                 canvas = ImageOps.contain(converted, (1200, 1200))
-                out = reference_dir / f"reference-{index:02}.jpg"
-                canvas.save(out, "JPEG", quality=86)
+                out = reference_dir / f"reference-v1-{hashlib.sha256(raw).hexdigest()}.jpg"
+                # Concurrent jobs must not overwrite another product's reference
+                # or expose a half-written JPEG to the request encoder.
+                fd, temporary = tempfile.mkstemp(prefix=".reference-", dir=reference_dir)
+                try:
+                    with os.fdopen(fd, "wb") as stream:
+                        canvas.save(stream, "JPEG", quality=86)
+                    os.replace(temporary, out)
+                finally:
+                    Path(temporary).unlink(missing_ok=True)
                 prepared.append(out)
-        except Exception:
-            continue
+        except (OSError, ValueError, ImportError):
+            raise ValueError(f"Cannot prepare selected reference image: {path.name}") from None
 
     return prepared
 
