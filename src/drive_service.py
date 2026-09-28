@@ -11,7 +11,6 @@ from .settings import (
     GOOGLE_AUTH_MODE,
     GOOGLE_DRIVE_ENABLED,
     GOOGLE_DRIVE_ROOT_FOLDER_ID,
-    GOOGLE_OAUTH_CLIENT_FILE,
     GOOGLE_OAUTH_TOKEN_FILE,
     ROOT_DIR,
 )
@@ -213,9 +212,9 @@ class GoogleDriveService:
                 return f"{GOOGLE_APPLICATION_CREDENTIALS} was not found."
             return ""
 
-        client_path = Path(GOOGLE_OAUTH_CLIENT_FILE)
-        if not client_path.exists():
-            return f"{GOOGLE_OAUTH_CLIENT_FILE} was not found. Download an OAuth Desktop client JSON from Google Cloud."
+        from app.services.drive_auth import require_token_file
+
+        require_token_file(ROOT_DIR / GOOGLE_OAUTH_TOKEN_FILE)
         return ""
 
     def _service_account_credentials(self):

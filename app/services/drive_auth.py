@@ -15,6 +15,19 @@ class DriveAuthorizationRequired(RuntimeError):
     """The owner must renew read-only Drive access on their own device."""
 
 
+REAUTHORIZATION_MESSAGE = (
+    "Google Drive needs owner reauthorization. Run scripts/drive-oauth-setup.py "
+    "on your laptop, then securely replace the VPS token.json. "
+    "Do not paste credentials into Telegram. No browser was opened on the server."
+)
+
+
+def require_token_file(token_path: Path) -> None:
+    """Workers need the saved grant, not the desktop consent client file."""
+    if not token_path.is_file():
+        raise DriveAuthorizationRequired(REAUTHORIZATION_MESSAGE)
+
+
 def save_token(token_path: Path, token_json: str) -> None:
     """Atomic, owner-only replacement; never truncate the last usable token."""
     fd, temporary = tempfile.mkstemp(prefix=".drive-token-", dir=token_path.parent)
@@ -33,26 +46,20 @@ def load_credentials(token_path: Path, scopes: list[str]):
     from google.auth.transport.requests import Request
     from google.oauth2.credentials import Credentials
 
-    message = (
-        "Google Drive needs owner reauthorization. Run scripts/drive-oauth-setup.py "
-        "on your laptop, then securely replace the VPS token.json. "
-        "Do not paste credentials into Telegram. No browser was opened on the server."
-    )
-    if not token_path.is_file():
-        raise DriveAuthorizationRequired(message)
+    require_token_file(token_path)
     try:
         credentials = Credentials.from_authorized_user_file(token_path, scopes)
     except (ValueError, KeyError):
-        raise DriveAuthorizationRequired(message) from None
+        raise DriveAuthorizationRequired(REAUTHORIZATION_MESSAGE) from None
     if credentials.valid:
         return credentials
     if not credentials.refresh_token:
-        raise DriveAuthorizationRequired(message)
+        raise DriveAuthorizationRequired(REAUTHORIZATION_MESSAGE)
     try:
         credentials.refresh(Request())
     except RefreshError:
-        raise DriveAuthorizationRequired(message) from None
+        raise DriveAuthorizationRequired(REAUTHORIZATION_MESSAGE) from None
     if not credentials.valid:
-        raise DriveAuthorizationRequired(message)
+        raise DriveAuthorizationRequired(REAUTHORIZATION_MESSAGE)
     save_token(token_path, credentials.to_json())
     return credentials

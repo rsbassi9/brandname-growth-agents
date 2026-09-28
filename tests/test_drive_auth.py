@@ -92,3 +92,31 @@ def test_studio_and_legacy_share_headless_auth(app_env, monkeypatch):
     assert loader.call_args.args[0] == legacy.ROOT_DIR / "nested-token.json"
     assert GoogleDriveService()._oauth_credentials() == "synthetic-credentials"
     assert isinstance(loader.call_args.args[0], Path)
+
+
+@pytest.mark.parametrize("module_name", ["app.services.drive", "src.drive_service"])
+def test_headless_preflight_uses_token_not_desktop_client_json(app_env, monkeypatch, module_name):
+    import importlib
+
+    module = importlib.import_module(module_name)
+    monkeypatch.setattr(module, "ROOT_DIR", app_env)
+    service = module.GoogleDriveService()
+    service.enabled = True
+    if module_name == "src.drive_service":
+        monkeypatch.setattr(module, "GOOGLE_AUTH_MODE", "oauth")
+        monkeypatch.setattr(module, "GOOGLE_OAUTH_TOKEN_FILE", "token.json")
+    else:
+        monkeypatch.setattr(service.settings, "google_auth_mode", "oauth")
+        monkeypatch.setattr(service.settings, "google_oauth_token_file", "token.json")
+        monkeypatch.setattr(service.settings, "google_oauth_client_file", "missing-client.json")
+    # Preflight checks presence only. Parsing/refresh are tested separately above.
+    token = app_env / "token.json"
+    token.write_text("synthetic-token")
+    assert service._missing_auth_message() == ""
+    token.unlink()
+    with pytest.raises(DriveAuthorizationRequired):
+        service.list_raw_assets()
+    with pytest.raises(DriveAuthorizationRequired):
+        service.download_image_assets(app_env / "downloads", 1)
+    with pytest.raises(DriveAuthorizationRequired):
+        service.get_asset_inventory()
