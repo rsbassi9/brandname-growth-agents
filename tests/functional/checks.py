@@ -1,6 +1,7 @@
 """Real HTTP + browser contracts, launched only inside the disposable namespace."""
 from __future__ import annotations
 
+import hashlib
 import json
 import sys
 import time
@@ -61,6 +62,38 @@ def integration(base):
     request(base, route, method="DELETE", expected=204)
     request(base, route, expected=404)
     request(base, "/api/v1/strategy/context/unknown-fixture.md", expected=404)
+    daily_persistence(base)
+
+
+def daily_persistence(base):
+    # Exercise the real queue, DB, file snapshots and API serialization twice.
+    # Namespace + local-only mode prevent any provider or Drive calls.
+    previous_ids = None
+    for _cycle in range(2):
+        queued = request(base, "/api/v1/system/daily-workflow/run", {}, "POST")
+        for _ in range(100):
+            job = request(base, f"/api/v1/jobs/{queued['job_id']}")
+            if job["status"] in {"succeeded", "failed"}:
+                break
+            time.sleep(0.1)
+        assert job["status"] == "succeeded", job
+        result = json.loads(job["result_json"])
+        assert result["mode"] == "local_only"
+        assert len(result["assets"]) == len(result["calendar_items"]) == 8
+        ids = {item["asset_id"] for item in result["assets"]}
+        assert previous_ids is None or ids.isdisjoint(previous_ids)
+        previous_ids = ids
+        for output in result["assets"]:
+            asset = request(base, f"/api/v1/assets/{output['asset_id']}")
+            assert asset["status"] == "draft"
+            version = asset["versions"][-1]
+            assert version["id"] == output["version_id"] and not version["is_selected"]
+            assert hashlib.sha256(version["content_text"].encode()).hexdigest() == output["artifact_sha256"]
+            assert "/daily_snapshots/" in version["file_path"]
+        for item in result["calendar_items"]:
+            current = request(base, f"/api/v1/calendar/{item['id']}")
+            assert current["status"] == "draft" and current["asset_id"] in ids
+            assert current["data"]["workflow_job_id"] == queued["job_id"]
 
 
 def e2e(base):
