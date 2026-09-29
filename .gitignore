@@ -17,6 +17,7 @@ dashboard-server.err.log
 dashboard-server.out.log
 dashboard/*.log
 data/
+outputs/daily_snapshots/
 frontend/node_modules/
 frontend/dist/
 frontend/.vite/

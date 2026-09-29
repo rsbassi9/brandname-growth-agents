@@ -34,7 +34,7 @@ const feedItems = [
     date: launchDate,
     status: "draft",
     asset_id: 42,
-    data: { title: "Launch teaser", channel: "Instagram" },
+    data: { title: "Launch teaser", channel: "Instagram", media_url: "/api/v1/assets/42/media" },
   },
   {
     id: "post-2",
@@ -229,6 +229,21 @@ describe("P2-5 Calendar and Feed Grid", () => {
         }),
       ),
     );
+  });
+
+  it("does not request image previews for text-only or missing daily files", async () => {
+    vi.stubGlobal("fetch", vi.fn(async () => response([
+      { id: "daily-report", date: launchDate, status: "draft", asset_id: 99,
+        data: { title: "Daily text report", media_url: null } },
+      { id: "daily-missing", date: launchDate, status: "draft", asset_id: 100,
+        data: { title: "Missing preview", media_url: null } },
+      feedItems[0],
+    ])));
+    const rendered = renderRoute("/feed");
+    expect(await screen.findByText("Daily text report")).toBeInTheDocument();
+    expect(rendered.container.querySelector('img[src="/api/v1/assets/99/media"]')).not.toBeInTheDocument();
+    expect(rendered.container.querySelector('img[src="/api/v1/assets/100/media"]')).not.toBeInTheDocument();
+    expect(rendered.container.querySelectorAll("img")).toHaveLength(1);
   });
 
   it("shows calendar guardrail warnings without blocking the week view", async () => {
