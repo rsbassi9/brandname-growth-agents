@@ -13,7 +13,8 @@ function titleFor(item: CalendarItemOut) {
 }
 
 function mediaUrlFor(item: CalendarItemOut) {
-  return item.asset_id ? `/api/v1/assets/${item.asset_id}/media` : "";
+  const expected = `/api/v1/assets/${item.asset_id}/media`;
+  return item.asset_id && item.data.media_url === expected ? expected : "";
 }
 
 function tileTone(status: string) {

@@ -198,3 +198,21 @@ def test_snapshot_write_failure_rolls_back_database(daily, monkeypatch):
         jobs._persist_daily_output_assets({"drafts": str(path)}, "live", "test")
     assert counts() == (0, 0)
     assert not list((root / "daily_snapshots").iterdir())
+
+
+def test_feed_advertises_only_servable_images(client, daily):
+    jobs, root = daily
+    text = root / "report.md"
+    picture = root / "product.png"
+    text.write_text("Synthetic text report")
+    Image.new("RGB", (4, 4), "blue").save(picture)
+    assets = jobs._persist_daily_output_assets({"report": str(text), "visual_slides": str(picture)}, "live", "test")
+    calendar = jobs._persist_daily_calendar_items(assets, "fixture")
+    feed = {row["id"]: row for row in client.get("/api/v1/feed").json()}
+    assert feed[calendar[0]["id"]]["data"]["media_url"] is None
+    url = feed[calendar[1]["id"]]["data"]["media_url"]
+    assert url == f"/api/v1/assets/{assets[1]['asset_id']}/media"
+    assert client.get(url).content == picture.read_bytes()
+    Path(assets[1]["file_path"]).unlink()
+    feed = {row["id"]: row for row in client.get("/api/v1/feed").json()}
+    assert feed[calendar[1]["id"]]["data"]["media_url"] is None

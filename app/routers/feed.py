@@ -4,17 +4,32 @@ from __future__ import annotations
 
 import json
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from ..db import get_session
 from ..models import CalendarItem, SettingsKV
 from ..schemas import CalendarItemOut, FeedOrderIn
+from .assets import get_asset_media
 
 router = APIRouter(prefix="/feed", tags=["feed"])
 
 _ORDER_KEY = "feed_order"
+
+
+def _media_url(item: CalendarItem, session: Session) -> str | None:
+    if item.asset_id is None:
+        return None
+    try:
+        # Reuse the serving endpoint's selected-version, path and image checks.
+        # This only constructs a response; it neither sends nor reads file bytes.
+        get_asset_media(item.asset_id, session)
+    except HTTPException as error:
+        if error.status_code in {404, 415}:
+            return None
+        raise
+    return f"/api/v1/assets/{item.asset_id}/media"
 
 
 def _stored_order(session: Session) -> list[str]:
@@ -43,7 +58,7 @@ def feed(session: Session = Depends(get_session)) -> list[CalendarItemOut]:
             date=item.date,
             status=item.status,
             asset_id=item.asset_id,
-            data=json.loads(item.data_json or "{}"),
+            data={**json.loads(item.data_json or "{}"), "media_url": _media_url(item, session)},
         )
         for item in items
     ]
