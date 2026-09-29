@@ -20,6 +20,7 @@ import requests
 from ..paths import outputs_dir
 from ..settings import get_settings
 from .brain import build_memory_context
+from .brand_foundation import brand_foundation
 from .openai_client import resolve_model
 from .rendering import render_text_carousel
 
@@ -47,6 +48,7 @@ def build_prompt(asset_type: str, brief: str, params: dict[str, Any], memory_blo
         f"Tone: {tone}",
         f"Template: {template}",
         "Ground every claim in the approved raw photoshoot/product assets; never invent garments.",
+        brand_foundation(),
     ]
     if memory_block:
         lines.extend(["", memory_block])

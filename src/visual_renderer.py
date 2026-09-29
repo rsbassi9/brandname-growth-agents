@@ -6,6 +6,8 @@ from typing import Any
 
 from PIL import Image, ImageDraw, ImageFont, ImageOps
 
+from app.services.source_policy import RESEARCH_LABEL
+
 from .settings import MEMORY_DIR, OUTPUTS_DIR, ROOT_DIR
 
 CANVAS = (1080, 1350)
@@ -53,15 +55,29 @@ def extract_json_plan(raw: str) -> dict:
     return json.loads(text)
 
 
+def select_asset(hint: str, asset_paths: list[Path]) -> Path:
+    """Bind a plan to one exact downloaded source, never an arbitrary photo."""
+    if not isinstance(hint, str) or not hint or Path(hint).name != hint:
+        raise ValueError("An exact downloaded source filename is required")
+    if RESEARCH_LABEL.search(hint):
+        raise ValueError("Research references cannot be production images")
+    matches = [path for path in asset_paths if path.name == hint]
+    if len(matches) != 1 or not matches[0].is_file():
+        raise ValueError("Source image is missing or ambiguous; request a new selection")
+    return matches[0]
+
+
 def render_carousel(plan: dict, asset_paths: list[Path]) -> list[Path]:
+    slides = plan.get("slides", [])
+    if not isinstance(slides, list) or not 1 <= len(slides) <= 7:
+        raise ValueError("A product carousel requires 1-7 source-grounded slides")
+    for slide in slides:
+        select_asset(slide.get("asset_hint", ""), asset_paths)
+    plan = {**plan, "approval_status": "Draft"}
     stamp = datetime.now().strftime("%Y-%m-%d")
     title = _slug(plan.get("title", "visual-carousel"))
     output_dir = OUTPUTS_DIR / "visual_content" / f"{stamp}-{title}"
     output_dir.mkdir(parents=True, exist_ok=True)
-
-    slides = plan.get("slides", [])[:7]
-    if not slides:
-        slides = [{"slide": 1, "headline": plan.get("title", "Archive fragment"), "subhead": "", "layout": "cover"}]
 
     rendered: list[Path] = []
     for index, slide in enumerate(slides):
@@ -213,7 +229,7 @@ def _render_slide(slide: dict, index: int, total: int, asset_paths: list[Path]) 
     draw.text((72, 58), f"{index + 1:02}/{total:02}", font=font_meta, fill=MUTED)
     draw.text((72, 118), "BRAND NAME DESIGN", font=font_meta, fill=INK)
 
-    asset = _load_asset(asset_paths[index % len(asset_paths)]) if asset_paths else _fallback_texture(index)
+    asset = _load_asset(select_asset(slide.get("asset_hint", ""), asset_paths))
     layout = slide.get("layout", "cover")
 
     if layout in {"split", "product"}:

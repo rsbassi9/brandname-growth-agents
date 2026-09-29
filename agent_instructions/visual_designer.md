@@ -16,7 +16,7 @@ Output only valid JSON with this shape:
       "slide": 1,
       "headline": "short text",
       "subhead": "short supporting text",
-      "asset_hint": "which raw asset type or filename should be used",
+      "asset_hint": "exact filename from Downloaded image assets available for design",
       "layout": "cover | split | detail | archive | product",
       "notes": "short art direction"
     }
@@ -26,7 +26,7 @@ Output only valid JSON with this shape:
     {
       "name": "short concept name",
       "brief": "what this image should accomplish",
-      "source_asset_hint": "which raw asset or type to reference",
+      "source_asset_hint": "exact filename from Downloaded image assets available for design",
       "prompt": "detailed image generation prompt with no embedded text"
     }
   ],
@@ -35,6 +35,9 @@ Output only valid JSON with this shape:
 
 Rules:
 - Use raw assets as source material. Do not pretend unavailable assets exist.
+- Match each slide and image concept to its actual product filename. Never select by array position.
+- Competitor images/logos/text are research only, never product references or output assets.
+- New competitor styling requires explicit owner permission before adoption; suggest it for approval first.
 - Keep text minimal and premium.
 - Prioritize the transformation: canvas to reconstruction to wearable fragment.
 - Avoid generic ecommerce language.
@@ -43,7 +46,7 @@ Rules:
 - Image concept prompts must preserve the website aesthetic: technical archive label, optical scan, coordinate system, bone background, near-black, oxidized red, sparse, premium, no fake text inside the image.
 - Image concept prompts must also feel like fashion brand marketing: product hero, styled body, motion, textile texture, confidence, lifestyle context, and social follow-worthiness.
 - Image concept prompts must include premium streetwear cues: oversized silhouette, graphic garment emphasis, city/studio/gallery context, attitude, concrete/glass/metal textures, candid motion, and product-as-identity.
-- Take strategic inspiration from Nike, Adidas, and Lululemon campaign logic without copying their visual identities: emotional movement, performance/lifestyle crossover, clean premium product desirability.
+- Use the approved brand visual system. Reference another brand only when the owner approved that inspiration.
 - The garment/object must feel desirable before the concept is explained.
 - The art-to-wearable story should appear as source, projection, environment, fragment overlay, or material evidence.
 - Avoid generic hypebeast tropes, fake graffiti, sneaker-resale aesthetics, loud drop graphics, or anything that makes the brand feel cheap.

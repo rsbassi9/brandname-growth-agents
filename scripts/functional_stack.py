@@ -137,6 +137,10 @@ def up() -> None:
         context = root / "app/brand_context"
         context.mkdir()
         (context / "brand_brief.md").write_text("Synthetic clothing brand. Use only synthetic fixtures. Drafts only.")
+        (context / "visual_system.md").write_text(
+            "Synthetic visual identity: charcoal and white, clean type, original fixture product photos. "
+            "No competitor assets or logos. All output is an owner-review draft."
+        )
         start(data)
     except Exception:
         down()

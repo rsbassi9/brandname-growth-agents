@@ -58,12 +58,14 @@ def index_local_folder(session: Session, folder: str, tags: list[str] | None = N
 
 def index_drive_sources(session: Session, tags: list[str] | None = None, limit: int = 100) -> list[SourceAsset]:
     from .drive import GoogleDriveService
+    from .source_policy import is_production_image
 
     service = GoogleDriveService()
     rows: list[SourceAsset] = []
-    for item in service.list_raw_assets()[:limit]:
-        mime = str(item.get("mimeType", ""))
-        if not mime.startswith("image/"):
+    for item in service.list_raw_assets():
+        if len(rows) >= limit:
+            break
+        if not is_production_image(item):
             continue
         path = str(item.get("webViewLink") or item.get("webContentLink") or f"drive://{item.get('id', '')}")
         item_tags = [
