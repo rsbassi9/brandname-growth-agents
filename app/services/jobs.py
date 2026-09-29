@@ -252,54 +252,69 @@ async def _handle_run_daily_workflow(job_id: str, payload: dict[str, Any]) -> di
 
         _update_job(job_id, progress_pct=20, message="running deterministic local workflow")
         paths = await asyncio.to_thread(run_local_daily_workflow)
-        _update_job(job_id, progress_pct=75, message="persisting workflow assets")
-        assets = _persist_daily_output_assets(paths, mode="local_only", source=str(payload.get("source", "manual")))
-        calendar_items = _persist_daily_calendar_items(assets, job_id=job_id)
-        return {"mode": "local_only", "paths": paths, "assets": assets, "calendar_items": calendar_items}
+        mode = "local_only"
+    else:
+        from src.orchestrator import run_daily_workflow
 
-    # TODO(fable-review): the full in-app agent pipeline lands in P3; until
-    # then the live path reuses the legacy orchestrator entry point.
-    _update_job(job_id, progress_pct=20, message="running legacy live workflow")
-    from src.orchestrator import run_daily_workflow  # lazy: paid path, never hit in tests
-
-    result = await asyncio.to_thread(asyncio.run, run_daily_workflow())
-    return {"mode": "live", "result": str(result)}
+        _update_job(job_id, progress_pct=20, message="running live workflow")
+        paths = await asyncio.to_thread(asyncio.run, run_daily_workflow())
+        mode = "live"
+    _update_job(job_id, progress_pct=75, message="persisting workflow assets")
+    assets = _persist_daily_output_assets(paths, mode=mode, source=str(payload.get("source", "manual")))
+    calendar_items = _persist_daily_calendar_items(assets, job_id=job_id)
+    return {"mode": mode, "paths": paths, "assets": assets, "calendar_items": calendar_items}
 
 
 def _persist_daily_output_assets(paths: dict[str, str], mode: str, source: str) -> list[dict[str, Any]]:
+    from .daily_outputs import validate_outputs
+
+    outputs = validate_outputs(paths)
     persisted: list[dict[str, Any]] = []
     version_ids: list[int] = []
     with session_scope() as session:
-        for name, raw_path in paths.items():
-            path = Path(raw_path)
-            content_text = path.read_text(encoding="utf-8") if path.exists() else ""
+        for output in outputs:
+            name, path = output.key, output.source
             asset = session.execute(select(Asset).where(Asset.source_path == str(path))).scalar_one_or_none()
             if asset is None:
                 asset = Asset(
-                    type="copy",
+                    type=output.asset_type,
                     title=f"Daily workflow: {name.replace('_', ' ').title()}",
                     status="draft",
                     source_path=str(path),
                 )
                 session.add(asset)
                 session.flush()
+            latest = session.scalars(
+                select(AssetVersion).where(AssetVersion.asset_id == asset.id)
+                .order_by(AssetVersion.version_no.desc())
+            ).first()
+            previous_hash = json.loads(latest.params_json or "{}").get("artifact_sha256") if latest else None
+            if previous_hash != output.sha256:
+                for prior in asset.versions:
+                    prior.is_selected = False
+                asset.status = "draft"
+                asset.type = output.asset_type
                 version = AssetVersion(
                     asset_id=asset.id,
-                    version_no=1,
+                    version_no=(latest.version_no + 1) if latest else 1,
                     prompt_snapshot=f"run_daily_workflow:{name}",
                     params_json=json.dumps(
-                        {"workflow": "run_daily_workflow", "mode": mode, "source": source, "output_key": name},
+                        {"workflow": "run_daily_workflow", "mode": mode, "source": source,
+                         "output_key": name, "artifact_sha256": output.sha256, "original_path": str(path)},
                         ensure_ascii=False,
                     ),
-                    content_text=content_text,
-                    file_path=str(path),
+                    content_text=output.text,
+                    file_path=str(output.snapshot()),
                     model_used=f"{mode}-daily-workflow",
-                    is_selected=True,
+                    is_selected=False,
                 )
                 session.add(version)
                 session.flush()
                 version_ids.append(version.id)
-            persisted.append({"output_key": name, "asset_id": asset.id, "source_path": str(path)})
+                latest = version
+            persisted.append({"output_key": name, "asset_id": asset.id, "source_path": str(path),
+                              "version_id": latest.id, "version_no": latest.version_no,
+                              "file_path": latest.file_path, "artifact_sha256": output.sha256})
     for version_id in version_ids:
         _enqueue_brain_index(asset_version_id=version_id)
     return persisted
@@ -313,23 +328,38 @@ def _persist_daily_calendar_items(assets: list[dict[str, Any]], job_id: str) -> 
             output_key = str(item.get("output_key", "output"))
             calendar_id = f"daily-workflow-{start_date.isoformat()}-{output_key}"
             row = session.get(CalendarItem, calendar_id)
+            data = json.loads(row.data_json or "{}") if row else {}
+            changed = row is not None and (
+                row.asset_id != item.get("asset_id") or data.get("asset_version_id") != item.get("version_id")
+            )
+            # A later draft cannot rewrite a recorded publication's history.
+            if changed and (row.status.lower() in {"published", "posted"} or session.scalar(
+                select(PublishedPost.id).where(PublishedPost.calendar_item_id == row.id).limit(1)
+            ) is not None):
+                calendar_id += f"-v{item['version_id']}"
+                row = session.get(CalendarItem, calendar_id)
+                data = json.loads(row.data_json or "{}") if row else {}
+                changed = False
             if row is None:
                 row = CalendarItem(
                     id=calendar_id,
                     date=(start_date + timedelta(days=index)).isoformat(),
                     status="draft",
                     asset_id=int(item["asset_id"]) if item.get("asset_id") is not None else None,
-                    data_json=json.dumps(
-                        {
-                            "title": f"Daily workflow: {output_key.replace('_', ' ').title()}",
-                            "workflow_job_id": job_id,
-                            "output_key": output_key,
-                            "source_path": item.get("source_path", ""),
-                        },
-                        ensure_ascii=False,
-                    ),
                 )
                 session.add(row)
+                changed = True
+            if changed:
+                row.asset_id = int(item["asset_id"])
+                row.status = "draft"
+                data.update({
+                    "title": f"Daily workflow: {output_key.replace('_', ' ').title()}",
+                    "workflow_job_id": job_id, "output_key": output_key,
+                    "source_path": item.get("source_path", ""),
+                    "asset_version_id": item.get("version_id"),
+                    "artifact_sha256": item.get("artifact_sha256"),
+                })
+                row.data_json = json.dumps(data, ensure_ascii=False)
             persisted.append({"id": row.id, "date": row.date, "asset_id": row.asset_id, "status": row.status})
     return persisted
 
